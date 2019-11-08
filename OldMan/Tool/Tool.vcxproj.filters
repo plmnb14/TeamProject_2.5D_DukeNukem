@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="02.MainFrm">
+      <UniqueIdentifier>{36360fa8-38d6-4c13-9198-c8555cf6f580}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.View">
+      <UniqueIdentifier>{843caf9b-6283-4039-b62d-fbbe7fb32f3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{56eb6385-21df-4d39-8fa4-0556b71d37d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Document">
+      <UniqueIdentifier>{c63fa270-c0d2-4497-89d3-58ea1eddd4b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.WinApp">
+      <UniqueIdentifier>{2f0621c4-ea59-4dee-85c2-751b33bf5b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Dialog">
+      <UniqueIdentifier>{b9abc78b-3c05-4322-aa93-31630754e88e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.View\00.FormView">
+      <UniqueIdentifier>{18969456-e770-4b81-961b-480992f9e197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Headers">
+      <UniqueIdentifier>{80378202-ed9c-4c27-8b86-99863fe25440}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>02.MainFrm</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool.h">
+      <Filter>00.WinApp</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolDoc.h">
+      <Filter>01.Document</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolView.h">
+      <Filter>03.View</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFormView.h">
+      <Filter>03.View\00.FormView</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Extern.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Define.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>02.MainFrm</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool.cpp">
+      <Filter>00.WinApp</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolDoc.cpp">
+      <Filter>01.Document</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolView.cpp">
+      <Filter>03.View</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFormView.cpp">
+      <Filter>03.View\00.FormView</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Tool.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>99.Default</Filter>
+    </Image>
+    <Image Include="res\ToolDoc.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tool.rc">
+      <Filter>99.Default</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Tool.rc2">
+      <Filter>99.Default</Filter>
+    </None>
+  </ItemGroup>
+</Project>
