@@ -153,79 +153,79 @@ void CCamera::Roll(float _Angle)
 void CCamera::GetViewMatrix(D3DXMATRIX * _ViewMatrix)
 {
 	D3DXVECTOR3 tmpLook = { 0,0,1 };
-	//D3DXVECTOR3 tmpRight = { 1,0,0 };
-	//D3DXVECTOR3 tmpUp = { 0,1,0 };
+	D3DXVECTOR3 tmpRight = { 1,0,0 };
+	D3DXVECTOR3 tmpUp = { 0,1,0 };
+	
+	tmpLook = m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos();
+	
+	D3DXVec3Normalize(&tmpLook, &m_pCCamera_Component->Get_Look());
+	
+	D3DXVec3Cross(&tmpRight, &m_pCCamera_Component->Get_Up(), &tmpLook);
+	D3DXVec3Normalize(&tmpRight, &m_pCCamera_Component->Get_Right());
+	
+	D3DXVec3Cross(&tmpUp, &tmpLook, &m_pCCamera_Component->Get_Right());
+	D3DXVec3Normalize(&tmpUp, &m_pCCamera_Component->Get_Up());
+	
+	float x = -D3DXVec3Dot(&m_pCCamera_Component->Get_EyePos(), &tmpRight);
+	float y = -D3DXVec3Dot(&m_pCCamera_Component->Get_EyePos(), &tmpUp);
+	float z = -D3DXVec3Dot(&m_pCCamera_Component->Get_EyePos(), &tmpLook);
+	
+	m_pCCamera_Component->Set_Right(tmpRight);
+	m_pCCamera_Component->Set_Up(tmpUp);
+	m_pCCamera_Component->Set_Look(tmpLook);
+	
+	_ViewMatrix->_11 = m_pCCamera_Component->Get_Right().x;
+	_ViewMatrix->_12 = m_pCCamera_Component->Get_Up().x;
+	_ViewMatrix->_13 = m_pCCamera_Component->Get_Look().x;
+	_ViewMatrix->_14 = 0.f;
+	
+	_ViewMatrix->_21 = m_pCCamera_Component->Get_Right().y;
+	_ViewMatrix->_22 = m_pCCamera_Component->Get_Up().y;
+	_ViewMatrix->_23 = m_pCCamera_Component->Get_Look().y;
+	_ViewMatrix->_24 = 0.f;
+	
+	_ViewMatrix->_31 = m_pCCamera_Component->Get_Right().z;
+	_ViewMatrix->_32 = m_pCCamera_Component->Get_Up().z;
+	_ViewMatrix->_33 = m_pCCamera_Component->Get_Look().z;
+	_ViewMatrix->_34 = 0.f;
+	
+	_ViewMatrix->_41 = x;
+	_ViewMatrix->_42 = y;
+	_ViewMatrix->_43 = z;
+	_ViewMatrix->_44 = 1.f;
+
+	//m_tCameraInfo.vLook = m_tCameraInfo.vLookAt - m_tCameraInfo.vEyePos;
+	//D3DXVec3Normalize(&m_tCameraInfo.vLook, &m_tCameraInfo.vLook);
 	//
-	//m_pCCamera_Component->Set_Look(m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos());
+	//D3DXVec3Cross(&m_tCameraInfo.vRight, &m_tCameraInfo.vUp, &m_tCameraInfo.vLook);
+	//D3DXVec3Normalize(&m_tCameraInfo.vRight, &m_tCameraInfo.vRight);
 	//
-	//D3DXVec3Normalize(&tmpLook, &m_pCCamera_Component->Get_Look());
+	//D3DXVec3Cross(&m_tCameraInfo.vUp, &m_tCameraInfo.vLook, &m_tCameraInfo.vRight);
+	//D3DXVec3Normalize(&m_tCameraInfo.vUp, &m_tCameraInfo.vUp);
 	//
-	//D3DXVec3Cross(&tmpRight, &m_pCCamera_Component->Get_Up(), &tmpLook);
-	//D3DXVec3Normalize(&tmpRight, &m_pCCamera_Component->Get_Right());
+	//float x = -D3DXVec3Dot(&m_tCameraInfo.vEyePos, &m_tCameraInfo.vRight);
+	//float y = -D3DXVec3Dot(&m_tCameraInfo.vEyePos, &m_tCameraInfo.vUp);
+	//float z = -D3DXVec3Dot(&m_tCameraInfo.vEyePos, &m_tCameraInfo.vLook);
 	//
-	//D3DXVec3Cross(&tmpUp, &tmpLook, &m_pCCamera_Component->Get_Right());
-	//D3DXVec3Normalize(&tmpUp, &m_pCCamera_Component->Get_Up());
-	//
-	//float x = -D3DXVec3Dot(&m_pCCamera_Component->Get_EyePos(), &tmpRight);
-	//float y = -D3DXVec3Dot(&m_pCCamera_Component->Get_EyePos(), &tmpUp);
-	//float z = -D3DXVec3Dot(&m_pCCamera_Component->Get_EyePos(), &tmpLook);
-	//
-	//m_pCCamera_Component->Set_Right(tmpRight);
-	//m_pCCamera_Component->Set_Up(tmpUp);
-	//m_pCCamera_Component->Set_Look(tmpLook);
-	//
-	//_ViewMatrix->_11 = m_pCCamera_Component->Get_Right().x;
-	//_ViewMatrix->_12 = m_pCCamera_Component->Get_Up().x;
-	//_ViewMatrix->_13 = m_pCCamera_Component->Get_Look().x;
+	//_ViewMatrix->_11 = m_tCameraInfo.vRight.x;
+	//_ViewMatrix->_12 = m_tCameraInfo.vUp.x;
+	//_ViewMatrix->_13 = m_tCameraInfo.vLook.x;
 	//_ViewMatrix->_14 = 0.f;
 	//
-	//_ViewMatrix->_21 = m_pCCamera_Component->Get_Right().y;
-	//_ViewMatrix->_22 = m_pCCamera_Component->Get_Up().y;
-	//_ViewMatrix->_23 = m_pCCamera_Component->Get_Look().y;
+	//_ViewMatrix->_21 = m_tCameraInfo.vRight.y;
+	//_ViewMatrix->_22 = m_tCameraInfo.vUp.y;
+	//_ViewMatrix->_23 = m_tCameraInfo.vLook.y;
 	//_ViewMatrix->_24 = 0.f;
 	//
-	//_ViewMatrix->_31 = m_pCCamera_Component->Get_Right().z;
-	//_ViewMatrix->_32 = m_pCCamera_Component->Get_Up().z;
-	//_ViewMatrix->_33 = m_pCCamera_Component->Get_Look().z;
+	//_ViewMatrix->_31 = m_tCameraInfo.vRight.z;
+	//_ViewMatrix->_32 = m_tCameraInfo.vUp.z;
+	//_ViewMatrix->_33 = m_tCameraInfo.vLook.z;
 	//_ViewMatrix->_34 = 0.f;
 	//
 	//_ViewMatrix->_41 = x;
 	//_ViewMatrix->_42 = y;
 	//_ViewMatrix->_43 = z;
 	//_ViewMatrix->_44 = 1.f;
-
-	m_tCameraInfo.vLook = m_tCameraInfo.vLookAt - m_tCameraInfo.vEyePos;
-	D3DXVec3Normalize(&m_tCameraInfo.vLook, &m_tCameraInfo.vLook);
-
-	D3DXVec3Cross(&m_tCameraInfo.vRight, &m_tCameraInfo.vUp, &m_tCameraInfo.vLook);
-	D3DXVec3Normalize(&m_tCameraInfo.vRight, &m_tCameraInfo.vRight);
-
-	D3DXVec3Cross(&m_tCameraInfo.vUp, &m_tCameraInfo.vLook, &m_tCameraInfo.vRight);
-	D3DXVec3Normalize(&m_tCameraInfo.vUp, &m_tCameraInfo.vUp);
-
-	float x = -D3DXVec3Dot(&m_tCameraInfo.vEyePos, &m_tCameraInfo.vRight);
-	float y = -D3DXVec3Dot(&m_tCameraInfo.vEyePos, &m_tCameraInfo.vUp);
-	float z = -D3DXVec3Dot(&m_tCameraInfo.vEyePos, &m_tCameraInfo.vLook);
-
-	_ViewMatrix->_11 = m_tCameraInfo.vRight.x;
-	_ViewMatrix->_12 = m_tCameraInfo.vUp.x;
-	_ViewMatrix->_13 = m_tCameraInfo.vLook.x;
-	_ViewMatrix->_14 = 0.f;
-
-	_ViewMatrix->_21 = m_tCameraInfo.vRight.y;
-	_ViewMatrix->_22 = m_tCameraInfo.vUp.y;
-	_ViewMatrix->_23 = m_tCameraInfo.vLook.y;
-	_ViewMatrix->_24 = 0.f;
-
-	_ViewMatrix->_31 = m_tCameraInfo.vRight.z;
-	_ViewMatrix->_32 = m_tCameraInfo.vUp.z;
-	_ViewMatrix->_33 = m_tCameraInfo.vLook.z;
-	_ViewMatrix->_34 = 0.f;
-
-	_ViewMatrix->_41 = x;
-	_ViewMatrix->_42 = y;
-	_ViewMatrix->_43 = z;
-	_ViewMatrix->_44 = 1.f;
 }
 
 void CCamera::SetCameraMode(CameraMode _CameraType)
@@ -245,27 +245,27 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 		D3DXVECTOR3 vTempDir = -dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetDir();
 		D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 		
-		D3DXVec3Normalize(&vTempDir, &vTempDir);
-
-		m_tCameraInfo.vEyePos = { vTempPos.x + (vTempDir.x * m_tCameraInfo.fDistance),
-			vTempPos.y + (vTempDir.y * m_tCameraInfo.fDistance * 0.5f) + 1 + m_tCameraInfo.fDistance * 0.5f,
-			vTempPos.z + (vTempDir.z * m_tCameraInfo.fDistance)
-		};
-
-		m_tCameraInfo.vLookAt = { vTempPos.x  , vTempPos.y + 1.6f, vTempPos.z };
-		m_tCameraInfo.vUp = { 0,1,0 };
-		break;
-
 		//D3DXVec3Normalize(&vTempDir, &vTempDir);
 		//
-		//m_pCCamera_Component->Set_EyePos({ vTempPos.x + (vTempDir.x * m_pCCamera_Component->Get_Distance()),
-		//	vTempPos.y + (vTempDir.y * m_pCCamera_Component->Get_Distance() * 0.5f) + 1 + m_pCCamera_Component->Get_Distance() * 0.5f,
-		//	vTempPos.z + (vTempDir.z * m_pCCamera_Component->Get_Distance())
-		//});
+		//m_tCameraInfo.vEyePos = { vTempPos.x + (vTempDir.x * m_tCameraInfo.fDistance),
+		//	vTempPos.y + (vTempDir.y * m_tCameraInfo.fDistance * 0.5f) + 1 + m_tCameraInfo.fDistance * 0.5f,
+		//	vTempPos.z + (vTempDir.z * m_tCameraInfo.fDistance)
+		//};
 		//
-		//m_pCCamera_Component->Set_LookAt({ vTempPos.x, vTempPos.y + 1.6f, vTempPos.z });
-		//m_pCCamera_Component->Set_Up({ 0,1,0 });
+		//m_tCameraInfo.vLookAt = { vTempPos.x  , vTempPos.y + 1.6f, vTempPos.z };
+		//m_tCameraInfo.vUp = { 0,1,0 };
 		//break;
+
+		D3DXVec3Normalize(&vTempDir, &vTempDir);
+		
+		m_pCCamera_Component->Set_EyePos({ vTempPos.x + (vTempDir.x * m_pCCamera_Component->Get_Distance()),
+			vTempPos.y + (vTempDir.y * m_pCCamera_Component->Get_Distance() * 0.5f) + 1 + m_pCCamera_Component->Get_Distance() * 0.5f,
+			vTempPos.z + (vTempDir.z * m_pCCamera_Component->Get_Distance())
+		});
+		
+		m_pCCamera_Component->Set_LookAt({ vTempPos.x, vTempPos.y + 1.6f, vTempPos.z });
+		m_pCCamera_Component->Set_Up({ 0,1,0 });
+		break;
 	}
 	}
 
@@ -277,11 +277,11 @@ void CCamera::SetUp_FirstPerson_ViewPoint()
 
 void CCamera::Update()
 {
-	//if (GetAsyncKeyState('Z'))
-	//	m_tCameraInfo.fDistance -= 0.01f;
-	//
-	//if (GetAsyncKeyState('X'))
-	//	m_tCameraInfo.fDistance += 0.01f;
+	if (GetAsyncKeyState('Z'))
+		m_pCCamera_Component->Add_Distance(-0.01f);
+	
+	if (GetAsyncKeyState('X'))
+		m_pCCamera_Component->Add_Distance(0.01f);
 
 	D3DXMATRIX matView;
 
@@ -320,21 +320,21 @@ void CCamera::Render()
 
 HRESULT CCamera::Initialize()
 {
-	//FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
-	//
-	//m_pCCamera_Component->Set_EyePos({ 0,3,0 });
-	//m_pCCamera_Component->Set_Right({ 1,0,0 });
-	//m_pCCamera_Component->Set_Up({ 0,1,0 });
-	//m_pCCamera_Component->Set_Look({ 0,0,1 });
-	//m_pCCamera_Component->Set_LookAt({ 0,2,1 });
-	//m_pCCamera_Component->Set_Distance(5.f);
+	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
+	
+	m_pCCamera_Component->Set_EyePos({ 0,3,0 });
+	m_pCCamera_Component->Set_Right({ 1,0,0 });
+	m_pCCamera_Component->Set_Up({ 0,1,0 });
+	m_pCCamera_Component->Set_Look({ 0,0,1 });
+	m_pCCamera_Component->Set_LookAt({ 0,2,1 });
+	m_pCCamera_Component->Set_Distance(5.f);
 
-	m_tCameraInfo.vEyePos = { 0,3,0 };	// Camera 의 Pos [ eye 에 해당 ]
-	m_tCameraInfo.vRight = { 1,0,0 };	// X 축 기준
-	m_tCameraInfo.vUp = { 0,1,0 };	// Y 축 기준
-	m_tCameraInfo.vLook = { 0,0,1 };	// Z 축 기준
-	m_tCameraInfo.vLookAt = { 0,2,1 };	// 카메라가 바라볼 대상
-	m_tCameraInfo.fDistance = 5.f;			// 3 인칭 시, 카메라와 플레이어의 거리
+	//m_tCameraInfo.vEyePos = { 0,3,0 };	// Camera 의 Pos [ eye 에 해당 ]
+	//m_tCameraInfo.vRight = { 1,0,0 };	// X 축 기준
+	//m_tCameraInfo.vUp = { 0,1,0 };	// Y 축 기준
+	//m_tCameraInfo.vLook = { 0,0,1 };	// Z 축 기준
+	//m_tCameraInfo.vLookAt = { 0,2,1 };	// 카메라가 바라볼 대상
+	//m_tCameraInfo.fDistance = 5.f;			// 3 인칭 시, 카메라와 플레이어의 거리
 	
 
 	m_fMax_PlayerRoll_Angle = 25.f;			// 1 인칭 시, 좌우 기울이기 최대 각도

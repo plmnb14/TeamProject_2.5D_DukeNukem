@@ -43,7 +43,7 @@ const int CCamera_Component::Get_Index() const
 
 const float CCamera_Component::Get_Distance() const
 {
-	return 0.0f;
+	return m_tCamInfo.fDistance;
 }
 
 const bool CCamera_Component::Get_MainCamera() const
@@ -89,6 +89,11 @@ void CCamera_Component::Set_Distance(float _Distance)
 void CCamera_Component::set_MainCamera(bool _IsMainCamera)
 {
 	m_tCamInfo.bMainCamera = _IsMainCamera;
+}
+
+void CCamera_Component::Add_Distance(float _Distance)
+{
+	m_tCamInfo.fDistance += _Distance;
 }
 
 void CCamera_Component::LateUpdate()

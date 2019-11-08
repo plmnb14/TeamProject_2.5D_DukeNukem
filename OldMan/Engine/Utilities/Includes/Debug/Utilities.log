@@ -1,13 +1,3 @@
 ﻿  Camera_Component.cpp
-  코드를 생성하고 있습니다...
-  건너뛰고 있습니다... (관련된 변경 내용 없음)
-  Trasform.cpp
-  Scene.cpp
-  Renderer.cpp
-  Management.cpp
-  Layer.cpp
-  GameObject.cpp
-  Component.cpp
-     ../Bin/Utilities.lib 라이브러리 및 ../Bin/Utilities.exp 개체를 생성하고 있습니다.
-  Utilities.vcxproj -> C:\Users\Administrator.JUSIN-20191106K\Desktop\191108_프로토타입_트랜스폼\OldMan\Engine\Utilities\Includes\../Bin/Utilities.dll
+  Utilities.vcxproj -> C:\Users\Administrator.JUSIN-20191106K\Desktop\SR_T\OldMan\Engine\Utilities\Includes\../Bin/Utilities.dll
   Utilities.vcxproj -> ../Bin/Utilities.pdb (Full PDB)

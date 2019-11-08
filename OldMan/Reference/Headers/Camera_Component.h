@@ -39,6 +39,9 @@ public:
 	void	set_MainCamera(bool _IsMainCamera);
 
 public:
+	void	Add_Distance(float _Distance);
+
+public:
 	virtual void LateUpdate();
 
 public:

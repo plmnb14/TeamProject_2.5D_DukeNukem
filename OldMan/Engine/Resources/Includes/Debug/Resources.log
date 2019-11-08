@@ -1,7 +1,4 @@
-﻿  RcCol.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  VIBuffer.cpp
+﻿  VIBuffer.cpp
   TriCol.cpp
   Texture.cpp
   TerrainTex.cpp
@@ -9,6 +6,8 @@
   Resources.cpp
   ResourceMgr.cpp
   RcTex.cpp
+  RcCol.cpp
   코드를 생성하고 있습니다...
-  Resources.vcxproj -> C:\Users\Administrator.JUSIN-20191106K\Desktop\191108_프로토타입_트랜스폼\OldMan\Engine\Resources\Includes\../Bin/Resources.dll
+     ../Bin/Resources.lib 라이브러리 및 ../Bin/Resources.exp 개체를 생성하고 있습니다.
+  Resources.vcxproj -> C:\Users\Administrator.JUSIN-20191106K\Desktop\SR_T\OldMan\Engine\Resources\Includes\../Bin/Resources.dll
   Resources.vcxproj -> ../Bin/Resources.pdb (Full PDB)
