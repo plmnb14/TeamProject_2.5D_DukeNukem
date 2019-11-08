@@ -152,7 +152,7 @@ void CCamera::Roll(float _Angle)
 
 void CCamera::GetViewMatrix(D3DXMATRIX * _ViewMatrix)
 {
-	//D3DXVECTOR3 tmpLook = { 0,0,1 };
+	D3DXVECTOR3 tmpLook = { 0,0,1 };
 	//D3DXVECTOR3 tmpRight = { 1,0,0 };
 	//D3DXVECTOR3 tmpUp = { 0,1,0 };
 	//
