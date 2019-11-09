@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include "Layer.h"
+
+class CTerrainCube;
 class CToolDoc;
 class CToolView : public CView
 {
@@ -16,9 +19,6 @@ public:
 	CToolDoc* GetDocument() const;
 
 // 작업입니다.
-public:
-	ENGINE::CGraphicDev*	m_pDeviceMgr;
-
 // 재정의입니다.
 public:
 	virtual void OnDraw(CDC* pDC);  // 이 뷰를 그리기 위해 재정의되었습니다.
@@ -43,6 +43,29 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual void OnInitialUpdate();
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+
+public:
+	void SelectObjAfter();
+
+private:
+	void PipeLineSetup();
+	HRESULT Initialize();
+	virtual HRESULT Add_Environment_Layer();
+	virtual HRESULT Add_Object_Layer();
+	//virtual HRESULT Add_UI_Layer();
+
+public:
+	ENGINE::CGraphicDev*			m_pDeviceMgr;
+	ENGINE::CResourceMgr*			m_pResourceMgr;
+
+	list<CTerrainCube*>				m_pCubeList;
+	CTerrainCube*					m_pSelectCube;
+
+	typedef map<WORD, ENGINE::CLayer*>	MAP_LAYER;
+	MAP_LAYER	m_mapLayer;
+
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전

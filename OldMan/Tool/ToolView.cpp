@@ -14,6 +14,8 @@
 #include "MainFrm.h"
 #include "MyFormView.h"
 
+#include "TerrainCube.h"
+#include "Trasform.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,12 +33,16 @@ BEGIN_MESSAGE_MAP(CToolView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CToolView 생성/소멸
 
 CToolView::CToolView()
-	:m_pDeviceMgr(ENGINE::CGraphicDev::GetInstance())
+	:m_pDeviceMgr(ENGINE::CGraphicDev::GetInstance()),
+	m_pResourceMgr(ENGINE::CResourceMgr::GetInstance()),
+	m_pSelectCube(nullptr)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
@@ -66,7 +72,11 @@ void CToolView::OnDraw(CDC* /*pDC*/)
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 	m_pDeviceMgr->Render_Begin();
 
-	//m_pTerrain->Render();
+	MAP_LAYER::iterator iter_begin = m_mapLayer.begin();
+	MAP_LAYER::iterator iter_end = m_mapLayer.end();
+
+	for (; iter_begin != iter_end; ++iter_begin)
+		iter_begin->second->Render();
 
 	m_pDeviceMgr->Render_End();
 }
@@ -154,4 +164,178 @@ void CToolView::OnInitialUpdate()
 
 	hr = m_pDeviceMgr->InitDevice(g_hWnd, WINCX, WINCY, ENGINE::CGraphicDev::MODE_WIN);
 	FAILED_CHECK_MSG(hr, L"InitDevice Failed");
+
+	Initialize();
+}
+
+
+void CToolView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CView::OnMouseMove(nFlags, point);
+
+	MAP_LAYER::iterator iter_begin = m_mapLayer.begin();
+	MAP_LAYER::iterator iter_end = m_mapLayer.end();
+
+	for (; iter_begin != iter_end; ++iter_begin)
+		iter_begin->second->Update();
+
+	iter_begin = m_mapLayer.begin();
+	iter_end = m_mapLayer.end();
+
+	for (; iter_begin != iter_end; ++iter_begin)
+		iter_begin->second->LateUpdate();
+
+	CView::Invalidate(FALSE); // 화면 갱신
+}
+
+
+void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CView::OnLButtonDown(nFlags, point);
+
+	if (m_pSelectCube)
+	{
+		m_pSelectCube->SetClicked();
+		m_pCubeList.push_back(m_pSelectCube);
+
+		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+	}
+}
+
+void CToolView::SelectObjAfter()
+{
+	if (!m_pSelectCube)
+	{
+		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+	}
+}
+
+void CToolView::PipeLineSetup()
+{
+	// 조명 off
+	m_pDeviceMgr->GetDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	// 후면 추려내기 off
+	m_pDeviceMgr->GetDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
+	// WireFrame
+	m_pDeviceMgr->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+
+	D3DXMATRIX matView, matProj; // 뷰행렬, 투영행렬
+
+								 // 뷰행렬(카메라의 역행렬) 생성하는 함수
+	D3DXMatrixLookAtLH(
+		&matView, /* 반환 값*/
+		&D3DXVECTOR3(0.f, 5.f, -20.f), /* Eye (카메라 위치) */
+		&D3DXVECTOR3(0.f, 0.f, 0.f), /* At (바라볼 위치) */
+		&D3DXVECTOR3(0.f, 1.f, 0.f) /* Up (업벡터) */);
+
+	// 장치에게 뷰행렬 전달.
+	m_pDeviceMgr->GetDevice()->SetTransform(D3DTS_VIEW, &matView);
+
+	// 원근투영 행렬 생성하는 함수
+	D3DXMatrixPerspectiveFovLH(
+		&matProj, /* 반환 값 */
+		D3DXToRadian(45.f), /* FOV (Field Of View, 시야각) */
+		WINCX / (float)WINCY, /* Aspect (종횡비) */
+		1.f, /* Near (근평면) */
+		1000.f /*Far (원평면) */);
+
+	// 장치에게 투영 행렬 전달.
+	m_pDeviceMgr->GetDevice()->SetTransform(D3DTS_PROJECTION, &matProj);
+}
+
+HRESULT CToolView::Initialize()
+{
+	PipeLineSetup();
+
+	// Player Buffer
+	HRESULT hr = m_pResourceMgr->AddBuffer(
+		m_pDeviceMgr->GetDevice(),
+		ENGINE::RESOURCE_STATIC,
+		ENGINE::CVIBuffer::BUFFER_RCTEX,
+		L"Buffer_Player");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
+
+	//// Terrain Buffer
+	//hr = m_pResourceMgr->AddBuffer(
+	//	m_pDeviceMgr->GetDevice(),
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::CVIBuffer::BUFFER_TERRAINTEX,
+	//	L"Buffer_Terrain",
+	//	TERRAIN_VTX_X, TERRAIN_VTX_Z, TERRAIN_VTX_ITV);
+	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Terrain Add Failed", E_FAIL);
+
+	// Player Texture
+	//hr = m_pResourceMgr->AddTexture(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_STATIC,
+	//	ENGINE::TEX_NORMAL,
+	//	L"Texture_Player",
+	//	L"../Texture/Player%d.png", 1);
+	//FAILED_CHECK_MSG_RETURN(hr, L"Texture_Player Add Failed", E_FAIL);
+
+	//// Terrain Texture
+	//hr = m_pResourceMgr->AddTexture(
+	//	m_pDeviceMgr->GetDevice(),
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::TEX_NORMAL,
+	//	L"Texture_Terrain",
+	//	L"../Texture/Terrain/Terrain%d.png", 1);
+	//FAILED_CHECK_MSG_RETURN(hr, L"Texture_Terrain Add Failed", E_FAIL);
+
+	// Environment Layer
+	hr = Add_Environment_Layer();
+	FAILED_CHECK_RETURN(hr, E_FAIL);
+
+	// Object Layer
+	hr = Add_Object_Layer();
+	FAILED_CHECK_RETURN(hr, E_FAIL);
+
+	//// UI Layer
+	//hr = Add_UI_Layer();
+	//FAILED_CHECK_RETURN(hr, E_FAIL);
+
+	return S_OK;
+}
+
+HRESULT CToolView::Add_Environment_Layer()
+{
+	return S_OK;
+}
+
+HRESULT CToolView::Add_Object_Layer()
+{
+	// Object Layer
+	ENGINE::CLayer* pObject_Layer = ENGINE::CLayer::Create(m_pDeviceMgr->GetDevice());
+	NULL_CHECK_MSG_RETURN(pObject_Layer, L"Object Layer Create Failed", E_FAIL);
+	m_mapLayer.insert({ ENGINE::CLayer::OBJECT, pObject_Layer });
+
+	//// Terrain
+	//pObject = CTerrain::Create(m_pGraphicDev);
+	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+
+	//// Player
+	//ENGINE::CGameObject* pObject = CPlayer::Create(m_pDeviceMgr->GetDevice());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Player Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PLAYER, pObject);
+
+	// Terrain
+	//ENGINE::CGameObject* pObject = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+	//NULL_CHECK_MSG_RETURN(pObject, L"CTerrainCube Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+
+	//// Camera
+	//pObject = CCamera::Create(m_pDeviceMgr->GetDevice(), pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+
+	return S_OK;
 }

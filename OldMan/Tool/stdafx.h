@@ -43,6 +43,17 @@
 #endif
 #endif
 
+// Standard Headers
+#include <string>
+#include <list>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <functional>
+#include <fstream>
+
+using namespace std;
+
 // Engine Headers
 #include "Export_Function.h"
 
@@ -52,3 +63,4 @@
 
 #include "Tool_Define.h"
 #include "Tool_Extern.h"
+#include "Tool_Struct.h"
