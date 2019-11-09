@@ -39,7 +39,9 @@ public:
 	void	set_MainCamera(bool _IsMainCamera);
 
 public:
-	void	Add_Distance(float _Distance);
+	void Add_EyePos(const D3DXVECTOR3& _vEyePos);
+	void Add_LookAt(const D3DXVECTOR3& _vLookAt);
+	void Add_Distance(float _Distance);
 
 public:
 	virtual void LateUpdate();

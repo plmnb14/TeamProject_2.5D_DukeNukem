@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "Camera.h"
 #include "Trasform.h"
+#include "Camera_Component.h"
+
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),	
@@ -84,14 +87,51 @@ void CPlayer::KeyInput()
 	float fMoveSpeed = 5.f * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	if (GetAsyncKeyState('W'))
+	{
 		m_pTransform->MovePos(fMoveSpeed);
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+		dynamic_cast<CCamera*>(m_pCamera)->Walk(fMoveSpeed);
+	}
+
+	if (GetAsyncKeyState('S'))
+	{
 		m_pTransform->MovePos(-fMoveSpeed);
+		dynamic_cast<CCamera*>(m_pCamera)->Walk(-fMoveSpeed);
+	}
+
+	if (GetAsyncKeyState('A'))
+	{
+		D3DXVECTOR3 vDir, vWorldUp;
+		vWorldUp = { 0.f , 1.f , 0.f };
+		
+		D3DXVec3Cross(&vDir, &m_pTransform->GetDir(), &vWorldUp);
+		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z) , fMoveSpeed);
+
+		dynamic_cast<CCamera*>(m_pCamera)->Starfe(-fMoveSpeed);
+	}
+
+	if (GetAsyncKeyState('D'))
+	{
+		D3DXVECTOR3 vDir, vWorldUp;
+		vWorldUp = { 0.f , 1.f , 0.f };
+
+		D3DXVec3Cross(&vDir, &m_pTransform->GetDir(), &vWorldUp);
+		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z), -fMoveSpeed);
+
+		dynamic_cast<CCamera*>(m_pCamera)->Starfe(fMoveSpeed);
+	}
+
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+		dynamic_cast<CCamera*>(m_pCamera)->Yaw(-fAngleSpeed);
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, -fAngleSpeed);
+	}
+
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+		dynamic_cast<CCamera*>(m_pCamera)->Yaw(fAngleSpeed);
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
+	}
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)

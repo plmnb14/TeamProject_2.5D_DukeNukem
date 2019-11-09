@@ -43,11 +43,6 @@ HRESULT CStage::Add_Object_Layer()
 	NULL_CHECK_MSG_RETURN(pObject_Layer, L"Object Layer Create Failed", E_FAIL);
 	m_mapLayer.insert({ ENGINE::CLayer::OBJECT, pObject_Layer });
 
-	//// Terrain
-	//pObject = CTerrain::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
-
 	// Player
 	ENGINE::CGameObject* pObject = CPlayer::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Player Create Failed", E_FAIL);
@@ -61,7 +56,9 @@ HRESULT CStage::Add_Object_Layer()
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev , pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
+
+	pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
 
 	return S_OK;
 }

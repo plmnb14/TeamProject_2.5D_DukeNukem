@@ -24,6 +24,10 @@ protected:
 	virtual HRESULT Initialize();
 	virtual void Release();
 
+
+public:
+	void Set_MainCamera(ENGINE::CGameObject* _Camera) { m_pCamera = _Camera; }
+
 public:
 	CComponent* Get_Component(wstring _key) { return m_mapComponent[_key]; }
 
@@ -32,6 +36,8 @@ protected:
 
 	typedef map<wstring, CComponent*>	MAP_COMPONENT;
 	MAP_COMPONENT	m_mapComponent;
+
+	CGameObject*	m_pCamera;
 };
 
 END

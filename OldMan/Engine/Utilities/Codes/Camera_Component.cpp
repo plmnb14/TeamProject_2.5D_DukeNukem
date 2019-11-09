@@ -38,7 +38,7 @@ const D3DXVECTOR3 & CCamera_Component::Get_Look() const
 
 const int CCamera_Component::Get_Index() const
 {
-	return 0;
+	return m_tCamInfo.iIndex;
 }
 
 const float CCamera_Component::Get_Distance() const
@@ -48,6 +48,9 @@ const float CCamera_Component::Get_Distance() const
 
 const bool CCamera_Component::Get_MainCamera() const
 {
+	if (m_tCamInfo.bMainCamera == true)
+		return true;
+
 	return false;
 }
 
@@ -89,6 +92,16 @@ void CCamera_Component::Set_Distance(float _Distance)
 void CCamera_Component::set_MainCamera(bool _IsMainCamera)
 {
 	m_tCamInfo.bMainCamera = _IsMainCamera;
+}
+
+void CCamera_Component::Add_EyePos(const D3DXVECTOR3 & _vEyePos)
+{
+	m_tCamInfo.vEyePos += _vEyePos;
+}
+
+void CCamera_Component::Add_LookAt(const D3DXVECTOR3 & _vLookAt)
+{
+	m_tCamInfo.vLookAt += _vLookAt;
 }
 
 void CCamera_Component::Add_Distance(float _Distance)
