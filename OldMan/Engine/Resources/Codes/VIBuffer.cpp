@@ -67,3 +67,8 @@ void CVIBuffer::Release()
 		Safe_Release(m_pIB);
 	}	
 }
+
+VTX_TEX* CVIBuffer::GetVtx()
+{
+	return m_pVtx;
+}

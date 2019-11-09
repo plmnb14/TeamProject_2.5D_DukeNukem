@@ -25,6 +25,18 @@
     <Filter Include="98.Headers">
       <UniqueIdentifier>{80378202-ed9c-4c27-8b86-99863fe25440}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97.FileInfo">
+      <UniqueIdentifier>{7ff748ec-6656-4892-9623-d7bd8973d033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject">
+      <UniqueIdentifier>{f68905a5-1b1c-4b6b-9ce1-474900e95ea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject\00.TerrainCube">
+      <UniqueIdentifier>{17d4edc7-e846-4196-8443-bd71e7c15fa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.Ray">
+      <UniqueIdentifier>{669a5273-1d1d-4f97-8eee-f227447239bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -57,6 +69,21 @@
     <ClInclude Include="Tool_Define.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectSelectDlg.h">
+      <Filter>04.Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="FileInfo.h">
+      <Filter>97.FileInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Struct.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainCube.h">
+      <Filter>05.GameObject\00.TerrainCube</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>96.Ray</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -76,6 +103,18 @@
     </ClCompile>
     <ClCompile Include="MyFormView.cpp">
       <Filter>03.View\00.FormView</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSelectDlg.cpp">
+      <Filter>04.Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="FileInfo.cpp">
+      <Filter>97.FileInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainCube.cpp">
+      <Filter>05.GameObject\00.TerrainCube</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>96.Ray</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

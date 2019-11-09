@@ -5,6 +5,8 @@
 #include "Tool.h"
 #include "MyFormView.h"
 
+#include "MainFrm.h"
+#include "ToolView.h"
 
 // CMyFormView
 
@@ -15,6 +17,15 @@ CMyFormView::CMyFormView()
 	m_strObjectName(_T("")),
 	m_wstrFileName(L""), m_wstrFilePath(L""),
 	m_eTerrainType(TERRAIN_END)
+	, m_strPositionX(_T(""))
+	, m_strPositionY(_T(""))
+	, m_strPositionZ(_T(""))
+	, m_strRotationX(_T(""))
+	, m_strRotationY(_T(""))
+	, m_strRotationZ(_T(""))
+	, m_strScaleX(_T(""))
+	, m_strScaleY(_T(""))
+	, m_strScaleZ(_T(""))
 {
 
 }
@@ -31,6 +42,15 @@ void CMyFormView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON1, m_TerrainTypeRadioBtn[0]);
 	DDX_Control(pDX, IDC_BUTTON2, m_TerrainTypeRadioBtn[1]);
 	DDX_Control(pDX, IDC_BUTTON3, m_TerrainTypeRadioBtn[2]);
+	DDX_Text(pDX, IDC_EDIT2, m_strPositionX);
+	DDX_Text(pDX, IDC_EDIT3, m_strPositionY);
+	DDX_Text(pDX, IDC_EDIT4, m_strPositionZ);
+	DDX_Text(pDX, IDC_EDIT5, m_strRotationX);
+	DDX_Text(pDX, IDC_EDIT6, m_strRotationY);
+	DDX_Text(pDX, IDC_EDIT7, m_strRotationZ);
+	DDX_Text(pDX, IDC_EDIT8, m_strScaleX);
+	DDX_Text(pDX, IDC_EDIT9, m_strScaleY);
+	DDX_Text(pDX, IDC_EDIT10, m_strScaleZ);
 }
 
 BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
@@ -38,6 +58,7 @@ BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMyFormView::OnBnClickedButtonMonster)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMyFormView::OnBnClickedButtonTrigger)
 	ON_WM_LBUTTONDOWN()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 
@@ -139,6 +160,40 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 	UpdateData(FALSE);
 }
 
+void CMyFormView::UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXVECTOR3 _vSize)
+{
+	UpdateData(TRUE);
+
+	m_strPositionX = to_string(_vPos.x).substr(0, (_vPos.x < 0) ? 5 : 4).c_str();
+	m_strPositionY = to_string(_vPos.y).substr(0, (_vPos.y < 0) ? 5 : 4).c_str();
+	m_strPositionZ = to_string(_vPos.z).substr(0, (_vPos.z < 0) ? 5 : 4).c_str();
+
+	m_strRotationX = to_string(_vRot.x).substr(0, (_vRot.x < 0) ? 5 : 4).c_str();
+	m_strRotationY = to_string(_vRot.y).substr(0, (_vRot.y < 0) ? 5 : 4).c_str();
+	m_strRotationZ = to_string(_vRot.z).substr(0, (_vRot.z < 0) ? 5 : 4).c_str();
+
+	m_strScaleX = to_string(_vSize.x).substr(0, (_vSize.x < 0) ? 5 : 4).c_str();
+	m_strScaleY = to_string(_vSize.y).substr(0, (_vSize.y < 0) ? 5 : 4).c_str();
+	m_strScaleZ = to_string(_vSize.z).substr(0, (_vSize.z < 0) ? 5 : 4).c_str();
+
+	UpdateData(FALSE);
+}
+
+D3DXVECTOR3 CMyFormView::GetPositionVec()
+{
+	return D3DXVECTOR3(stof((wstring)m_strPositionX), stof((wstring)m_strPositionY), stof((wstring)m_strPositionZ));
+}
+
+D3DXVECTOR3 CMyFormView::GetRotationVec()
+{
+	return D3DXVECTOR3(stof((wstring)m_strRotationX), stof((wstring)m_strRotationY), stof((wstring)m_strRotationZ));
+}
+
+D3DXVECTOR3 CMyFormView::GetScaleVec()
+{
+	return D3DXVECTOR3(stof((wstring)m_strScaleX), stof((wstring)m_strScaleY), stof((wstring)m_strScaleZ));
+}
+
 
 void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -155,4 +210,12 @@ void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	UpdateData(FALSE);
 
+
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+	pView->ChangeValueAfter();
 }
+

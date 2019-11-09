@@ -48,6 +48,7 @@ public:
 
 public:
 	void SelectObjAfter();
+	void ChangeValueAfter();
 
 private:
 	void PipeLineSetup();
@@ -66,6 +67,7 @@ public:
 	typedef map<WORD, ENGINE::CLayer*>	MAP_LAYER;
 	MAP_LAYER	m_mapLayer;
 
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전

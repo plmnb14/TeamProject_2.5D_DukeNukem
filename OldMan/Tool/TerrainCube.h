@@ -2,6 +2,7 @@
 #ifndef __TERRAIN_CUBE_H__
 
 #include "GameObject.h"
+#include "Ray.h"
 
 namespace ENGINE
 {
@@ -48,6 +49,11 @@ private:
 	ENGINE::CTransform*		m_pTransform;
 
 	bool					m_bSetted;
+	bool					m_bIsPicked;
+
+	//Test
+	CRay					m_Ray;
+	ENGINE::VTX_TEX			m_tVtx;
 };
 
 #define __TERRAIN_CUBE_H__

@@ -34,6 +34,9 @@ public:
 private:
 	void Release();
 
+public:
+	VTX_TEX* GetVtx();
+
 protected:
 	LPDIRECT3DVERTEXBUFFER9	m_pVB;
 	LPDIRECT3DINDEXBUFFER9	m_pIB;
@@ -47,6 +50,8 @@ protected:
 
 	DWORD		m_dwIdxSize;	// 인덱스 메모리 크기.
 	D3DFORMAT	m_IdxFmt;	// 인덱스 포맷 (16비트 or 32비트)
+
+	VTX_TEX*	m_pVtx;
 };
 
 END

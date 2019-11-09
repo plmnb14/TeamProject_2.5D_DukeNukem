@@ -41,11 +41,25 @@ public:
 
 public:
 	void UpdatePicture(wstring _wstrName, wstring _wstrPath);
+	void UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXVECTOR3 _vSize);
+	D3DXVECTOR3 GetPositionVec();
+	D3DXVECTOR3 GetRotationVec();
+	D3DXVECTOR3 GetScaleVec();
 
 public:
-	CString m_strObjectName;
 	CStatic m_PictureControl;
 	CButton m_TerrainTypeRadioBtn[3];
+
+	CString m_strObjectName;
+	CString m_strPositionX;
+	CString m_strPositionY;
+	CString m_strPositionZ;
+	CString m_strRotationX;
+	CString m_strRotationY;
+	CString m_strRotationZ;
+	CString m_strScaleX;
+	CString m_strScaleY;
+	CString m_strScaleZ;
 
 public:
 	CObjectSelectDlg m_ObjSelect_Map;

@@ -10,12 +10,11 @@ typedef struct tagPathInfo
 	int iImgCount = 0;
 }PATH_INFO;
 
-typedef struct tagTexture
+typedef struct tagRay
 {
-	LPDIRECT3DTEXTURE9	pTexture;
-	D3DXIMAGE_INFO		tImgInfo;
-}TEX_INFO;
-
+	D3DXVECTOR3 vOrigin;
+	D3DXVECTOR3 vDir;
+}RAY;
 
 #define __TOOL_STRUCT_H__
 #endif

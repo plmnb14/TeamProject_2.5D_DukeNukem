@@ -47,6 +47,8 @@ HRESULT CRcTex::CreateBuffer()
 	pVtxTex[3].vPos = { -1.f, -1.f, 0.f };
 	pVtxTex[3].vTex = { 0.f, 1.f };
 
+	m_pVtx = pVtxTex;
+
 	m_pVB->Unlock();
 
 	// 인덱스 셋팅

@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(CToolView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CToolView 생성/소멸
@@ -187,6 +188,22 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 	for (; iter_begin != iter_end; ++iter_begin)
 		iter_begin->second->LateUpdate();
 
+	if (m_pSelectCube)
+	{
+		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+		NULL_CHECK(pMainFrm);
+
+		CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+		NULL_CHECK(pFormView);
+
+		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
+		pFormView->UpdateTransformStr(
+			pTransform->GetPos(),
+			D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z)),
+			pTransform->GetSize()
+		);
+	}
+
 	CView::Invalidate(FALSE); // 화면 갱신
 }
 
@@ -202,10 +219,32 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_pSelectCube->SetClicked();
 		m_pCubeList.push_back(m_pSelectCube);
 
+		//m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		//m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+	}
+}
+
+
+void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CView::OnRButtonDown(nFlags, point);
+
+	if (m_pSelectCube)
+	{
+		m_pSelectCube = nullptr;
+
+		//delete Object in Layer
+		//m_mapLayer[ENGINE::CLayer::OBJECT]
+	}
+	else
+	{
 		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 	}
 }
+
 
 void CToolView::SelectObjAfter()
 {
@@ -213,6 +252,25 @@ void CToolView::SelectObjAfter()
 	{
 		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+	}
+}
+
+void CToolView::ChangeValueAfter()
+{
+	if (m_pSelectCube)
+	{
+		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+		NULL_CHECK(pMainFrm);
+
+		CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+		NULL_CHECK(pFormView);
+
+		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
+		pTransform->SetPos(pFormView->GetPositionVec());
+		pTransform->SetAngle(pFormView->GetRotationVec().x, ENGINE::ANGLE_X);
+		pTransform->SetAngle(pFormView->GetRotationVec().y, ENGINE::ANGLE_Y);
+		pTransform->SetAngle(pFormView->GetRotationVec().z, ENGINE::ANGLE_Z);
+		pTransform->SetSize(pFormView->GetScaleVec());
 	}
 }
 
@@ -225,7 +283,7 @@ void CToolView::PipeLineSetup()
 	m_pDeviceMgr->GetDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	// WireFrame
-	m_pDeviceMgr->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//m_pDeviceMgr->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 	D3DXMATRIX matView, matProj; // 뷰행렬, 투영행렬
 
@@ -273,13 +331,13 @@ HRESULT CToolView::Initialize()
 	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Terrain Add Failed", E_FAIL);
 
 	// Player Texture
-	//hr = m_pResourceMgr->AddTexture(
-	//	m_pGraphicDev,
-	//	ENGINE::RESOURCE_STATIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"Texture_Player",
-	//	L"../Texture/Player%d.png", 1);
-	//FAILED_CHECK_MSG_RETURN(hr, L"Texture_Player Add Failed", E_FAIL);
+	hr = m_pResourceMgr->AddTexture(
+		m_pDeviceMgr->GetDevice(),
+		ENGINE::RESOURCE_STATIC,
+		ENGINE::TEX_NORMAL,
+		L"Texture_Player",
+		L"../Client/Texture/Terrain/Terrain%d.png", 1);
+	FAILED_CHECK_MSG_RETURN(hr, L"Texture_Player Add Failed", E_FAIL);
 
 	//// Terrain Texture
 	//hr = m_pResourceMgr->AddTexture(
@@ -339,3 +397,4 @@ HRESULT CToolView::Add_Object_Layer()
 
 	return S_OK;
 }
+

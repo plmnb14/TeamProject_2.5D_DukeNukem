@@ -2,12 +2,15 @@
 #include "TerrainCube.h"
 #include "Trasform.h"
 
+#include "Ray.h"
+
 
 CTerrainCube::CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
+	m_bIsPicked(false), m_bSetted(false)
 {
 }
 
@@ -20,7 +23,7 @@ void CTerrainCube::Update()
 {
 	ENGINE::CGameObject::Update();
 
-	KeyInput();
+	//KeyInput();
 	MouseInput();
 }
 
@@ -32,8 +35,16 @@ void CTerrainCube::LateUpdate()
 void CTerrainCube::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
-	//m_pTexture->Render(0);
+
+	if (m_bIsPicked)
+		ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+
+	m_pTexture->Render(0);
 	m_pBuffer->Render();
+
+	if (m_bIsPicked)
+		ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
 }
 
 HRESULT CTerrainCube::Initialize()
@@ -59,13 +70,13 @@ HRESULT CTerrainCube::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
-	// Texture
-	//pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Texture_Player");
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent.insert({ L"Texture", pComponent });
-	//
-	//m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
-	//NULL_CHECK_RETURN(m_pTexture, E_FAIL);
+	//Texture
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Texture_Player");
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Texture", pComponent });
+	
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
 	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_Player");
@@ -88,6 +99,9 @@ HRESULT CTerrainCube::AddComponent()
 
 void CTerrainCube::KeyInput()
 {
+	if (m_bSetted)
+		return;
+
 	float fMoveSpeed = 5.f * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
@@ -112,24 +126,44 @@ void CTerrainCube::MouseInput()
 	{
 		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
 
-		D3DVIEWPORT9 vp;
-		m_pGraphicDev->GetViewport(&vp);
 
-		D3DXMATRIX matProj, matProjInverse, matView;
+		CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
 
-		m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
-		m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+		//// test
+		//D3DXMATRIX matWVP, matWorld, matView, matProj;
+		//ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_WORLD, &matWorld);
+		//ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_PROJECTION, &matProj);
+		//matWVP = matWorld * matView * matProj;
 
-		v3.x = (((v3.x * 2.f) / vp.Width) - 1.f) / matProj(0, 0);
-		v3.y = (-((v3.y * 2.f) / vp.Height) + 1.f) / matProj(1, 1);
+		//D3DXVECTOR4 vWorldToScreen = { 0, 0, 0, 1 };
+		//D3DXVec4Transform(&vWorldToScreen, &vWorldToScreen, &matWVP);
 
-		/*D3DXMatrixInverse(&matProjInverse, 0, &matView);
-		matProjInverse = matProj * matProjInverse;
-		D3DXVec3TransformCoord(&v3, &v3, &matProjInverse);*/
+		//float fWorldToScreenX = vWorldToScreen.x / vWorldToScreen.w;
+		//float fWorldToScreenY = vWorldToScreen.y / vWorldToScreen.w;
+		//float fWorldToScreenZ = vWorldToScreen.z / vWorldToScreen.w;
 
-		float fTestMul = 15.f;
-		D3DXVECTOR3 vPos = D3DXVECTOR3(v3.x * fTestMul, 0, v3.y * fTestMul);
+		//float fScreenNormalX = (fWorldToScreenX + 1) * 0.5f;
+		//float fScreenNormalY = (fWorldToScreenY + 1) * 0.5f;
+		//fScreenNormalY = 1.f - fScreenNormalY;
+
+		//float fScreenX = fScreenNormalX * WINCX;
+		//float fScreenY = fScreenNormalY * WINCY;
+		
+		float fTestMul = 1.f;
+		D3DXVECTOR3 vPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);
 		m_pTransform->SetPos(vPos);
+	}
+	else if (m_bSetted)
+	{
+		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
+
+		D3DXVECTOR3 vPos;
+		CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
+		if (r.IsPicked(m_pBuffer->GetVtx()[0].vPos, m_pBuffer->GetVtx()[1].vPos, m_pBuffer->GetVtx()[2].vPos, vPos)
+			|| r.IsPicked(m_pBuffer->GetVtx()[0].vPos, m_pBuffer->GetVtx()[2].vPos, m_pBuffer->GetVtx()[3].vPos, vPos))
+			m_bIsPicked = true;
+		else
+			m_bIsPicked = false;
 	}
 }
 
