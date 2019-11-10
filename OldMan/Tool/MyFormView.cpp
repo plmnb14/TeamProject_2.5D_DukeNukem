@@ -39,9 +39,9 @@ void CMyFormView::DoDataExchange(CDataExchange* pDX)
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_FORMPICTURE, m_PictureControl);
 	DDX_Text(pDX, IDC_EDIT1, m_strObjectName);
-	DDX_Control(pDX, IDC_BUTTON1, m_TerrainTypeRadioBtn[0]);
-	DDX_Control(pDX, IDC_BUTTON2, m_TerrainTypeRadioBtn[1]);
-	DDX_Control(pDX, IDC_BUTTON3, m_TerrainTypeRadioBtn[2]);
+	DDX_Control(pDX, IDC_RADIO1, m_TerrainTypeRadioBtn[0]);
+	DDX_Control(pDX, IDC_RADIO2, m_TerrainTypeRadioBtn[1]);
+	DDX_Control(pDX, IDC_RADIO3, m_TerrainTypeRadioBtn[2]);
 	DDX_Text(pDX, IDC_EDIT2, m_strPositionX);
 	DDX_Text(pDX, IDC_EDIT3, m_strPositionY);
 	DDX_Text(pDX, IDC_EDIT4, m_strPositionZ);
@@ -59,6 +59,7 @@ BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMyFormView::OnBnClickedButtonTrigger)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_KEYDOWN()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -201,16 +202,6 @@ void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CFormView::OnLButtonDown(nFlags, point);
 
-	UpdateData(TRUE);
-
-	UpdatePicture(m_wstrFileName, m_wstrFilePath);
-
-	for (int i = 0; i < 3; i++)
-		if ((m_TerrainTypeRadioBtn[i].GetCheck() >= 1)) m_eTerrainType = (TERRAIN_TYPE)i;
-
-	UpdateData(FALSE);
-
-
 	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
 	NULL_CHECK(pMainFrm);
 
@@ -219,3 +210,24 @@ void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
 	pView->ChangeValueAfter();
 }
 
+
+
+void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CFormView::OnMouseMove(nFlags, point);
+
+	UpdateData(TRUE);
+
+	UpdatePicture(m_wstrFileName, m_wstrFilePath);
+
+	for (int i = 0; i < 3; i++)
+	{
+		if ((m_TerrainTypeRadioBtn[i].GetCheck() >= 1))
+			m_eTerrainType = (TERRAIN_TYPE)i;
+	}
+
+	UpdateData(FALSE);
+
+}

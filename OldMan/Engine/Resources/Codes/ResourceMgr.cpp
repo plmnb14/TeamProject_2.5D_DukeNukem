@@ -4,6 +4,8 @@
 #include "RcTex.h"
 #include "TerrainCol.h"
 #include "TerrainTex.h"
+#include "CubeCol.h"
+#include "WallCubeCol.h"
 
 USING(ENGINE)
 
@@ -55,6 +57,12 @@ HRESULT CResourceMgr::AddBuffer(
 		break;
 	case CVIBuffer::BUFFER_TERRAINTEX:
 		pResource = CTerrainTex::Create(pGraphicDev, wCntX, wCntZ, wItv);
+		break;
+	case CVIBuffer::BUFFER_CUBECOL:
+		pResource = CCubeCol::Create(pGraphicDev);
+		break;
+	case CVIBuffer::BUFFER_WALLCUBECOL:
+		pResource = CWallCubeCol::Create(pGraphicDev);
 		break;
 	}
 

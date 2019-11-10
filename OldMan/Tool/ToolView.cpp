@@ -15,6 +15,8 @@
 #include "MyFormView.h"
 
 #include "TerrainCube.h"
+#include "TerrainWallCube.h"
+#include "TerrainRect.h"
 #include "Trasform.h"
 
 #ifdef _DEBUG
@@ -214,13 +216,38 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnLButtonDown(nFlags, point);
 
+	// юс╫ц
 	if (m_pSelectCube)
 	{
-		m_pSelectCube->SetClicked();
+		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+		NULL_CHECK(pMainFrm);
+
+		CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+		NULL_CHECK(pFormView);
+
+		switch (pFormView->m_eTerrainType)
+		{
+		case CMyFormView::TERRAIN_CUBE:
+		{
+			dynamic_cast<CTerrainCube*>(m_pSelectCube)->SetClicked();
+			break;
+		}
+		case CMyFormView::TERRAIN_WALL:
+		{
+			dynamic_cast<CTerrainWallCube*>(m_pSelectCube)->SetClicked();
+			break;
+		}
+		case CMyFormView::TERRAIN_RECT:
+		{
+			dynamic_cast<CTerrainRect*>(m_pSelectCube)->SetClicked();
+			break;
+		}
+		}
+
 		m_pCubeList.push_back(m_pSelectCube);
 
-		//m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
-		//m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 	}
 }
 
@@ -250,8 +277,33 @@ void CToolView::SelectObjAfter()
 {
 	if (!m_pSelectCube)
 	{
-		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+		NULL_CHECK(pMainFrm);
+
+		CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+		NULL_CHECK(pFormView);
+
+		switch (pFormView->m_eTerrainType)
+		{
+		case CMyFormView::TERRAIN_CUBE:
+		{
+			m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+			break;
+		}
+		case CMyFormView::TERRAIN_WALL:
+		{
+			m_pSelectCube = CTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+			break;
+		}
+		case CMyFormView::TERRAIN_RECT:
+		{
+			m_pSelectCube = CTerrainRect::Create(m_pDeviceMgr->GetDevice());
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+			break;
+		}
+		}
 	}
 }
 
@@ -314,21 +366,28 @@ HRESULT CToolView::Initialize()
 	PipeLineSetup();
 
 	// Player Buffer
+
+	// Terrain Buffer
 	HRESULT hr = m_pResourceMgr->AddBuffer(
 		m_pDeviceMgr->GetDevice(),
 		ENGINE::RESOURCE_STATIC,
 		ENGINE::CVIBuffer::BUFFER_RCTEX,
-		L"Buffer_Player");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
+		L"Buffer_RcTex");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
 
-	//// Terrain Buffer
-	//hr = m_pResourceMgr->AddBuffer(
-	//	m_pDeviceMgr->GetDevice(),
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::CVIBuffer::BUFFER_TERRAINTEX,
-	//	L"Buffer_Terrain",
-	//	TERRAIN_VTX_X, TERRAIN_VTX_Z, TERRAIN_VTX_ITV);
-	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Terrain Add Failed", E_FAIL);
+	hr = m_pResourceMgr->AddBuffer(
+		m_pDeviceMgr->GetDevice(),
+		ENGINE::RESOURCE_STATIC,
+		ENGINE::CVIBuffer::BUFFER_CUBECOL,
+		L"Buffer_CubeCol");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
+
+	hr = m_pResourceMgr->AddBuffer(
+		m_pDeviceMgr->GetDevice(),
+		ENGINE::RESOURCE_STATIC,
+		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
+		L"Buffer_WallCubeCol");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
 
 	// Player Texture
 	hr = m_pResourceMgr->AddTexture(

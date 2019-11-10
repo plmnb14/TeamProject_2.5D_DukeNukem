@@ -1,5 +1,5 @@
 #pragma once
-#ifndef __TERRAIN_CUBE_H__
+#ifndef __TERRAIN_WALLCUBE_H__
 
 #include "ToolTerrain.h"
 #include "GameObject.h"
@@ -14,12 +14,12 @@ namespace ENGINE
 	class CTransform;
 }
 
-class CTerrainCube : public CToolTerrain
+class CTerrainWallCube : public CToolTerrain
 {
 private:
-	explicit CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CTerrainWallCube(LPDIRECT3DDEVICE9 pGraphicDev);
 public:
-	virtual ~CTerrainCube();
+	virtual ~CTerrainWallCube();
 
 public:
 	virtual void Update() override;
@@ -39,7 +39,7 @@ private:
 	void MouseInput();
 
 public:
-	static CTerrainCube* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CTerrainWallCube* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -57,5 +57,5 @@ private:
 	ENGINE::VTX_TEX			m_tVtx;
 };
 
-#define __TERRAIN_CUBE_H__
+#define __TERRAIN_WALLCUBE_H__
 #endif

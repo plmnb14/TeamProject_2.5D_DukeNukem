@@ -6,7 +6,7 @@
 
 #include "Layer.h"
 
-class CTerrainCube;
+class CToolTerrain;
 class CToolDoc;
 class CToolView : public CView
 {
@@ -61,8 +61,8 @@ public:
 	ENGINE::CGraphicDev*			m_pDeviceMgr;
 	ENGINE::CResourceMgr*			m_pResourceMgr;
 
-	list<CTerrainCube*>				m_pCubeList;
-	CTerrainCube*					m_pSelectCube;
+	list<CToolTerrain*>				m_pCubeList;
+	CToolTerrain*					m_pSelectCube;
 
 	typedef map<WORD, ENGINE::CLayer*>	MAP_LAYER;
 	MAP_LAYER	m_mapLayer;

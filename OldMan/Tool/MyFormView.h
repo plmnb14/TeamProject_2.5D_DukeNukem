@@ -71,5 +71,6 @@ public:
 	wstring m_wstrFilePath;
 
 	TERRAIN_TYPE m_eTerrainType;
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
