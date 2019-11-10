@@ -225,7 +225,6 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 	{
 	case FIRST_PERSON:
 	{
-		cout << m_pKeyMgr->Get_MouseGap(g_hWnd).x << endl;
 		SetUp_MouseRotate();
 
 		break;
@@ -300,35 +299,32 @@ void CCamera::SetUp_MouseRotate()
 		D3DXVECTOR3 tmpEyePos;
 
 		fAngle = tmpPT.x;
-		Yaw(fAngle);
 		dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->MoveAngle(ENGINE::ANGLE_Y , fAngle);
 
-		//D3DXMatrixRotationY(&matRot, D3DXToRadian(fAngle));
-		//
-		//memcpy(&matRot._41, &m_pCCamera_Component->Get_LookAt(), sizeof(D3DXVECTOR3));
-		//
-		//vDir = m_pCCamera_Component->Get_EyePos() - m_pCCamera_Component->Get_LookAt();
-		//
-		//// x 축 재조정
-		//D3DXVec3TransformNormal(&tmpRight, &m_pCCamera_Component->Get_Right() , &matRot);
-		//D3DXVec3Normalize(&tmpRight, &tmpRight);
-		//m_pCCamera_Component->Set_Right(tmpRight);
-		//
-		//// y 축 재조정
-		//D3DXVec3TransformNormal(&tmpUp, &m_pCCamera_Component->Get_Up(), &matRot);
-		//D3DXVec3Normalize(&tmpUp, &tmpUp);
-		//m_pCCamera_Component->Set_Up(tmpUp);
-		//
-		//// z 축 재조정
-		//D3DXVec3TransformNormal(&tmpLook, &m_pCCamera_Component->Get_Look(), &matRot);
-		//D3DXVec3Normalize(&tmpLook, &tmpLook);
-		//m_pCCamera_Component->Set_Look(tmpLook);
-		//
-		//// 카메라 위치 재조정
-		//D3DXVec3TransformCoord(&tmpEyePos, &vDir, &matRot);
-		//m_pCCamera_Component->Set_EyePos(tmpEyePos);
-		//
-		//D3DXVECTOR3 tmpPos;
+		D3DXMatrixRotationY(&matRot, D3DXToRadian(fAngle));
+		
+		memcpy(&matRot._41, &m_pCCamera_Component->Get_EyePos(), sizeof(D3DXVECTOR3));
+		
+		vDir = m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos();
+		
+		// x 축 재조정
+		D3DXVec3TransformNormal(&tmpRight, &m_pCCamera_Component->Get_Right() , &matRot);
+		D3DXVec3Normalize(&tmpRight, &tmpRight);
+		m_pCCamera_Component->Set_Right(tmpRight);
+		
+		// y 축 재조정
+		D3DXVec3TransformNormal(&tmpUp, &m_pCCamera_Component->Get_Up(), &matRot);
+		D3DXVec3Normalize(&tmpUp, &tmpUp);
+		m_pCCamera_Component->Set_Up(tmpUp);
+		
+		// z 축 재조정
+		D3DXVec3TransformNormal(&tmpLook, &m_pCCamera_Component->Get_Look(), &matRot);
+		D3DXVec3Normalize(&tmpLook, &tmpLook);
+		m_pCCamera_Component->Set_Look(tmpLook);
+		
+		// 카메라 위치 재조정
+		D3DXVec3TransformCoord(&tmpEyePos, &vDir, &matRot);
+		m_pCCamera_Component->Set_LookAt(tmpEyePos);
 	}
 
 	if (tmpPT.y != 0)
@@ -336,34 +332,27 @@ void CCamera::SetUp_MouseRotate()
 		D3DXVECTOR3 tmpRight, tmpUp, tmpLook;
 		D3DXVECTOR3 tmpEyePos;
 
-		fAngle = tmpPT.y * 0.5f * m_pTimeMgr->GetDelta();
+		fAngle = tmpPT.y;
 
-		Roll(fAngle);
-		Pitch(fAngle);
-
-		//D3DXMatrixRotationAxis(&matRot, &m_pCCamera_Component->Get_Right(), fAngle);
-		//memcpy(&matRot._41, &m_pCCamera_Component->Get_LookAt(), sizeof(D3DXVECTOR3));
-		//
-		//vDir = m_pCCamera_Component->Get_EyePos() - m_pCCamera_Component->Get_LookAt();
-		//
-		//
-		//// y 축 재조정
-		//D3DXVec3TransformNormal(&tmpUp, &m_pCCamera_Component->Get_Up(), &matRot);
-		//D3DXVec3Normalize(&tmpUp, &tmpUp);
-		//m_pCCamera_Component->Set_Up(tmpUp);
-		//
-		//// z 축 재조정
-		//D3DXVec3TransformNormal(&tmpLook, &m_pCCamera_Component->Get_Look(), &matRot);
-		//D3DXVec3Normalize(&tmpLook, &tmpLook);
-		//m_pCCamera_Component->Set_Look(tmpLook);
-		//
-		//// 카메라 위치 재조정
-		//D3DXVec3TransformCoord(&tmpEyePos, &vDir, &matRot);
-		//m_pCCamera_Component->Set_EyePos(tmpEyePos);
-		//
-		//D3DXVECTOR3 tmpPos;
-
-		//m_pCCamera_Component->Set_EyePos(dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos());
+		D3DXMatrixRotationAxis(&matRot, &m_pCCamera_Component->Get_Right(), D3DXToRadian(fAngle));
+		memcpy(&matRot._41, &m_pCCamera_Component->Get_EyePos(), sizeof(D3DXVECTOR3));
+		
+		vDir = m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos();
+		
+		
+		// y 축 재조정
+		D3DXVec3TransformNormal(&tmpUp, &m_pCCamera_Component->Get_Up(), &matRot);
+		D3DXVec3Normalize(&tmpUp, &tmpUp);
+		m_pCCamera_Component->Set_Up(tmpUp);
+		
+		// z 축 재조정
+		D3DXVec3TransformNormal(&tmpLook, &m_pCCamera_Component->Get_Look(), &matRot);
+		D3DXVec3Normalize(&tmpLook, &tmpLook);
+		m_pCCamera_Component->Set_Look(tmpLook);
+		
+		// 카메라 위치 재조정
+		D3DXVec3TransformCoord(&tmpEyePos, &vDir, &matRot);
+		m_pCCamera_Component->Set_LookAt(tmpEyePos);
 	}
 }
 
@@ -381,7 +370,7 @@ void CCamera::Update()
 	pt.x = WINCX / 2;
 	pt.y = WINCY / 2;
 
-	ScreenToClient(g_hWnd,&pt);
+	ClientToScreen(g_hWnd,&pt);
 	SetCursorPos(pt.x, pt.y);
 
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matView);
