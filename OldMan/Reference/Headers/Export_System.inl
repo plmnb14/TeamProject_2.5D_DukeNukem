@@ -14,3 +14,8 @@ CKeyMgr * GetKeyMgr()
 {
 	return CKeyMgr::GetInstance();
 }
+
+CFrameMgr * GetFrameMgr()
+{
+	return CFrameMgr::GetInstance();
+}

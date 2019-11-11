@@ -10,6 +10,9 @@ CCamera::CCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pGraphicDev(pGraphicDev),
 	m_pTarget(nullptr), m_pCCamera_Component(nullptr),
 	m_fMax_PlayerRoll_Angle(0), m_fCamShake_Y(0),
+	m_fEyeHeight(0) , m_fZoom_Min(0) , m_fZoom_Max(0),
+	m_fX_Angle(0) , m_fY_Angle(0), m_fZ_Angle(0),
+	m_fX_OriginXAngle(0) , m_fX_OriginYAngle(0),
 	m_pTimeMgr(ENGINE::GetTimeMgr()), m_pKeyMgr(ENGINE::GetKeyMgr())
 {
 	m_pGraphicDev->AddRef();
@@ -149,8 +152,16 @@ void CCamera::Roll(float _Angle)
 	{
 	case LAND_MODE:
 	{
-		if (fabs(_Angle) <= m_fMax_PlayerRoll_Angle)
-			D3DXMatrixRotationAxis(&T, &m_pCCamera_Component->Get_Look(), D3DXToRadian(_Angle));
+		D3DXVECTOR3  vView;
+
+		vView = m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos();
+
+		D3DXMatrixRotationAxis(&T, &m_pCCamera_Component->Get_Look(), D3DXToRadian(_Angle));
+		D3DXVec3TransformCoord(&vView, &vView, &T);
+
+		m_pCCamera_Component->Set_LookAt(m_pCCamera_Component->Get_EyePos() + vView);
+
+		cout << m_pCCamera_Component->Get_LookAt().z << endl;
 
 		break;
 	}
@@ -164,7 +175,7 @@ void CCamera::Roll(float _Angle)
 	D3DXVECTOR3 vTmpRight, vTmpUp;
 
 	D3DXVec3TransformCoord(&vTmpRight, &m_pCCamera_Component->Get_Right(), &T);
-	D3DXVec3TransformCoord(&vTmpUp, &m_pCCamera_Component->Get_Look(), &T);
+	D3DXVec3TransformCoord(&vTmpUp, &m_pCCamera_Component->Get_Up(), &T);
 
 	m_pCCamera_Component->Set_Right(vTmpRight);
 	m_pCCamera_Component->Set_Up(vTmpUp);
@@ -177,7 +188,6 @@ void CCamera::SetUp_ViewMatrix(D3DXMATRIX * _ViewMatrix)
 	D3DXVECTOR3 tmpUp = { 0,1,0 };
 
 	tmpLook = m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos();
-
 	D3DXVec3Normalize(&tmpLook, &tmpLook);
 
 	D3DXVec3Cross(&tmpRight, &tmpUp, &tmpLook);
@@ -226,7 +236,14 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 	case FIRST_PERSON:
 	{
 		SetUp_MouseRotate();
-
+		
+		POINT pt;
+		pt.x = WINCX / 2;
+		pt.y = WINCY / 2;
+		
+		ClientToScreen(g_hWnd, &pt);
+		SetCursorPos(pt.x, pt.y);
+		
 		break;
 	}
 	case THIRD_PERSON:
@@ -272,16 +289,24 @@ void CCamera::SetUp_FirstPerson_ViewPoint()
 
 void CCamera::SetUp_Zoom()
 {
-	if (GetAsyncKeyState('Z'))
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_SPACE))
 	{
-		if (m_pCCamera_Component->Get_Distance() > 1.f)
-			m_pCCamera_Component->Add_Distance(-0.01f);
+		if (m_pCCamera_Component->Get_Distance() > m_fZoom_Min)
+			m_pCCamera_Component->Add_Distance(-0.1f);
+
+		POINT pt;
+		pt.x = WINCX / 2;
+		pt.y = WINCY / 2;
+
+		ClientToScreen(g_hWnd, &pt);
+		SetCursorPos(pt.x, pt.y);
+
 	}
 
 	if (GetAsyncKeyState('X'))
 	{
-		if (m_pCCamera_Component->Get_Distance() < 10.f)
-			m_pCCamera_Component->Add_Distance(0.01f);
+		if (m_pCCamera_Component->Get_Distance() < m_fZoom_Max)
+			m_pCCamera_Component->Add_Distance(0.1f);
 	}
 }
 
@@ -297,31 +322,38 @@ void CCamera::SetUp_MouseRotate()
 	{
 		D3DXVECTOR3 tmpRight, tmpUp, tmpLook;
 		D3DXVECTOR3 tmpEyePos;
+		
+		cout << m_fX_OriginXAngle << endl;
 
-		fAngle = tmpPT.x;
-		dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->MoveAngle(ENGINE::ANGLE_Y, fAngle);
+		m_fX_Angle = tmpPT.x * 0.5f;
+		m_fX_OriginXAngle += m_fX_Angle;
 
-		D3DXMatrixRotationY(&matRot, D3DXToRadian(fAngle));
+		if (m_fX_OriginXAngle <= -360 || m_fX_OriginXAngle >= 360)
+			m_fX_OriginXAngle = 0;
 
+		dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->MoveAngle(ENGINE::ANGLE_Y, m_fX_Angle);
+		
+		D3DXMatrixRotationY(&matRot, D3DXToRadian(m_fX_Angle));
+		
 		memcpy(&matRot._41, &m_pCCamera_Component->Get_EyePos(), sizeof(D3DXVECTOR3));
-
+		
 		vDir = m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos();
-
+		
 		// x 축 재조정
 		D3DXVec3TransformNormal(&tmpRight, &m_pCCamera_Component->Get_Right(), &matRot);
 		D3DXVec3Normalize(&tmpRight, &tmpRight);
 		m_pCCamera_Component->Set_Right(tmpRight);
-
+		
 		// y 축 재조정
 		D3DXVec3TransformNormal(&tmpUp, &m_pCCamera_Component->Get_Up(), &matRot);
 		D3DXVec3Normalize(&tmpUp, &tmpUp);
 		m_pCCamera_Component->Set_Up(tmpUp);
-
+		
 		// z 축 재조정
 		D3DXVec3TransformNormal(&tmpLook, &m_pCCamera_Component->Get_Look(), &matRot);
 		D3DXVec3Normalize(&tmpLook, &tmpLook);
 		m_pCCamera_Component->Set_Look(tmpLook);
-
+		
 		// 카메라 위치 재조정
 		D3DXVec3TransformCoord(&tmpEyePos, &vDir, &matRot);
 		m_pCCamera_Component->Set_LookAt(tmpEyePos);
@@ -329,31 +361,76 @@ void CCamera::SetUp_MouseRotate()
 
 	if (tmpPT.y != 0)
 	{
+		cout << m_pCCamera_Component->Get_Look().z << endl;
+
+		if (m_pCCamera_Component->Get_Look().z < 0.2f && m_pCCamera_Component->Get_Look().z > 0.f)
+		{
+			if (m_pCCamera_Component->Get_Look().y < -0.9f)
+			{
+				if (tmpPT.y > 0)
+					return;
+			}
+
+			if (m_pCCamera_Component->Get_Look().y > 0.9f)
+			{
+				if (tmpPT.y < 0)
+					return;
+			}
+		}
+
+		else if (m_pCCamera_Component->Get_Look().z > -0.2f && m_pCCamera_Component->Get_Look().z < 0.f)
+		{
+			if (m_pCCamera_Component->Get_Look().y < -0.9f)
+			{
+				if (tmpPT.y > 0)
+					return;
+			}
+
+			if (m_pCCamera_Component->Get_Look().y > 0.9f)
+			{
+				if (tmpPT.y < 0)
+					return;
+			}
+		}
+
 		D3DXVECTOR3 tmpRight, tmpUp, tmpLook;
 		D3DXVECTOR3 tmpEyePos;
 
-		fAngle = tmpPT.y;
+		m_fY_Angle = tmpPT.y * 0.5f;
+		m_fX_OriginYAngle += m_fY_Angle;
 
-		D3DXMatrixRotationAxis(&matRot, &m_pCCamera_Component->Get_Right(), D3DXToRadian(fAngle));
+		if (m_fX_OriginYAngle <= -360 || m_fX_OriginYAngle >= 360)
+			m_fX_OriginYAngle = 0;
+		
+		D3DXMatrixRotationAxis(&matRot, &m_pCCamera_Component->Get_Right(), D3DXToRadian(m_fY_Angle));
 		memcpy(&matRot._41, &m_pCCamera_Component->Get_EyePos(), sizeof(D3DXVECTOR3));
-
+		
 		vDir = m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos();
-
-
+		
 		// y 축 재조정
-		D3DXVec3TransformNormal(&tmpUp, &m_pCCamera_Component->Get_Up(), &matRot);
-		D3DXVec3Normalize(&tmpUp, &tmpUp);
-		m_pCCamera_Component->Set_Up(tmpUp);
-
-		// z 축 재조정
-		D3DXVec3TransformNormal(&tmpLook, &m_pCCamera_Component->Get_Look(), &matRot);
-		D3DXVec3Normalize(&tmpLook, &tmpLook);
-		m_pCCamera_Component->Set_Look(tmpLook);
-
+		//D3DXVec3TransformNormal(&tmpUp, &m_pCCamera_Component->Get_Up(), &matRot);
+		//D3DXVec3Normalize(&tmpUp, &tmpUp);
+		//m_pCCamera_Component->Set_Up(tmpUp);
+		//
+		//// z 축 재조정
+		//D3DXVec3TransformNormal(&tmpLook, &m_pCCamera_Component->Get_Look(), &matRot);
+		//D3DXVec3Normalize(&tmpLook, &tmpLook);
+		//m_pCCamera_Component->Set_Look(tmpLook);
+		
 		// 카메라 위치 재조정
 		D3DXVec3TransformCoord(&tmpEyePos, &vDir, &matRot);
 		m_pCCamera_Component->Set_LookAt(tmpEyePos);
 	}
+}
+
+D3DXVECTOR3 CCamera::Get_Pos()
+{
+	return m_pCCamera_Component->Get_EyePos();
+}
+
+D3DXVECTOR3 CCamera::Get_LookAt()
+{
+	return m_pCCamera_Component->Get_LookAt();
 }
 
 void CCamera::Update()
@@ -363,15 +440,7 @@ void CCamera::Update()
 	SetUp_Zoom();
 	SetUp_FirstPerson_ViewPoint();
 	SetUp_ViewPoint(m_eCameraViewPoint);
-
 	SetUp_ViewMatrix(&matView);
-
-	POINT pt;
-	pt.x = WINCX / 2;
-	pt.y = WINCY / 2;
-
-	ClientToScreen(g_hWnd, &pt);
-	SetCursorPos(pt.x, pt.y);
 
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matView);
 }
@@ -397,7 +466,12 @@ HRESULT CCamera::Initialize()
 	m_pCCamera_Component->Set_Distance(5.f);
 	m_pCCamera_Component->set_MainCamera(true);
 
+
 	m_fMax_PlayerRoll_Angle = 25.f;			// 1 인칭 시, 좌우 기울이기 최대 각도
+	m_fEyeHeight = 3.f;
+	m_fZoom_Min = 1.f;
+	m_fZoom_Max = 10.f;
+
 
 	D3DXMATRIX matView, matProj;
 
@@ -406,6 +480,8 @@ HRESULT CCamera::Initialize()
 
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(70.f), WINCX / (float)WINCY, 1.f, 1000.f);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
+
+	ShowCursor(false);
 
 	return S_OK;
 }

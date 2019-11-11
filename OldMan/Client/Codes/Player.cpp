@@ -3,12 +3,14 @@
 #include "Camera.h"
 #include "Trasform.h"
 #include "Camera_Component.h"
+#include "Bullet.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),	
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
+	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
 {	
 }
@@ -87,6 +89,32 @@ void CPlayer::KeyInput()
 	float fMoveSpeed = 5.f * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_LBUTTON))
+	{
+		//float fAngle[3];
+		//
+		//fAngle[0] = m_pTransform->GetAngle(ENGINE::ANGLE_X);
+		//fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
+		//fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
+
+		D3DXVECTOR3 tmpDir;
+		D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x , dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 1.5f , dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z };
+
+		// 3ÀÎÄª
+		//D3DXVECTOR3 tmpDir = dynamic_cast<CCamera*>(m_pCamera)->Get_Pos() - dynamic_cast<CCamera*>(m_pCamera)->Get_LookAt();
+		//D3DXVec3Normalize(&tmpDir, &tmpDir);
+		float fAngle[3];
+
+		fAngle[0] = dynamic_cast<CCamera*>(m_pCamera)->Get_YAngle();
+		fAngle[1] = dynamic_cast<CCamera*>(m_pCamera)->Get_XAngle();
+		fAngle[2] = 1;
+
+		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos , tmpDir, fAngle);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+
+	}
+
+
 	if (GetAsyncKeyState('W'))
 	{
 		m_pTransform->MovePos(fMoveSpeed);
@@ -131,6 +159,17 @@ void CPlayer::KeyInput()
 	{
 		dynamic_cast<CCamera*>(m_pCamera)->Yaw(fAngleSpeed);
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
+	}
+
+
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_Q))
+	{
+		dynamic_cast<CCamera*>(m_pCamera)->Roll(-1.f);
+	}
+
+	else if (m_pKeyMgr->KeyPressing(ENGINE::KEY_E))
+	{
+
 	}
 }
 

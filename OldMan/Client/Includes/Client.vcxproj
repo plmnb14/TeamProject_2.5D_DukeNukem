@@ -167,6 +167,7 @@
     <ClInclude Include="..\Headers\Function.h" />
     <ClInclude Include="..\Headers\Functor.h" />
     <ClInclude Include="..\Headers\Struct.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

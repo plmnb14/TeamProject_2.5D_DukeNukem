@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __PLAYER_H__
+#ifndef __BULLET_H__
 
 #include "GameObject.h"
 
@@ -13,13 +13,13 @@ namespace ENGINE
 	class CTransform;
 }
 
-class CPlayer : public ENGINE::CGameObject
+class CBullet : public ENGINE::CGameObject
 {
 private:
-	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CBullet(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
-	virtual ~CPlayer();
+	virtual ~CBullet();
 
 public:
 	virtual void Update() override;
@@ -34,10 +34,17 @@ private:
 	HRESULT AddComponent();
 	void KeyInput();
 
-public:
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+private:
+	void Set_Target(CGameObject* _Target);
+	void Set_Device(LPDIRECT3DDEVICE9 pGraphicDev);
+	void Set_Pos(D3DXVECTOR3 _Pos);
+	void Set_Dir(D3DXVECTOR3 _Dir);
+	void Set_Angle(float* _Angle);
 
-private:	
+public:
+	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle);
+
+private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
 	ENGINE::CKeyMgr*		m_pKeyMgr;
@@ -45,7 +52,10 @@ private:
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
+
+private:
+	CGameObject*	m_pTarget;
 };
 
-#define __PLAYER_H__
+#define __BULLET_H__
 #endif

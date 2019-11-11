@@ -34,6 +34,9 @@
     <Filter Include="02.GameObject\03.Camera">
       <UniqueIdentifier>{867a41bb-1ddd-49ad-ad63-c43694e804fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\04.Bullet">
+      <UniqueIdentifier>{a5ad0130-6567-4cda-9b5a-84be63798f22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="..\Headers\Functor.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>02.GameObject\04.Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -115,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Camera.cpp">
       <Filter>02.GameObject\03.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>02.GameObject\04.Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
