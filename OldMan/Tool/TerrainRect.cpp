@@ -150,15 +150,15 @@ void CTerrainRect::MouseInput()
 	}
 	else if (m_bSetted)
 	{
-		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
+		//D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
 
-		D3DXVECTOR3 vPos;
-		CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
-		if (r.IsPicked(m_pBuffer->GetVtx()[0].vPos, m_pBuffer->GetVtx()[1].vPos, m_pBuffer->GetVtx()[2].vPos, vPos)
-			|| r.IsPicked(m_pBuffer->GetVtx()[0].vPos, m_pBuffer->GetVtx()[2].vPos, m_pBuffer->GetVtx()[3].vPos, vPos))
-			m_bIsPicked = true;
-		else
-			m_bIsPicked = false;
+		//D3DXVECTOR3 vPos;
+		//CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
+		//if (r.IsPicked(m_pBuffer->GetVtx()[0].vPos, m_pBuffer->GetVtx()[1].vPos, m_pBuffer->GetVtx()[2].vPos, vPos)
+		//	|| r.IsPicked(m_pBuffer->GetVtx()[0].vPos, m_pBuffer->GetVtx()[2].vPos, m_pBuffer->GetVtx()[3].vPos, vPos))
+		//	m_bIsPicked = true;
+		//else
+		//	m_bIsPicked = false;
 	}
 }
 
