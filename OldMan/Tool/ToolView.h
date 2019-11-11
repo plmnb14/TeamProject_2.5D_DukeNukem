@@ -45,23 +45,24 @@ public:
 	virtual void OnInitialUpdate();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 public:
 	void SelectObjAfter();
 	void ChangeValueAfter();
+	void ChangeTerrainType();
 
 private:
 	void PipeLineSetup();
 	HRESULT Initialize();
-	virtual HRESULT Add_Environment_Layer();
-	virtual HRESULT Add_Object_Layer();
-	//virtual HRESULT Add_UI_Layer();
-
-public:
-	void ChangeTerrainType();
-
-private:
-	void CreateCube();
+	HRESULT Add_Environment_Layer();
+	HRESULT Add_Object_Layer();
+	//HRESULT Add_UI_Layer();
+	void CubeMoveToMouse();
+	void CreateCube(bool _bIsChange);
+	void DragPicking(float _fPointX, float _fPointY);
+	bool CheckGrid();
 
 public:
 	ENGINE::CGraphicDev*			m_pDeviceMgr;
@@ -73,7 +74,10 @@ public:
 	typedef map<WORD, ENGINE::CLayer*>	MAP_LAYER;
 	MAP_LAYER	m_mapLayer;
 
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	D3DXVECTOR3 m_vBeforeMousePos;
+	float m_fDragX;
+	float m_fDragY;
+
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전

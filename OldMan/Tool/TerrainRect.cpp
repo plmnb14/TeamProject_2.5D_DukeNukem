@@ -18,12 +18,17 @@ CTerrainRect::~CTerrainRect()
 	Release();
 }
 
-void CTerrainRect::Update()
+int CTerrainRect::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	ENGINE::CGameObject::Update();
 
 	//KeyInput();
 	MouseInput();
+
+	return NO_EVENT;
 }
 
 void CTerrainRect::LateUpdate()
@@ -44,6 +49,46 @@ void CTerrainRect::Render()
 	if (m_bIsPicked)
 		ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 
+}
+
+bool CTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
+{
+	if (!m_bSetted)
+		return false;
+
+	POINT pt = {};
+
+	GetCursorPos(&pt);
+	ScreenToClient(g_hWnd, &pt);
+
+	D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
+	CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
+
+	float fTestMul = 15.f;
+	D3DXVECTOR3 vRayPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);
+
+	D3DXMATRIX matWorld;
+	ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_WORLD, &matWorld);
+	//D3DXMatrixInverse(&matWorld, 0, &matWorld);
+
+	DWORD dwVtxCount = 0;
+	ENGINE::VTX_TEX* pVtx = m_pBuffer->GetVtx(dwVtxCount);
+	float fGridRange = 1.f;
+	for (int i = 0; i < dwVtxCount; i++)
+	{
+		D3DXVECTOR3 vVtxPos = pVtx[i].vPos;
+		D3DXVECTOR3 vVtxWorldPos;
+		D3DXVec3TransformCoord(&vVtxWorldPos, &vVtxPos, &matWorld);
+		if ((vVtxWorldPos.x + fGridRange > vRayPos.x && vVtxWorldPos.x - fGridRange < vRayPos.x)
+			&& (vVtxWorldPos.y + fGridRange > vRayPos.y && vVtxWorldPos.y - fGridRange < vRayPos.y))
+		{
+			// 임시 기준 Grid 정함
+			_vVtx = D3DXVECTOR3(vVtxWorldPos.x, vVtxWorldPos.y, m_pTransform->GetPos().z );
+			return true;
+		}
+	}
+
+	return false;
 }
 
 HRESULT CTerrainRect::Initialize()
@@ -119,30 +164,12 @@ void CTerrainRect::MouseInput()
 
 	if (!m_bSetted)
 	{
+		if (m_bIsFitGrid)
+			return;
+
 		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
 
-
 		CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
-
-		//// test
-		//D3DXMATRIX matWVP, matWorld, matView, matProj;
-		//ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_WORLD, &matWorld);
-		//ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_PROJECTION, &matProj);
-		//matWVP = matWorld * matView * matProj;
-
-		//D3DXVECTOR4 vWorldToScreen = { 0, 0, 0, 1 };
-		//D3DXVec4Transform(&vWorldToScreen, &vWorldToScreen, &matWVP);
-
-		//float fWorldToScreenX = vWorldToScreen.x / vWorldToScreen.w;
-		//float fWorldToScreenY = vWorldToScreen.y / vWorldToScreen.w;
-		//float fWorldToScreenZ = vWorldToScreen.z / vWorldToScreen.w;
-
-		//float fScreenNormalX = (fWorldToScreenX + 1) * 0.5f;
-		//float fScreenNormalY = (fWorldToScreenY + 1) * 0.5f;
-		//fScreenNormalY = 1.f - fScreenNormalY;
-
-		//float fScreenX = fScreenNormalX * WINCX;
-		//float fScreenY = fScreenNormalY * WINCY;
 
 		float fTestMul = 15.f;
 		D3DXVECTOR3 vPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);

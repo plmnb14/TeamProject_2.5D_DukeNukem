@@ -19,12 +19,17 @@ CTerrainWallCube::~CTerrainWallCube()
 	Release();
 }
 
-void CTerrainWallCube::Update()
+int CTerrainWallCube::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	ENGINE::CGameObject::Update();
 
 	//KeyInput();
 	MouseInput();
+
+	return NO_EVENT;
 }
 
 void CTerrainWallCube::LateUpdate()

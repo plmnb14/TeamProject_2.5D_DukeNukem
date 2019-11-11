@@ -22,9 +22,10 @@ public:
 	virtual ~CTerrainRect();
 
 public:
-	virtual void Update() override;
+	virtual int Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
+	virtual bool CheckGrid(D3DXVECTOR3& _vVtx) override;
 
 private:
 	virtual HRESULT Initialize() override;
@@ -47,10 +48,6 @@ private:
 	ENGINE::CTransform*		m_pTransform;
 
 	bool					m_bIsPicked;
-
-	//Test
-	CRay					m_Ray;
-	ENGINE::VTX_TEX			m_tVtx;
 };
 
 #define __TERRAIN_RECT_H__

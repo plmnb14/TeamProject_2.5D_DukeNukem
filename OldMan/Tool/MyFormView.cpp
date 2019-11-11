@@ -17,17 +17,27 @@ CMyFormView::CMyFormView()
 	m_strObjectName(_T("")),
 	m_wstrFileName(L""), m_wstrFilePath(L""),
 	m_eTerrainType(TERRAIN_END)
-	, m_strPositionX(_T(""))
-	, m_strPositionY(_T(""))
-	, m_strPositionZ(_T(""))
-	, m_strRotationX(_T(""))
-	, m_strRotationY(_T(""))
-	, m_strRotationZ(_T(""))
-	, m_strScaleX(_T(""))
-	, m_strScaleY(_T(""))
-	, m_strScaleZ(_T(""))
+	, m_strPositionX(_T("0"))
+	, m_strPositionY(_T("0"))
+	, m_strPositionZ(_T("0"))
+	, m_strRotationX(_T("0"))
+	, m_strRotationY(_T("0"))
+	, m_strRotationZ(_T("0"))
+	, m_strScaleX(_T("1"))
+	, m_strScaleY(_T("1"))
+	, m_strScaleZ(_T("1"))
 {
+	m_fPositionValue[X] = 0.f;
+	m_fPositionValue[Y] = 0.f;
+	m_fPositionValue[Z] = 0.f;
 
+	m_fRotaionValue[X] = 0.f;
+	m_fRotaionValue[Y] = 0.f;
+	m_fRotaionValue[Z] = 0.f;
+
+	m_fScaleValue[X] = 1.f;
+	m_fScaleValue[Y] = 1.f;
+	m_fScaleValue[Z] = 1.f;
 }
 
 CMyFormView::~CMyFormView()
@@ -60,6 +70,16 @@ BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_KEYDOWN()
 	ON_WM_MOUSEMOVE()
+	ON_WM_KEYDOWN()
+	ON_EN_CHANGE(IDC_EDIT9, &CMyFormView::OnEnChangeEdit9)
+	ON_EN_CHANGE(IDC_EDIT2, &CMyFormView::OnEnChangeEdit2)
+	ON_EN_CHANGE(IDC_EDIT3, &CMyFormView::OnEnChangeEdit3)
+	ON_EN_CHANGE(IDC_EDIT4, &CMyFormView::OnEnChangeEdit4)
+	ON_EN_CHANGE(IDC_EDIT5, &CMyFormView::OnEnChangeEdit5)
+	ON_EN_CHANGE(IDC_EDIT6, &CMyFormView::OnEnChangeEdit6)
+	ON_EN_CHANGE(IDC_EDIT7, &CMyFormView::OnEnChangeEdit7)
+	ON_EN_CHANGE(IDC_EDIT8, &CMyFormView::OnEnChangeEdit8)
+	ON_EN_CHANGE(IDC_EDIT10, &CMyFormView::OnEnChangeEdit10)
 END_MESSAGE_MAP()
 
 
@@ -182,6 +202,32 @@ void CMyFormView::UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXV
 	UpdateData(FALSE);
 }
 
+void CMyFormView::InitData()
+{
+	UpdateData(TRUE);
+
+	m_strPositionX = to_string(m_fPositionValue[X]).substr(0, (m_fPositionValue[X] < 0) ? 5 : 4).c_str();
+	m_strPositionY = to_string(m_fPositionValue[Y]).substr(0, (m_fPositionValue[Y] < 0) ? 5 : 4).c_str();
+	m_strPositionZ = to_string(m_fPositionValue[Z]).substr(0, (m_fPositionValue[Z] < 0) ? 5 : 4).c_str();
+
+	m_strRotationX = to_string(m_fRotaionValue[X]).substr(0, (m_fRotaionValue[X] < 0) ? 5 : 4).c_str();
+	m_strRotationY = to_string(m_fRotaionValue[Y]).substr(0, (m_fRotaionValue[Y] < 0) ? 5 : 4).c_str();
+	m_strRotationZ = to_string(m_fRotaionValue[Z]).substr(0, (m_fRotaionValue[Z] < 0) ? 5 : 4).c_str();
+
+	m_strScaleX = to_string(m_fScaleValue[X]).substr(0, (m_fScaleValue[X] < 0) ? 5 : 4).c_str();
+	m_strScaleY = to_string(m_fScaleValue[Y]).substr(0, (m_fScaleValue[Y] < 0) ? 5 : 4).c_str();
+	m_strScaleZ = to_string(m_fScaleValue[Z]).substr(0, (m_fScaleValue[Z] < 0) ? 5 : 4).c_str();
+
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+	pView->ChangeValueAfter();
+
+	UpdateData(FALSE);
+}
+
 D3DXVECTOR3 CMyFormView::GetPositionVec()
 {
 	return D3DXVECTOR3(stof((wstring)m_strPositionX), stof((wstring)m_strPositionY), stof((wstring)m_strPositionZ));
@@ -197,12 +243,9 @@ D3DXVECTOR3 CMyFormView::GetScaleVec()
 	return D3DXVECTOR3(stof((wstring)m_strScaleX), stof((wstring)m_strScaleY), stof((wstring)m_strScaleZ));
 }
 
-
-void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
+void CMyFormView::EditDataExchange()
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
-	CFormView::OnLButtonDown(nFlags, point);
+	UpdateData(TRUE);
 
 	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
 	NULL_CHECK(pMainFrm);
@@ -210,6 +253,30 @@ void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
 	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
 	NULL_CHECK(pView);
 	pView->ChangeValueAfter();
+
+	// 데이터 저장
+	m_fPositionValue[X] = GetPositionVec().x;
+	m_fPositionValue[Y] = GetPositionVec().y;
+	m_fPositionValue[Z] = GetPositionVec().z;
+
+	m_fRotaionValue[X] = GetRotationVec().x;
+	m_fRotaionValue[Y] = GetRotationVec().y;
+	m_fRotaionValue[Z] = GetRotationVec().z;
+
+	m_fScaleValue[X] = GetScaleVec().x;
+	m_fScaleValue[Y] = GetScaleVec().y;
+	m_fScaleValue[Z] = GetScaleVec().z;
+
+	UpdateData(FALSE);
+}
+
+
+void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CFormView::OnLButtonDown(nFlags, point);
+
 }
 
 
@@ -230,21 +297,81 @@ void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
 		{
 			if (m_eTerrainType != (TERRAIN_TYPE)i)
 			{
-				if (m_eTerrainType != TERRAIN_END)
-				{
-					CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-					NULL_CHECK(pMainFrm);
-
-					CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
-					NULL_CHECK(pView);
-					pView->ChangeTerrainType();
-				}
-
 				m_eTerrainType = (TERRAIN_TYPE)i;
+
+				CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+				NULL_CHECK(pMainFrm);
+
+				CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+				NULL_CHECK(pView);
+				pView->ChangeTerrainType();
 			}
 		}
 	}
-
 	UpdateData(FALSE);
-
 }
+
+
+void CMyFormView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CFormView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+#pragma region Edit Contorl Data Exchage
+
+void CMyFormView::OnEnChangeEdit9()
+{
+	EditDataExchange();
+}
+
+
+void CMyFormView::OnEnChangeEdit2()
+{
+	EditDataExchange();
+}
+
+
+void CMyFormView::OnEnChangeEdit3()
+{
+	EditDataExchange();
+}
+
+
+void CMyFormView::OnEnChangeEdit4()
+{
+	EditDataExchange();
+}
+
+
+void CMyFormView::OnEnChangeEdit5()
+{
+	EditDataExchange();
+}
+
+
+void CMyFormView::OnEnChangeEdit6()
+{
+	EditDataExchange();
+}
+
+
+void CMyFormView::OnEnChangeEdit7()
+{
+	EditDataExchange();;
+}
+
+
+void CMyFormView::OnEnChangeEdit8()
+{
+	EditDataExchange();
+}
+
+
+void CMyFormView::OnEnChangeEdit10()
+{
+	EditDataExchange();
+}
+
+#pragma endregion

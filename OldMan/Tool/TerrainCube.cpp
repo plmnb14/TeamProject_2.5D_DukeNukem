@@ -19,12 +19,17 @@ CTerrainCube::~CTerrainCube()
 	Release();
 }
 
-void CTerrainCube::Update()
+int CTerrainCube::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	ENGINE::CGameObject::Update();
 
 	//KeyInput();
 	MouseInput();
+
+	return NO_EVENT;
 }
 
 void CTerrainCube::LateUpdate()

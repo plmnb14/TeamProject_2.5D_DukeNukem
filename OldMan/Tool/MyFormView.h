@@ -11,6 +11,7 @@ class CMyFormView : public CFormView
 
 public:
 	enum TERRAIN_TYPE { TERRAIN_CUBE, TERRAIN_WALL, TERRAIN_RECT, TERRAIN_END };
+	enum VALUE_IDX { X, Y, Z, VALUE_END };
 
 protected:
 	CMyFormView();           // 동적 만들기에 사용되는 protected 생성자입니다.
@@ -42,9 +43,13 @@ public:
 public:
 	void UpdatePicture(wstring _wstrName, wstring _wstrPath);
 	void UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXVECTOR3 _vSize);
+	void InitData();
+	void EditDataExchange();
 	D3DXVECTOR3 GetPositionVec();
 	D3DXVECTOR3 GetRotationVec();
 	D3DXVECTOR3 GetScaleVec();
+
+private:
 
 public:
 	CStatic m_PictureControl;
@@ -70,7 +75,21 @@ public:
 	wstring m_wstrFileName;
 	wstring m_wstrFilePath;
 
+	float m_fPositionValue[VALUE_END];
+	float m_fRotaionValue[VALUE_END];
+	float m_fScaleValue[VALUE_END];
+
 	TERRAIN_TYPE m_eTerrainType;
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnEnChangeEdit9();
+	afx_msg void OnEnChangeEdit2();
+	afx_msg void OnEnChangeEdit3();
+	afx_msg void OnEnChangeEdit4();
+	afx_msg void OnEnChangeEdit5();
+	afx_msg void OnEnChangeEdit6();
+	afx_msg void OnEnChangeEdit7();
+	afx_msg void OnEnChangeEdit8();
+	afx_msg void OnEnChangeEdit10();
 };
 

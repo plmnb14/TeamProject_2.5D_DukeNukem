@@ -11,10 +11,15 @@ public:
 	virtual ~CToolTerrain();
 
 public:
+	virtual bool CheckGrid(D3DXVECTOR3& _vVtx);
+
+public:
 	void SetClicked();
+	void SetFitGrid(bool _bIsFit);
 
 protected:
 	bool					m_bSetted;
+	bool					m_bIsFitGrid;
 
 };
 
