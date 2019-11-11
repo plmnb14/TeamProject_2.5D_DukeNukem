@@ -232,25 +232,14 @@ void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnRButtonDown(nFlags, point);
 
-	if (m_pSelectCube)
-	{
-		//m_pSelectCube->SetDead();
-		m_pSelectCube = nullptr;
-	}
-	else
-	{
-		CreateCube();
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
-	}
+	CreateCube();
+	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 }
 
 
 void CToolView::SelectObjAfter()
 {
-	if (!m_pSelectCube)
-	{
-		CreateCube();
-	}
+	CreateCube();
 }
 
 void CToolView::ChangeValueAfter()
@@ -407,18 +396,19 @@ HRESULT CToolView::Add_Object_Layer()
 
 void CToolView::ChangeTerrainType()
 {
-	if (m_pSelectCube)
-	{
-		//m_pSelectCube->SetDead();
-		m_pSelectCube = nullptr;
-	}
-
 	CreateCube();
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 }
 
 void CToolView::CreateCube()
 {
+
+	if (m_pSelectCube)
+	{
+		//m_pSelectCube->SetDead();
+		m_pSelectCube = nullptr;
+	}
+
 	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
 	NULL_CHECK(pMainFrm);
 
