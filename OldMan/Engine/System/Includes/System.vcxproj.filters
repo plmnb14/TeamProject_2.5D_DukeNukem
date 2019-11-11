@@ -10,6 +10,9 @@
     <Filter Include="01.TimeMgr">
       <UniqueIdentifier>{7836577b-7641-42f6-9236-87c368b33565}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.KeyMgr">
+      <UniqueIdentifier>{02007c14-8377-4a40-8119-c6d1b43ba816}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\GraphicDev.h">
@@ -21,6 +24,9 @@
     <ClInclude Include="..\Codes\TimeMgr.h">
       <Filter>01.TimeMgr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\KeyMgr.h">
+      <Filter>02.KeyMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\GraphicDev.cpp">
@@ -28,6 +34,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\TimeMgr.cpp">
       <Filter>01.TimeMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\KeyMgr.cpp">
+      <Filter>02.KeyMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

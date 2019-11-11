@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Exports\Export_Resource.h" />
+    <ClInclude Include="..\Codes\CubeCol.h" />
     <ClInclude Include="..\Codes\RcCol.h" />
     <ClInclude Include="..\Codes\RcTex.h" />
     <ClInclude Include="..\Codes\ResourceMgr.h" />
@@ -168,8 +169,10 @@
     <ClInclude Include="..\Codes\Texture.h" />
     <ClInclude Include="..\Codes\TriCol.h" />
     <ClInclude Include="..\Codes\VIBuffer.h" />
+    <ClInclude Include="..\Codes\WallCubeCol.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\CubeCol.cpp" />
     <ClCompile Include="..\Codes\RcCol.cpp" />
     <ClCompile Include="..\Codes\RcTex.cpp" />
     <ClCompile Include="..\Codes\ResourceMgr.cpp" />
@@ -179,6 +182,7 @@
     <ClCompile Include="..\Codes\Texture.cpp" />
     <ClCompile Include="..\Codes\TriCol.cpp" />
     <ClCompile Include="..\Codes\VIBuffer.cpp" />
+    <ClCompile Include="..\Codes\WallCubeCol.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Exports\Export_Resource.inl" />

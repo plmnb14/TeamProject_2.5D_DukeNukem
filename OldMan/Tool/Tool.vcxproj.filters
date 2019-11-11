@@ -31,11 +31,20 @@
     <Filter Include="05.GameObject">
       <UniqueIdentifier>{f68905a5-1b1c-4b6b-9ce1-474900e95ea3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.GameObject\00.TerrainCube">
-      <UniqueIdentifier>{17d4edc7-e846-4196-8443-bd71e7c15fa2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="96.Ray">
       <UniqueIdentifier>{669a5273-1d1d-4f97-8eee-f227447239bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject\00.ToolTerrain">
+      <UniqueIdentifier>{5261393e-b504-435e-ab6a-7b48e929a54f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject\00.ToolTerrain\00.TerrainCube">
+      <UniqueIdentifier>{17d4edc7-e846-4196-8443-bd71e7c15fa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject\00.ToolTerrain\01.TerrainWallCube">
+      <UniqueIdentifier>{cceef794-1a7d-4659-bc29-b49ef70642d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject\00.ToolTerrain\02.TerrainRect">
+      <UniqueIdentifier>{e9aed1b2-170c-4571-bc4e-6cdf500ab4f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,10 +88,19 @@
       <Filter>98.Headers</Filter>
     </ClInclude>
     <ClInclude Include="TerrainCube.h">
-      <Filter>05.GameObject\00.TerrainCube</Filter>
+      <Filter>05.GameObject\00.ToolTerrain\00.TerrainCube</Filter>
     </ClInclude>
     <ClInclude Include="Ray.h">
       <Filter>96.Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainRect.h">
+      <Filter>05.GameObject\00.ToolTerrain\02.TerrainRect</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainWallCube.h">
+      <Filter>05.GameObject\00.ToolTerrain\01.TerrainWallCube</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolTerrain.h">
+      <Filter>05.GameObject\00.ToolTerrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -111,10 +129,19 @@
       <Filter>97.FileInfo</Filter>
     </ClCompile>
     <ClCompile Include="TerrainCube.cpp">
-      <Filter>05.GameObject\00.TerrainCube</Filter>
+      <Filter>05.GameObject\00.ToolTerrain\00.TerrainCube</Filter>
     </ClCompile>
     <ClCompile Include="Ray.cpp">
       <Filter>96.Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainRect.cpp">
+      <Filter>05.GameObject\00.ToolTerrain\02.TerrainRect</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainWallCube.cpp">
+      <Filter>05.GameObject\00.ToolTerrain\01.TerrainWallCube</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolTerrain.cpp">
+      <Filter>05.GameObject\00.ToolTerrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

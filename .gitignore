@@ -1,8 +1,12 @@
 <<<<<<< Updated upstream
 *.ipch
+<<<<<<< HEAD
+*.pdb
+*.obj
+=======
 =======
 *.ncb
-*.vcproj
+
 *.db
 *.aps
 *.opt
@@ -13,7 +17,6 @@
 *.suo
 *.user
 *.userosscache
-*.sln.docstates
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -273,7 +276,6 @@ paket-files/
 
 # JetBrains Rider
 .idea/
-*.sln.iml
 
 # CodeRush
 .cr/
@@ -301,3 +303,4 @@ __pycache__/
 
 # End of https://www.gitignore.io/api/visualstudio
 >>>>>>> Stashed changes
+>>>>>>> 23c13facbae3b03470a2742ab4cf3b47fe962778
