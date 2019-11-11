@@ -10,7 +10,7 @@ CTerrainCube::CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
-	m_bIsPicked(false), m_bSetted(false)
+	m_bIsPicked(false)
 {
 }
 
@@ -61,10 +61,6 @@ void CTerrainCube::Release()
 {
 }
 
-void CTerrainCube::SetClicked()
-{
-	m_bSetted = true;
-}
 
 HRESULT CTerrainCube::AddComponent()
 {

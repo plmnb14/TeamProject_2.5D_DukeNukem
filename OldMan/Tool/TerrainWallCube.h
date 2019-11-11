@@ -31,7 +31,6 @@ private:
 	virtual void Release() override;
 
 public:
-	void SetClicked();
 
 private:
 	HRESULT AddComponent();
@@ -49,7 +48,6 @@ private:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 
-	bool					m_bSetted;
 	bool					m_bIsPicked;
 
 	//Test

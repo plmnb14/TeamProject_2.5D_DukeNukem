@@ -219,34 +219,8 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	// юс╫ц
 	if (m_pSelectCube)
 	{
-		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-		NULL_CHECK(pMainFrm);
-
-		CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
-		NULL_CHECK(pFormView);
-
-		switch (pFormView->m_eTerrainType)
-		{
-		case CMyFormView::TERRAIN_CUBE:
-		{
-			dynamic_cast<CTerrainCube*>(m_pSelectCube)->SetClicked();
-			break;
-		}
-		case CMyFormView::TERRAIN_WALL:
-		{
-			dynamic_cast<CTerrainWallCube*>(m_pSelectCube)->SetClicked();
-			break;
-		}
-		case CMyFormView::TERRAIN_RECT:
-		{
-			dynamic_cast<CTerrainRect*>(m_pSelectCube)->SetClicked();
-			break;
-		}
-		}
-
-		m_pCubeList.push_back(m_pSelectCube);
-
-		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		m_pSelectCube->SetClicked();
+		CreateCube();
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 	}
 }
@@ -260,14 +234,12 @@ void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	if (m_pSelectCube)
 	{
+		//m_pSelectCube->SetDead();
 		m_pSelectCube = nullptr;
-
-		//delete Object in Layer
-		//m_mapLayer[ENGINE::CLayer::OBJECT]
 	}
 	else
 	{
-		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		CreateCube();
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 	}
 }
@@ -277,33 +249,7 @@ void CToolView::SelectObjAfter()
 {
 	if (!m_pSelectCube)
 	{
-		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-		NULL_CHECK(pMainFrm);
-
-		CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
-		NULL_CHECK(pFormView);
-
-		switch (pFormView->m_eTerrainType)
-		{
-		case CMyFormView::TERRAIN_CUBE:
-		{
-			m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
-			break;
-		}
-		case CMyFormView::TERRAIN_WALL:
-		{
-			m_pSelectCube = CTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
-			break;
-		}
-		case CMyFormView::TERRAIN_RECT:
-		{
-			m_pSelectCube = CTerrainRect::Create(m_pDeviceMgr->GetDevice());
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
-			break;
-		}
-		}
+		CreateCube();
 	}
 }
 
@@ -455,5 +401,49 @@ HRESULT CToolView::Add_Object_Layer()
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
 
 	return S_OK;
+}
+
+void CToolView::ChangeTerrainType()
+{
+	if (m_pSelectCube)
+	{
+		//m_pSelectCube->SetDead();
+		m_pSelectCube = nullptr;
+	}
+
+	CreateCube();
+	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+}
+
+void CToolView::CreateCube()
+{
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	switch (pFormView->m_eTerrainType)
+	{
+	case CMyFormView::TERRAIN_CUBE:
+	{
+		m_pCubeList.push_back(m_pSelectCube);
+		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		break;
+	}
+	case CMyFormView::TERRAIN_WALL:
+	{
+		m_pCubeList.push_back(m_pSelectCube);
+		m_pSelectCube = CTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
+		break;
+	}
+	case CMyFormView::TERRAIN_RECT:
+	{
+		m_pCubeList.push_back(m_pSelectCube);
+		m_pSelectCube = CTerrainRect::Create(m_pDeviceMgr->GetDevice());
+		break;
+	}
+	}
+
 }
 

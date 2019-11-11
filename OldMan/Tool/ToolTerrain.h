@@ -9,6 +9,13 @@ protected:
 
 public:
 	virtual ~CToolTerrain();
+
+public:
+	void SetClicked();
+
+protected:
+	bool					m_bSetted;
+
 };
 
 #define __TOOL_TERRAIN_H__

@@ -58,6 +58,12 @@ private:
 	//virtual HRESULT Add_UI_Layer();
 
 public:
+	void ChangeTerrainType();
+
+private:
+	void CreateCube();
+
+public:
 	ENGINE::CGraphicDev*			m_pDeviceMgr;
 	ENGINE::CResourceMgr*			m_pResourceMgr;
 

@@ -30,9 +30,6 @@ private:
 	virtual HRESULT Initialize() override;
 	virtual void Release() override;
 
-public:
-	void SetClicked();
-
 private:
 	HRESULT AddComponent();
 	void KeyInput();
@@ -49,7 +46,6 @@ private:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 
-	bool					m_bSetted;
 	bool					m_bIsPicked;
 
 	//Test

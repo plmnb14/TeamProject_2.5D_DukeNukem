@@ -127,6 +127,8 @@ void CMyFormView::OnInitialUpdate()
 		m_ObjSelect_Trigger.Create(IDD_OBJECTSELECTDLG);
 		m_ObjSelect_Map.SetType(CObjectSelectDlg::OBJ_TRIGGER);
 	}
+
+	m_TerrainTypeRadioBtn[0].SetCheck(true);
 }
 
 void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
@@ -225,7 +227,22 @@ void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
 	for (int i = 0; i < 3; i++)
 	{
 		if ((m_TerrainTypeRadioBtn[i].GetCheck() >= 1))
-			m_eTerrainType = (TERRAIN_TYPE)i;
+		{
+			if (m_eTerrainType != (TERRAIN_TYPE)i)
+			{
+				if (m_eTerrainType != TERRAIN_END)
+				{
+					CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+					NULL_CHECK(pMainFrm);
+
+					CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+					NULL_CHECK(pView);
+					pView->ChangeTerrainType();
+				}
+
+				m_eTerrainType = (TERRAIN_TYPE)i;
+			}
+		}
 	}
 
 	UpdateData(FALSE);
