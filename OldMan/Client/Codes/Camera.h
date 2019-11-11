@@ -6,6 +6,8 @@
 
 namespace ENGINE
 {
+	class CTimeMgr;
+	class CKeyMgr;
 	class CCamera_Component;
 }
 
@@ -40,12 +42,14 @@ public:
 	void Roll(float _Angle);
 
 public:
-	void GetViewMatrix(D3DXMATRIX* _ViewMatrix);
+	void SetUp_ViewMatrix(D3DXMATRIX* _ViewMatrix);
 	void SetCameraMode(CameraMode _CameraType);
 
 public:
 	void SetUp_ViewPoint(CameraViewPoint _CameraViewPoint);
 	void SetUp_FirstPerson_ViewPoint();
+	void SetUp_Zoom();
+	void SetUp_MouseRotate();
 
 
 public:
@@ -72,11 +76,12 @@ private:
 	CameraViewPoint		m_eCameraViewPoint;
 
 private:
-	ENGINE::CAM_INFO			m_tCameraInfo;
 	ENGINE::CCamera_Component*	m_pCCamera_Component;
+	ENGINE::CTimeMgr*			m_pTimeMgr;
+	ENGINE::CKeyMgr*			m_pKeyMgr;
 
 private:
-	CGameObject*			m_pTarget;	// 추후 Obj Target 으로 변경 예정
+	CGameObject*	m_pTarget;	// 추후 Obj Target 으로 변경 예정
 
 
 private:

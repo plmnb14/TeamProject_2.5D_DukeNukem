@@ -4,7 +4,7 @@
 USING(ENGINE)
 
 CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphicDev)
-	: m_pGraphicDev(pGraphicDev)
+	: m_pGraphicDev(pGraphicDev) , m_pCamera(nullptr)
 {
 	m_pGraphicDev->AddRef();
 }

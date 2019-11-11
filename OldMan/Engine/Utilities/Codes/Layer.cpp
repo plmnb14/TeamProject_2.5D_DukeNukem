@@ -1,5 +1,6 @@
 #include "Layer.h"
 #include "GameObject.h"
+#include "Camera_Component.h"
 
 USING(ENGINE)
 
@@ -29,9 +30,11 @@ CGameObject* CLayer::Get_Player()
 
 CGameObject * CLayer::Get_MainCamera()
 {
-	//for (auto& piter : m_mapGameObject[ENGINE::OBJECT_TYPE::CAMERA])
-	//{
-	//}
+	for (auto& piter : m_mapGameObject[ENGINE::OBJECT_TYPE::CAMERA])
+	{
+		if (dynamic_cast<CCamera_Component*>(piter->Get_Component(L"Camera"))->Get_MainCamera() == true)
+			return piter;
+	}
 
 	return nullptr;
 }

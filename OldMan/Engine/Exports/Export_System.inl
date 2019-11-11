@@ -1,3 +1,4 @@
+#include "Export_System.h"
 
 CGraphicDev* GetGraphicDev()
 {
@@ -7,4 +8,9 @@ CGraphicDev* GetGraphicDev()
 CTimeMgr* GetTimeMgr()
 {
 	return CTimeMgr::GetInstance();
+}
+
+CKeyMgr * GetKeyMgr()
+{
+	return CKeyMgr::GetInstance();
 }
