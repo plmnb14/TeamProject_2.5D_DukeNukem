@@ -68,7 +68,8 @@ void CVIBuffer::Release()
 	}	
 }
 
-VTX_TEX* CVIBuffer::GetVtx()
+VTX_TEX* CVIBuffer::GetVtx(DWORD& _dwVtxCountOut)
 {
+	_dwVtxCountOut = m_dwVtxCount;
 	return m_pVtx;
 }

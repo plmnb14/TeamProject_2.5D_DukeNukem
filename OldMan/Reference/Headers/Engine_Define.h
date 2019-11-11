@@ -20,6 +20,9 @@ using namespace NAME;
 #define MID_STR 128
 #define MAX_STR 256
 
+#define NO_EVENT 0
+#define DEAD_OBJ 1
+
 #define ERR_MSG(message)	\
 ::MessageBox(nullptr, message, L"System Error!", MB_OK)
 

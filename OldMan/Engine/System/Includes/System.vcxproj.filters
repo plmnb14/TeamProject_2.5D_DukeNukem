@@ -13,9 +13,6 @@
     <Filter Include="02.KeyMgr">
       <UniqueIdentifier>{02007c14-8377-4a40-8119-c6d1b43ba816}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Test">
-      <UniqueIdentifier>{b5c219a8-e8a0-4fcf-8bc1-f6436f230190}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\GraphicDev.h">

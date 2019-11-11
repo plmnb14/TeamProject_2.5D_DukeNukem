@@ -16,7 +16,7 @@ public:
 	virtual ~CGameObject();
 
 public:
-	virtual void Update();
+	virtual int Update();
 	virtual void LateUpdate();
 	virtual void Render();
 
@@ -30,6 +30,10 @@ public:
 
 public:
 	CComponent* Get_Component(wstring _key) { return m_mapComponent[_key]; }
+	int GetDead();
+
+public:
+	void SetDead();
 
 protected:
 	LPDIRECT3DDEVICE9 m_pGraphicDev;
@@ -38,6 +42,8 @@ protected:
 	MAP_COMPONENT	m_mapComponent;
 
 	CGameObject*	m_pCamera;
+
+	bool			m_bIsDead;
 };
 
 END

@@ -4,7 +4,7 @@
 USING(ENGINE)
 
 CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphicDev)
-	: m_pGraphicDev(pGraphicDev) , m_pCamera(nullptr)
+	: m_pGraphicDev(pGraphicDev) , m_pCamera(nullptr), m_bIsDead(false)
 {
 	m_pGraphicDev->AddRef();
 }
@@ -14,13 +14,18 @@ CGameObject::~CGameObject()
 	Release();
 }
 
-void CGameObject::Update()
+int CGameObject::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	MAP_COMPONENT::iterator iter_begin = m_mapComponent.begin();
 	MAP_COMPONENT::iterator iter_end = m_mapComponent.end();
 
 	for (; iter_begin != iter_end; ++iter_begin)
 		iter_begin->second->Update();
+
+	return NO_EVENT;
 }
 
 void CGameObject::LateUpdate()
@@ -53,4 +58,14 @@ void CGameObject::Release()
 
 
 	Safe_Release(m_pGraphicDev);
+}
+
+int CGameObject::GetDead()
+{
+	return m_bIsDead;
+}
+
+void CGameObject::SetDead()
+{
+	m_bIsDead = true;
 }

@@ -28,7 +28,7 @@ CGameObject* CLayer::Get_Player()
 	return m_mapGameObject[ENGINE::OBJECT_TYPE::PLAYER].back();
 }
 
-CGameObject * CLayer::Get_MainCamera()
+CGameObject* CLayer::Get_MainCamera()
 {
 	for (auto& piter : m_mapGameObject[ENGINE::OBJECT_TYPE::CAMERA])
 	{
@@ -39,7 +39,7 @@ CGameObject * CLayer::Get_MainCamera()
 	return nullptr;
 }
 
-CGameObject * CLayer::Get_Camera_By_Index(int _Index)
+CGameObject* CLayer::Get_Camera_By_Index(int _Index)
 {
 	return nullptr;
 }
@@ -51,8 +51,22 @@ void CLayer::Update()
 
 	for (; iter_begin != iter_end; ++iter_begin)
 	{
-		for (auto& pObject : iter_begin->second)
-			pObject->Update();
+		auto& iter_begin_Obj = iter_begin->second.begin();
+		auto& iter_end_Obj = iter_begin->second.end();
+		for (; iter_begin_Obj != iter_end_Obj; )
+		{
+			int iEvent = (*iter_begin_Obj)->Update();
+			
+			if (DEAD_OBJ == iEvent)
+			{
+				Safe_Delete(*iter_begin_Obj);
+				iter_begin_Obj = iter_begin->second.erase(iter_begin_Obj);
+			}
+			else
+			{
+				++iter_begin_Obj;
+			}
+		}
 	}
 }
 

@@ -37,7 +37,7 @@ private:
 	void Release();
 
 public:
-	VTX_TEX* GetVtx();
+	VTX_TEX* GetVtx(DWORD& _dwVtxCountOut);
 
 protected:
 	LPDIRECT3DVERTEXBUFFER9	m_pVB;
