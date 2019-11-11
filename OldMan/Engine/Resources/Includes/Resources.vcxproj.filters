@@ -31,6 +31,12 @@
     <Filter Include="01.Resources\00.VIBuffer\04.TerrainTex">
       <UniqueIdentifier>{81e44717-b50a-420a-b021-85bac5455d8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Resources\00.VIBuffer\05.CubeCol">
+      <UniqueIdentifier>{82478e03-b26e-48d5-8095-9e289b32f80c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Resources\00.VIBuffer\06.WallCubeCol">
+      <UniqueIdentifier>{1ed0c28f-3266-4b2b-bfb7-ee80dd44d104}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\ResourceMgr.h">
@@ -63,6 +69,12 @@
     <ClInclude Include="..\Codes\TerrainTex.h">
       <Filter>01.Resources\00.VIBuffer\04.TerrainTex</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\CubeCol.h">
+      <Filter>01.Resources\00.VIBuffer\05.CubeCol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\WallCubeCol.h">
+      <Filter>01.Resources\00.VIBuffer\06.WallCubeCol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\ResourceMgr.cpp">
@@ -91,6 +103,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\TerrainTex.cpp">
       <Filter>01.Resources\00.VIBuffer\04.TerrainTex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CubeCol.cpp">
+      <Filter>01.Resources\00.VIBuffer\05.CubeCol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\WallCubeCol.cpp">
+      <Filter>01.Resources\00.VIBuffer\06.WallCubeCol</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
