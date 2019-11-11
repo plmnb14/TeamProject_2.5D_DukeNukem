@@ -321,6 +321,8 @@ HRESULT CToolView::Initialize()
 		L"Buffer_RcTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
 
+	int a = 0;
+
 	hr = m_pResourceMgr->AddBuffer(
 		m_pDeviceMgr->GetDevice(),
 		ENGINE::RESOURCE_STATIC,
