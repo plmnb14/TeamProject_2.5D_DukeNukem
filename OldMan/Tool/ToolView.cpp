@@ -14,9 +14,9 @@
 #include "MainFrm.h"
 #include "MyFormView.h"
 
-#include "TerrainCube.h"
-#include "TerrainWallCube.h"
-#include "TerrainRect.h"
+#include "ToolTerrainCube.h"
+#include "ToolTerrainWallCube.h"
+#include "ToolTerrainRect.h"
 #include "Trasform.h"
 
 #ifdef _DEBUG
@@ -405,6 +405,27 @@ HRESULT CToolView::Add_Object_Layer()
 
 void CToolView::ChangeTerrainType()
 {
+<<<<<<< Updated upstream
+=======
+	CreateCube(true);
+}
+
+void CToolView::AddCubeForLoad(CToolTerrain* pTerrain)
+{
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	pTerrain->SetClicked();
+	m_pCubeList.push_back(pTerrain);
+	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, pTerrain);
+}
+
+void CToolView::CubeMoveToMouse()
+{
+>>>>>>> Stashed changes
 	if (m_pSelectCube)
 	{
 		//m_pSelectCube->SetDead();
@@ -425,25 +446,163 @@ void CToolView::CreateCube()
 
 	switch (pFormView->m_eTerrainType)
 	{
-	case CMyFormView::TERRAIN_CUBE:
+	case ENGINE::TERRAIN_CUBE:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
-		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		m_pSelectCube = CToolTerrainCube::Create(m_pDeviceMgr->GetDevice());
 		break;
 	}
-	case CMyFormView::TERRAIN_WALL:
+	case ENGINE::TERRAIN_WALL:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
-		m_pSelectCube = CTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
+		m_pSelectCube = CToolTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
 		break;
 	}
-	case CMyFormView::TERRAIN_RECT:
+	case ENGINE::TERRAIN_RECT:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
-		m_pSelectCube = CTerrainRect::Create(m_pDeviceMgr->GetDevice());
+		m_pSelectCube = CToolTerrainRect::Create(m_pDeviceMgr->GetDevice());
 		break;
 	}
 	}
 
+<<<<<<< Updated upstream
 }
 
+=======
+	m_pSelectCube->SetTexName((wstring)pFormView->m_strObjectName);
+	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+
+	pFormView->EditDataExchange();
+	pFormView->InitData();
+}
+
+void CToolView::DragPicking(float _fPointX, float _fPointY)
+{
+	// Drag Picking
+	// 임시 (Ray로 옆면 벗어났는지 체크하는 것으로 수정하기)
+	if (::GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	{
+		D3DXVECTOR3 vMouse = { float(_fPointX), float(_fPointY), 0.f };
+
+		m_fDragX += vMouse.x - m_vBeforeMousePos.x;
+		m_fDragY += vMouse.y - m_vBeforeMousePos.y;
+		m_vBeforeMousePos = vMouse;
+
+		// 타일 사이즈만큼 움직였는지 체크
+		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
+		float fTestMul = 100.f;
+		float fSizeX = pTransform->GetSize().x * 2.f * fTestMul;
+		float fSizeY = pTransform->GetSize().y * 2.f * fTestMul;
+
+		if (abs(m_fDragX) >= fSizeX)
+		{
+			m_fDragX = 0.f;
+			m_vBeforeMousePos = vMouse;
+
+			m_pSelectCube->SetClicked();
+			CreateCube(false);
+		}
+		else if(abs(m_fDragY) >= fSizeY)
+		{
+			m_fDragY = 0.f;
+			m_vBeforeMousePos = vMouse;
+
+			m_pSelectCube->SetClicked();
+			CreateCube(false);
+		}
+	}
+
+	CView::Invalidate(FALSE); // 화면 갱신
+}
+
+bool CToolView::CheckGrid()
+{
+	if (!m_pSelectCube)
+		return false;
+
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	if (!pFormView->m_CheckButton_Grid.GetCheck())
+	{
+		m_pSelectCube->SetFitGrid(false);
+		return false;
+	}
+
+	// 임시 (3D 픽킹 배운 뒤 제대로 수정하기)
+	for (auto& iter : m_pCubeList)
+	{
+		D3DXVECTOR3 vVtxPos;
+		if (iter->CheckGrid(vVtxPos))
+		{
+			ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(iter->Get_Component(L"Transform"));
+			pFormView->UpdateTransformStr(
+				vVtxPos,
+				D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z)),
+				pTransform->GetSize()
+			);
+
+			m_pSelectCube->SetFitGrid(true);
+			pFormView->EditDataExchange();
+			return true;
+		}
+	}
+
+	m_pSelectCube->SetFitGrid(false);
+	return false;
+}
+
+
+
+void CToolView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+
+
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	if (GetAsyncKeyState('W') & 0x8000)
+	{
+		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
+		pTransform->SetPos(
+			D3DXVECTOR3(
+			pTransform->GetPos().x,
+			pTransform->GetPos().y + (2.f * pTransform->GetSize().y),
+			pTransform->GetPos().z));
+
+		pFormView->UpdateTransformStr(
+			pTransform->GetPos(),
+			D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z)),
+			pTransform->GetSize()
+		);
+		pFormView->EditDataExchange();
+	}
+
+	if (GetAsyncKeyState('S') & 0x8000)
+	{
+		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
+		pTransform->SetPos(
+			D3DXVECTOR3(
+				pTransform->GetPos().x,
+				pTransform->GetPos().y - (2.f * pTransform->GetSize().y),
+				pTransform->GetPos().z));
+
+		pFormView->UpdateTransformStr(
+			pTransform->GetPos(),
+			D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z)),
+			pTransform->GetSize()
+		);
+		pFormView->EditDataExchange();
+	}
+}
+>>>>>>> Stashed changes

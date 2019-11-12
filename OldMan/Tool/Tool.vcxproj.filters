@@ -78,12 +78,30 @@
     <ClInclude Include="Tool_Struct.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
     <ClInclude Include="TerrainCube.h">
       <Filter>05.GameObject\00.TerrainCube</Filter>
     </ClInclude>
     <ClInclude Include="Ray.h">
       <Filter>96.Ray</Filter>
     </ClInclude>
+=======
+    <ClInclude Include="Ray.h">
+      <Filter>96.Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolTerrain.h">
+      <Filter>05.GameObject\00.ToolTerrain</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolTerrainRect.h">
+      <Filter>05.GameObject\00.ToolTerrain\02.TerrainRect</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolTerrainWallCube.h">
+      <Filter>05.GameObject\00.ToolTerrain\01.TerrainWallCube</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolTerrainCube.h">
+      <Filter>05.GameObject\00.ToolTerrain\00.TerrainCube</Filter>
+    </ClInclude>
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -110,12 +128,30 @@
     <ClCompile Include="FileInfo.cpp">
       <Filter>97.FileInfo</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="TerrainCube.cpp">
       <Filter>05.GameObject\00.TerrainCube</Filter>
     </ClCompile>
     <ClCompile Include="Ray.cpp">
       <Filter>96.Ray</Filter>
     </ClCompile>
+=======
+    <ClCompile Include="Ray.cpp">
+      <Filter>96.Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolTerrain.cpp">
+      <Filter>05.GameObject\00.ToolTerrain</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolTerrainRect.cpp">
+      <Filter>05.GameObject\00.ToolTerrain\02.TerrainRect</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolTerrainWallCube.cpp">
+      <Filter>05.GameObject\00.ToolTerrain\01.TerrainWallCube</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolTerrainCube.cpp">
+      <Filter>05.GameObject\00.ToolTerrain\00.TerrainCube</Filter>
+    </ClCompile>
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Tool.ico">

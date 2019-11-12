@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "TerrainRect.h"
+#include "ToolTerrainRect.h"
 #include "Trasform.h"
 
 #include "Ray.h"
 
-CTerrainRect::CTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainRect::CToolTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CToolTerrain(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
@@ -13,12 +13,16 @@ CTerrainRect::CTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 }
 
-CTerrainRect::~CTerrainRect()
+CToolTerrainRect::~CToolTerrainRect()
 {
 	Release();
 }
 
+<<<<<<< Updated upstream:OldMan/Tool/TerrainRect.cpp
 void CTerrainRect::Update()
+=======
+int CToolTerrainRect::Update()
+>>>>>>> Stashed changes:OldMan/Tool/ToolTerrainRect.cpp
 {
 	ENGINE::CGameObject::Update();
 
@@ -26,12 +30,12 @@ void CTerrainRect::Update()
 	MouseInput();
 }
 
-void CTerrainRect::LateUpdate()
+void CToolTerrainRect::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 }
 
-void CTerrainRect::Render()
+void CToolTerrainRect::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
@@ -46,22 +50,72 @@ void CTerrainRect::Render()
 
 }
 
+<<<<<<< Updated upstream:OldMan/Tool/TerrainRect.cpp
 HRESULT CTerrainRect::Initialize()
+=======
+bool CToolTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
+{
+	if (!m_bSetted)
+		return false;
+
+	POINT pt = {};
+
+	GetCursorPos(&pt);
+	ScreenToClient(g_hWnd, &pt);
+
+	D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
+	CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
+
+	// 임시
+	float fTestMul = 1.f;
+	D3DXVECTOR3 vRayPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);
+
+	D3DXMATRIX matWorld;
+	ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_VIEW, &matWorld); // 임시 : 픽킹 수정 후 VIEW, WORLD 중 맞는걸로 변경필요
+	//D3DXMatrixInverse(&matWorld, 0, &matWorld);
+
+	DWORD dwVtxCount = 0;
+	ENGINE::VTX_TEX* pVtx = m_pBuffer->GetVtx(dwVtxCount);
+	float fGridRangeX = fTestMul * m_pTransform->GetSize().x;
+	float fGridRangeY = fTestMul * m_pTransform->GetSize().y;
+	for (int i = 0; i < dwVtxCount; i++)
+	{
+		D3DXVECTOR3 vVtxPos = pVtx[i].vPos;
+		D3DXVECTOR3 vVtxWorldPos;
+		D3DXVec3TransformCoord(&vVtxWorldPos, &vVtxPos, &matWorld);
+		if ((vVtxWorldPos.x + fGridRangeX > vRayPos.x && vVtxWorldPos.x - fGridRangeX < vRayPos.x)
+			&& (vVtxWorldPos.y + fGridRangeY > vRayPos.y && vVtxWorldPos.y - fGridRangeY < vRayPos.y))
+		{
+			if(vVtxWorldPos.x - vRayPos.x < vVtxWorldPos.y - vRayPos.y)
+				_vVtx = D3DXVECTOR3(vVtxWorldPos.x, m_pTransform->GetPos().y, m_pTransform->GetPos().z );
+			else if (vVtxWorldPos.x - vRayPos.x > vVtxWorldPos.y - vRayPos.y)
+				_vVtx = D3DXVECTOR3(m_pTransform->GetPos().x, vVtxWorldPos.y, m_pTransform->GetPos().z);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+HRESULT CToolTerrainRect::Initialize()
+>>>>>>> Stashed changes:OldMan/Tool/ToolTerrainRect.cpp
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	m_eTerrainType = ENGINE::TERRAIN_RECT;
 
 	return S_OK;
 }
 
-void CTerrainRect::Release()
+void CToolTerrainRect::Release()
 {
 }
 
 
-HRESULT CTerrainRect::AddComponent()
+HRESULT CToolTerrainRect::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
@@ -92,7 +146,7 @@ HRESULT CTerrainRect::AddComponent()
 	return S_OK;
 }
 
-void CTerrainRect::KeyInput()
+void CToolTerrainRect::KeyInput()
 {
 	if (m_bSetted)
 		return;
@@ -110,7 +164,7 @@ void CTerrainRect::KeyInput()
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
 }
 
-void CTerrainRect::MouseInput()
+void CToolTerrainRect::MouseInput()
 {
 	POINT pt = {};
 
@@ -162,11 +216,11 @@ void CTerrainRect::MouseInput()
 	}
 }
 
-CTerrainRect* CTerrainRect::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainRect* CToolTerrainRect::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CTerrainRect* pInstance = new CTerrainRect(pGraphicDev);
+	CToolTerrainRect* pInstance = new CToolTerrainRect(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

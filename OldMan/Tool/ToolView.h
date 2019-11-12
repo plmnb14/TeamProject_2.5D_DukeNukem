@@ -49,6 +49,11 @@ public:
 public:
 	void SelectObjAfter();
 	void ChangeValueAfter();
+<<<<<<< Updated upstream
+=======
+	void ChangeTerrainType();
+	void AddCubeForLoad(CToolTerrain* pTerrain);
+>>>>>>> Stashed changes
 
 private:
 	void PipeLineSetup();
@@ -67,7 +72,7 @@ public:
 	ENGINE::CGraphicDev*			m_pDeviceMgr;
 	ENGINE::CResourceMgr*			m_pResourceMgr;
 
-	list<CToolTerrain*>				m_pCubeList;
+	list<CToolTerrain*>			m_pCubeList;
 	CToolTerrain*					m_pSelectCube;
 
 	typedef map<WORD, ENGINE::CLayer*>	MAP_LAYER;

@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "TerrainWallCube.h"
+#include "ToolTerrainCube.h"
 #include "Trasform.h"
 
 #include "Ray.h"
 
 
-CTerrainWallCube::CTerrainWallCube(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainCube::CToolTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CToolTerrain(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
@@ -14,12 +14,16 @@ CTerrainWallCube::CTerrainWallCube(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 }
 
-CTerrainWallCube::~CTerrainWallCube()
+CToolTerrainCube::~CToolTerrainCube()
 {
 	Release();
 }
 
-void CTerrainWallCube::Update()
+<<<<<<< Updated upstream:OldMan/Tool/TerrainCube.cpp
+void CTerrainCube::Update()
+=======
+int CToolTerrainCube::Update()
+>>>>>>> Stashed changes:OldMan/Tool/ToolTerrainCube.cpp
 {
 	ENGINE::CGameObject::Update();
 
@@ -27,42 +31,43 @@ void CTerrainWallCube::Update()
 	MouseInput();
 }
 
-void CTerrainWallCube::LateUpdate()
+void CToolTerrainCube::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 }
 
-void CTerrainWallCube::Render()
+void CToolTerrainCube::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
 	//if (m_bIsPicked)
-	ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+		ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
 
 	//if (m_bIsPicked)
-	ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+		ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 
 }
 
-HRESULT CTerrainWallCube::Initialize()
+HRESULT CToolTerrainCube::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	m_eTerrainType = ENGINE::TERRAIN_CUBE;
 
 	return S_OK;
 }
 
-void CTerrainWallCube::Release()
+void CToolTerrainCube::Release()
 {
 }
 
 
-HRESULT CTerrainWallCube::AddComponent()
+HRESULT CToolTerrainCube::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
@@ -75,7 +80,7 @@ HRESULT CTerrainWallCube::AddComponent()
 	//NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_WallCubeCol");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_CubeCol");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
@@ -93,7 +98,7 @@ HRESULT CTerrainWallCube::AddComponent()
 	return S_OK;
 }
 
-void CTerrainWallCube::KeyInput()
+void CToolTerrainCube::KeyInput()
 {
 	if (m_bSetted)
 		return;
@@ -111,7 +116,7 @@ void CTerrainWallCube::KeyInput()
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
 }
 
-void CTerrainWallCube::MouseInput()
+void CToolTerrainCube::MouseInput()
 {
 	POINT pt = {};
 
@@ -123,18 +128,18 @@ void CTerrainWallCube::MouseInput()
 		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
 
 		CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
-
+		
 		float fTestMul = 15.f;
 		D3DXVECTOR3 vPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);
 		m_pTransform->SetPos(vPos);
 	}
 }
 
-CTerrainWallCube* CTerrainWallCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainCube* CToolTerrainCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CTerrainWallCube* pInstance = new CTerrainWallCube(pGraphicDev);
+	CToolTerrainCube* pInstance = new CToolTerrainCube(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{
