@@ -52,6 +52,7 @@ public:
 	void SelectObjAfter();
 	void ChangeValueAfter();
 	void ChangeTerrainType();
+	void AddCubeForLoad(CToolTerrain* _pTerrain);
 
 private:
 	void PipeLineSetup();

@@ -10,7 +10,6 @@ class CMyFormView : public CFormView
 	DECLARE_DYNCREATE(CMyFormView)
 
 public:
-	enum TERRAIN_TYPE { TERRAIN_CUBE, TERRAIN_WALL, TERRAIN_RECT, TERRAIN_END };
 	enum VALUE_IDX { X, Y, Z, VALUE_END };
 
 protected:
@@ -37,23 +36,34 @@ public:
 	afx_msg void OnBnClickedButtonMonster();
 	afx_msg void OnBnClickedButtonTrigger();
 	virtual void OnInitialUpdate();
-
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnEnChangeEdit2();
+	afx_msg void OnEnChangeEdit3();
+	afx_msg void OnEnChangeEdit4();
+	afx_msg void OnEnChangeEdit5();
+	afx_msg void OnEnChangeEdit6();
+	afx_msg void OnEnChangeEdit7();
+	afx_msg void OnEnChangeEdit8();
+	afx_msg void OnEnChangeEdit9();
+	afx_msg void OnEnChangeEdit10();
+	afx_msg void OnBnClickedButton_Save();
+	afx_msg void OnBnClickedButton_Load();
 
 public:
 	void UpdatePicture(wstring _wstrName, wstring _wstrPath);
 	void UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXVECTOR3 _vSize);
-	void InitData();
 	void EditDataExchange();
+	void InitData();
 	D3DXVECTOR3 GetPositionVec();
 	D3DXVECTOR3 GetRotationVec();
 	D3DXVECTOR3 GetScaleVec();
 
-private:
-
 public:
 	CStatic m_PictureControl;
 	CButton m_TerrainTypeRadioBtn[3];
+	CButton m_CheckButton_Grid;
 
 	CString m_strObjectName;
 	CString m_strPositionX;
@@ -79,17 +89,7 @@ public:
 	float m_fRotaionValue[VALUE_END];
 	float m_fScaleValue[VALUE_END];
 
-	TERRAIN_TYPE m_eTerrainType;
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnEnChangeEdit9();
-	afx_msg void OnEnChangeEdit2();
-	afx_msg void OnEnChangeEdit3();
-	afx_msg void OnEnChangeEdit4();
-	afx_msg void OnEnChangeEdit5();
-	afx_msg void OnEnChangeEdit6();
-	afx_msg void OnEnChangeEdit7();
-	afx_msg void OnEnChangeEdit8();
-	afx_msg void OnEnChangeEdit10();
+	ENGINE::TERRAIN_TYPE m_eTerrainType;
+
 };
 

@@ -113,7 +113,7 @@ void CMapObjectSelectDlg::OnLbnSelchangeListBox()
 		m_PictureControl.SetBitmap(NULL);
 
 		// CImage 초기화가 안되서 임시 방편.
-		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64\\Tile64_09.png");
+		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64\\Tile64x64_9.png");
 		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
 		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
 		if (iWidth <= 0) iWidth = StaticPictureRect.Width();

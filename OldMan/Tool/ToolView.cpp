@@ -408,6 +408,19 @@ void CToolView::ChangeTerrainType()
 	CreateCube(true);
 }
 
+void CToolView::AddCubeForLoad(CToolTerrain* _pTerrain)
+{
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	_pTerrain->SetClicked();
+	m_pCubeList.push_back(_pTerrain);
+	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, _pTerrain);
+}
+
 void CToolView::CubeMoveToMouse()
 {
 	if (m_pSelectCube)
@@ -443,19 +456,19 @@ void CToolView::CreateCube(bool _bIsChange)
 
 	switch (pFormView->m_eTerrainType)
 	{
-	case CMyFormView::TERRAIN_CUBE:
+	case ENGINE::TERRAIN_CUBE:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
 		m_pSelectCube = CToolTerrainCube::Create(m_pDeviceMgr->GetDevice());
 		break;
 	}
-	case CMyFormView::TERRAIN_WALL:
+	case ENGINE::TERRAIN_WALL:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
 		m_pSelectCube = CToolTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
 		break;
 	}
-	case CMyFormView::TERRAIN_RECT:
+	case ENGINE::TERRAIN_RECT:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
 		m_pSelectCube = CToolTerrainRect::Create(m_pDeviceMgr->GetDevice());

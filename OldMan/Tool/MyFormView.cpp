@@ -8,6 +8,13 @@
 #include "MainFrm.h"
 #include "ToolView.h"
 
+#include "ToolTerrain.h"
+#include "Trasform.h"
+
+#include "ToolTerrainCube.h"
+#include "ToolTerrainWallCube.h"
+#include "ToolTerrainRect.h"
+
 // CMyFormView
 
 IMPLEMENT_DYNCREATE(CMyFormView, CFormView)
@@ -16,7 +23,7 @@ CMyFormView::CMyFormView()
 	: CFormView(IDD_MYFORMVIEW),
 	m_strObjectName(_T("")),
 	m_wstrFileName(L""), m_wstrFilePath(L""),
-	m_eTerrainType(TERRAIN_END)
+	m_eTerrainType(ENGINE::TERRAIN_END)
 	, m_strPositionX(_T("0"))
 	, m_strPositionY(_T("0"))
 	, m_strPositionZ(_T("0"))
@@ -27,17 +34,7 @@ CMyFormView::CMyFormView()
 	, m_strScaleY(_T("1"))
 	, m_strScaleZ(_T("1"))
 {
-	m_fPositionValue[X] = 0.f;
-	m_fPositionValue[Y] = 0.f;
-	m_fPositionValue[Z] = 0.f;
 
-	m_fRotaionValue[X] = 0.f;
-	m_fRotaionValue[Y] = 0.f;
-	m_fRotaionValue[Z] = 0.f;
-
-	m_fScaleValue[X] = 1.f;
-	m_fScaleValue[Y] = 1.f;
-	m_fScaleValue[Z] = 1.f;
 }
 
 CMyFormView::~CMyFormView()
@@ -61,6 +58,7 @@ void CMyFormView::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT8, m_strScaleX);
 	DDX_Text(pDX, IDC_EDIT9, m_strScaleY);
 	DDX_Text(pDX, IDC_EDIT10, m_strScaleZ);
+	DDX_Control(pDX, IDC_CHECK1, m_CheckButton_Grid);
 }
 
 BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
@@ -80,6 +78,8 @@ BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
 	ON_EN_CHANGE(IDC_EDIT7, &CMyFormView::OnEnChangeEdit7)
 	ON_EN_CHANGE(IDC_EDIT8, &CMyFormView::OnEnChangeEdit8)
 	ON_EN_CHANGE(IDC_EDIT10, &CMyFormView::OnEnChangeEdit10)
+	ON_BN_CLICKED(IDC_BUTTON4, &CMyFormView::OnBnClickedButton_Save)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMyFormView::OnBnClickedButton_Load)
 END_MESSAGE_MAP()
 
 
@@ -139,13 +139,13 @@ void CMyFormView::OnInitialUpdate()
 	if (nullptr == m_ObjSelect_Monster.GetSafeHwnd())
 	{
 		m_ObjSelect_Monster.Create(IDD_OBJECTSELECTDLG);
-		m_ObjSelect_Map.SetType(CMapObjectSelectDlg::OBJ_MONSTER);
+		m_ObjSelect_Monster.SetType(CMapObjectSelectDlg::OBJ_MONSTER);
 	}
 
 	if (nullptr == m_ObjSelect_Trigger.GetSafeHwnd())
 	{
 		m_ObjSelect_Trigger.Create(IDD_OBJECTSELECTDLG);
-		m_ObjSelect_Map.SetType(CMapObjectSelectDlg::OBJ_TRIGGER);
+		m_ObjSelect_Trigger.SetType(CMapObjectSelectDlg::OBJ_TRIGGER);
 	}
 
 	m_TerrainTypeRadioBtn[0].SetCheck(true);
@@ -166,7 +166,26 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 	CRect StaticPictureRect;
 	m_PictureControl.GetClientRect(StaticPictureRect);
 
-	m_Img.Destroy();
+	if (!m_Img.IsNull())
+	{
+		m_Img.Destroy();
+		m_PictureControl.SetBitmap(NULL);
+
+		// CImage 초기화가 안되서 임시 방편.
+		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64\\Tile64x64_9.png");
+		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
+		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
+		if (iWidth <= 0) iWidth = StaticPictureRect.Width();
+		if (iHeight <= 0) iHeight = StaticPictureRect.Height();
+
+		m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
+			StaticPictureRect.TopLeft().x,
+			StaticPictureRect.TopLeft().y,
+			iWidth,
+			iHeight);
+		m_Img.Destroy();
+	}
+
 	m_Img.Load(_wstrPath.c_str());
 
 	int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
@@ -202,32 +221,6 @@ void CMyFormView::UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXV
 	UpdateData(FALSE);
 }
 
-void CMyFormView::InitData()
-{
-	UpdateData(TRUE);
-
-	m_strPositionX = to_string(m_fPositionValue[X]).substr(0, (m_fPositionValue[X] < 0) ? 5 : 4).c_str();
-	m_strPositionY = to_string(m_fPositionValue[Y]).substr(0, (m_fPositionValue[Y] < 0) ? 5 : 4).c_str();
-	m_strPositionZ = to_string(m_fPositionValue[Z]).substr(0, (m_fPositionValue[Z] < 0) ? 5 : 4).c_str();
-
-	m_strRotationX = to_string(m_fRotaionValue[X]).substr(0, (m_fRotaionValue[X] < 0) ? 5 : 4).c_str();
-	m_strRotationY = to_string(m_fRotaionValue[Y]).substr(0, (m_fRotaionValue[Y] < 0) ? 5 : 4).c_str();
-	m_strRotationZ = to_string(m_fRotaionValue[Z]).substr(0, (m_fRotaionValue[Z] < 0) ? 5 : 4).c_str();
-
-	m_strScaleX = to_string(m_fScaleValue[X]).substr(0, (m_fScaleValue[X] < 0) ? 5 : 4).c_str();
-	m_strScaleY = to_string(m_fScaleValue[Y]).substr(0, (m_fScaleValue[Y] < 0) ? 5 : 4).c_str();
-	m_strScaleZ = to_string(m_fScaleValue[Z]).substr(0, (m_fScaleValue[Z] < 0) ? 5 : 4).c_str();
-
-	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-	NULL_CHECK(pMainFrm);
-
-	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
-	NULL_CHECK(pView);
-	pView->ChangeValueAfter();
-
-	UpdateData(FALSE);
-}
-
 D3DXVECTOR3 CMyFormView::GetPositionVec()
 {
 	return D3DXVECTOR3(stof((wstring)m_strPositionX), stof((wstring)m_strPositionY), stof((wstring)m_strPositionZ));
@@ -254,7 +247,6 @@ void CMyFormView::EditDataExchange()
 	NULL_CHECK(pView);
 	pView->ChangeValueAfter();
 
-	// 데이터 저장
 	m_fPositionValue[X] = GetPositionVec().x;
 	m_fPositionValue[Y] = GetPositionVec().y;
 	m_fPositionValue[Z] = GetPositionVec().z;
@@ -270,6 +262,32 @@ void CMyFormView::EditDataExchange()
 	UpdateData(FALSE);
 }
 
+void CMyFormView::InitData()
+{
+	UpdateData(TRUE);
+
+	m_strPositionX = to_string(m_fPositionValue[X]).substr(0, (m_fPositionValue[X] < 0) ? 5 : 4).c_str();
+	m_strPositionY = to_string(m_fPositionValue[Y]).substr(0, (m_fPositionValue[Y] < 0) ? 5 : 4).c_str();
+	m_strPositionZ = to_string(m_fPositionValue[Z]).substr(0, (m_fPositionValue[Z] < 0) ? 5 : 4).c_str();
+
+	m_strRotationX = to_string(m_fRotaionValue[X]).substr(0, (m_fRotaionValue[X] < 0) ? 5 : 4).c_str();
+	m_strRotationY = to_string(m_fRotaionValue[Y]).substr(0, (m_fRotaionValue[Y] < 0) ? 5 : 4).c_str();
+	m_strRotationZ = to_string(m_fRotaionValue[Z]).substr(0, (m_fRotaionValue[Z] < 0) ? 5 : 4).c_str();
+
+	m_strScaleX = to_string(m_fScaleValue[X]).substr(0, (m_fScaleValue[X] < 0) ? 5 : 4).c_str();
+	m_strScaleY = to_string(m_fScaleValue[Y]).substr(0, (m_fScaleValue[Y] < 0) ? 5 : 4).c_str();
+	m_strScaleZ = to_string(m_fScaleValue[Z]).substr(0, (m_fScaleValue[Z] < 0) ? 5 : 4).c_str();
+	
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+	pView->ChangeValueAfter();
+
+	UpdateData(FALSE);
+}
+
 
 void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -277,6 +295,12 @@ void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CFormView::OnLButtonDown(nFlags, point);
 
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+	pView->ChangeValueAfter();
 }
 
 
@@ -295,79 +319,73 @@ void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		if ((m_TerrainTypeRadioBtn[i].GetCheck() >= 1))
 		{
-			if (m_eTerrainType != (TERRAIN_TYPE)i)
+			if (m_eTerrainType != (ENGINE::TERRAIN_TYPE)i)
 			{
-				m_eTerrainType = (TERRAIN_TYPE)i;
+				if (m_eTerrainType != ENGINE::TERRAIN_END)
+				{
+					CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+					NULL_CHECK(pMainFrm);
 
-				CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-				NULL_CHECK(pMainFrm);
+					m_eTerrainType = (ENGINE::TERRAIN_TYPE)i;
 
-				CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
-				NULL_CHECK(pView);
-				pView->ChangeTerrainType();
+					CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+					NULL_CHECK(pView);
+					pView->ChangeTerrainType();
+				}
+
+				m_eTerrainType = (ENGINE::TERRAIN_TYPE)i;
 			}
 		}
 	}
-	UpdateData(FALSE);
-}
 
+	UpdateData(FALSE);
+
+}
 
 void CMyFormView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
 	CFormView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
-
-#pragma region Edit Contorl Data Exchage
-
-void CMyFormView::OnEnChangeEdit9()
-{
-	EditDataExchange();
-}
-
 
 void CMyFormView::OnEnChangeEdit2()
 {
 	EditDataExchange();
 }
 
-
 void CMyFormView::OnEnChangeEdit3()
 {
 	EditDataExchange();
 }
-
 
 void CMyFormView::OnEnChangeEdit4()
 {
 	EditDataExchange();
 }
 
-
 void CMyFormView::OnEnChangeEdit5()
 {
 	EditDataExchange();
 }
-
 
 void CMyFormView::OnEnChangeEdit6()
 {
 	EditDataExchange();
 }
 
-
 void CMyFormView::OnEnChangeEdit7()
 {
-	EditDataExchange();;
+	EditDataExchange();
 }
-
 
 void CMyFormView::OnEnChangeEdit8()
 {
 	EditDataExchange();
 }
 
+void CMyFormView::OnEnChangeEdit9()
+{
+	EditDataExchange();
+}
 
 void CMyFormView::OnEnChangeEdit10()
 {
@@ -375,3 +393,171 @@ void CMyFormView::OnEnChangeEdit10()
 }
 
 #pragma endregion
+
+
+void CMyFormView::OnBnClickedButton_Save()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	// GetPane(row, col): row, col 위치에 배치된 CWnd* 를 반환하는 CSplitterWnd의 멤버 함수.
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+
+	list<CToolTerrain*> pTerrainList = pView->m_pCubeList;
+
+	UpdateData(TRUE);
+
+	CFileDialog Dlg(FALSE, L".dat", L"제목없음.dat",
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		L"Data Files(*.dat)|*.dat||", this);
+
+	TCHAR szCurrentPath[MAX_STR] = L"";
+
+	// 현재 작업경로를 얻어오는 함수
+	::GetCurrentDirectory(MAX_STR, szCurrentPath);
+	// 현재 경로에서 파일명을 제거하는 함수. 제거할 파일명 없다면 말단 폴더명을 제거 (\Debug ,\Tool)
+	::PathRemoveFileSpec(szCurrentPath);
+
+	lstrcat(szCurrentPath, L"\\Data");
+
+	// 절대 경로만 가능
+	Dlg.m_ofn.lpstrInitialDir = szCurrentPath;
+
+	if (IDOK == Dlg.DoModal()) // IDOK : 확인, 저장, 열기 등 버튼 눌렀을 때 반환
+	{
+		HANDLE hFile = ::CreateFile(Dlg.GetPathName(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+		if (INVALID_HANDLE_VALUE == hFile)
+			FAILED_CHECK_MSG(-1, L"Save Failed. [INVALID_HANDLE_VALUE]");
+
+		DWORD dwByte = 0;
+		D3DXVECTOR3 vPos, vSize, vAngle;
+		ENGINE::TERRAIN_TYPE eTerrainType;
+
+		for (auto iter : pTerrainList)
+		{
+			TCHAR szName[MAX_STR] = L"";
+			lstrcpy(szName, iter->GetTexName().c_str());
+
+			ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(iter->Get_Component(L"Transform"));
+			vPos = pTransform->GetPos();
+			vSize = pTransform->GetSize();
+			vAngle = D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z));
+			eTerrainType = iter->GetTerrainType();
+
+			::WriteFile(hFile, &szName, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
+			::WriteFile(hFile, &vPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
+			::WriteFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
+			::WriteFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
+			::WriteFile(hFile, &eTerrainType, sizeof(ENGINE::TERRAIN_TYPE), &dwByte, nullptr);
+		}
+
+		CloseHandle(hFile);
+		MessageBox(_T("Save Success."), _T("Save"), MB_OK);
+	}
+
+	UpdateData(FALSE);
+}
+
+
+void CMyFormView::OnBnClickedButton_Load()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	// GetPane(row, col): row, col 위치에 배치된 CWnd* 를 반환하는 CSplitterWnd의 멤버 함수.
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+
+	list<CToolTerrain*> pTerrainList = pView->m_pCubeList;
+
+	CFileDialog Dlg(TRUE, L".dat", L"제목없음.dat",
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		L"Data Files(*.dat)|*.dat||", this);
+
+	TCHAR szCurrentPath[MAX_STR] = L"";
+
+	// 현재 작업경로를 얻어오는 함수
+	::GetCurrentDirectory(MAX_STR, szCurrentPath);
+	// 현재 경로에서 파일명을 제거하는 함수. 제거할 파일명 없다면 말단 폴더명을 제거 (\Debug ,\Tool)
+	::PathRemoveFileSpec(szCurrentPath);
+
+	lstrcat(szCurrentPath, L"\\Data");
+
+	// 절대 경로만 가능
+	Dlg.m_ofn.lpstrInitialDir = szCurrentPath;
+
+	if (IDOK == Dlg.DoModal()) // IDOK : 확인, 저장, 열기 등 버튼 눌렀을 때 반환
+	{
+		HANDLE hFile = CreateFile(Dlg.GetPathName(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+		if (INVALID_HANDLE_VALUE == hFile)
+			FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
+
+		for (auto& _rObj : pTerrainList)
+		{
+			//_rObj->SetDead();
+			Safe_Delete(_rObj);
+		}
+		pView->m_pCubeList.clear();
+
+		DWORD dwByte = 0;
+		TCHAR szName[MAX_STR] = L"";
+		D3DXVECTOR3 vPos, vSize, vAngle;
+		ENGINE::TERRAIN_TYPE eTerrainType;
+
+		while (true)
+		{
+			::ReadFile(hFile, &szName, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
+			::ReadFile(hFile, &vPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
+			::ReadFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
+			::ReadFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
+			::ReadFile(hFile, &eTerrainType, sizeof(ENGINE::TERRAIN_TYPE), &dwByte, nullptr);
+
+			if (0 == dwByte)
+				break;
+
+			CToolTerrain* pTerrain = nullptr;
+
+			switch (eTerrainType)
+			{
+			case ENGINE::TERRAIN_CUBE:
+			{
+				pTerrain = CToolTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+				break;
+			}
+			case ENGINE::TERRAIN_WALL:
+			{
+				pTerrain = CToolTerrainWallCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+				break;
+			}
+			case ENGINE::TERRAIN_RECT:
+			{
+				pTerrain = CToolTerrainRect::Create(ENGINE::GetGraphicDev()->GetDevice());
+				break;
+			}
+			}
+
+			ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(pTerrain->Get_Component(L"Transform"));
+			pTransform->SetPos(vPos);
+			pTransform->SetSize(vSize);
+			pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
+			pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
+			pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+
+			pTerrain->SetTexName(szName);
+
+			pView->AddCubeForLoad(pTerrain);
+		}
+
+		CloseHandle(hFile);
+		MessageBox(_T("Load Success."), _T("Load"), MB_OK);
+	}
+
+	UpdateData(FALSE);
+}
