@@ -6,7 +6,8 @@ CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
+	m_eTerrainType(ENGINE::TERRAIN_END)
 {
 }
 
@@ -15,11 +16,16 @@ CTerrain::~CTerrain()
 	Release();
 }
 
-void CTerrain::Update()
+int CTerrain::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	ENGINE::CGameObject::Update();
 
 	KeyInput();
+
+	return NO_EVENT;
 }
 
 void CTerrain::LateUpdate()
@@ -50,32 +56,6 @@ void CTerrain::Release()
 
 HRESULT CTerrain::AddComponent()
 {
-	ENGINE::CComponent* pComponent = nullptr;
-
-	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Texture_Terrain");
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
-
-	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Buffer_Terrain");
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent.insert({ L"Buffer", pComponent });
-
-	m_pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(pComponent);
-	NULL_CHECK_RETURN(m_pBuffer, E_FAIL);
-
-	// Transform
-	pComponent = ENGINE::CTransform::Create(D3DXVECTOR3(0.f, 0.f, 1.f));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent.insert({ L"Transform", pComponent });
-
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
-	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
-
 	return S_OK;
 }
 

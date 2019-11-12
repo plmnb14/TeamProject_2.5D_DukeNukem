@@ -38,6 +38,15 @@ namespace ENGINE
 		CAMERA,
 		UI
 	};
+
+	enum TERRAIN_TYPE 
+	{ 
+		TERRAIN_CUBE,
+		TERRAIN_WALL,
+		TERRAIN_RECT,
+		TERRAIN_END
+	};
+
 }
 
 #define __ENGINE_ENUM_H__

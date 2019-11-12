@@ -34,6 +34,15 @@
     <Filter Include="02.GameObject\03.Camera">
       <UniqueIdentifier>{867a41bb-1ddd-49ad-ad63-c43694e804fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\01.Terrain\00.TerrainCube">
+      <UniqueIdentifier>{0e7de85c-723f-423a-993a-509caab223ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Terrain\01.TerrainWallCube">
+      <UniqueIdentifier>{6079a286-6a72-40dd-baa8-e67b7a99808f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Terrain\02.TerrainRect">
+      <UniqueIdentifier>{c29fbaa9-4690-48da-a2d8-d4d4edcba0db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -87,6 +96,15 @@
     <ClInclude Include="..\Headers\Functor.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\TerrainCube.h">
+      <Filter>02.GameObject\01.Terrain\00.TerrainCube</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\TerrainWallCube.h">
+      <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\TerrainRect.h">
+      <Filter>02.GameObject\01.Terrain\02.TerrainRect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -115,6 +133,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Camera.cpp">
       <Filter>02.GameObject\03.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TerrainCube.cpp">
+      <Filter>02.GameObject\01.Terrain\00.TerrainCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TerrainWallCube.cpp">
+      <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TerrainRect.cpp">
+      <Filter>02.GameObject\01.Terrain\02.TerrainRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

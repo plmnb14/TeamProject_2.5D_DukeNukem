@@ -34,6 +34,7 @@ private:
 
 private:
 	void PipeLineSetUp();
+	void LoadMapObj();
 
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pGraphicDev);

@@ -162,6 +162,9 @@
     <ClInclude Include="..\Codes\SceneSelector.h" />
     <ClInclude Include="..\Codes\Stage.h" />
     <ClInclude Include="..\Codes\Terrain.h" />
+    <ClInclude Include="..\Codes\TerrainCube.h" />
+    <ClInclude Include="..\Codes\TerrainRect.h" />
+    <ClInclude Include="..\Codes\TerrainWallCube.h" />
     <ClInclude Include="..\Headers\Define.h" />
     <ClInclude Include="..\Headers\Extern.h" />
     <ClInclude Include="..\Headers\Function.h" />
@@ -180,6 +183,9 @@
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
+    <ClCompile Include="..\Codes\TerrainCube.cpp" />
+    <ClCompile Include="..\Codes\TerrainRect.cpp" />
+    <ClCompile Include="..\Codes\TerrainWallCube.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

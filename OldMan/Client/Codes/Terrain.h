@@ -15,35 +15,37 @@ namespace ENGINE
 
 class CTerrain : public ENGINE::CGameObject
 {
-private:
+protected:
 	explicit CTerrain(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
 	virtual ~CTerrain();
 
 public:
-	virtual void Update() override;
+	virtual int Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-private:
+protected:
 	virtual HRESULT Initialize() override;
 	virtual void Release() override;
 
-private:
+protected:
 	HRESULT AddComponent();
 	void KeyInput();
 
 public:
 	static CTerrain* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
-private:
+protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
 
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
+
+	ENGINE::TERRAIN_TYPE	m_eTerrainType;
 };
 
 #define __TERRAIN_H__
