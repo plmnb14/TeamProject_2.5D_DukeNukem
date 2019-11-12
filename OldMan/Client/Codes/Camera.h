@@ -51,6 +51,16 @@ public:
 	void SetUp_Zoom();
 	void SetUp_MouseRotate();
 
+public:
+	float Get_YAngle() { return m_fX_OriginYAngle; };
+	float Get_XAngle() { return m_fX_OriginXAngle; };
+	D3DXVECTOR3 Get_Pos();
+	D3DXVECTOR3 Get_LookAt();
+	D3DXVECTOR3 Get_Look();
+	D3DXVECTOR3 Get_Right();
+	D3DXVECTOR3 Get_Up();
+
+
 
 public:
 	virtual void Update() override;
@@ -82,6 +92,20 @@ private:
 
 private:
 	CGameObject*	m_pTarget;	// 추후 Obj Target 으로 변경 예정
+
+private:
+	float m_fEyeHeight;
+	float m_fZoom_Max;
+	float m_fZoom_Min;
+	float m_fZoom_Speed;
+
+private:
+	float m_fX_Angle;
+	float m_fY_Angle;
+	float m_fZ_Angle;
+
+	float m_fX_OriginXAngle;
+	float m_fX_OriginYAngle;
 
 
 private:

@@ -3,6 +3,7 @@
 #ifndef __GAMEOBJECT_H__
 
 #include "Engine_Include.h"
+#include "Layer.h"
 
 BEGIN(ENGINE)
 
@@ -27,6 +28,7 @@ protected:
 
 public:
 	void Set_MainCamera(ENGINE::CGameObject* _Camera) { m_pCamera = _Camera; }
+	void Set_MapLayer(map<WORD, CLayer*> _mapLayer) { m_mapLayer = _mapLayer; }
 
 public:
 	CComponent* Get_Component(wstring _key) { return m_mapComponent[_key]; }
@@ -40,6 +42,9 @@ protected:
 
 	typedef map<wstring, CComponent*>	MAP_COMPONENT;
 	MAP_COMPONENT	m_mapComponent;
+
+	typedef map<WORD, CLayer*>	MAP_LAYER;
+	MAP_LAYER	m_mapLayer;
 
 	CGameObject*	m_pCamera;
 

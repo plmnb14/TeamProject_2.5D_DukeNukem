@@ -13,6 +13,12 @@
     <Filter Include="02.KeyMgr">
       <UniqueIdentifier>{02007c14-8377-4a40-8119-c6d1b43ba816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Test">
+      <UniqueIdentifier>{b5c219a8-e8a0-4fcf-8bc1-f6436f230190}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.FrameMgr">
+      <UniqueIdentifier>{4c8a6e6a-2276-4eca-8ae5-ab4207e233ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\GraphicDev.h">
@@ -27,6 +33,9 @@
     <ClInclude Include="..\Codes\KeyMgr.h">
       <Filter>02.KeyMgr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\FrameMgr.h">
+      <Filter>04.FrameMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\GraphicDev.cpp">
@@ -37,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\KeyMgr.cpp">
       <Filter>02.KeyMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FrameMgr.cpp">
+      <Filter>04.FrameMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

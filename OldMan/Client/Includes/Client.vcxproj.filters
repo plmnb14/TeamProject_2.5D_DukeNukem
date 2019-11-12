@@ -34,14 +34,11 @@
     <Filter Include="02.GameObject\03.Camera">
       <UniqueIdentifier>{867a41bb-1ddd-49ad-ad63-c43694e804fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\01.Terrain\00.TerrainCube">
-      <UniqueIdentifier>{0e7de85c-723f-423a-993a-509caab223ea}</UniqueIdentifier>
+    <Filter Include="02.GameObject\04.Bullet">
+      <UniqueIdentifier>{a5ad0130-6567-4cda-9b5a-84be63798f22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\01.Terrain\01.TerrainWallCube">
-      <UniqueIdentifier>{6079a286-6a72-40dd-baa8-e67b7a99808f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\01.Terrain\02.TerrainRect">
-      <UniqueIdentifier>{c29fbaa9-4690-48da-a2d8-d4d4edcba0db}</UniqueIdentifier>
+    <Filter Include="02.GameObject\05.Monster">
+      <UniqueIdentifier>{9f248697-2114-42bd-901c-b5ee66fd906d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -96,14 +93,11 @@
     <ClInclude Include="..\Headers\Functor.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\TerrainCube.h">
-      <Filter>02.GameObject\01.Terrain\00.TerrainCube</Filter>
+    <ClInclude Include="..\Codes\Monster.h">
+      <Filter>02.GameObject\05.Monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\TerrainWallCube.h">
-      <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Codes\TerrainRect.h">
-      <Filter>02.GameObject\01.Terrain\02.TerrainRect</Filter>
+    <ClInclude Include="..\Codes\Bullet.h">
+      <Filter>02.GameObject\04.Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -134,14 +128,11 @@
     <ClCompile Include="..\Codes\Camera.cpp">
       <Filter>02.GameObject\03.Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\TerrainCube.cpp">
-      <Filter>02.GameObject\01.Terrain\00.TerrainCube</Filter>
+    <ClCompile Include="..\Codes\Monster.cpp">
+      <Filter>02.GameObject\05.Monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\TerrainWallCube.cpp">
-      <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\TerrainRect.cpp">
-      <Filter>02.GameObject\01.Terrain\02.TerrainRect</Filter>
+    <ClCompile Include="..\Codes\Bullet.cpp">
+      <Filter>02.GameObject\04.Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

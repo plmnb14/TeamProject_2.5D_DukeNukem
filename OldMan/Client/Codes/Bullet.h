@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __MONSTER_H__
+#ifndef __BULLET_H__
 
 #include "GameObject.h"
 
@@ -11,16 +11,21 @@ namespace ENGINE
 	class CVIBuffer;
 	class CTexture;
 	class CTransform;
-	class CCollider;
 }
 
-class CMonster : public ENGINE::CGameObject
+class CBullet : public ENGINE::CGameObject
 {
 private:
-	explicit CMonster(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CBullet(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
-	virtual ~CMonster();
+	virtual ~CBullet();
+
+public:
+	enum BULLET_TYPE
+	{
+		PISTOL, RIFLE
+	};
 
 public:
 	virtual void Update() override;
@@ -33,22 +38,30 @@ private:
 
 private:
 	HRESULT AddComponent();
-	void Player_Pursue();  //추격하다 
-public: 
-	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
+	void KeyInput();
+
+private:
+	void Set_Target(CGameObject* _Target);
+	void Set_Device(LPDIRECT3DDEVICE9 pGraphicDev);
+	void Set_Pos(D3DXVECTOR3 _Pos);
+	void Set_Dir(D3DXVECTOR3 _Dir);
+	void Set_Angle(float* _Angle);
 
 public:
-	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
-private:
-	CGameObject*			m_pTarget;
+	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle);
+
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
+	ENGINE::CKeyMgr*		m_pKeyMgr;
+
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
-	ENGINE::CCollider*		m_pCollider;
+
+private:
+	CGameObject*	m_pTarget;
 };
 
-#define __MONSTER_H__
+#define __BULLET_H__
 #endif

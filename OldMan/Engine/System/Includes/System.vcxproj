@@ -157,11 +157,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Exports\Export_System.h" />
+    <ClInclude Include="..\Codes\FrameMgr.h" />
     <ClInclude Include="..\Codes\GraphicDev.h" />
     <ClInclude Include="..\Codes\KeyMgr.h" />
     <ClInclude Include="..\Codes\TimeMgr.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\FrameMgr.cpp" />
     <ClCompile Include="..\Codes\GraphicDev.cpp" />
     <ClCompile Include="..\Codes\KeyMgr.cpp" />
     <ClCompile Include="..\Codes\TimeMgr.cpp" />

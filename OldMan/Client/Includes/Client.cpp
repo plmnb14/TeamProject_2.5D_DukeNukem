@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Client.h"
 #include "MainApp.h"
+#include "Engine_Include.h"
 
 #define MAX_LOADSTRING 100
 
@@ -46,6 +47,29 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	CMainApp* pMainApp = CMainApp::Create();
 	NULL_CHECK_RETURN(pMainApp, FALSE);
+
+	ENGINE::CFrameMgr* pFrameMgr = ENGINE::GetFrameMgr();
+	NULL_CHECK_RETURN(pFrameMgr, FALSE);
+	
+	pFrameMgr->InitTime();
+
+	// 기본 메시지 루프입니다.
+	while (WM_QUIT != msg.message)
+	{
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+		if (pFrameMgr->LockFrame(60.f))
+		{
+			pMainApp->Update();
+			pMainApp->LateUpdate();
+			pMainApp->Render();
+		}
+	}
+
 
     // 기본 메시지 루프입니다.
 	while (WM_QUIT != msg.message)

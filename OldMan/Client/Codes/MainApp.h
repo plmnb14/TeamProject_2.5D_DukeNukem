@@ -23,6 +23,9 @@ public:
 	void LateUpdate();
 	void Render();
 
+public:
+	void FrameRender();
+
 private:
 	HRESULT Initialize();
 	void Release();
@@ -35,6 +38,11 @@ private:
 	ENGINE::CManagement*	m_pManagement;	
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
+	ENGINE::CKeyMgr*		m_pKeyMgr;
+
+private:
+	float	m_fTimeCount;
+	int		m_iFps;
 };
 
 #define __MAINAPP_H__

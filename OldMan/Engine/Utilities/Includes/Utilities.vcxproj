@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Exports\Export_Utilities.h" />
     <ClInclude Include="..\Codes\Camera_Component.h" />
+    <ClInclude Include="..\Codes\Collider.h" />
     <ClInclude Include="..\Codes\Component.h" />
     <ClInclude Include="..\Codes\GameObject.h" />
     <ClInclude Include="..\Codes\Layer.h" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Camera_Component.cpp" />
+    <ClCompile Include="..\Codes\Collider.cpp" />
     <ClCompile Include="..\Codes\Component.cpp" />
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\Layer.cpp" />

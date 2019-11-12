@@ -31,6 +31,9 @@
     <Filter Include="02.SuperClass\02.Component\99. Camera_Component">
       <UniqueIdentifier>{d2fb3ca2-446c-49ae-81d4-7babdce64251}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.SuperClass\02.Component\01. Collider">
+      <UniqueIdentifier>{d7a0ebfe-37f6-40ea-bdf8-c7930a730a06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -60,6 +63,9 @@
     <ClInclude Include="..\Codes\Camera_Component.h">
       <Filter>02.SuperClass\02.Component\99. Camera_Component</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Collider.h">
+      <Filter>02.SuperClass\02.Component\01. Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -85,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Component.cpp">
       <Filter>02.SuperClass\02.Component\99. Camera_Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Collider.cpp">
+      <Filter>02.SuperClass\02.Component\01. Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

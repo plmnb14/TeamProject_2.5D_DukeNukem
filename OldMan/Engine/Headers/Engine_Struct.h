@@ -88,6 +88,25 @@ namespace ENGINE
 		bool		bMainCamera;
 
 	}CAM_INFO;
+
+	typedef struct tagBoxCollider
+	{
+		D3DXVECTOR3 vCenterPos;
+		D3DXVECTOR3 vUnderPos;
+
+		// AABB 충돌 검사 시 사용
+		D3DXVECTOR3 vMaxPos;
+		D3DXVECTOR3 vMinPos;
+
+		// OBB 충돌 검사 시 사용
+		float fRadius[RADIUS_END];
+		float flength[LENGTH_END];
+
+		bool bIsCollision;
+		bool bIsTrigger;
+		bool bIsEnabled;
+
+	}BOXCOL;
 }
 
 #define __ENGINE_STRUCT_H__

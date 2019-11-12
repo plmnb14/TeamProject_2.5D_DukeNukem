@@ -4,6 +4,7 @@
 
 #include "Engine_Include.h"
 
+
 BEGIN(ENGINE)
 
 const DWORD KEY_UP = 0x00000001;	// 0000 0000 0000 0000 0000 0000 0000 0001
@@ -34,7 +35,7 @@ class ENGINE_DLL CKeyMgr
 	DECLARE_SINGLETON(CKeyMgr)
 
 private:
-	CKeyMgr();
+	explicit CKeyMgr();
 	~CKeyMgr();
 
 public:

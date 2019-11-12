@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "Monster.h"
 #include "Trasform.h"
+#include "Collider.h"
 
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr)
 {
 }
 
@@ -20,6 +21,11 @@ void CMonster::Update()
 {
 	ENGINE::CGameObject::Update();
 	Player_Pursue();
+
+	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
+	m_pCollider->SetUp_Box();
+
+	cout << m_pCollider->Get_BoxCollider()->vCenterPos.y << endl;
 }
 
 void CMonster::LateUpdate()
@@ -76,6 +82,21 @@ HRESULT CMonster::AddComponent()
 	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
+
+	// Collider
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Collider", pComponent });
+
+	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+	float Radius[3] = { 2.f , 2.f , 2.f };
+
+	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
+	m_pCollider->Set_Radius(Radius);
+	m_pCollider->SetUp_Box();
+
 	return S_OK;
 }
 
@@ -102,7 +123,6 @@ void CMonster::Player_Pursue()
 	D3DXVec3Cross(&vMonsterDir_Right, &vMonsterDir,&vMonsterDir_Left);
 	// 양수일때 왼쪽 음수일때 오른쪽 이다. y 값이 반영되면 된다. 
 
-	cout <<D3DXToDegree( vMonsterDir_Right.y )<< endl;
 	bool m_Check;
 	m_Check = true;
 	if (m_Range < 5)

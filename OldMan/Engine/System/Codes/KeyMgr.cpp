@@ -114,14 +114,18 @@ bool CKeyMgr::KeyCombined(DWORD dwFirst, DWORD dwSecond)
 
 POINT CKeyMgr::Get_MouseGap(HWND _g_hWnd)
 {
-	if (m_CurMousePos.x != m_OldMousePos.x && m_CurMousePos.y != m_OldMousePos.y)
-		m_OldMousePos = m_CurMousePos;
+	
+
+	//if (m_CurMousePos.x != m_OldMousePos.x && m_CurMousePos.y != m_OldMousePos.y)
+	//	m_OldMousePos = m_CurMousePos;
 
 	GetCursorPos(&m_CurMousePos);
 	ScreenToClient(_g_hWnd, &m_CurMousePos);
 
-	m_MouseGap.x = m_CurMousePos.x - m_OldMousePos.x;
-	m_MouseGap.y = m_CurMousePos.y - m_OldMousePos.y;
+	m_MouseGap.x = m_CurMousePos.x - 400;
+	m_MouseGap.y = m_CurMousePos.y - 300;
+	//m_MouseGap.x = m_CurMousePos.x - m_OldMousePos.x;
+	//m_MouseGap.y = m_CurMousePos.y - m_OldMousePos.y;
 
 	return m_MouseGap;
 }

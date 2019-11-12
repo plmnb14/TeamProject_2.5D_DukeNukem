@@ -11,6 +11,7 @@ namespace ENGINE
 	class CVIBuffer;
 	class CTexture;
 	class CTransform;
+	class CCollider;
 }
 
 class CPlayer : public ENGINE::CGameObject
@@ -40,10 +41,12 @@ public:
 private:	
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
+	ENGINE::CKeyMgr*		m_pKeyMgr;
 
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
+	ENGINE::CCollider*		m_pCollider;
 };
 
 #define __PLAYER_H__
