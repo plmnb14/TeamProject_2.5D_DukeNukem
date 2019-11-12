@@ -69,9 +69,14 @@ void CFileInfo::ExtractPathInfo(
 			*/
 			CString strFullPath = find.GetFilePath();
 
-			// CString::Replace(old, new)
-			// old -> new로 교체
-			strFullPath.Replace(L"0.", L"%d.");
+			bool bIsTiles = strFullPath.Replace(L"\Tiles.", L"") > 0;
+			// 타일 이미지들의 제목이 숫자로 되어있어서 예외처리
+			if (!bIsTiles)
+			{
+				// CString::Replace(old, new)
+				// old -> new로 교체
+				strFullPath.Replace(L"0.", L"%d.");
+			}
 
 			// 상대경로 변환.
 			/*
@@ -103,7 +108,7 @@ void CFileInfo::ExtractPathInfo(
 			// 파일명을 찾는다. 파일명이 없으면 말단 폴더명을 찾는다.
 			pPathInfo->wstrStateKey = ::PathFindFileName(szBuf);
 
-			if (!lstrcmp(pPathInfo->wstrStateKey.c_str(), L"Single"))
+			if (!lstrcmp(pPathInfo->wstrStateKey.c_str(), L"Single") || bIsTiles)
 			{
 				rPathInfoLst_Single.push_back(pPathInfo);
 				continue;

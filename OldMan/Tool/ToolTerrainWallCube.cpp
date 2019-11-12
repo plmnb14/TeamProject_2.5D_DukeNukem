@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "TerrainWallCube.h"
+#include "ToolTerrainWallCube.h"
 #include "Trasform.h"
 
 #include "Ray.h"
 
 
-CTerrainWallCube::CTerrainWallCube(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainWallCube::CToolTerrainWallCube(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CToolTerrain(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
@@ -14,12 +14,12 @@ CTerrainWallCube::CTerrainWallCube(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 }
 
-CTerrainWallCube::~CTerrainWallCube()
+CToolTerrainWallCube::~CToolTerrainWallCube()
 {
 	Release();
 }
 
-int CTerrainWallCube::Update()
+int CToolTerrainWallCube::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
@@ -32,12 +32,12 @@ int CTerrainWallCube::Update()
 	return NO_EVENT;
 }
 
-void CTerrainWallCube::LateUpdate()
+void CToolTerrainWallCube::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 }
 
-void CTerrainWallCube::Render()
+void CToolTerrainWallCube::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
@@ -52,7 +52,7 @@ void CTerrainWallCube::Render()
 
 }
 
-HRESULT CTerrainWallCube::Initialize()
+HRESULT CToolTerrainWallCube::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
@@ -62,12 +62,12 @@ HRESULT CTerrainWallCube::Initialize()
 	return S_OK;
 }
 
-void CTerrainWallCube::Release()
+void CToolTerrainWallCube::Release()
 {
 }
 
 
-HRESULT CTerrainWallCube::AddComponent()
+HRESULT CToolTerrainWallCube::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
@@ -98,7 +98,7 @@ HRESULT CTerrainWallCube::AddComponent()
 	return S_OK;
 }
 
-void CTerrainWallCube::KeyInput()
+void CToolTerrainWallCube::KeyInput()
 {
 	if (m_bSetted)
 		return;
@@ -116,7 +116,7 @@ void CTerrainWallCube::KeyInput()
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
 }
 
-void CTerrainWallCube::MouseInput()
+void CToolTerrainWallCube::MouseInput()
 {
 	POINT pt = {};
 
@@ -135,11 +135,11 @@ void CTerrainWallCube::MouseInput()
 	}
 }
 
-CTerrainWallCube* CTerrainWallCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainWallCube* CToolTerrainWallCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CTerrainWallCube* pInstance = new CTerrainWallCube(pGraphicDev);
+	CToolTerrainWallCube* pInstance = new CToolTerrainWallCube(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

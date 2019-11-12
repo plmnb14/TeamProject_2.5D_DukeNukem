@@ -14,9 +14,9 @@
 #include "MainFrm.h"
 #include "MyFormView.h"
 
-#include "TerrainCube.h"
-#include "TerrainWallCube.h"
-#include "TerrainRect.h"
+#include "ToolTerrainCube.h"
+#include "ToolTerrainWallCube.h"
+#include "ToolTerrainRect.h"
 #include "Trasform.h"
 
 #ifdef _DEBUG
@@ -446,19 +446,19 @@ void CToolView::CreateCube(bool _bIsChange)
 	case CMyFormView::TERRAIN_CUBE:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
-		m_pSelectCube = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
+		m_pSelectCube = CToolTerrainCube::Create(m_pDeviceMgr->GetDevice());
 		break;
 	}
 	case CMyFormView::TERRAIN_WALL:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
-		m_pSelectCube = CTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
+		m_pSelectCube = CToolTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
 		break;
 	}
 	case CMyFormView::TERRAIN_RECT:
 	{
 		m_pCubeList.push_back(m_pSelectCube);
-		m_pSelectCube = CTerrainRect::Create(m_pDeviceMgr->GetDevice());
+		m_pSelectCube = CToolTerrainRect::Create(m_pDeviceMgr->GetDevice());
 		break;
 	}
 	}

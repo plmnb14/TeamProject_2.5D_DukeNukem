@@ -4,16 +4,16 @@
 
 // CObjectSelectDlg 대화 상자입니다.
 
-class CObjectSelectDlg : public CDialog
+class CMapObjectSelectDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CObjectSelectDlg)
+	DECLARE_DYNAMIC(CMapObjectSelectDlg)
 
 public: 
 	enum OBJECT_TYPE { OBJ_MAP, OBJ_MONSTER, OBJ_TRIGGER, OBJ_END };
 
 public:
-	CObjectSelectDlg(CWnd* pParent = NULL);   // 표준 생성자입니다.
-	virtual ~CObjectSelectDlg();
+	CMapObjectSelectDlg(CWnd* pParent = NULL);   // 표준 생성자입니다.
+	virtual ~CMapObjectSelectDlg();
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME

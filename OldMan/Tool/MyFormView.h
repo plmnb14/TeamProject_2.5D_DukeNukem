@@ -2,7 +2,7 @@
 
 // CMyFormView Æû ºäÀÔ´Ï´Ù.
 
-#include "ObjectSelectDlg.h"
+#include "MapObjectSelectDlg.h"
 #include "afxwin.h"
 
 class CMyFormView : public CFormView
@@ -67,9 +67,9 @@ public:
 	CString m_strScaleZ;
 
 public:
-	CObjectSelectDlg m_ObjSelect_Map;
-	CObjectSelectDlg m_ObjSelect_Monster;
-	CObjectSelectDlg m_ObjSelect_Trigger;
+	CMapObjectSelectDlg m_ObjSelect_Map;
+	CMapObjectSelectDlg m_ObjSelect_Monster;
+	CMapObjectSelectDlg m_ObjSelect_Trigger;
 
 	CImage m_Img;
 	wstring m_wstrFileName;

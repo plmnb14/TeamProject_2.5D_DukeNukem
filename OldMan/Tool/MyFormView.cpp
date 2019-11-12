@@ -133,19 +133,19 @@ void CMyFormView::OnInitialUpdate()
 	if (nullptr == m_ObjSelect_Map.GetSafeHwnd())
 	{
 		m_ObjSelect_Map.Create(IDD_OBJECTSELECTDLG);
-		m_ObjSelect_Map.SetType(CObjectSelectDlg::OBJ_MAP);
+		m_ObjSelect_Map.SetType(CMapObjectSelectDlg::OBJ_MAP);
 	}
 
 	if (nullptr == m_ObjSelect_Monster.GetSafeHwnd())
 	{
 		m_ObjSelect_Monster.Create(IDD_OBJECTSELECTDLG);
-		m_ObjSelect_Map.SetType(CObjectSelectDlg::OBJ_MONSTER);
+		m_ObjSelect_Map.SetType(CMapObjectSelectDlg::OBJ_MONSTER);
 	}
 
 	if (nullptr == m_ObjSelect_Trigger.GetSafeHwnd())
 	{
 		m_ObjSelect_Trigger.Create(IDD_OBJECTSELECTDLG);
-		m_ObjSelect_Map.SetType(CObjectSelectDlg::OBJ_TRIGGER);
+		m_ObjSelect_Map.SetType(CMapObjectSelectDlg::OBJ_TRIGGER);
 	}
 
 	m_TerrainTypeRadioBtn[0].SetCheck(true);

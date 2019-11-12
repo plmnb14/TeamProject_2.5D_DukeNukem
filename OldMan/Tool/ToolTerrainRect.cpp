@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "TerrainRect.h"
+#include "ToolTerrainRect.h"
 #include "Trasform.h"
 
 #include "Ray.h"
 
-CTerrainRect::CTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainRect::CToolTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CToolTerrain(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
@@ -13,12 +13,12 @@ CTerrainRect::CTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 }
 
-CTerrainRect::~CTerrainRect()
+CToolTerrainRect::~CToolTerrainRect()
 {
 	Release();
 }
 
-int CTerrainRect::Update()
+int CToolTerrainRect::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
@@ -31,12 +31,12 @@ int CTerrainRect::Update()
 	return NO_EVENT;
 }
 
-void CTerrainRect::LateUpdate()
+void CToolTerrainRect::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 }
 
-void CTerrainRect::Render()
+void CToolTerrainRect::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
@@ -51,7 +51,7 @@ void CTerrainRect::Render()
 
 }
 
-bool CTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
+bool CToolTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
 {
 	if (!m_bSetted)
 		return false;
@@ -91,7 +91,7 @@ bool CTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
 	return false;
 }
 
-HRESULT CTerrainRect::Initialize()
+HRESULT CToolTerrainRect::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
@@ -101,12 +101,12 @@ HRESULT CTerrainRect::Initialize()
 	return S_OK;
 }
 
-void CTerrainRect::Release()
+void CToolTerrainRect::Release()
 {
 }
 
 
-HRESULT CTerrainRect::AddComponent()
+HRESULT CToolTerrainRect::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
@@ -137,7 +137,7 @@ HRESULT CTerrainRect::AddComponent()
 	return S_OK;
 }
 
-void CTerrainRect::KeyInput()
+void CToolTerrainRect::KeyInput()
 {
 	if (m_bSetted)
 		return;
@@ -155,7 +155,7 @@ void CTerrainRect::KeyInput()
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
 }
 
-void CTerrainRect::MouseInput()
+void CToolTerrainRect::MouseInput()
 {
 	POINT pt = {};
 
@@ -189,11 +189,11 @@ void CTerrainRect::MouseInput()
 	}
 }
 
-CTerrainRect* CTerrainRect::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainRect* CToolTerrainRect::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CTerrainRect* pInstance = new CTerrainRect(pGraphicDev);
+	CToolTerrainRect* pInstance = new CToolTerrainRect(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "TerrainCube.h"
+#include "ToolTerrainCube.h"
 #include "Trasform.h"
 
 #include "Ray.h"
 
 
-CTerrainCube::CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainCube::CToolTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CToolTerrain(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
@@ -14,12 +14,12 @@ CTerrainCube::CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 }
 
-CTerrainCube::~CTerrainCube()
+CToolTerrainCube::~CToolTerrainCube()
 {
 	Release();
 }
 
-int CTerrainCube::Update()
+int CToolTerrainCube::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
@@ -32,12 +32,12 @@ int CTerrainCube::Update()
 	return NO_EVENT;
 }
 
-void CTerrainCube::LateUpdate()
+void CToolTerrainCube::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 }
 
-void CTerrainCube::Render()
+void CToolTerrainCube::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
@@ -52,7 +52,7 @@ void CTerrainCube::Render()
 
 }
 
-HRESULT CTerrainCube::Initialize()
+HRESULT CToolTerrainCube::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
@@ -62,12 +62,12 @@ HRESULT CTerrainCube::Initialize()
 	return S_OK;
 }
 
-void CTerrainCube::Release()
+void CToolTerrainCube::Release()
 {
 }
 
 
-HRESULT CTerrainCube::AddComponent()
+HRESULT CToolTerrainCube::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
@@ -98,7 +98,7 @@ HRESULT CTerrainCube::AddComponent()
 	return S_OK;
 }
 
-void CTerrainCube::KeyInput()
+void CToolTerrainCube::KeyInput()
 {
 	if (m_bSetted)
 		return;
@@ -116,7 +116,7 @@ void CTerrainCube::KeyInput()
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
 }
 
-void CTerrainCube::MouseInput()
+void CToolTerrainCube::MouseInput()
 {
 	POINT pt = {};
 
@@ -135,11 +135,11 @@ void CTerrainCube::MouseInput()
 	}
 }
 
-CTerrainCube* CTerrainCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CToolTerrainCube* CToolTerrainCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CTerrainCube* pInstance = new CTerrainCube(pGraphicDev);
+	CToolTerrainCube* pInstance = new CToolTerrainCube(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

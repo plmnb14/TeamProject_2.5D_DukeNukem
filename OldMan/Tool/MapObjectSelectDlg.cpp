@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "Tool.h"
-#include "ObjectSelectDlg.h"
+#include "MapObjectSelectDlg.h"
 #include "afxdialogex.h"
 
 #include "FileInfo.h"
@@ -15,47 +15,50 @@
 
 // CObjectSelectDlg 대화 상자입니다.
 
-IMPLEMENT_DYNAMIC(CObjectSelectDlg, CDialog)
+IMPLEMENT_DYNAMIC(CMapObjectSelectDlg, CDialog)
 
-CObjectSelectDlg::CObjectSelectDlg(CWnd* pParent /*=NULL*/)
+CMapObjectSelectDlg::CMapObjectSelectDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(IDD_OBJECTSELECTDLG, pParent)
 {
 
 }
 
-CObjectSelectDlg::~CObjectSelectDlg()
+CMapObjectSelectDlg::~CMapObjectSelectDlg()
 {
 }
 
-void CObjectSelectDlg::DoDataExchange(CDataExchange* pDX)
+void CMapObjectSelectDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_ListBox);
 	DDX_Control(pDX, IDC_PICTURE, m_PictureControl);
 }
 
-void CObjectSelectDlg::SetType(OBJECT_TYPE _eType)
+void CMapObjectSelectDlg::SetType(OBJECT_TYPE _eType)
 {
 	m_eType = _eType;
 	SetData();
 }
 
-void CObjectSelectDlg::SetData()
+void CMapObjectSelectDlg::SetData()
 {
 	CString strRelativePath = L"";
 
 	switch (m_eType)
 	{
-	case CObjectSelectDlg::OBJ_MAP:
+	case CMapObjectSelectDlg::OBJ_MAP:
 	{
-		strRelativePath = L"..\\Client\\Texture\\Terrain";
+		strRelativePath = L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64";
 		break;
 	}
-	case CObjectSelectDlg::OBJ_MONSTER:
+	case CMapObjectSelectDlg::OBJ_MONSTER:
+	{
+		strRelativePath = L"..\\Client\\Texture\\Monster";
 		break;
-	case CObjectSelectDlg::OBJ_TRIGGER:
+	}
+	case CMapObjectSelectDlg::OBJ_TRIGGER:
 		break;
-	case CObjectSelectDlg::OBJ_END:
+	case CMapObjectSelectDlg::OBJ_END:
 		break;
 	default:
 		break;
@@ -75,15 +78,15 @@ void CObjectSelectDlg::SetData()
 }
 
 
-BEGIN_MESSAGE_MAP(CObjectSelectDlg, CDialog)
-	ON_LBN_SELCHANGE(IDC_LIST1, &CObjectSelectDlg::OnLbnSelchangeListBox)
+BEGIN_MESSAGE_MAP(CMapObjectSelectDlg, CDialog)
+	ON_LBN_SELCHANGE(IDC_LIST1, &CMapObjectSelectDlg::OnLbnSelchangeListBox)
 END_MESSAGE_MAP()
 
 
 // CObjectSelectDlg 메시지 처리기입니다.
 
 
-void CObjectSelectDlg::OnLbnSelchangeListBox()
+void CMapObjectSelectDlg::OnLbnSelchangeListBox()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	UpdateData(TRUE);
@@ -104,7 +107,26 @@ void CObjectSelectDlg::OnLbnSelchangeListBox()
 	CRect StaticPictureRect;
 	m_PictureControl.GetClientRect(StaticPictureRect);
 
-	m_Img.Destroy();
+	if (!m_Img.IsNull())
+	{
+		m_Img.Destroy();
+		m_PictureControl.SetBitmap(NULL);
+
+		// CImage 초기화가 안되서 임시 방편.
+		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64\\Tile64_09.png");
+		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
+		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
+		if (iWidth <= 0) iWidth = StaticPictureRect.Width();
+		if (iHeight <= 0) iHeight = StaticPictureRect.Height();
+
+		m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
+			StaticPictureRect.TopLeft().x,
+			StaticPictureRect.TopLeft().y,
+			iWidth,
+			iHeight);
+		m_Img.Destroy();
+	}
+
 	m_Img.Load((*iter_begin)->wstrImgPath.c_str());
 
 	int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
