@@ -14,12 +14,12 @@ namespace ENGINE
 	class CTransform;
 }
 
-class CTerrainWallCube : public CToolTerrain
+class CToolTerrainWallCube : public CToolTerrain
 {
 private:
-	explicit CTerrainWallCube(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CToolTerrainWallCube(LPDIRECT3DDEVICE9 pGraphicDev);
 public:
-	virtual ~CTerrainWallCube();
+	virtual ~CToolTerrainWallCube();
 
 public:
 	virtual int Update() override;
@@ -38,7 +38,7 @@ private:
 	void MouseInput();
 
 public:
-	static CTerrainWallCube* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CToolTerrainWallCube* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;

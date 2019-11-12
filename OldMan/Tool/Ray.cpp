@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "Ray.h"
 #include "Trasform.h"
-#include "TerrainCube.h"
+//юс╫ц
+#include "ToolTerrainCube.h"
 
 CRay::CRay()
 	:m_vOrigin(0, 0, 0), m_vDirection(0, 0, 0)
@@ -47,7 +48,7 @@ CRay CRay::RayAtWorldSpace(int _iScreecX, int _iScreecY)
 	return r;
 }
 
-bool CRay::IsPicked(CTerrainCube* _pTerrainCube)
+bool CRay::IsPicked(CToolTerrainCube* _pTerrainCube)
 {
 	CRay r = (*this);
 
