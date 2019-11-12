@@ -37,6 +37,9 @@
     <Filter Include="02.GameObject\04.Bullet">
       <UniqueIdentifier>{a5ad0130-6567-4cda-9b5a-84be63798f22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster">
+      <UniqueIdentifier>{9f248697-2114-42bd-901c-b5ee66fd906d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -90,7 +93,10 @@
     <ClInclude Include="..\Headers\Functor.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
+    <ClInclude Include="..\Codes\Monster.h">
+      <Filter>02.GameObject\05.Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Bullet.h">
       <Filter>02.GameObject\04.Bullet</Filter>
     </ClInclude>
   </ItemGroup>
@@ -122,7 +128,10 @@
     <ClCompile Include="..\Codes\Camera.cpp">
       <Filter>02.GameObject\03.Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="..\Codes\Monster.cpp">
+      <Filter>02.GameObject\05.Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bullet.cpp">
       <Filter>02.GameObject\04.Bullet</Filter>
     </ClCompile>
   </ItemGroup>

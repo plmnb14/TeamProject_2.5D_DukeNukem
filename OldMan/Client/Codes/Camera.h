@@ -56,6 +56,10 @@ public:
 	float Get_XAngle() { return m_fX_OriginXAngle; };
 	D3DXVECTOR3 Get_Pos();
 	D3DXVECTOR3 Get_LookAt();
+	D3DXVECTOR3 Get_Look();
+	D3DXVECTOR3 Get_Right();
+	D3DXVECTOR3 Get_Up();
+
 
 
 public:

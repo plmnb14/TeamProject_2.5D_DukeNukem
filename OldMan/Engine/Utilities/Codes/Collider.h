@@ -10,7 +10,7 @@ class CGameObject;
 class ENGINE_DLL CCollider : public CComponent
 {
 private:
-	explicit CCollider(D3DXVECTOR3 _Pos, D3DXVECTOR3 _MinPos, D3DXVECTOR3 _MaxPos);
+	explicit CCollider();
 
 public:
 	virtual ~CCollider();
@@ -19,7 +19,23 @@ public:
 	virtual void LateUpdate();
 
 public:
-	static CCollider* Create(D3DXVECTOR3 _Pos , D3DXVECTOR3 _MinPos, D3DXVECTOR3 _MaxPos);
+	void SetUp_Box();
+
+public:
+	void Set_Radius(float* _Radius);
+	void Set_Length(float* _Length);
+	void Set_CenterPos();
+	void Set_UnderPos(D3DXVECTOR3 _UnderPos);
+
+public:
+	void Check_AABB(ENGINE::BOXCOL* _TargetCollider);
+
+public:
+	bool Get_IsCollision() { return m_tBoxCollider.bIsCollision; }
+	BOXCOL* Get_BoxCollider() { return &m_tBoxCollider; }
+
+public:
+	static CCollider* Create();
 
 private:
 	BOXCOL m_tBoxCollider;

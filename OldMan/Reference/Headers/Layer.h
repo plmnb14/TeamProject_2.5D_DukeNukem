@@ -24,6 +24,7 @@ public:
 	virtual ~CLayer();
 
 public:
+	CGameObject* Get_Target(ENGINE::OBJECT_TYPE _ObjType);
 	CGameObject* Get_Player();
 	CGameObject* Get_MainCamera();
 	CGameObject* Get_Camera_By_Index(int _Index);

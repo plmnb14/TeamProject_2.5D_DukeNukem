@@ -154,10 +154,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Codes\Bullet.h" />
     <ClInclude Include="..\Codes\Camera.h" />
     <ClInclude Include="..\Codes\Logo.h" />
     <ClInclude Include="..\Codes\LogoBack.h" />
     <ClInclude Include="..\Codes\MainApp.h" />
+    <ClInclude Include="..\Codes\Monster.h" />
     <ClInclude Include="..\Codes\Player.h" />
     <ClInclude Include="..\Codes\SceneSelector.h" />
     <ClInclude Include="..\Codes\Stage.h" />
@@ -167,21 +169,21 @@
     <ClInclude Include="..\Headers\Function.h" />
     <ClInclude Include="..\Headers\Functor.h" />
     <ClInclude Include="..\Headers\Struct.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\Bullet.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\LogoBack.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
+    <ClCompile Include="..\Codes\Monster.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

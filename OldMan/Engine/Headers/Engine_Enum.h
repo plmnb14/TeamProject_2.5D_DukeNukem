@@ -26,6 +26,22 @@ namespace ENGINE
 		ANGLE_END
 	};
 
+	enum RADIUS_TYPE
+	{
+		RADIUS_X,
+		RADIUS_Y,
+		RADIUS_Z,
+		RADIUS_END
+	};
+
+	enum LENGTH_TYPE
+	{
+		LENGTH_X,
+		LENGTH_Y,
+		LENGTH_Z,
+		LENGTH_END
+	};
+
 	enum OBJECT_TYPE
 	{
 		TERRAIN,

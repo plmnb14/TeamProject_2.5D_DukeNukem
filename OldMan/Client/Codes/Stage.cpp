@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Terrain.h"
 #include "Camera.h"
+#include "Monster.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
@@ -47,6 +48,12 @@ HRESULT CStage::Add_Object_Layer()
 	ENGINE::CGameObject* pObject = CPlayer::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Player Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PLAYER, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
+	// Monster
+	pObject = CMonster::Create(m_pGraphicDev , pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
 	// Terrain

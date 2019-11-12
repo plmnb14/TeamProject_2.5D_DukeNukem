@@ -91,18 +91,16 @@ namespace ENGINE
 
 	typedef struct tagBoxCollider
 	{
-		D3DXVECTOR3 vPos;
+		D3DXVECTOR3 vCenterPos;
+		D3DXVECTOR3 vUnderPos;
 
 		// AABB 충돌 검사 시 사용
 		D3DXVECTOR3 vMaxPos;
 		D3DXVECTOR3 vMinPos;
 
 		// OBB 충돌 검사 시 사용
-
-
-		float flength_X;
-		float flength_Y;
-		float flength_Z;
+		float fRadius[RADIUS_END];
+		float flength[LENGTH_END];
 
 		bool bIsCollision;
 		bool bIsTrigger;
