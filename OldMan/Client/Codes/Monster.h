@@ -23,7 +23,7 @@ public:
 	virtual ~CMonster();
 
 public:
-	virtual void Update() override;
+	virtual int Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 

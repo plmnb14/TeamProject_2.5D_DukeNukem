@@ -21,8 +21,11 @@ CPlayer::~CPlayer()
 	Release();
 }
 
-void CPlayer::Update()
+int CPlayer::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	ENGINE::CGameObject::Update();
 	KeyInput();
 
@@ -36,6 +39,8 @@ void CPlayer::Update()
 		->Get_Component(L"Collider"))->Get_BoxCollider());
 
 	cout << m_pCollider->Get_IsCollision() << endl;
+
+	return NO_EVENT;
 }
 
 void CPlayer::LateUpdate()

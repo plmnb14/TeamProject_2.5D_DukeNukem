@@ -17,8 +17,11 @@ CMonster::~CMonster()
 	Release();
 }
 
-void CMonster::Update()
+int CMonster::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	ENGINE::CGameObject::Update();
 	Player_Pursue();
 
@@ -26,6 +29,8 @@ void CMonster::Update()
 	m_pCollider->SetUp_Box();
 
 	cout << m_pCollider->Get_BoxCollider()->vCenterPos.y << endl;
+
+	return NO_EVENT;
 }
 
 void CMonster::LateUpdate()

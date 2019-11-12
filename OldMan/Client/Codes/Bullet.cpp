@@ -19,13 +19,18 @@ CBullet::~CBullet()
 	Release();
 }
 
-void CBullet::Update()
+int CBullet::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	ENGINE::CGameObject::Update();
 
 	m_pTransform->MovePos(0.5f);
 
 	KeyInput();
+
+	return NO_EVENT;
 }
 
 void CBullet::LateUpdate()
