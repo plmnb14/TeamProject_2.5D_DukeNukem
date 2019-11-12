@@ -1,7 +1,7 @@
 #pragma once
 #ifndef __RAY_H__
 
-class CTerrainCube;
+class CToolTerrainCube;
 class CRay
 {
 public:
@@ -19,7 +19,7 @@ public:
 public:
 	static CRay RayAtViewSpace(int _iScreecX, int _iScreecY);
 	static CRay RayAtWorldSpace(int _iScreecX, int _iScreecY);
-	bool IsPicked(CTerrainCube* _pTerrainCube);
+	bool IsPicked(CToolTerrainCube* _pTerrainCube);
 	bool IsPicked(D3DXVECTOR3& _v0, D3DXVECTOR3& _v1, D3DXVECTOR3& _v2, D3DXVECTOR3& _vPickedPos);
 
 public:

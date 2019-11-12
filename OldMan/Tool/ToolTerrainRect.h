@@ -14,12 +14,12 @@ namespace ENGINE
 	class CTransform;
 }
 
-class CTerrainRect : public CToolTerrain
+class CToolTerrainRect : public CToolTerrain
 {
 private:
-	explicit CTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CToolTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev);
 public:
-	virtual ~CTerrainRect();
+	virtual ~CToolTerrainRect();
 
 public:
 	virtual int Update() override;
@@ -37,7 +37,7 @@ private:
 	void MouseInput();
 
 public:
-	static CTerrainRect* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CToolTerrainRect* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
