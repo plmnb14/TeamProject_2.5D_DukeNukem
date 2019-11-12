@@ -14,14 +14,19 @@ CLogoBack::~CLogoBack()
 	Release();
 }
 
-void CLogoBack::Update()
+int CLogoBack::Update()
 {
+	if (m_bIsDead)
+		return DEAD_OBJ;
+
 	ENGINE::CGameObject::Update();
 
 	m_fStartFrame += m_fMaxFrame * m_pTimeMgr->GetDelta();
 
 	if (m_fStartFrame >= m_fMaxFrame)
 		m_fStartFrame = 0.f;
+
+	return NO_EVENT;
 }
 
 void CLogoBack::LateUpdate()
