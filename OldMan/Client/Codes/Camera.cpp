@@ -441,11 +441,8 @@ D3DXVECTOR3 CCamera::Get_Up()
 	return m_pCCamera_Component->Get_Up();
 }
 
-int CCamera::Update()
+void CCamera::Update()
 {
-	if (m_bIsDead)
-		return DEAD_OBJ;
-
 	D3DXMATRIX matView;
 
 	SetUp_Zoom();
@@ -454,8 +451,6 @@ int CCamera::Update()
 	SetUp_ViewMatrix(&matView);
 
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matView);
-
-	return NO_EVENT;
 }
 
 void CCamera::LateUpdate()

@@ -21,7 +21,7 @@ public:
 	virtual ~CLogoBack();
 
 public:
-	virtual int Update();
+	virtual void Update();
 	virtual void LateUpdate();
 	virtual void Render();
 

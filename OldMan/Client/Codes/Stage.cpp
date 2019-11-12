@@ -2,12 +2,8 @@
 #include "Stage.h"
 #include "Player.h"
 #include "Terrain.h"
-#include "TerrainCube.h"
-#include "TerrainWallCube.h"
-#include "TerrainRect.h"
 #include "Camera.h"
 #include "Monster.h"
-#include "Trasform.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
@@ -61,9 +57,9 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	// Terrain
-	//pObject = CTerrain::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+	pObject = CTerrain::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev , pObject_Layer->Get_Player());
@@ -100,27 +96,6 @@ HRESULT CStage::Initialize()
 		TERRAIN_VTX_X, TERRAIN_VTX_Z, TERRAIN_VTX_ITV);
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Terrain Add Failed", E_FAIL);
 
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_CUBECOL,
-		L"Buffer_CubeCol");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
-
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
-		L"Buffer_WallCubeCol");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
-
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_RCTEX,
-		L"Buffer_RcTex");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
-
 	// Player Texture
 	//hr = m_pResourceMgr->AddTexture(
 	//	m_pGraphicDev,
@@ -150,8 +125,6 @@ HRESULT CStage::Initialize()
 	// UI Layer
 	hr = Add_UI_Layer();
 	FAILED_CHECK_RETURN(hr, E_FAIL);	
-
-	LoadMapObj();
 
 	return S_OK;
 }
@@ -194,57 +167,6 @@ void CStage::PipeLineSetUp()
 
 	// 장치에게 투영 행렬 전달.
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
-}
-
-void CStage::LoadMapObj()
-{
-	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-
-	if (INVALID_HANDLE_VALUE == hFile)
-		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
-
-	DWORD dwByte = 0;
-	TCHAR szName[MAX_STR] = L"";
-	D3DXVECTOR3 vPos, vSize, vAngle;
-	ENGINE::TERRAIN_TYPE eTerrainType;
-
-	while (true)
-	{
-		::ReadFile(hFile, &szName, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
-		::ReadFile(hFile, &vPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
-		::ReadFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
-		::ReadFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
-		::ReadFile(hFile, &eTerrainType, sizeof(ENGINE::TERRAIN_TYPE), &dwByte, nullptr);
-
-		if (0 == dwByte)
-			break;
-
-		CTerrain* pTerrain = nullptr;
-
-		switch (eTerrainType)
-		{
-		case ENGINE::TERRAIN_CUBE:
-			pTerrain = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
-			break;
-		case ENGINE::TERRAIN_WALL:
-			pTerrain = CTerrainWallCube::Create(ENGINE::GetGraphicDev()->GetDevice());
-			break;
-		case ENGINE::TERRAIN_RECT:
-			pTerrain = CTerrainRect::Create(ENGINE::GetGraphicDev()->GetDevice());
-			break;
-		}
-
-		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(pTerrain->Get_Component(L"Transform"));
-		pTransform->SetPos(vPos);
-		pTransform->SetSize(vSize);
-		pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
-		pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
-		pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
-
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::TERRAIN, pTerrain);
-	}
-
-	CloseHandle(hFile);
 }
 
 CStage* CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
