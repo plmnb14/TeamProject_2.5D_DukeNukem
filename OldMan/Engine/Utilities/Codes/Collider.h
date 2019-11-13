@@ -28,11 +28,12 @@ public:
 	void Set_UnderPos(D3DXVECTOR3 _UnderPos);
 
 public:
-	void Check_AABB(ENGINE::BOXCOL* _TargetCollider);
+	bool Check_AABB(ENGINE::BOXCOL* _TargetCollider);
 
 public:
 	bool Get_IsCollision() { return m_tBoxCollider.bIsCollision; }
 	BOXCOL* Get_BoxCollider() { return &m_tBoxCollider; }
+	float* Get_Length() { return m_tBoxCollider.flength; };
 
 public:
 	static CCollider* Create();

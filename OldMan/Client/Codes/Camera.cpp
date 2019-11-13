@@ -241,6 +241,9 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 		ClientToScreen(g_hWnd, &pt);
 		SetCursorPos(pt.x, pt.y);
 		
+		D3DXVECTOR3 vTemp_TargetPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
+		m_pCCamera_Component->Set_EyePos({ vTemp_TargetPos.x, vTemp_TargetPos.y + 3,vTemp_TargetPos.z });
+
 		break;
 	}
 	case THIRD_PERSON:

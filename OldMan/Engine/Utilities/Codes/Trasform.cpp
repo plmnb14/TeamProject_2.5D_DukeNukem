@@ -88,6 +88,11 @@ void CTransform::Move_AdvancedPos(D3DXVECTOR3& _vDir,  float _fSpeed)
 	m_vPos += _vDir * _fSpeed;
 }
 
+void CTransform::Move_AdvancedPos_Vec3(D3DXVECTOR3& _vPos)
+{
+	m_vPos += _vPos;
+}
+
 void CTransform::MoveAngle(ANGLE_TYPE eAxis, float fSpeed)
 {
 	m_fAngle[eAxis] += fSpeed;

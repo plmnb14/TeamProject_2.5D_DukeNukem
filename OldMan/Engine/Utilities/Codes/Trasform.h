@@ -31,6 +31,7 @@ public:
 public:
 	void MovePos(float fSpeed);
 	void Move_AdvancedPos(D3DXVECTOR3& _vDir, float _fSpeed);
+	void Move_AdvancedPos_Vec3(D3DXVECTOR3 & _vPos);
 	void MoveAngle(ANGLE_TYPE eAxis, float fSpeed);
 
 public:
