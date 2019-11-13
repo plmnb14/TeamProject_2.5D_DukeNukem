@@ -72,7 +72,8 @@ bool CRay::IsPicked(CToolTerrainCube* _pTerrainCube)
 bool CRay::IsPicked(D3DXVECTOR3& _v0, D3DXVECTOR3& _v1, D3DXVECTOR3& _v2, D3DXVECTOR3& _vPickedPos)
 {
 	float u, v, t;
-	bool b = D3DXIntersectTri(&_v0, &_v1, &_v2, &m_vOrigin, &m_vDirection, &u, &v, &t);
+	BOOL b;
+	b = D3DXIntersectTri(&_v0, &_v1, &_v2, &m_vOrigin, &m_vDirection, &u, &v, &t);
 	_vPickedPos = m_vOrigin + (t * m_vDirection);
 
 	return b;

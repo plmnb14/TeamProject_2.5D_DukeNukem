@@ -112,6 +112,7 @@ void CFileInfo::ExtractPathInfo(
 			{
 				::PathRemoveFileSpec(szBuf);
 				pPathInfo->wstrObjectKey = ::PathFindFileName(szBuf);
+				pPathInfo->iImgCount = 1;
 				rPathInfoLst_Single.push_back(pPathInfo);
 				continue;
 			}
@@ -189,7 +190,7 @@ void CFileInfo::GetMapToolFiles(const TCHAR* pFullPath, list<PATH_INFO*>& rPathI
 			lstrcpy(szBuf, strRelative);
 
 			::PathRemoveExtension(szBuf);
-			pPathInfo->wstrStateKey = ::PathFindFileName(szBuf);
+			pPathInfo->wstrFileName = ::PathFindFileName(szBuf);
 
 			rPathInfoLst.push_back(pPathInfo);
 		}

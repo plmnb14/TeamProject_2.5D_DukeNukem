@@ -35,6 +35,10 @@ bool CToolTerrain::CheckGrid(D3DXVECTOR3& _vVtx)
 	return false;
 }
 
+void CToolTerrain::ChangeTex()
+{
+}
+
 wstring CToolTerrain::GetTexName()
 {
 	return m_wstrTex;

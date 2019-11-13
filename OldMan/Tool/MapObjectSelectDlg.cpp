@@ -12,7 +12,6 @@
 #include "ToolView.h"
 #include "MyFormView.h"
 
-
 // CObjectSelectDlg 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(CMapObjectSelectDlg, CDialog)
@@ -48,12 +47,14 @@ void CMapObjectSelectDlg::SetData()
 	{
 	case CMapObjectSelectDlg::OBJ_MAP:
 	{
-		strRelativePath = L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64";
+		strRelativePath = L"..\\Client\\Texture\\Tiles\\No_Animaition";
 		break;
 	}
 	case CMapObjectSelectDlg::OBJ_MONSTER:
 	{
-		strRelativePath = L"..\\Client\\Texture\\Monster";
+		//임시.
+		//몬스터는 텍스쳐로드가 아님... 종류별로 뜨도록 수정하기 +Trigger
+		//strRelativePath = L"..\\Client\\Texture\\Monster";
 		break;
 	}
 	case CMapObjectSelectDlg::OBJ_TRIGGER:
@@ -70,10 +71,12 @@ void CMapObjectSelectDlg::SetData()
 	m_ListBox.ResetContent();
 
 	CFileInfo::GetMapToolFiles(strRelativePath, m_listFileInfo);
+	//list<PATH_INFO*> listMultiTexture;
+	//CFileInfo::ExtractPathInfo(strRelativePath, listMultiTexture, m_listFileInfo);
 
 	for (auto& iter : m_listFileInfo)
 	{
-		m_ListBox.AddString(iter->wstrStateKey.c_str());
+		m_ListBox.AddString(iter->wstrFileName.c_str());
 	}
 }
 

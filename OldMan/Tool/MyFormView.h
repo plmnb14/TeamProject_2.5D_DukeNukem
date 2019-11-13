@@ -50,6 +50,7 @@ public:
 	afx_msg void OnEnChangeEdit10();
 	afx_msg void OnBnClickedButton_Save();
 	afx_msg void OnBnClickedButton_Load();
+	afx_msg void OnBnClickedButton_PathUpdate();
 
 public:
 	void UpdatePicture(wstring _wstrName, wstring _wstrPath);

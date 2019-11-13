@@ -5,7 +5,7 @@
 
 BEGIN(ENGINE)
 
-class CTexture;
+class CAPITexture;
 class ENGINE_DLL CTextureMgr
 {
 	DECLARE_SINGLETON(CTextureMgr)
@@ -23,6 +23,8 @@ public:
 		const wstring& wstrStateKey = L"",
 		int iIndex = 0);
 
+	map<wstring, CAPITexture*> GetMapTexture();
+
 public:
 	HRESULT LoadTextureFromImgPath(const wstring & wstrImgPath);
 	HRESULT LoadTexture(
@@ -36,7 +38,7 @@ private:
 	void Release();
 
 private:
-	map<wstring, CTexture*>				m_mapTexture;
+	map<wstring, CAPITexture*>				m_mapTexture;
 
 };
 

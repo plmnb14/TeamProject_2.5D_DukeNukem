@@ -45,9 +45,6 @@
     <ClInclude Include="..\Codes\FrameMgr.h">
       <Filter>04.FrameMgr</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Texture.h">
-      <Filter>05.TextureMgr\00.Texture</Filter>
-    </ClInclude>
     <ClInclude Include="..\Codes\TextureMgr.h">
       <Filter>05.TextureMgr</Filter>
     </ClInclude>
@@ -56,6 +53,9 @@
     </ClInclude>
     <ClInclude Include="..\Codes\MultiTexture.h">
       <Filter>05.TextureMgr\00.Texture\01.MultiTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\APITexture.h">
+      <Filter>05.TextureMgr\00.Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -71,9 +71,6 @@
     <ClCompile Include="..\Codes\FrameMgr.cpp">
       <Filter>04.FrameMgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Texture.cpp">
-      <Filter>05.TextureMgr\00.Texture</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\TextureMgr.cpp">
       <Filter>05.TextureMgr</Filter>
     </ClCompile>
@@ -82,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MultiTexture.cpp">
       <Filter>05.TextureMgr\00.Texture\01.MultiTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\APITexture.cpp">
+      <Filter>05.TextureMgr\00.Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

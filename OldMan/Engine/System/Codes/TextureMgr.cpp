@@ -31,6 +31,11 @@ const TEX_INFO* CTextureMgr::GetTexInfo(
 	return iter_find->second->GetTexInfo(wstrStateKey, iIndex);
 }
 
+map<wstring, CAPITexture*> CTextureMgr::GetMapTexture()
+{
+	return m_mapTexture;
+}
+
 HRESULT CTextureMgr::LoadTextureFromImgPath(const wstring& wstrImgPath)
 {
 	wifstream fin;
@@ -88,7 +93,7 @@ HRESULT CTextureMgr::LoadTexture(
 	// 중복된 오브젝트 키가 없다면 싱글이건 멀티건 최초 할당해주고 map에 삽입.
 	if (m_mapTexture.end() == iter_find)
 	{
-		CTexture* pTexture = nullptr;
+		CAPITexture* pTexture = nullptr;
 
 		switch (eTexType)
 		{

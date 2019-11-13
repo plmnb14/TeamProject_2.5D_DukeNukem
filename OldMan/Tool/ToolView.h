@@ -6,6 +6,7 @@
 
 #include "Layer.h"
 
+class CPathExtract;
 class CToolTerrain;
 class CToolDoc;
 class CToolView : public CView
@@ -69,6 +70,8 @@ private:
 public:
 	ENGINE::CGraphicDev*			m_pDeviceMgr;
 	ENGINE::CResourceMgr*			m_pResourceMgr;
+	
+	CPathExtract*					m_pPathExtractor;
 
 	list<CToolTerrain*>				m_pCubeList;
 	CToolTerrain*					m_pSelectCube;
