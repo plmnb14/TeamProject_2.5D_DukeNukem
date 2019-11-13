@@ -19,6 +19,8 @@
 #include "ToolTerrainRect.h"
 #include "Trasform.h"
 
+#include "PathExtract.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -26,7 +28,7 @@
 // 전역변수
 HWND g_hWnd;
 
-// CToolView
+// CToolView11
 
 IMPLEMENT_DYNCREATE(CToolView, CView)
 
@@ -306,6 +308,35 @@ void CToolView::PipeLineSetup()
 	m_pDeviceMgr->GetDevice()->SetTransform(D3DTS_PROJECTION, &matProj);
 }
 
+void CToolView::LoadTexture()
+{
+	//임시
+	CPathExtract* pPath = new CPathExtract;
+	pPath->MakePathFile();
+	ENGINE::Safe_Delete(pPath);
+
+	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
+	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
+
+	// Player Texture
+	hr = m_pResourceMgr->AddTexture(
+		m_pDeviceMgr->GetDevice(),
+		ENGINE::RESOURCE_STATIC,
+		ENGINE::TEX_NORMAL,
+		L"Texture_Player",
+		L"../Client/Texture/Terrain/Terrain%d.png", 1);
+	FAILED_CHECK_MSG(hr, L"Texture_Player Add Failed");
+
+	//// Terrain Texture
+	//hr = m_pResourceMgr->AddTexture(
+	//	m_pDeviceMgr->GetDevice(),
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::TEX_NORMAL,
+	//	L"Texture_Terrain",
+	//	L"../Texture/Terrain/Terrain%d.png", 1);
+	//FAILED_CHECK_MSG_RETURN(hr, L"Texture_Terrain Add Failed", E_FAIL);
+}
+
 HRESULT CToolView::Initialize()
 {
 	PipeLineSetup();
@@ -336,23 +367,7 @@ HRESULT CToolView::Initialize()
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
 
-	// Player Texture
-	hr = m_pResourceMgr->AddTexture(
-		m_pDeviceMgr->GetDevice(),
-		ENGINE::RESOURCE_STATIC,
-		ENGINE::TEX_NORMAL,
-		L"Texture_Player",
-		L"../Client/Texture/Terrain/Terrain%d.png", 1);
-	FAILED_CHECK_MSG_RETURN(hr, L"Texture_Player Add Failed", E_FAIL);
-
-	//// Terrain Texture
-	//hr = m_pResourceMgr->AddTexture(
-	//	m_pDeviceMgr->GetDevice(),
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"Texture_Terrain",
-	//	L"../Texture/Terrain/Terrain%d.png", 1);
-	//FAILED_CHECK_MSG_RETURN(hr, L"Texture_Terrain Add Failed", E_FAIL);
+	LoadTexture();
 
 	// Environment Layer
 	hr = Add_Environment_Layer();

@@ -192,6 +192,7 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapObjectSelectDlg.h" />
     <ClInclude Include="MyFormView.h" />
+    <ClInclude Include="PathExtract.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapObjectSelectDlg.cpp" />
     <ClCompile Include="MyFormView.cpp" />
+    <ClCompile Include="PathExtract.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

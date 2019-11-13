@@ -18,6 +18,11 @@ LPDIRECT3DDEVICE9 CGraphicDev::GetDevice()
 	return m_pGraphicDev;
 }
 
+LPD3DXSPRITE CGraphicDev::GetSprite()
+{
+	return m_pSprite;
+}
+
 HRESULT CGraphicDev::InitDevice(
 	HWND hWnd, 
 	const DWORD& dwWinCX, 
@@ -71,6 +76,10 @@ HRESULT CGraphicDev::InitDevice(
 	hr = m_pSDK->CreateDevice(
 		D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, vp, &d3dpp, &m_pGraphicDev);
 	FAILED_CHECK_MSG_RETURN(hr, L"CreateDevice Failed", E_FAIL);
+
+	// m_pSprite »ý¼º
+	hr = D3DXCreateSprite(m_pGraphicDev, &m_pSprite);
+	FAILED_CHECK_MSG_RETURN(hr, L"D3DXCreateSprite Failed", E_FAIL);
 
 	return S_OK;
 }

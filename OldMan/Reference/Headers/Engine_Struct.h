@@ -107,6 +107,15 @@ namespace ENGINE
 		bool bIsEnabled;
 
 	}BOXCOL;
+
+	typedef struct tagTexture
+	{
+		// 불러온 텍스처를 조작하기 위한 Com객체.
+		LPDIRECT3DTEXTURE9	pTexture;
+
+		// 불러올 텍스처의 정보
+		D3DXIMAGE_INFO		tImgInfo;
+	}TEX_INFO;
 }
 
 #define __ENGINE_STRUCT_H__

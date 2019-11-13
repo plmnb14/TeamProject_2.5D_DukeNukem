@@ -160,12 +160,20 @@
     <ClInclude Include="..\Codes\FrameMgr.h" />
     <ClInclude Include="..\Codes\GraphicDev.h" />
     <ClInclude Include="..\Codes\KeyMgr.h" />
+    <ClInclude Include="..\Codes\MultiTexture.h" />
+    <ClInclude Include="..\Codes\SingleTexture.h" />
+    <ClInclude Include="..\Codes\Texture.h" />
+    <ClInclude Include="..\Codes\TextureMgr.h" />
     <ClInclude Include="..\Codes\TimeMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\FrameMgr.cpp" />
     <ClCompile Include="..\Codes\GraphicDev.cpp" />
     <ClCompile Include="..\Codes\KeyMgr.cpp" />
+    <ClCompile Include="..\Codes\MultiTexture.cpp" />
+    <ClCompile Include="..\Codes\SingleTexture.cpp" />
+    <ClCompile Include="..\Codes\Texture.cpp" />
+    <ClCompile Include="..\Codes\TextureMgr.cpp" />
     <ClCompile Include="..\Codes\TimeMgr.cpp" />
   </ItemGroup>
   <ItemGroup>

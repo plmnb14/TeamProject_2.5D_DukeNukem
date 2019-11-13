@@ -56,6 +56,7 @@ public:
 
 private:
 	void PipeLineSetup();
+	void LoadTexture();
 	HRESULT Initialize();
 	HRESULT Add_Environment_Layer();
 	HRESULT Add_Object_Layer();

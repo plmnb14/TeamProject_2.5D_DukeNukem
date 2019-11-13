@@ -22,6 +22,7 @@ private:
 
 public:
 	LPDIRECT3DDEVICE9 GetDevice();
+	LPD3DXSPRITE GetSprite();
 
 public:
 	HRESULT InitDevice(
@@ -41,6 +42,8 @@ private:
 
 	// IDirect3DDevice9: 그래픽 장치를 제어하는 Com객체.
 	LPDIRECT3DDEVICE9		m_pGraphicDev;
+
+	LPD3DXSPRITE			m_pSprite;
 };
 
 END
