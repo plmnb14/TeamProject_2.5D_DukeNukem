@@ -16,6 +16,9 @@ using namespace NAME;
 #define ENGINE_DLL _declspec(dllimport)
 #endif
 
+#define WINCX 1280
+#define WINCY 720
+
 #define MIN_STR 64
 #define MID_STR 128
 #define MAX_STR 256
