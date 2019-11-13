@@ -46,6 +46,9 @@
     <Filter Include="05.GameObject\00.ToolTerrain\02.TerrainRect">
       <UniqueIdentifier>{e9aed1b2-170c-4571-bc4e-6cdf500ab4f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="95.PathExtract">
+      <UniqueIdentifier>{e0d67a46-d9e1-43a3-84cd-28fbd28e67d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -68,9 +71,6 @@
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>99.Default</Filter>
-    </ClInclude>
-    <ClInclude Include="MyFormView.h">
-      <Filter>03.View\00.FormView</Filter>
     </ClInclude>
     <ClInclude Include="Tool_Extern.h">
       <Filter>98.Headers</Filter>
@@ -102,6 +102,12 @@
     <ClInclude Include="MapObjectSelectDlg.h">
       <Filter>04.Dialog</Filter>
     </ClInclude>
+    <ClInclude Include="PathExtract.h">
+      <Filter>95.PathExtract</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFormView.h">
+      <Filter>03.View\00.FormView</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -118,9 +124,6 @@
     </ClCompile>
     <ClCompile Include="ToolView.cpp">
       <Filter>03.View</Filter>
-    </ClCompile>
-    <ClCompile Include="MyFormView.cpp">
-      <Filter>03.View\00.FormView</Filter>
     </ClCompile>
     <ClCompile Include="FileInfo.cpp">
       <Filter>97.FileInfo</Filter>
@@ -142,6 +145,12 @@
     </ClCompile>
     <ClCompile Include="MapObjectSelectDlg.cpp">
       <Filter>04.Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="PathExtract.cpp">
+      <Filter>95.PathExtract</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFormView.cpp">
+      <Filter>03.View\00.FormView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
