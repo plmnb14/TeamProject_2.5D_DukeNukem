@@ -65,6 +65,7 @@ BOOL CToolView::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 // CToolView ±×¸®±â
+//v f
 
 void CToolView::OnDraw(CDC* /*pDC*/)
 {
