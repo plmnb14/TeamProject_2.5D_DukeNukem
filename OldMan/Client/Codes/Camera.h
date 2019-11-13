@@ -8,6 +8,7 @@ namespace ENGINE
 {
 	class CTimeMgr;
 	class CKeyMgr;
+	class CCameraSubject;
 	class CCamera_Component;
 }
 
@@ -89,6 +90,7 @@ private:
 	ENGINE::CCamera_Component*	m_pCCamera_Component;
 	ENGINE::CTimeMgr*			m_pTimeMgr;
 	ENGINE::CKeyMgr*			m_pKeyMgr;
+	ENGINE::CCameraSubject*		m_pSubject;
 
 private:
 	CGameObject*	m_pTarget;	// 추후 Obj Target 으로 변경 예정

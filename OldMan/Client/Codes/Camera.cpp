@@ -7,7 +7,7 @@
 CCamera::CCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_eCameraMode(LAND_MODE), m_eCameraViewPoint(THIRD_PERSON),
-	m_pGraphicDev(pGraphicDev),
+	m_pGraphicDev(pGraphicDev), m_pSubject(ENGINE::GetCameraSubject()),
 	m_pTarget(nullptr), m_pCCamera_Component(nullptr),
 	m_fMax_PlayerRoll_Angle(0), m_fCamShake_Y(0),
 	m_fEyeHeight(0) , m_fZoom_Min(0) , m_fZoom_Max(0),
@@ -458,6 +458,8 @@ int CCamera::Update()
 
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matView);
 
+	m_pSubject->AddData(D3DTS_VIEW, &matView);
+
 	return NO_EVENT;
 }
 
@@ -498,6 +500,9 @@ HRESULT CCamera::Initialize()
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 
 	ShowCursor(false);
+
+	m_pSubject->AddData(D3DTS_VIEW, &matView);
+	m_pSubject->AddData(D3DTS_PROJECTION, &matProj);
 
 	return S_OK;
 }

@@ -30,8 +30,8 @@ void CCameraSubject::AddData(int iMessage, void * pData)
 
 	auto iter_find = m_mapData.find(iMessage);
 
-	if (m_mapData.end() != iter_find)
-		return;
+	/*if (m_mapData.end() != iter_find)
+		return;*/
 
 	m_mapData[iMessage] = pData;
 	CSubject::Notify(iMessage);

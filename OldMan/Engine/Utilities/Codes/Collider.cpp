@@ -58,13 +58,13 @@ bool CCollider::Check_AABB(ENGINE::BOXCOL* _TargetCollider)
 		m_tBoxCollider.vMinPos.y <= _TargetCollider->vMaxPos.y && m_tBoxCollider.vMaxPos.y >= _TargetCollider->vMinPos.y &&
 		m_tBoxCollider.vMinPos.z <= _TargetCollider->vMaxPos.z && m_tBoxCollider.vMaxPos.z >= _TargetCollider->vMinPos.z)
 	{
-		m_tBoxCollider.flength[0] = m_tBoxCollider.vMinPos.x - _TargetCollider->vMaxPos.x;
-		m_tBoxCollider.flength[1] = m_tBoxCollider.vMinPos.y - _TargetCollider->vMaxPos.y;
-		m_tBoxCollider.flength[2] = m_tBoxCollider.vMinPos.z - _TargetCollider->vMaxPos.z;
+		//m_tBoxCollider.flength[0] = m_tBoxCollider.vMinPos.x - _TargetCollider->vMaxPos.x;
+		//m_tBoxCollider.flength[1] = m_tBoxCollider.vMinPos.y - _TargetCollider->vMaxPos.y;
+		//m_tBoxCollider.flength[2] = m_tBoxCollider.vMinPos.z - _TargetCollider->vMaxPos.z;
 
-		//m_tBoxCollider.flength[0] = _TargetCollider->vMaxPos.x - m_tBoxCollider.vMinPos.x;
-		//m_tBoxCollider.flength[1] = _TargetCollider->vMaxPos.y - m_tBoxCollider.vMinPos.y;
-		//m_tBoxCollider.flength[2] = _TargetCollider->vMaxPos.z - m_tBoxCollider.vMinPos.z;
+		m_tBoxCollider.flength[0] = _TargetCollider->vMaxPos.x - m_tBoxCollider.vMinPos.x;
+		m_tBoxCollider.flength[1] = _TargetCollider->vMaxPos.y - m_tBoxCollider.vMinPos.y;
+		m_tBoxCollider.flength[2] = _TargetCollider->vMaxPos.z - m_tBoxCollider.vMinPos.z;
 
 		m_tBoxCollider.bIsCollision = true;
 		return true;

@@ -26,8 +26,12 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update()
 {
+	//m_pSubject->get
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
+
+	m_pObserver->GetViewMatrix();
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
@@ -43,20 +47,20 @@ int CPlayer::Update()
 	float* a = dynamic_cast<ENGINE::CCollider*>(m_pCollider)->Get_Length();
 
 	D3DXVECTOR3 vPos = m_pTransform->GetPos();
-
 	D3DXVECTOR3 vDir = m_pTransform->GetDir();
 
-	//m_pTransform->Move_AdvancedPos(vDir, a[0] * 0.01f);
+	if (vPos.x < dynamic_cast<ENGINE::CCollider*>(m_mapLayer[ENGINE::CLayer::OBJECT]
+		->Get_Target(ENGINE::OBJECT_TYPE::MONSTER)
+		->Get_Component(L"Collider"))->Get_BoxCollider()->vUnderPos.x)
+		a[0] *= -1.f;
 
 	cout << a[0] << endl;
 
-	//m_pTransform->SetPos({ vPos.x + a[0] * 0.01f, vPos.y , vPos.z + a[2] * 0.01f });
+
+	m_pTransform->SetPos({ vPos.x + a[0], vPos.y , vPos.z});
 	//m_pTransform->Move_AdvancedPos(vDir , 1 * m_pTimeMgr->GetDelta());
 	//m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * m_pTimeMgr->GetDelta(), 0, a[2] * m_pTimeMgr->GetDelta() });
-	m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * vDir.x * 0.01f, 0, a[2] * vDir.z * 0.01f });
-
-	cout << a[0] << endl;
-	cout << a[1] << endl;
+	//m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * vDir.x * 0.01f, 0, a[2] * vDir.z * 0.01f });
  
 	return NO_EVENT;
 }
