@@ -23,6 +23,7 @@ public:
 
 protected:
 	virtual HRESULT Initialize();
+	virtual HRESULT LateInit();
 	virtual void Release();
 
 
@@ -49,6 +50,7 @@ protected:
 	CGameObject*	m_pCamera;
 
 	bool			m_bIsDead;
+	bool			m_bIsInit;
 };
 
 END

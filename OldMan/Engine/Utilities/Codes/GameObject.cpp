@@ -46,6 +46,19 @@ HRESULT CGameObject::Initialize()
 	return S_OK;
 }
 
+HRESULT CGameObject::LateInit()
+{
+	HRESULT hr = 0;
+
+	if (!m_bIsInit)
+	{
+		hr = this->LateInit();
+		m_bIsInit = true;
+	}
+
+	return hr;
+}
+
 void CGameObject::Release()
 {
 	for_each(m_mapComponent.begin(), m_mapComponent.end(),

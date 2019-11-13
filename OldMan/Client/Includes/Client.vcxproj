@@ -156,6 +156,9 @@
   <ItemGroup>
     <ClInclude Include="..\Codes\Bullet.h" />
     <ClInclude Include="..\Codes\Camera.h" />
+    <ClInclude Include="..\Codes\CameraObserver.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Codes\Logo.h" />
     <ClInclude Include="..\Codes\LogoBack.h" />
     <ClInclude Include="..\Codes\MainApp.h" />
@@ -180,6 +183,9 @@
   <ItemGroup>
     <ClCompile Include="..\Codes\Bullet.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp" />
+    <ClCompile Include="..\Codes\CameraObserver.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\LogoBack.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />

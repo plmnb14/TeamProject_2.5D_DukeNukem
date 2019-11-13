@@ -49,6 +49,9 @@
     <Filter Include="02.GameObject\01.Terrain\01.TerrainWallCube">
       <UniqueIdentifier>{67e2b66f-42a2-48d6-a68b-1dcd02aa4eaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.CameraObserver">
+      <UniqueIdentifier>{9b25728f-0336-4511-8f4d-c6c08e4c76b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -117,6 +120,9 @@
     <ClInclude Include="..\Codes\TerrainWallCube.h">
       <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\CameraObserver.h">
+      <Filter>03.CameraObserver</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\TerrainWallCube.cpp">
       <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CameraObserver.cpp">
+      <Filter>03.CameraObserver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

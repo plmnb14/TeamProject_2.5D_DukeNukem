@@ -12,8 +12,10 @@ namespace ENGINE
 	class CTexture;
 	class CTransform;
 	class CCollider;
+	class CCameraSubject;
 }
 
+class CCameraObserver;
 class CPlayer : public ENGINE::CGameObject
 {
 private:
@@ -29,6 +31,7 @@ public:
 
 private:
 	virtual HRESULT Initialize() override;
+	virtual HRESULT LateInit();
 	virtual void Release() override;
 
 private:
@@ -47,6 +50,9 @@ private:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
+
+	ENGINE::CCameraSubject*	m_pSubject;
+	CCameraObserver*		m_pObserver;
 };
 
 #define __PLAYER_H__

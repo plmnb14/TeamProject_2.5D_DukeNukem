@@ -5,6 +5,7 @@
 #include "Camera_Component.h"
 #include "Bullet.h"
 #include "Collider.h"
+#include "CameraObserver.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -12,7 +13,9 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr),
+	m_pSubject(ENGINE::GetCameraSubject()),
+	m_pObserver(nullptr)
 {	
 }
 
@@ -26,6 +29,7 @@ int CPlayer::Update()
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
+	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	KeyInput();
 
@@ -37,8 +41,6 @@ int CPlayer::Update()
 	m_pCollider->Check_AABB(dynamic_cast<ENGINE::CCollider*>(m_mapLayer[ENGINE::CLayer::OBJECT]
 		->Get_Target(ENGINE::OBJECT_TYPE::MONSTER)
 		->Get_Component(L"Collider"))->Get_BoxCollider());
-
-	cout << m_pCollider->Get_IsCollision() << endl;
 
 	return NO_EVENT;
 }
@@ -65,8 +67,20 @@ HRESULT CPlayer::Initialize()
 	return S_OK;
 }
 
+HRESULT CPlayer::LateInit()
+{
+	m_pObserver = CCameraObserver::Create();
+	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
+
+	m_pSubject->Subscribe(m_pObserver);
+
+	return S_OK;
+}
+
 void CPlayer::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 HRESULT CPlayer::AddComponent()

@@ -34,6 +34,18 @@
     <Filter Include="02.SuperClass\02.Component\01. Collider">
       <UniqueIdentifier>{d7a0ebfe-37f6-40ea-bdf8-c7930a730a06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Design">
+      <UniqueIdentifier>{324fb4ab-b252-4914-bc18-4f4af2927db3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Design\00.Observer">
+      <UniqueIdentifier>{b0de339d-7303-4569-b081-3beb0c19ba23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Design\00.Observer\00.Subject">
+      <UniqueIdentifier>{3dfdcad8-ebe8-4875-be4b-b4d3cb2b67c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Design\00.Observer\00.Subject\00. CameraSubject">
+      <UniqueIdentifier>{e692f7af-3c6d-4cd0-9627-4d8abee907e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -66,6 +78,15 @@
     <ClInclude Include="..\Codes\Collider.h">
       <Filter>02.SuperClass\02.Component\01. Collider</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\CameraSubject.h">
+      <Filter>03.Design\00.Observer\00.Subject\00. CameraSubject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Observer.h">
+      <Filter>03.Design\00.Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Subject.h">
+      <Filter>03.Design\00.Observer\00.Subject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -94,6 +115,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Collider.cpp">
       <Filter>02.SuperClass\02.Component\01. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CameraSubject.cpp">
+      <Filter>03.Design\00.Observer\00.Subject\00. CameraSubject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Observer.cpp">
+      <Filter>03.Design\00.Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Subject.cpp">
+      <Filter>03.Design\00.Observer\00.Subject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
