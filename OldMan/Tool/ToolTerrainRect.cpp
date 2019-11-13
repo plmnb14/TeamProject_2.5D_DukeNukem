@@ -62,7 +62,7 @@ bool CToolTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
 	ScreenToClient(g_hWnd, &pt);
 
 	D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
-	CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
+	CRay r = CRay::RayAtWorldSpace((int)v3.x, (int)v3.y);
 
 	float fTestMul = 15.f;
 	D3DXVECTOR3 vRayPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);
@@ -74,7 +74,7 @@ bool CToolTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
 	DWORD dwVtxCount = 0;
 	ENGINE::VTX_TEX* pVtx = m_pBuffer->GetVtx(dwVtxCount);
 	float fGridRange = 1.f;
-	for (int i = 0; i < dwVtxCount; i++)
+	for (DWORD i = 0; i < dwVtxCount; i++)
 	{
 		D3DXVECTOR3 vVtxPos = pVtx[i].vPos;
 		D3DXVECTOR3 vVtxWorldPos;
@@ -184,7 +184,7 @@ void CToolTerrainRect::MouseInput()
 
 		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
 
-		CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
+		CRay r = CRay::RayAtWorldSpace((int)v3.x, (int)v3.y);
 
 		float fTestMul = 15.f;
 		D3DXVECTOR3 vPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);

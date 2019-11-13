@@ -190,7 +190,7 @@ void CFileInfo::GetMapToolFiles(const TCHAR* pFullPath, list<PATH_INFO*>& rPathI
 			lstrcpy(szBuf, strRelative);
 
 			::PathRemoveExtension(szBuf);
-			pPathInfo->wstrStateKey = ::PathFindFileName(szBuf);
+			pPathInfo->wstrFileName = ::PathFindFileName(szBuf);
 
 			rPathInfoLst.push_back(pPathInfo);
 		}

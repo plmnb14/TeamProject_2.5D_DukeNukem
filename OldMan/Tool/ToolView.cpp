@@ -208,7 +208,7 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 			iter_begin_Cube++;
 	}
 
-	DragPicking(point.x, point.y);
+	DragPicking((float)point.x, (float)point.y);
 	if(!CheckGrid())
 		CubeMoveToMouse();
 
@@ -227,7 +227,7 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 		CreateCube(false);
 	}
 
-	m_vBeforeMousePos = D3DXVECTOR3(point.x, point.y, 0.f);
+	m_vBeforeMousePos = D3DXVECTOR3((float)point.x, (float)point.y, 0.f);
 	m_fDragX = 0.f;
 	m_fDragY = 0.f;
 }
@@ -554,10 +554,10 @@ bool CToolView::CheckGrid()
 		return false;
 
 	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-	NULL_CHECK(pMainFrm);
+	NULL_CHECK_RETURN(pMainFrm, false);
 
 	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
-	NULL_CHECK(pFormView);
+	NULL_CHECK_RETURN(pFormView, false);
 
 	if (!(pFormView->m_CheckButton_Grid.GetCheck()))
 	{

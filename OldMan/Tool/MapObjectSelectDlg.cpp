@@ -52,7 +52,9 @@ void CMapObjectSelectDlg::SetData()
 	}
 	case CMapObjectSelectDlg::OBJ_MONSTER:
 	{
-		strRelativePath = L"..\\Client\\Texture\\Monster";
+		//임시.
+		//몬스터는 텍스쳐로드가 아님... 종류별로 뜨도록 수정하기 +Trigger
+		//strRelativePath = L"..\\Client\\Texture\\Monster";
 		break;
 	}
 	case CMapObjectSelectDlg::OBJ_TRIGGER:
@@ -68,9 +70,9 @@ void CMapObjectSelectDlg::SetData()
 
 	m_ListBox.ResetContent();
 
-	//CFileInfo::GetMapToolFiles(strRelativePath, m_listFileInfo);
-	list<PATH_INFO*> listMultiTexture;
-	CFileInfo::ExtractPathInfo(strRelativePath, listMultiTexture, m_listFileInfo);
+	CFileInfo::GetMapToolFiles(strRelativePath, m_listFileInfo);
+	//list<PATH_INFO*> listMultiTexture;
+	//CFileInfo::ExtractPathInfo(strRelativePath, listMultiTexture, m_listFileInfo);
 
 	for (auto& iter : m_listFileInfo)
 	{

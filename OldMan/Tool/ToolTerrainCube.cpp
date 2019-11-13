@@ -127,7 +127,7 @@ void CToolTerrainCube::MouseInput()
 	{
 		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
 
-		CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
+		CRay r = CRay::RayAtWorldSpace((int)v3.x, (int)v3.y);
 		
 		float fTestMul = 15.f;
 		D3DXVECTOR3 vPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);

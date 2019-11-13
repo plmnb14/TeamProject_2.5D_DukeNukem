@@ -2,7 +2,7 @@ Animation|Lava|%d|6|..\Client\Texture\Tiles\Animation\Lava\%d.png
 Animation|Screen_Broke|%d|3|..\Client\Texture\Tiles\Animation\Screen_Broke\%d.png
 Animation|Screen_Noise|9999 (10)|4|..\Client\Texture\Tiles\Animation\Screen_Noise\9999 (10).png
 Animation|Water|%d|3|..\Client\Texture\Tiles\Animation\Water\%d.png
-Texture|Monster|tile1680-blue|832|..\Client\Texture\Monster\tile1680-blue.png
+Texture|Monster|monster_%d|51|..\Client\Texture\Monster\monster_%d.png
 No_Animaition|128 x 128|Tile128x128_0|1|..\Client\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_0.png
 No_Animaition|128 x 128|Tile128x128_1|1|..\Client\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_1.png
 No_Animaition|128 x 128|Tile128x128_10|1|..\Client\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_10.png
