@@ -26,6 +26,7 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update()
 {
+	int a = 0;
 	//m_pSubject->get
 
 	if (m_bIsDead)
