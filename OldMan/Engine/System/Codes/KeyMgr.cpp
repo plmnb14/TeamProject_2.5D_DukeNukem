@@ -122,8 +122,8 @@ POINT CKeyMgr::Get_MouseGap(HWND _g_hWnd)
 	GetCursorPos(&m_CurMousePos);
 	ScreenToClient(_g_hWnd, &m_CurMousePos);
 
-	m_MouseGap.x = m_CurMousePos.x - 400;
-	m_MouseGap.y = m_CurMousePos.y - 300;
+	m_MouseGap.x = m_CurMousePos.x - (float)WINCX * 0.5f;
+	m_MouseGap.y = m_CurMousePos.y - (float)WINCY * 0.5f;
 	//m_MouseGap.x = m_CurMousePos.x - m_OldMousePos.x;
 	//m_MouseGap.y = m_CurMousePos.y - m_OldMousePos.y;
 
