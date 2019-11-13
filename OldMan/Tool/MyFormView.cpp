@@ -15,6 +15,8 @@
 #include "ToolTerrainWallCube.h"
 #include "ToolTerrainRect.h"
 
+#include "PathExtract.h"
+
 // CMyFormView
 
 IMPLEMENT_DYNCREATE(CMyFormView, CFormView)
@@ -149,6 +151,11 @@ void CMyFormView::OnInitialUpdate()
 	}
 
 	m_TerrainTypeRadioBtn[0].SetCheck(true);
+
+	//юс╫ц
+	CPathExtract* pPath = new CPathExtract;
+	pPath->MakePathFile();
+	ENGINE::Safe_Delete(pPath);
 }
 
 void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
