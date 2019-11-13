@@ -26,7 +26,7 @@
 // 전역변수
 HWND g_hWnd;
 
-// CToolView
+// CToolView11
 
 IMPLEMENT_DYNCREATE(CToolView, CView)
 
