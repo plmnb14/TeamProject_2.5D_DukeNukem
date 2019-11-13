@@ -15,6 +15,7 @@
 #include "ToolTerrainWallCube.h"
 #include "ToolTerrainRect.h"
 
+#include "PathExtract.h"
 
 // CMyFormView
 
@@ -81,6 +82,7 @@ BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
 	ON_EN_CHANGE(IDC_EDIT10, &CMyFormView::OnEnChangeEdit10)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMyFormView::OnBnClickedButton_Save)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMyFormView::OnBnClickedButton_Load)
+	ON_BN_CLICKED(IDC_BUTTON6, &CMyFormView::OnBnClickedButton_PathUpdate)
 END_MESSAGE_MAP()
 
 
@@ -164,23 +166,60 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 	if (!lstrcmp(m_wstrFileName.c_str(), L""))
 		return;
 
-	const ENGINE::TEX_INFO* pTexInfo = ENGINE::GetTextureMgr()->GetTexInfo(m_wstrFileName);
-	NULL_CHECK(pTexInfo);
+	CRect StaticPictureRect;
+	m_PictureControl.GetClientRect(StaticPictureRect);
 
-	ENGINE::GetGraphicDev()->Render_Begin();
+	if (!m_Img.IsNull())
+	{
+		m_Img.Destroy();
+		m_PictureControl.SetBitmap(NULL);
 
-	D3DXMATRIX matScale, matTrans, matWorld;
-	D3DXMatrixIdentity(&matWorld);
-	D3DXMatrixScaling(&matScale, (float)WINCX / pTexInfo->tImgInfo.Width, (float)WINCY / pTexInfo->tImgInfo.Height, 0.f);
-	D3DXMatrixTranslation(&matTrans, 0.f, 0.f, 0.f);
+		// CImage 초기화가 안되서 임시 방편.
+		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64\\Tile64x64_9.png");
+		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
+		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
+		if (iWidth <= 0) iWidth = StaticPictureRect.Width();
+		if (iHeight <= 0) iHeight = StaticPictureRect.Height();
 
-	matWorld = matScale * matTrans;
+		m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
+			StaticPictureRect.TopLeft().x,
+			StaticPictureRect.TopLeft().y,
+			iWidth,
+			iHeight);
+		m_Img.Destroy();
+	}
 
-	ENGINE::GetGraphicDev()->GetSprite()->SetTransform(&matWorld);
-	ENGINE::GetGraphicDev()->GetSprite()->Draw(pTexInfo->pTexture,
-		nullptr, nullptr, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+	m_Img.Load(_wstrPath.c_str());
 
-	ENGINE::GetGraphicDev()->Render_End(m_PictureControl.m_hWnd);
+	int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
+	int iHeeght = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
+	if (iWidth <= 0) iWidth = StaticPictureRect.Width();
+	if (iHeeght <= 0) iHeeght = StaticPictureRect.Height();
+
+	m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
+		StaticPictureRect.TopLeft().x,
+		StaticPictureRect.TopLeft().y,
+		iWidth,
+		iHeeght);
+
+	//// TextureMgr 사용
+	//const ENGINE::TEX_INFO* pTexInfo = ENGINE::GetTextureMgr()->GetTexInfo(m_wstrFileName);
+	//NULL_CHECK(pTexInfo);
+
+	//ENGINE::GetGraphicDev()->Render_Begin();
+
+	//D3DXMATRIX matScale, matTrans, matWorld;
+	//D3DXMatrixIdentity(&matWorld);
+	//D3DXMatrixScaling(&matScale, (float)WINCX / pTexInfo->tImgInfo.Width, (float)WINCY / pTexInfo->tImgInfo.Height, 0.f);
+	//D3DXMatrixTranslation(&matTrans, 0.f, 0.f, 0.f);
+
+	//matWorld = matScale * matTrans;
+
+	//ENGINE::GetGraphicDev()->GetSprite()->SetTransform(&matWorld);
+	//ENGINE::GetGraphicDev()->GetSprite()->Draw(pTexInfo->pTexture,
+	//	nullptr, nullptr, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	//ENGINE::GetGraphicDev()->Render_End(m_PictureControl.m_hWnd);
 
 	UpdateData(FALSE);
 }
@@ -543,4 +582,14 @@ void CMyFormView::OnBnClickedButton_Load()
 	}
 
 	UpdateData(FALSE);
+}
+
+
+void CMyFormView::OnBnClickedButton_PathUpdate()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	CPathExtract* pPath = new CPathExtract;
+	pPath->MakePathFile();
+	ENGINE::Safe_Delete(pPath);
 }

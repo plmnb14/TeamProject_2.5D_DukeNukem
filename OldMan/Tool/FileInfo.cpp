@@ -112,6 +112,7 @@ void CFileInfo::ExtractPathInfo(
 			{
 				::PathRemoveFileSpec(szBuf);
 				pPathInfo->wstrObjectKey = ::PathFindFileName(szBuf);
+				pPathInfo->iImgCount = 1;
 				rPathInfoLst_Single.push_back(pPathInfo);
 				continue;
 			}

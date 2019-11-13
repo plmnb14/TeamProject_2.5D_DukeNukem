@@ -26,6 +26,7 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 	virtual bool CheckGrid(D3DXVECTOR3& _vVtx) override;
+	virtual void ChangeTex();
 
 private:
 	virtual HRESULT Initialize() override;

@@ -6,13 +6,13 @@
 
 BEGIN(ENGINE)
 
-class ENGINE_DLL CTexture
+class ENGINE_DLL CAPITexture
 {
 protected:
-	CTexture();
+	CAPITexture();
 
 public:
-	virtual ~CTexture();
+	virtual ~CAPITexture();
 
 public:
 	virtual const TEX_INFO* GetTexInfo(

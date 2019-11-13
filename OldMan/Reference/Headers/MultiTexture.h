@@ -1,10 +1,10 @@
 #pragma once
 #ifndef __MULTITEXTURE_H__
-#include "Texture.h"
+#include "APITexture.h"
 
 BEGIN(ENGINE)
 class CMultiTexture :
-	public CTexture
+	public CAPITexture
 {
 private:
 	CMultiTexture();

@@ -12,6 +12,7 @@ public:
 
 public:
 	virtual bool CheckGrid(D3DXVECTOR3& _vVtx);
+	virtual void ChangeTex();
 
 public:
 	 wstring GetTexName();

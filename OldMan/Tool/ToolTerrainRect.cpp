@@ -91,6 +91,20 @@ bool CToolTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
 	return false;
 }
 
+void CToolTerrainRect::ChangeTex()
+{
+	// Change Texture
+	m_mapComponent.erase(L"Texture");
+
+	ENGINE::CComponent* pComponent = nullptr;
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, m_wstrTex);
+	NULL_CHECK(pComponent);
+	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK(m_pTexture);
+}
+
 HRESULT CToolTerrainRect::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
@@ -111,7 +125,8 @@ HRESULT CToolTerrainRect::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	//Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Texture_Player");
+	m_wstrTex = L"Tile64x64_0";
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, m_wstrTex);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

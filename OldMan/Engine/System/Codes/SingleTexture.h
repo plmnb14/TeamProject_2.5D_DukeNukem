@@ -1,11 +1,11 @@
 #pragma once
 #ifndef __SINGLETEXTURE_H__
 
-#include "Texture.h"
+#include "APITexture.h"
 
 BEGIN(ENGINE)
 class CSingleTexture :
-	public CTexture
+	public CAPITexture
 {
 private:
 	CSingleTexture();

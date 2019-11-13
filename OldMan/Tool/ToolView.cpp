@@ -20,6 +20,7 @@
 #include "Trasform.h"
 
 #include "PathExtract.h"
+//#include "FileInfo.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -48,7 +49,7 @@ END_MESSAGE_MAP()
 CToolView::CToolView()
 	:m_pDeviceMgr(ENGINE::CGraphicDev::GetInstance()),
 	m_pResourceMgr(ENGINE::CResourceMgr::GetInstance()),
-	m_pSelectCube(nullptr)
+	m_pSelectCube(nullptr), m_pPathExtractor(nullptr)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
@@ -56,6 +57,7 @@ CToolView::CToolView()
 
 CToolView::~CToolView()
 {
+	ENGINE::Safe_Delete(m_pPathExtractor);
 }
 
 BOOL CToolView::PreCreateWindow(CREATESTRUCT& cs)
@@ -310,31 +312,38 @@ void CToolView::PipeLineSetup()
 
 void CToolView::LoadTexture()
 {
-	//임시
-	CPathExtract* pPath = new CPathExtract;
-	pPath->MakePathFile();
-	ENGINE::Safe_Delete(pPath);
+	m_pPathExtractor = new CPathExtract;
+	m_pPathExtractor->MakePathFile();
 
-	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
-	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
+	HRESULT hr;
+	//// 임시.
+	//// 항상 MakePathFile하기 때문에 로딩느림.
+	//// TextureMgr가 txt 파일에서 읽어온 Map을 사용하면 좋겠지만 구현방법 생각중.
+	//HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
+	//FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
 
-	// Player Texture
-	hr = m_pResourceMgr->AddTexture(
-		m_pDeviceMgr->GetDevice(),
-		ENGINE::RESOURCE_STATIC,
-		ENGINE::TEX_NORMAL,
-		L"Texture_Player",
-		L"../Client/Texture/Terrain/Terrain%d.png", 1);
-	FAILED_CHECK_MSG(hr, L"Texture_Player Add Failed");
+	for (auto& iter : m_pPathExtractor->m_PathInfoLst_Multi)
+	{
+		hr = m_pResourceMgr->AddTexture(
+			m_pDeviceMgr->GetDevice(),
+			ENGINE::RESOURCE_DYNAMIC,
+			ENGINE::TEX_NORMAL,
+			iter->wstrStateKey,
+			iter->wstrImgPath, iter->iImgCount);
+		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+	}
 
-	//// Terrain Texture
-	//hr = m_pResourceMgr->AddTexture(
-	//	m_pDeviceMgr->GetDevice(),
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"Texture_Terrain",
-	//	L"../Texture/Terrain/Terrain%d.png", 1);
-	//FAILED_CHECK_MSG_RETURN(hr, L"Texture_Terrain Add Failed", E_FAIL);
+	// Single은 FileName
+	for (auto& iter : m_pPathExtractor->m_PathInfoLst_Single)
+	{
+		hr = m_pResourceMgr->AddTexture(
+			m_pDeviceMgr->GetDevice(),
+			ENGINE::RESOURCE_DYNAMIC,
+			ENGINE::TEX_NORMAL,
+			iter->wstrFileName,
+			iter->wstrImgPath, 1);
+		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+	}
 }
 
 HRESULT CToolView::Initialize()
@@ -492,6 +501,8 @@ void CToolView::CreateCube(bool _bIsChange)
 	}
 	}
 
+	m_pSelectCube->SetTexName(pFormView->m_wstrFileName);
+	m_pSelectCube->ChangeTex();
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 
 	pFormView->EditDataExchange();
@@ -542,18 +553,24 @@ bool CToolView::CheckGrid()
 	if (!m_pSelectCube)
 		return false;
 
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	if (!(pFormView->m_CheckButton_Grid.GetCheck()))
+	{
+		m_pSelectCube->SetFitGrid(false);
+		return false;
+	}
+
 	// 임시 (3D 픽킹 배운 뒤 제대로 수정하기)
 	for (auto& iter : m_pCubeList)
 	{
 		D3DXVECTOR3 vVtxPos;
 		if (iter->CheckGrid(vVtxPos))
 		{
-			CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-			NULL_CHECK(pMainFrm);
-
-			CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
-			NULL_CHECK(pFormView);
-
 			ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(iter->Get_Component(L"Transform"));
 			pFormView->UpdateTransformStr(
 				vVtxPos,

@@ -162,7 +162,7 @@
     <ClInclude Include="..\Codes\KeyMgr.h" />
     <ClInclude Include="..\Codes\MultiTexture.h" />
     <ClInclude Include="..\Codes\SingleTexture.h" />
-    <ClInclude Include="..\Codes\Texture.h" />
+    <ClInclude Include="..\Codes\APITexture.h" />
     <ClInclude Include="..\Codes\TextureMgr.h" />
     <ClInclude Include="..\Codes\TimeMgr.h" />
   </ItemGroup>
@@ -172,7 +172,7 @@
     <ClCompile Include="..\Codes\KeyMgr.cpp" />
     <ClCompile Include="..\Codes\MultiTexture.cpp" />
     <ClCompile Include="..\Codes\SingleTexture.cpp" />
-    <ClCompile Include="..\Codes\Texture.cpp" />
+    <ClCompile Include="..\Codes\APITexture.cpp" />
     <ClCompile Include="..\Codes\TextureMgr.cpp" />
     <ClCompile Include="..\Codes\TimeMgr.cpp" />
   </ItemGroup>
