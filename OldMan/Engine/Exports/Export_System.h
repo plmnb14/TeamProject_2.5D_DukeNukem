@@ -6,6 +6,7 @@
 #include "TimeMgr.h"
 #include "KeyMgr.h"
 #include "FrameMgr.h"
+#include "TextureMgr.h"
 
 BEGIN(ENGINE)
 
@@ -13,6 +14,7 @@ inline CGraphicDev* GetGraphicDev();
 inline CTimeMgr* GetTimeMgr();
 inline CKeyMgr* GetKeyMgr();
 inline CFrameMgr* GetFrameMgr();
+inline CTextureMgr* GetTextureMgr();
 
 #include "Export_System.inl"
 

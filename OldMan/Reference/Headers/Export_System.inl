@@ -19,3 +19,8 @@ CFrameMgr * GetFrameMgr()
 {
 	return CFrameMgr::GetInstance();
 }
+
+CTextureMgr * GetTextureMgr()
+{
+	return CTextureMgr::GetInstance();
+}

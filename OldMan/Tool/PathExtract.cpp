@@ -20,7 +20,7 @@ CPathExtract::~CPathExtract()
 void CPathExtract::MakePathFile()
 {
 	OnDropFiles(L"..\\Client\\Texture\\Tiles");
-	//OnDropFiles(L"..\\Client\\Texture\\Monster");
+	OnDropFiles(L"..\\Client\\Texture\\Monster");
 
 	OnBnClickedSave();
 }
@@ -55,13 +55,21 @@ void CPathExtract::OnDropFiles(wstring _wstrPath)
 
 void CPathExtract::OnBnClickedSave()
 {
-	HANDLE hFile = CreateFile(L"../Data/TexturePath.txt", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+	//HANDLE hFile = CreateFile(L"../Data/TexturePath.txt", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 
-	if (INVALID_HANDLE_VALUE == hFile)
-		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
+	//if (INVALID_HANDLE_VALUE == hFile)
+	//	FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
+
+	wofstream fout;
+
+	fout.open(L"../Data/TexturePath.txt");
+
+	if (fout.fail())
+		return;
 
 	DWORD dwByte = 0;
 	wstring wstrCombined = L"";
+	TCHAR szCombined[MAX_STR] = L"";
 	TCHAR szImgCount[MIN_STR] = L"";
 
 	for (auto& pPathInfo : m_PathInfoLst_Multi)
@@ -76,7 +84,7 @@ void CPathExtract::OnBnClickedSave()
 		wstrCombined = pPathInfo->wstrObjectKey + L"|" + pPathInfo->wstrStateKey
 			+ L"|" + pPathInfo->wstrFileName + L"|" + szImgCount + L"|" + pPathInfo->wstrImgPath;
 
-		::WriteFile(hFile, &wstrCombined, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
+		fout << wstrCombined << endl;
 	}
 
 	for (auto& pPathInfo : m_PathInfoLst_Single)
@@ -87,9 +95,10 @@ void CPathExtract::OnBnClickedSave()
 		wstrCombined = pPathInfo->wstrObjectKey + L"|" + pPathInfo->wstrStateKey
 			+ L"|" + pPathInfo->wstrFileName + L"|" + szImgCount + L"|" + pPathInfo->wstrImgPath;
 
-		::WriteFile(hFile, &wstrCombined, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
+		fout << wstrCombined << endl;
 	}
 
+	fout.close();
 }
 
 

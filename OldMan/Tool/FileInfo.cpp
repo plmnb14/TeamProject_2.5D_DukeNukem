@@ -69,7 +69,7 @@ void CFileInfo::ExtractPathInfo(
 			*/
 			CString strFullPath = find.GetFilePath();
 
-			bool bIsTiles = strFullPath.Replace(L"\Tiles.", L"") > 0;
+			bool bIsTiles = strFullPath.Find(L"\\Tiles\\No_Animaition") != -1;
 			// 타일 이미지들의 제목이 숫자로 되어있어서 예외처리
 			if (!bIsTiles)
 			{
@@ -110,6 +110,8 @@ void CFileInfo::ExtractPathInfo(
 
 			if (!lstrcmp(pPathInfo->wstrStateKey.c_str(), L"Single") || bIsTiles)
 			{
+				::PathRemoveFileSpec(szBuf);
+				pPathInfo->wstrObjectKey = ::PathFindFileName(szBuf);
 				rPathInfoLst_Single.push_back(pPathInfo);
 				continue;
 			}

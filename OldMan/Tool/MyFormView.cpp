@@ -15,7 +15,6 @@
 #include "ToolTerrainWallCube.h"
 #include "ToolTerrainRect.h"
 
-#include "PathExtract.h"
 
 // CMyFormView
 
@@ -151,11 +150,6 @@ void CMyFormView::OnInitialUpdate()
 	}
 
 	m_TerrainTypeRadioBtn[0].SetCheck(true);
-
-	//임시
-	CPathExtract* pPath = new CPathExtract;
-	pPath->MakePathFile();
-	ENGINE::Safe_Delete(pPath);
 }
 
 void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
@@ -170,41 +164,23 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 	if (!lstrcmp(m_wstrFileName.c_str(), L""))
 		return;
 
-	CRect StaticPictureRect;
-	m_PictureControl.GetClientRect(StaticPictureRect);
+	const ENGINE::TEX_INFO* pTexInfo = ENGINE::GetTextureMgr()->GetTexInfo(m_wstrFileName);
+	NULL_CHECK(pTexInfo);
 
-	if (!m_Img.IsNull())
-	{
-		m_Img.Destroy();
-		m_PictureControl.SetBitmap(NULL);
+	ENGINE::GetGraphicDev()->Render_Begin();
 
-		// CImage 초기화가 안되서 임시 방편.
-		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64\\Tile64x64_9.png");
-		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
-		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
-		if (iWidth <= 0) iWidth = StaticPictureRect.Width();
-		if (iHeight <= 0) iHeight = StaticPictureRect.Height();
+	D3DXMATRIX matScale, matTrans, matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	D3DXMatrixScaling(&matScale, (float)WINCX / pTexInfo->tImgInfo.Width, (float)WINCY / pTexInfo->tImgInfo.Height, 0.f);
+	D3DXMatrixTranslation(&matTrans, 0.f, 0.f, 0.f);
 
-		m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
-			StaticPictureRect.TopLeft().x,
-			StaticPictureRect.TopLeft().y,
-			iWidth,
-			iHeight);
-		m_Img.Destroy();
-	}
+	matWorld = matScale * matTrans;
 
-	m_Img.Load(_wstrPath.c_str());
+	ENGINE::GetGraphicDev()->GetSprite()->SetTransform(&matWorld);
+	ENGINE::GetGraphicDev()->GetSprite()->Draw(pTexInfo->pTexture,
+		nullptr, nullptr, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
-	int iHeeght = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
-	if (iWidth <= 0) iWidth = StaticPictureRect.Width();
-	if (iHeeght <= 0) iHeeght = StaticPictureRect.Height();
-
-	m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
-		StaticPictureRect.TopLeft().x,
-		StaticPictureRect.TopLeft().y,
-		iWidth,
-		iHeeght);
+	ENGINE::GetGraphicDev()->Render_End(m_PictureControl.m_hWnd);
 
 	UpdateData(FALSE);
 }

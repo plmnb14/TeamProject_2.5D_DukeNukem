@@ -13,11 +13,20 @@
     <Filter Include="02.KeyMgr">
       <UniqueIdentifier>{02007c14-8377-4a40-8119-c6d1b43ba816}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Test">
-      <UniqueIdentifier>{b5c219a8-e8a0-4fcf-8bc1-f6436f230190}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.FrameMgr">
       <UniqueIdentifier>{4c8a6e6a-2276-4eca-8ae5-ab4207e233ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.TextureMgr">
+      <UniqueIdentifier>{36cebae9-d43a-41a6-bbb9-af475baddb44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.TextureMgr\00.Texture">
+      <UniqueIdentifier>{a2d11a91-d210-41de-8a29-2fd6a5a22ac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.TextureMgr\00.Texture\00.SingleTexture">
+      <UniqueIdentifier>{3d246249-a0d7-4ae4-9122-4a2ffe28104f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.TextureMgr\00.Texture\01.MultiTexture">
+      <UniqueIdentifier>{f7409db3-cc14-4ab8-a8e8-c5ffd7ee196b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +45,18 @@
     <ClInclude Include="..\Codes\FrameMgr.h">
       <Filter>04.FrameMgr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Texture.h">
+      <Filter>05.TextureMgr\00.Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\TextureMgr.h">
+      <Filter>05.TextureMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\SingleTexture.h">
+      <Filter>05.TextureMgr\00.Texture\00.SingleTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\MultiTexture.h">
+      <Filter>05.TextureMgr\00.Texture\01.MultiTexture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\GraphicDev.cpp">
@@ -49,6 +70,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\FrameMgr.cpp">
       <Filter>04.FrameMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Texture.cpp">
+      <Filter>05.TextureMgr\00.Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TextureMgr.cpp">
+      <Filter>05.TextureMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SingleTexture.cpp">
+      <Filter>05.TextureMgr\00.Texture\00.SingleTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MultiTexture.cpp">
+      <Filter>05.TextureMgr\00.Texture\01.MultiTexture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
