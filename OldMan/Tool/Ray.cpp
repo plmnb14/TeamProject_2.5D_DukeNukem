@@ -87,5 +87,7 @@ bool CRay::IsPicked(D3DXVECTOR3& _v0, D3DXVECTOR3& _v1, D3DXVECTOR3& _v2, D3DXVE
 	b = D3DXIntersectTri(&_v0, &_v1, &_v2, &m_vOrigin, &m_vDirection, &u, &v, &t);
 	_vPickedPos = m_vOrigin + (t * m_vDirection);
 
-	return (bool)b;
+	// warning C4800: 'BOOL': 'true' 또는 'false'로 bool 값을 강제하고 있습니다(성능 경고).
+	// 3항 연산자로 해결
+	return b ? true : false;
 }
