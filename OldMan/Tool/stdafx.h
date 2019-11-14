@@ -43,6 +43,13 @@
 #endif
 #endif
 
+
+#pragma warning(disable: 4005)
+
+// ¾Ù¸®»í ¤£¤£
+#pragma comment(linker,"/entry:wWinMainCRTStartup /subsystem:console")
+#include <iostream>
+
 // Standard Headers
 #include <string>
 #include <list>

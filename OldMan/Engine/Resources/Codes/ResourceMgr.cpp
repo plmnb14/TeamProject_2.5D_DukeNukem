@@ -22,6 +22,19 @@ CResourceMgr::~CResourceMgr()
 	Release();
 }
 
+void CResourceMgr::GetVertexInfo(
+	RESOURCE_TYPE eResourceType,
+	const wstring& wstrResourceKey,
+	void* pVertex)
+{
+	auto iter_find = m_mapResource[eResourceType].find(wstrResourceKey);
+
+	if (m_mapResource[eResourceType].end() == iter_find)
+		return;
+
+	dynamic_cast<CVIBuffer*>(iter_find->second)->GetVertexInfo(pVertex);
+}
+
 HRESULT CResourceMgr::AddBuffer(
 	LPDIRECT3DDEVICE9 pGraphicDev, 
 	RESOURCE_TYPE eResourceType, 

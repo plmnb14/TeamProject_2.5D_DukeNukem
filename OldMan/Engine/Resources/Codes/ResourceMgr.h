@@ -40,6 +40,8 @@ public:
 		RESOURCE_TYPE eResourceType,
 		const wstring& wstrResourceKey);
 
+	void GetVertexInfo(RESOURCE_TYPE eResourceType, const wstring& wstrResourceKey, void* pVertex);
+
 private:
 	void Release();
 

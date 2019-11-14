@@ -28,7 +28,11 @@ public:
 
 protected:
 	virtual HRESULT Initialize() override;
+	virtual HRESULT LateInit() override;
 	virtual void Release() override;
+
+public:
+	virtual void ChangeTex(wstring _wstrTex);
 
 protected:
 	HRESULT AddComponent();
@@ -46,6 +50,8 @@ protected:
 	ENGINE::CTransform*		m_pTransform;
 
 	ENGINE::TERRAIN_TYPE	m_eTerrainType;
+
+	wstring					m_wstrTex;
 };
 
 #define __TERRAIN_H__

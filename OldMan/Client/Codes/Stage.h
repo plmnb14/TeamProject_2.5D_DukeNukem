@@ -34,6 +34,7 @@ private:
 
 private:
 	void PipeLineSetUp();
+	void LoadTexture();
 	void LoadMapObj();
 
 public:

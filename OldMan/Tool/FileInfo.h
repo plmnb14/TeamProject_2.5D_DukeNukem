@@ -7,8 +7,8 @@ private:
 
 public:
 	static CString ConvertRelativePath(const TCHAR* pFullPath);
-	static void ExtractPathInfo(const TCHAR* pPath, list<PATH_INFO*>& rPathInfoLst, list<PATH_INFO*>& rPathInfoLst_Single);
+	static void ExtractPathInfo(const TCHAR* pPath, list<ENGINE::PATH_INFO*>& rPathInfoLst, list<ENGINE::PATH_INFO*>& rPathInfoLst_Single, bool bForClientPath = false);
 	static int CountImageFile(const TCHAR* pPath);
-	static void GetMapToolFiles(const TCHAR * pFullPath, list<PATH_INFO*>& rPathInfoLst);
+	static void GetMapToolFiles(const TCHAR * pFullPath, list<ENGINE::PATH_INFO*>& rPathInfoLst);
 };
 

@@ -31,9 +31,14 @@ const TEX_INFO* CTextureMgr::GetTexInfo(
 	return iter_find->second->GetTexInfo(wstrStateKey, iIndex);
 }
 
-map<wstring, CAPITexture*> CTextureMgr::GetMapTexture()
+list<ENGINE::PATH_INFO*> CTextureMgr::GetMapTexture_Multi()
 {
-	return m_mapTexture;
+	return m_PathInfoLst_Multi;
+}
+
+list<ENGINE::PATH_INFO*> CTextureMgr::GetMapTexture_Single()
+{
+	return m_PathInfoLst_Single;
 }
 
 HRESULT CTextureMgr::LoadTextureFromImgPath(const wstring& wstrImgPath)
@@ -67,12 +72,28 @@ HRESULT CTextureMgr::LoadTextureFromImgPath(const wstring& wstrImgPath)
 			HRESULT hr = LoadTexture(SINGLE_TEXTURE, szImgPath,
 				szFileName);
 			FAILED_CHECK_MSG_RETURN(hr, szImgPath, E_FAIL);
+
+			ENGINE::PATH_INFO* pPathInfo = new ENGINE::PATH_INFO;
+			pPathInfo->iImgCount = 1;
+			pPathInfo->wstrObjectKey = szObjectKey;
+			pPathInfo->wstrStateKey = szStateKey;
+			pPathInfo->wstrImgPath = szImgPath;
+			pPathInfo->wstrFileName = szFileName;
+			m_PathInfoLst_Single.push_back(pPathInfo);
 		}
 		else
 		{
 			HRESULT hr = LoadTexture(MULTI_TEXTURE, szImgPath,
 				szObjectKey, szStateKey, _ttoi(szImgCount));
 			FAILED_CHECK_MSG_RETURN(hr, szImgPath, E_FAIL);
+
+			ENGINE::PATH_INFO* pPathInfo = new ENGINE::PATH_INFO;
+			pPathInfo->iImgCount = _ttoi(szImgCount);
+			pPathInfo->wstrObjectKey = szObjectKey;
+			pPathInfo->wstrStateKey = szStateKey;
+			pPathInfo->wstrImgPath = szImgPath;
+			pPathInfo->wstrFileName = szFileName;
+			m_PathInfoLst_Multi.push_back(pPathInfo);
 		}
 	}
 

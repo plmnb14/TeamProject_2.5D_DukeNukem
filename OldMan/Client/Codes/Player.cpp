@@ -26,42 +26,42 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update()
 {
-	int a = 0;
+	//int a = 0;
 	//m_pSubject->get
 
-	//if (m_bIsDead)
-	//	return DEAD_OBJ;
-	//
-	//m_pObserver->GetViewMatrix();
-	//
-	//ENGINE::CGameObject::LateInit();
-	//ENGINE::CGameObject::Update();
-	//KeyInput();
-	//
-	//m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	//m_pCollider->SetUp_Box();
-	//
-	//m_pCollider->Check_AABB(dynamic_cast<ENGINE::CCollider*>(m_mapLayer[ENGINE::CLayer::OBJECT]
-	//	->Get_Target(ENGINE::OBJECT_TYPE::MONSTER)
-	//	->Get_Component(L"Collider"))->Get_BoxCollider());
-	//
-	//float* a = dynamic_cast<ENGINE::CCollider*>(m_pCollider)->Get_Length();
-	//
-	//D3DXVECTOR3 vPos = m_pTransform->GetPos();
-	//D3DXVECTOR3 vDir = m_pTransform->GetDir();
-	//
-	//if (vPos.x < dynamic_cast<ENGINE::CCollider*>(m_mapLayer[ENGINE::CLayer::OBJECT]
-	//	->Get_Target(ENGINE::OBJECT_TYPE::MONSTER)
-	//	->Get_Component(L"Collider"))->Get_BoxCollider()->vUnderPos.x)
-	//	a[0] *= -1.f;
-	//
-	//cout << a[0] << endl;
-	//
-	//
-	//m_pTransform->SetPos({ vPos.x + a[0], vPos.y , vPos.z});
-	//m_pTransform->Move_AdvancedPos(vDir , 1 * m_pTimeMgr->GetDelta());
-	//m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * m_pTimeMgr->GetDelta(), 0, a[2] * m_pTimeMgr->GetDelta() });
-	//m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * vDir.x * 0.01f, 0, a[2] * vDir.z * 0.01f });
+	if (m_bIsDead)
+		return DEAD_OBJ;
+	
+	m_pObserver->GetViewMatrix();
+	
+	ENGINE::CGameObject::LateInit();
+	ENGINE::CGameObject::Update();
+	KeyInput();
+	
+	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
+	m_pCollider->SetUp_Box();
+	
+	m_pCollider->Check_AABB(dynamic_cast<ENGINE::CCollider*>(m_mapLayer[ENGINE::CLayer::OBJECT]
+		->Get_Target(ENGINE::OBJECT_TYPE::MONSTER)
+		->Get_Component(L"Collider"))->Get_BoxCollider());
+	
+	float* a = dynamic_cast<ENGINE::CCollider*>(m_pCollider)->Get_Length();
+	
+	D3DXVECTOR3 vPos = m_pTransform->GetPos();
+	D3DXVECTOR3 vDir = m_pTransform->GetDir();
+	
+	if (vPos.x < dynamic_cast<ENGINE::CCollider*>(m_mapLayer[ENGINE::CLayer::OBJECT]
+		->Get_Target(ENGINE::OBJECT_TYPE::MONSTER)
+		->Get_Component(L"Collider"))->Get_BoxCollider()->vUnderPos.x)
+		a[0] *= -1.f;
+	
+	cout << a[0] << endl;
+	
+	
+	m_pTransform->SetPos({ vPos.x + a[0], vPos.y , vPos.z});
+	m_pTransform->Move_AdvancedPos(vDir , 1 * m_pTimeMgr->GetDelta());
+	m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * m_pTimeMgr->GetDelta(), 0, a[2] * m_pTimeMgr->GetDelta() });
+	m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * vDir.x * 0.01f, 0, a[2] * vDir.z * 0.01f });
  
 	return NO_EVENT;
 }
