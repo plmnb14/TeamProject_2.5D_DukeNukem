@@ -12,8 +12,10 @@ namespace ENGINE
 	class CTexture;
 	class CTransform;
 	class CCollider;
+	class CCameraSubject;
+	class CBillborad;
 }
-
+class CCameraObserver;
 class CMonster : public ENGINE::CGameObject
 {
 private:
@@ -29,11 +31,14 @@ public:
 
 private:
 	virtual HRESULT Initialize() override;
+	virtual HRESULT LateInit();
 	virtual void Release() override;
 
 private:
 	HRESULT AddComponent();
 	void Player_Pursue();  //추격하다 
+	void Billborad_Front();
+	void Billborad_YAngle();
 public: 
 	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
 
@@ -41,6 +46,8 @@ public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
 private:
 	CGameObject*			m_pTarget;
+	CCameraObserver*		m_pObserver;
+	D3DXMATRIX              matView;
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
@@ -48,6 +55,12 @@ private:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
+	ENGINE::CCameraSubject*	m_pSubject;
+	ENGINE::CBillborad*		m_pBillborad;
+
+
+
+
 };
 
 #define __MONSTER_H__

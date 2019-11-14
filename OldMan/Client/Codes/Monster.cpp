@@ -2,12 +2,15 @@
 #include "Monster.h"
 #include "Trasform.h"
 #include "Collider.h"
-
+#include "Billborad.h"
+#include "CameraObserver.h"
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr),
+	m_pSubject(ENGINE::GetCameraSubject()),
+	m_pObserver(nullptr), m_pBillborad(nullptr)
 {
 }
 
@@ -21,14 +24,14 @@ int CMonster::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
-
+	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
-	Player_Pursue();
+	//Player_Pursue();
 
-	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->SetUp_Box();
+	//m_pCollider->Set_UnderPos(m_pTransform->GetPos());
+//	m_pCollider->SetUp_Box();
 
-	cout << m_pCollider->Get_BoxCollider()->vCenterPos.y << endl;
+	//cout << m_pCollider->Get_BoxCollider()->vCenterPos.y << endl;
 
 	return NO_EVENT;
 }
@@ -36,11 +39,31 @@ int CMonster::Update()
 void CMonster::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
+	D3DXMatrixIdentity(&matView);
+
+	D3DXMATRIX matView2, matView3;
+	D3DXVECTOR3 vSize;
+	matView2 = m_pTransform->GetWorldMatrix();
+	matView3 = m_pObserver->GetViewMatrix();
+	vSize = m_pTransform->GetSize();
+
+	m_pBillborad->Billborad_Front(matView2, matView3 ,vSize);
+	matView = m_pBillborad->GetWorldMatrix_Billborad();
+	
+	// 이거 하고도 문제있음 
+	cout << vSize.x << endl;
+
 }
 
 void CMonster::Render()
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
+
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matView);
+
+
+	//Billborad_Front();
+	// Billborad_YAngle();
+	//m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
 }
@@ -51,6 +74,16 @@ HRESULT CMonster::Initialize()
 
 	m_pTransform->SetPos(D3DXVECTOR3(10.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+
+	return S_OK;
+}
+
+HRESULT CMonster::LateInit()
+{
+	m_pObserver = CCameraObserver::Create();
+	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
+
+	m_pSubject->Subscribe(m_pObserver);
 
 	return S_OK;
 }
@@ -95,6 +128,17 @@ HRESULT CMonster::AddComponent()
 
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+	pComponent = ENGINE::CBillborad::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	
+	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
+	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+
+	
+
+
 
 	float Radius[3] = { 2.f , 2.f , 2.f };
 
@@ -152,6 +196,50 @@ void CMonster::Player_Pursue()
 
 
 }
+void CMonster::Billborad_Front()
+{
+
+	D3DXMATRIX matView;																		 //행렬 생성 
+	D3DXMatrixIdentity(&matView);															// 초기화 
+
+	matView = m_pObserver->GetViewMatrix();													//생성된 행렬에 카메라의 뷰행렬을 받아온다 
+	D3DXMatrixInverse(&matView, 0, &matView);											    //받은 뷰행렬을 역행렬로 만든다.   -> 항상 나를 보기 위해서 
+
+	memcpy(&matView._41, m_pTransform->GetWorldMatrix().m[3], sizeof(D3DXVECTOR3));         //몬스터의 이동행렬을 받은 뷰행렬에 덧씌운다. 
+
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matView);									  //생성된 행렬을 월드로 바꿔준다. 
+
+
+
+}
+
+void CMonster::Billborad_YAngle()
+{
+
+	D3DXMATRIX matView;																	  //행렬 생성 
+	D3DXMatrixIdentity(&matView);														  // 초기화 
+
+	matView = m_pObserver->GetViewMatrix();												//생성된 행렬에 카메라의 뷰행렬을 받아온다 
+
+	D3DXMATRIX matBill;																	//카메라의 뷰행렬을 저장할 행렬 생성 
+	D3DXMatrixIdentity(&matBill);														// 초기화 
+
+	matBill._11 = matView._11;															// 11,13, 31,33 행렬에 값을 넣어준다. 
+	matBill._13 = matView._13;
+	matBill._31 = matView._31;
+	matBill._33 = matView._33;
+
+
+	D3DXMatrixInverse(&matBill, 0, &matBill);												     // 역행렬 로 만든다.
+	memcpy(&matBill._41, m_pTransform->GetWorldMatrix().m[3], sizeof(D3DXVECTOR3));             // 이동행렬을 넣어준다. matBill에다.
+
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matBill);                                           //월드로 바꿔준다.
+
+
+
+}
+
+
 
 CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
 {
