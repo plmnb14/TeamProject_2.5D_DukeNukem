@@ -23,6 +23,11 @@ void CPathExtract::MakePathFile()
 	OnDropFiles(L"..\\Client\\Texture\\Monster", true);
 	OnBnClickedSave(true);
 
+	for (auto& iter : m_PathInfoLst_Multi)
+		Safe_Delete(iter);
+	for (auto& iter : m_PathInfoLst_Single)
+		Safe_Delete(iter);
+
 	m_PathInfoLst_Multi.clear();
 	m_PathInfoLst_Single.clear();
 
