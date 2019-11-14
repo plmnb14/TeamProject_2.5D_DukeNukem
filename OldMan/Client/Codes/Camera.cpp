@@ -26,24 +26,26 @@ CCamera::~CCamera()
 
 void CCamera::Starfe(float _Speed)
 {
-	if (m_eCameraViewPoint == THIRD_PERSON)
-		return;
+	int a = 0;
 
-	switch (m_eCameraMode)
-	{
-	case LAND_MODE:
-	{
-		m_pCCamera_Component->Add_EyePos(D3DXVECTOR3(m_pCCamera_Component->Get_Right().x, 0.f, m_pCCamera_Component->Get_Right().z) * _Speed);
-		m_pCCamera_Component->Add_LookAt(D3DXVECTOR3(m_pCCamera_Component->Get_Right().x, 0.f, m_pCCamera_Component->Get_Right().z) * _Speed);
-
-		break;
-	}
-	case FLY_MODE:
-	{
-		m_pCCamera_Component->Add_EyePos(m_pCCamera_Component->Get_Right() * _Speed);
-		break;
-	}
-	}
+	//if (m_eCameraViewPoint == THIRD_PERSON)
+	//	return;
+	//
+	//switch (m_eCameraMode)
+	//{
+	//case LAND_MODE:
+	//{
+	//	m_pCCamera_Component->Add_EyePos(D3DXVECTOR3(m_pCCamera_Component->Get_Right().x, 0.f, m_pCCamera_Component->Get_Right().z) * _Speed);
+	//	m_pCCamera_Component->Add_LookAt(D3DXVECTOR3(m_pCCamera_Component->Get_Right().x, 0.f, m_pCCamera_Component->Get_Right().z) * _Speed);
+	//
+	//	break;
+	//}
+	//case FLY_MODE:
+	//{
+	//	m_pCCamera_Component->Add_EyePos(m_pCCamera_Component->Get_Right() * _Speed);
+	//	break;
+	//}
+	//}
 }
 
 void CCamera::Fly(float _Speed)
