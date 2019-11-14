@@ -26,7 +26,7 @@ CCamera::~CCamera()
 
 void CCamera::Starfe(float _Speed)
 {
-	카메라가 터져서 여기서 다시 작업해야됨.
+	int a = 0;
 
 	//if (m_eCameraViewPoint == THIRD_PERSON)
 	//	return;
