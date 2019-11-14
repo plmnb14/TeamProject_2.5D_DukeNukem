@@ -46,6 +46,9 @@
     <Filter Include="03.Design\00.Observer\00.Subject\00. CameraSubject">
       <UniqueIdentifier>{e692f7af-3c6d-4cd0-9627-4d8abee907e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Design\00. Collision">
+      <UniqueIdentifier>{35849a72-409d-4dec-8aba-0c9a7da175d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="..\Codes\Subject.h">
       <Filter>03.Design\00.Observer\00.Subject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\CollisionMgr.h">
+      <Filter>03.Design\00. Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -124,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Subject.cpp">
       <Filter>03.Design\00.Observer\00.Subject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CollisionMgr.cpp">
+      <Filter>03.Design\00. Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,8 @@ namespace NAME			\
 #define USING(NAME)	\
 using namespace NAME;
 
+#define MAP_OBJ m_mapLayer[ENGINE::CLayer::OBJECT]->Get_List
+
 #ifdef ENGINE_EXPORTS
 #define ENGINE_DLL _declspec(dllexport)
 #else

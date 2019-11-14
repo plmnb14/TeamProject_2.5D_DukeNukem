@@ -56,6 +56,11 @@ CGameObject* CLayer::Get_Camera_By_Index(int _Index)
 	return nullptr;
 }
 
+list<CGameObject*> CLayer::Get_List(ENGINE::OBJECT_TYPE _Type)
+{
+	return m_mapGameObject[_Type];
+}
+
 void CLayer::Update()
 {
 	MAP_GAMEOBJECT::iterator iter_begin = m_mapGameObject.begin();

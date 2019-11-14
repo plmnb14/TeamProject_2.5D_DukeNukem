@@ -6,6 +6,7 @@
 
 BEGIN(ENGINE)
 
+class CLayer;
 class ENGINE_DLL CManagement
 {
 	DECLARE_SINGLETON(CManagement)
@@ -41,6 +42,9 @@ private:
 	LPDIRECT3DDEVICE9	m_pGraphicDev;
 	CRenderer*			m_pRenderer;
 	CScene*				m_pScene;
+
+	typedef map<WORD, CLayer*>	MAP_LAYER;
+	MAP_LAYER	m_mapLayer;
 };
 
 END

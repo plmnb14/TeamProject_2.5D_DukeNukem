@@ -23,12 +23,10 @@ int CMonster::Update()
 		return DEAD_OBJ;
 
 	ENGINE::CGameObject::Update();
-	Player_Pursue();
+	//Player_Pursue();
 
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
 	m_pCollider->SetUp_Box();
-
-	cout << m_pCollider->Get_BoxCollider()->vCenterPos.y << endl;
 
 	return NO_EVENT;
 }
@@ -96,10 +94,11 @@ HRESULT CMonster::AddComponent()
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
-	float Radius[3] = { 2.f , 2.f , 2.f };
-
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->Set_Radius(Radius);
+	m_pCollider->Set_Radius({1.f , 1.f, 1.f});
+	m_pCollider->Set_Dynamic(false);
+	m_pCollider->Set_Trigger(false);
+
 	m_pCollider->SetUp_Box();
 
 	return S_OK;

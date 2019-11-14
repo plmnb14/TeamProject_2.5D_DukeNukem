@@ -36,6 +36,11 @@ void CStage::Render()
 	ENGINE::CScene::Render();
 }
 
+map<WORD, ENGINE::CLayer*> CStage::Get_MapLayer()
+{
+	return m_mapLayer;
+}
+
 HRESULT CStage::Add_Environment_Layer()
 {
 	return S_OK;
