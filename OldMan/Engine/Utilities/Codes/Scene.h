@@ -18,6 +18,9 @@ public:
 	virtual void LateUpdate();
 	virtual void Render();
 
+public:
+	virtual map<WORD, ENGINE::CLayer*> Get_MapLayer() PURE;
+
 protected:
 	virtual HRESULT Add_Environment_Layer() PURE;
 	virtual HRESULT Add_Object_Layer()		PURE;

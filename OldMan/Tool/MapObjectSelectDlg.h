@@ -38,7 +38,7 @@ private:
 
 public:
 	OBJECT_TYPE				m_eType;
-	list<PATH_INFO*>		m_listFileInfo;
+	list<ENGINE::PATH_INFO*>		m_listFileInfo;
 	wstring					m_wstrTex;
 	CImage					m_Img;
 };

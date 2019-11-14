@@ -30,7 +30,7 @@ CString CFileInfo::ConvertRelativePath(const TCHAR* pFullPath)
 
 void CFileInfo::ExtractPathInfo(
 	const TCHAR* pPath, /* D:\\김태윤\\4개월차\\98기\\Framework98\\Texture\\Stage\\Effect\\BossMultiAttack */
-	list<PATH_INFO*>& rPathInfoLst_Multi, list<PATH_INFO*>& rPathInfoLst_Single)
+	list<ENGINE::PATH_INFO*>& rPathInfoLst_Multi, list<ENGINE::PATH_INFO*>& rPathInfoLst_Single, bool bForClientPath)
 {
 	wstring wstrFindPath = wstring(pPath) + L"\\*.*";
 
@@ -57,7 +57,7 @@ void CFileInfo::ExtractPathInfo(
 		if (find.IsDots()) // 찾은 것이 마커라면 건너뛰어라.
 			continue;
 		else if (find.IsDirectory()) // 찾은 것이 폴더라면			
-			ExtractPathInfo(find.GetFilePath(), rPathInfoLst_Multi, rPathInfoLst_Single); // 파일 찾을 때까지 재귀.
+			ExtractPathInfo(find.GetFilePath(), rPathInfoLst_Multi, rPathInfoLst_Single, bForClientPath); // 파일 찾을 때까지 재귀.
 		else // 찾은 것이 파일이라면
 		{
 			if (find.IsSystem()) // 숨어있는 시스템 파일이라면 건너뛰어라.
@@ -84,7 +84,9 @@ void CFileInfo::ExtractPathInfo(
 			*/
 			CString strRelative = ConvertRelativePath(strFullPath);
 
-			PATH_INFO* pPathInfo = new PATH_INFO;
+			ENGINE::PATH_INFO* pPathInfo = new ENGINE::PATH_INFO;
+			if (bForClientPath)
+				strRelative.Replace(L"..\\Client\\Texture", L"..\\Texture");
 			pPathInfo->wstrImgPath = strRelative;
 
 			CString strFileName = L"";
@@ -155,7 +157,7 @@ int CFileInfo::CountImageFile(const TCHAR* pPath)
 }
 
 // Get StateKey (FileName) Only
-void CFileInfo::GetMapToolFiles(const TCHAR* pFullPath, list<PATH_INFO*>& rPathInfoLst)
+void CFileInfo::GetMapToolFiles(const TCHAR* pFullPath, list<ENGINE::PATH_INFO*>& rPathInfoLst)
 {
 	wstring wstrFindPath = wstring(pFullPath) + L"\\*.*";
 
@@ -181,7 +183,7 @@ void CFileInfo::GetMapToolFiles(const TCHAR* pFullPath, list<PATH_INFO*>& rPathI
 
 			CString strRelative = ConvertRelativePath(strFullPath);
 
-			PATH_INFO* pPathInfo = new PATH_INFO;
+			ENGINE::PATH_INFO* pPathInfo = new ENGINE::PATH_INFO;
 			pPathInfo->wstrImgPath = strRelative;
 
 			///////////////////////////////////////////////////////////////////////////

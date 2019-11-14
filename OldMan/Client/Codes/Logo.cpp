@@ -111,6 +111,11 @@ void CLogo::Release()
 	m_pResourceMgr->ResetDynamicResource();
 }
 
+map<WORD, ENGINE::CLayer*> CLogo::Get_MapLayer()
+{
+	return m_mapLayer;
+}
+
 void CLogo::PipeLineSetUp()
 {
 	// Α¶Έν off

@@ -22,18 +22,21 @@ public:
 	void SetUp_Box();
 
 public:
-	void Set_Radius(float* _Radius);
-	void Set_Length(float* _Length);
+	void Set_Radius(D3DXVECTOR3 _Radius);
+	void Set_Length(D3DXVECTOR3 _Length);
 	void Set_CenterPos();
 	void Set_UnderPos(D3DXVECTOR3 _UnderPos);
+	void Set_Dynamic(bool _Dynamic);
+	void Set_Trigger(bool _Trigger);
 
 public:
-	bool Check_AABB(ENGINE::BOXCOL* _TargetCollider);
+	bool Check_AABB(ENGINE::BOXCOL* _DistCollider , ENGINE::BOXCOL* _TargetCollider);
 
 public:
 	bool Get_IsCollision() { return m_tBoxCollider.bIsCollision; }
 	BOXCOL* Get_BoxCollider() { return &m_tBoxCollider; }
-	float* Get_Length() { return m_tBoxCollider.flength; };
+	D3DXVECTOR3 Get_Length() { return m_tBoxCollider.vLength; };
+	ENGINE::COLLISION_TYPE Get_CollisionType() { return m_eCollisionType; }
 
 public:
 	static CCollider* Create();
@@ -41,6 +44,7 @@ public:
 private:
 	BOXCOL m_tBoxCollider;
 	CGameObject* m_pTarget;
+	ENGINE::COLLISION_TYPE m_eCollisionType;
 };
 
 END

@@ -5,11 +5,7 @@
 #include "Ray.h"
 
 CToolTerrainRect::CToolTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CToolTerrain(pGraphicDev),
-	m_pResourceMgr(ENGINE::GetResourceMgr()),
-	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
-	m_bIsPicked(false)
+	:CToolTerrain(pGraphicDev)
 {
 }
 
@@ -61,24 +57,28 @@ bool CToolTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
 
-	D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
-	CRay r = CRay::RayAtWorldSpace((int)v3.x, (int)v3.y);
+	D3DXVECTOR3 v3 = CRay::GetDirection();
 
-	float fTestMul = 15.f;
-	D3DXVECTOR3 vRayPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);
-
+	float fTestMul = 1.f;
+	D3DXVECTOR3 vRayPos = D3DXVECTOR3(v3.x * fTestMul, m_pTransform->GetPos().y, v3.y * fTestMul);
 	D3DXMATRIX matWorld;
 	ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_WORLD, &matWorld);
-	//D3DXMatrixInverse(&matWorld, 0, &matWorld);
+	D3DXMatrixInverse(&matWorld, 0, &matWorld);
+	D3DXVec3TransformCoord(&vRayPos, &vRayPos, &matWorld);
 
-	DWORD dwVtxCount = 0;
-	ENGINE::VTX_TEX* pVtx = m_pBuffer->GetVtx(dwVtxCount);
+	//cout << vRayPos.x <<", "<< vRayPos.y<<", "<< vRayPos.z << endl;
+
+	int iVtxCount = 4;
+	ENGINE::VTX_TEX* pVtx = new ENGINE::VTX_TEX[iVtxCount];;
+	m_pResourceMgr->GetVertexInfo(ENGINE::RESOURCE_STATIC, L"Buffer_RcTex", pVtx);
+
 	float fGridRange = 1.f;
-	for (DWORD i = 0; i < dwVtxCount; i++)
+	for (int i = 0; i < iVtxCount; i++)
 	{
 		D3DXVECTOR3 vVtxPos = pVtx[i].vPos;
 		D3DXVECTOR3 vVtxWorldPos;
-		D3DXVec3TransformCoord(&vVtxWorldPos, &vVtxPos, &matWorld);
+		//D3DXVec3Cross(&vVtxWorldPos, &vVtxPos, &m_pTransform->GetPos());
+		vVtxWorldPos = m_pTransform->GetPos();
 		if ((vVtxWorldPos.x + fGridRange > vRayPos.x && vVtxWorldPos.x - fGridRange < vRayPos.x)
 			&& (vVtxWorldPos.y + fGridRange > vRayPos.y && vVtxWorldPos.y - fGridRange < vRayPos.y))
 		{
@@ -111,6 +111,7 @@ HRESULT CToolTerrainRect::Initialize()
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	m_eTerrainType = ENGINE::TERRAIN_RECT;
 
 	return S_OK;
 }
@@ -168,40 +169,6 @@ void CToolTerrainRect::KeyInput()
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, -fAngleSpeed);
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
-}
-
-void CToolTerrainRect::MouseInput()
-{
-	POINT pt = {};
-
-	GetCursorPos(&pt);
-	ScreenToClient(g_hWnd, &pt);
-
-	if (!m_bSetted)
-	{
-		if (m_bIsFitGrid)
-			return;
-
-		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
-
-		CRay r = CRay::RayAtWorldSpace((int)v3.x, (int)v3.y);
-
-		float fTestMul = 15.f;
-		D3DXVECTOR3 vPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);
-		m_pTransform->SetPos(vPos);
-	}
-	else if (m_bSetted)
-	{
-		//D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
-
-		//D3DXVECTOR3 vPos;
-		//CRay r = CRay::RayAtWorldSpace(v3.x, v3.y);
-		//if (r.IsPicked(m_pBuffer->GetVtx()[0].vPos, m_pBuffer->GetVtx()[1].vPos, m_pBuffer->GetVtx()[2].vPos, vPos)
-		//	|| r.IsPicked(m_pBuffer->GetVtx()[0].vPos, m_pBuffer->GetVtx()[2].vPos, m_pBuffer->GetVtx()[3].vPos, vPos))
-		//	m_bIsPicked = true;
-		//else
-		//	m_bIsPicked = false;
-	}
 }
 
 CToolTerrainRect* CToolTerrainRect::Create(LPDIRECT3DDEVICE9 pGraphicDev)

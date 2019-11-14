@@ -25,6 +25,8 @@ public:
 	virtual void LateUpdate();
 	virtual void Render();
 
+	virtual map<WORD, ENGINE::CLayer*> Get_MapLayer();
+
 private:
 	virtual HRESULT Add_Environment_Layer();
 	virtual HRESULT Add_Object_Layer();
@@ -34,6 +36,7 @@ private:
 
 private:
 	void PipeLineSetUp();
+	void LoadTexture();
 	void LoadMapObj();
 
 public:

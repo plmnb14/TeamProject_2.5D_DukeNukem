@@ -1,6 +1,15 @@
 #pragma once
 #ifndef __TOOL_TERRAIN_H__
 
+namespace ENGINE
+{
+	class CResourceMgr;
+	class CTimeMgr;
+	class CVIBuffer;
+	class CTexture;
+	class CTransform;
+}
+
 #include "GameObject.h"
 class CToolTerrain : public ENGINE::CGameObject
 {
@@ -24,10 +33,22 @@ public:
 	void SetTexName(wstring _wstrTex);
 
 protected:
-	bool					m_bSetted;
-	bool					m_bIsFitGrid;
+	void MouseInput();
+
+protected:
 	ENGINE::TERRAIN_TYPE	m_eTerrainType;
 	wstring					m_wstrTex;
+
+	ENGINE::CResourceMgr*	m_pResourceMgr;
+	ENGINE::CTimeMgr*		m_pTimeMgr;
+
+	ENGINE::CTexture*		m_pTexture;
+	ENGINE::CVIBuffer*		m_pBuffer;
+	ENGINE::CTransform*		m_pTransform;
+
+	bool					m_bIsPicked;
+	bool					m_bSetted;
+	bool					m_bIsFitGrid;
 };
 
 #define __TOOL_TERRAIN_H__

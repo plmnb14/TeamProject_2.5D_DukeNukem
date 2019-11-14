@@ -1,6 +1,7 @@
 #include "Management.h"
 #include "Renderer.h"
 #include "Scene.h"
+#include "CollisionMgr.h"
 
 USING(ENGINE)
 
@@ -40,6 +41,10 @@ void CManagement::LateUpdate()
 {
 	NULL_CHECK(m_pScene);
 	m_pScene->LateUpdate();
+
+	m_mapLayer = m_pScene->Get_MapLayer();
+
+	CCollisionMgr::CollisionSphere(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER) , MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
 }
 
 void CManagement::Render()

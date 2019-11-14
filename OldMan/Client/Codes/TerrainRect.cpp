@@ -16,6 +16,7 @@ int CTerrainRect::Update()
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
+	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 
 	return NO_EVENT;
@@ -30,12 +31,12 @@ void CTerrainRect::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
-	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 	m_pTexture->Render(0);
 	m_pBuffer->Render();
 
-	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	//m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
 HRESULT CTerrainRect::Initialize()
@@ -49,8 +50,29 @@ HRESULT CTerrainRect::Initialize()
 	return S_OK;
 }
 
+HRESULT CTerrainRect::LateInit()
+{
+	return S_OK;
+}
+
 void CTerrainRect::Release()
 {
+}
+
+void CTerrainRect::ChangeTex(wstring _wstrTex)
+{
+	m_wstrTex = _wstrTex;
+
+	// Change Texture component
+	m_mapComponent.erase(L"Texture");
+
+	ENGINE::CComponent* pComponent = nullptr;
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
+	NULL_CHECK(pComponent);
+	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK(m_pTexture);
 }
 
 HRESULT CTerrainRect::AddComponent()
@@ -58,7 +80,7 @@ HRESULT CTerrainRect::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Texture_Terrain");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Tile256x256_0");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

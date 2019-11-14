@@ -28,6 +28,8 @@ public:
 	CGameObject* Get_Player();
 	CGameObject* Get_MainCamera();
 	CGameObject* Get_Camera_By_Index(int _Index);
+	list<CGameObject*> Get_List(ENGINE::OBJECT_TYPE _Type);
+
 
 public:
 	HRESULT AddObject(ENGINE::OBJECT_TYPE _ObjType, CGameObject* pObject);

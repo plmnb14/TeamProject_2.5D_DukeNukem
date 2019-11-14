@@ -26,42 +26,20 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update()
 {
-	int a = 0;
-	//m_pSubject->get
+	cout << m_pTransform->GetPos().x << endl;
+	cout << dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x << endl;
 
-	//if (m_bIsDead)
-	//	return DEAD_OBJ;
-	//
-	//m_pObserver->GetViewMatrix();
-	//
-	//ENGINE::CGameObject::LateInit();
-	//ENGINE::CGameObject::Update();
-	//KeyInput();
-	//
-	//m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	//m_pCollider->SetUp_Box();
-	//
-	//m_pCollider->Check_AABB(dynamic_cast<ENGINE::CCollider*>(m_mapLayer[ENGINE::CLayer::OBJECT]
-	//	->Get_Target(ENGINE::OBJECT_TYPE::MONSTER)
-	//	->Get_Component(L"Collider"))->Get_BoxCollider());
-	//
-	//float* a = dynamic_cast<ENGINE::CCollider*>(m_pCollider)->Get_Length();
-	//
-	//D3DXVECTOR3 vPos = m_pTransform->GetPos();
-	//D3DXVECTOR3 vDir = m_pTransform->GetDir();
-	//
-	//if (vPos.x < dynamic_cast<ENGINE::CCollider*>(m_mapLayer[ENGINE::CLayer::OBJECT]
-	//	->Get_Target(ENGINE::OBJECT_TYPE::MONSTER)
-	//	->Get_Component(L"Collider"))->Get_BoxCollider()->vUnderPos.x)
-	//	a[0] *= -1.f;
-	//
-	//cout << a[0] << endl;
-	//
-	//
-	//m_pTransform->SetPos({ vPos.x + a[0], vPos.y , vPos.z});
-	//m_pTransform->Move_AdvancedPos(vDir , 1 * m_pTimeMgr->GetDelta());
-	//m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * m_pTimeMgr->GetDelta(), 0, a[2] * m_pTimeMgr->GetDelta() });
-	//m_pTransform->Move_AdvancedPos_Vec3(D3DXVECTOR3{a[0] * vDir.x * 0.01f, 0, a[2] * vDir.z * 0.01f });
+	if (m_bIsDead)
+		return DEAD_OBJ;
+	
+	m_pObserver->GetViewMatrix();
+	
+	ENGINE::CGameObject::LateInit();
+	ENGINE::CGameObject::Update();
+	KeyInput();
+
+	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
+	m_pCollider->SetUp_Box();
  
 	return NO_EVENT;
 }
@@ -141,11 +119,13 @@ HRESULT CPlayer::AddComponent()
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
-	float Radius[3] = { 1.f , 1.f , 1.f };
-
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->Set_Radius(Radius);
+	m_pCollider->Set_Radius({1.f , 1.f, 1.f});
+	m_pCollider->Set_Dynamic(true);
+	m_pCollider->Set_Trigger(false);
+
 	m_pCollider->SetUp_Box();
+
 
 	return S_OK;
 }
@@ -178,7 +158,6 @@ void CPlayer::KeyInput()
 
 		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
-
 	}
 
 
@@ -226,17 +205,6 @@ void CPlayer::KeyInput()
 	{
 		dynamic_cast<CCamera*>(m_pCamera)->Yaw(fAngleSpeed);
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
-	}
-
-
-	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_Q))
-	{
-		dynamic_cast<CCamera*>(m_pCamera)->Roll(-1.f);
-	}
-
-	else if (m_pKeyMgr->KeyPressing(ENGINE::KEY_E))
-	{
-
 	}
 }
 

@@ -40,6 +40,10 @@ void CTerrain::Render()
 	m_pBuffer->Render();
 }
 
+void CTerrain::ChangeTex(wstring _wstrTex)
+{
+}
+
 HRESULT CTerrain::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
@@ -47,6 +51,11 @@ HRESULT CTerrain::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
+	return S_OK;
+}
+
+HRESULT CTerrain::LateInit()
+{
 	return S_OK;
 }
 

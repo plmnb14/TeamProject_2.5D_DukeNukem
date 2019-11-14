@@ -24,7 +24,7 @@ IMPLEMENT_DYNCREATE(CMyFormView, CFormView)
 CMyFormView::CMyFormView()
 	: CFormView(IDD_MYFORMVIEW),
 	m_strObjectName(_T("")),
-	m_wstrFileName(L""), m_wstrFilePath(L""),
+	m_wstrFileName(L"Tile64x64_9"), m_wstrFilePath(L""),
 	m_eTerrainType(ENGINE::TERRAIN_END)
 	, m_strPositionX(_T("0"))
 	, m_strPositionY(_T("0"))
@@ -163,7 +163,7 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 	m_wstrFileName = _wstrName;
 	m_wstrFilePath = _wstrPath;
 
-	if (!lstrcmp(m_wstrFileName.c_str(), L""))
+	if (!lstrcmp(m_wstrFilePath.c_str(), L""))
 		return;
 
 	CRect StaticPictureRect;
@@ -561,6 +561,8 @@ void CMyFormView::OnBnClickedButton_Load()
 			case ENGINE::TERRAIN_RECT:
 			{
 				pTerrain = CToolTerrainRect::Create(ENGINE::GetGraphicDev()->GetDevice());
+				pTerrain->SetTexName(szName);
+				pTerrain->ChangeTex();
 				break;
 			}
 			}

@@ -10,13 +10,13 @@ public:
 	void MakePathFile();
 
 private:
-	void OnDropFiles(wstring _wstrPath);
-	void OnBnClickedSave();
+	void OnDropFiles(wstring _wstrPath, bool _bForClient = false);
+	void OnBnClickedSave(bool _bForClient = false);
 	void OnBnClickedLoad();
 
 public:
-	list<PATH_INFO*>	m_PathInfoLst_Multi;
-	list<PATH_INFO*>	m_PathInfoLst_Single;
+	list<ENGINE::PATH_INFO*>	m_PathInfoLst_Multi;
+	list<ENGINE::PATH_INFO*>	m_PathInfoLst_Single;
 };
 #define __PATHEXTRACT_H__
 #endif

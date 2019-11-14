@@ -89,6 +89,7 @@ namespace ENGINE
 
 	}CAM_INFO;
 
+
 	typedef struct tagBoxCollider
 	{
 		D3DXVECTOR3 vCenterPos;
@@ -98,10 +99,10 @@ namespace ENGINE
 		D3DXVECTOR3 vMaxPos;
 		D3DXVECTOR3 vMinPos;
 
-		// OBB 충돌 검사 시 사용
-		float fRadius[RADIUS_END];
-		float flength[LENGTH_END];
+		D3DXVECTOR3 vLength;
+		D3DXVECTOR3 vRadius;
 
+		bool bIsDynamic;
 		bool bIsCollision;
 		bool bIsTrigger;
 		bool bIsEnabled;
@@ -116,6 +117,15 @@ namespace ENGINE
 		// 불러올 텍스처의 정보
 		D3DXIMAGE_INFO		tImgInfo;
 	}TEX_INFO;
+
+	typedef struct tagPathInfo
+	{
+		wstring wstrObjectKey = L"";
+		wstring wstrStateKey = L"";
+		wstring wstrImgPath = L"";
+		wstring wstrFileName = L"";
+		int iImgCount = 0;
+	}PATH_INFO;
 }
 
 #define __ENGINE_STRUCT_H__

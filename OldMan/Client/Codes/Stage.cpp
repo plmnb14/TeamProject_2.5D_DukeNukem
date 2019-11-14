@@ -36,6 +36,11 @@ void CStage::Render()
 	ENGINE::CScene::Render();
 }
 
+map<WORD, ENGINE::CLayer*> CStage::Get_MapLayer()
+{
+	return m_mapLayer;
+}
+
 HRESULT CStage::Add_Environment_Layer()
 {
 	return S_OK;
@@ -121,23 +126,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_RcTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
 
-	// Player Texture
-	//hr = m_pResourceMgr->AddTexture(
-	//	m_pGraphicDev,
-	//	ENGINE::RESOURCE_STATIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"Texture_Player",
-	//	L"../Texture/Player%d.png", 1);
-	//FAILED_CHECK_MSG_RETURN(hr, L"Texture_Player Add Failed", E_FAIL);
-
-	// Terrain Texture
-	hr = m_pResourceMgr->AddTexture(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::TEX_NORMAL,
-		L"Texture_Terrain",
-		L"../Texture/Terrain/Terrain%d.png", 1);
-	FAILED_CHECK_MSG_RETURN(hr, L"Texture_Terrain Add Failed", E_FAIL);
+	LoadTexture();
 
 	// Environment Layer
 	hr = Add_Environment_Layer();
@@ -196,6 +185,36 @@ void CStage::PipeLineSetUp()
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 }
 
+void CStage::LoadTexture()
+{
+	// ÀÓ½Ã.
+	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../../Data/TexturePath_Client.txt");
+	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
+
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Multi())
+	{
+		hr = m_pResourceMgr->AddTexture(
+			m_pGraphicDev,
+			ENGINE::RESOURCE_DYNAMIC,
+			ENGINE::TEX_NORMAL,
+			iter->wstrStateKey,
+			iter->wstrImgPath, iter->iImgCount);
+		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+	}
+
+	// SingleÀº FileName
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
+	{
+		hr = m_pResourceMgr->AddTexture(
+			m_pGraphicDev,
+			ENGINE::RESOURCE_DYNAMIC,
+			ENGINE::TEX_NORMAL,
+			iter->wstrFileName,
+			iter->wstrImgPath, 1);
+		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+	}
+}
+
 void CStage::LoadMapObj()
 {
 	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -231,6 +250,7 @@ void CStage::LoadMapObj()
 			break;
 		case ENGINE::TERRAIN_RECT:
 			pTerrain = CTerrainRect::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pTerrain->ChangeTex(szName);
 			break;
 		}
 
