@@ -37,7 +37,7 @@ private:
 	void Release();
 
 public:
-	VTX_TEX* GetVtx(DWORD& _dwVtxCountOut);
+	void GetVertexInfo(void* pVertex);
 
 protected:
 	LPDIRECT3DVERTEXBUFFER9	m_pVB;
@@ -51,9 +51,8 @@ protected:
 	DWORD		m_dwTriCount;	// 삼각형 개수 (폴리곤 개수)
 
 	DWORD		m_dwIdxSize;	// 인덱스 메모리 크기.
-	D3DFORMAT	m_IdxFmt;	// 인덱스 포맷 (16비트 or 32비트)
-
-	VTX_TEX*	m_pVtx;
+	D3DFORMAT	m_IdxFmt;
+	// 인덱스 포맷 (16비트 or 32비트)
 };
 
 END

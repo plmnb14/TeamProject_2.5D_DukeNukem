@@ -6,11 +6,7 @@
 
 
 CToolTerrainCube::CToolTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CToolTerrain(pGraphicDev),
-	m_pResourceMgr(ENGINE::GetResourceMgr()),
-	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
-	m_bIsPicked(false)
+	:CToolTerrain(pGraphicDev)
 {
 }
 
@@ -58,6 +54,7 @@ HRESULT CToolTerrainCube::Initialize()
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	m_eTerrainType = ENGINE::TERRAIN_CUBE;
 
 	return S_OK;
 }
@@ -114,25 +111,6 @@ void CToolTerrainCube::KeyInput()
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, -fAngleSpeed);
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
-}
-
-void CToolTerrainCube::MouseInput()
-{
-	POINT pt = {};
-
-	GetCursorPos(&pt);
-	ScreenToClient(g_hWnd, &pt);
-
-	if (!m_bSetted)
-	{
-		D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
-
-		CRay r = CRay::RayAtWorldSpace((int)v3.x, (int)v3.y);
-		
-		float fTestMul = 15.f;
-		D3DXVECTOR3 vPos = D3DXVECTOR3(r.m_vDirection.x * fTestMul, m_pTransform->GetPos().y, r.m_vDirection.y * fTestMul);
-		m_pTransform->SetPos(vPos);
-	}
 }
 
 CToolTerrainCube* CToolTerrainCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)

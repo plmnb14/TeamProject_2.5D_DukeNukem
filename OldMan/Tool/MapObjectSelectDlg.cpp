@@ -71,7 +71,7 @@ void CMapObjectSelectDlg::SetData()
 	m_ListBox.ResetContent();
 
 	CFileInfo::GetMapToolFiles(strRelativePath, m_listFileInfo);
-	//list<PATH_INFO*> listMultiTexture;
+	//list<ENGINE::PATH_INFO*> listMultiTexture;
 	//CFileInfo::ExtractPathInfo(strRelativePath, listMultiTexture, m_listFileInfo);
 
 	for (auto& iter : m_listFileInfo)

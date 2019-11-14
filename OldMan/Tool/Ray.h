@@ -19,6 +19,7 @@ public:
 public:
 	static CRay RayAtViewSpace(int _iScreecX, int _iScreecY);
 	static CRay RayAtWorldSpace(int _iScreecX, int _iScreecY);
+	static D3DXVECTOR3 GetDirection();
 	bool IsPicked(CToolTerrainCube* _pTerrainCube);
 	bool IsPicked(D3DXVECTOR3& _v0, D3DXVECTOR3& _v1, D3DXVECTOR3& _v2, D3DXVECTOR3& _vPickedPos);
 

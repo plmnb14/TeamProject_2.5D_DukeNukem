@@ -405,26 +405,6 @@ HRESULT CToolView::Add_Object_Layer()
 	NULL_CHECK_MSG_RETURN(pObject_Layer, L"Object Layer Create Failed", E_FAIL);
 	m_mapLayer.insert({ ENGINE::CLayer::OBJECT, pObject_Layer });
 
-	//// Terrain
-	//pObject = CTerrain::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
-
-	//// Player
-	//ENGINE::CGameObject* pObject = CPlayer::Create(m_pDeviceMgr->GetDevice());
-	//NULL_CHECK_MSG_RETURN(pObject, L"Player Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PLAYER, pObject);
-
-	// Terrain
-	//ENGINE::CGameObject* pObject = CTerrainCube::Create(m_pDeviceMgr->GetDevice());
-	//NULL_CHECK_MSG_RETURN(pObject, L"CTerrainCube Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
-
-	//// Camera
-	//pObject = CCamera::Create(m_pDeviceMgr->GetDevice(), pObject_Layer->Get_Player());
-	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
-
 	return S_OK;
 }
 
@@ -462,6 +442,8 @@ void CToolView::CubeMoveToMouse()
 			D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z)),
 			pTransform->GetSize()
 		);
+
+		pFormView->EditDataExchange();
 	}
 }
 

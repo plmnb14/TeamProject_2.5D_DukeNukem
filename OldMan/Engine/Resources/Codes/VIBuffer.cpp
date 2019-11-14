@@ -68,8 +68,13 @@ void CVIBuffer::Release()
 	}	
 }
 
-VTX_TEX* CVIBuffer::GetVtx(DWORD& _dwVtxCountOut)
+void CVIBuffer::GetVertexInfo(void* pVertex)
 {
-	_dwVtxCountOut = m_dwVtxCount;
-	return m_pVtx;
+	void* pOriginVtx = nullptr;
+
+	m_pVB->Lock(0, 0, &pOriginVtx, 0);
+
+	memcpy(pVertex, pOriginVtx, m_dwVtxSize * m_dwVtxCount);
+
+	m_pVB->Unlock();
 }

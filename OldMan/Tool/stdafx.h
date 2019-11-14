@@ -43,6 +43,10 @@
 #endif
 #endif
 
+// ¾Ù¸®»í ¤£¤£
+#pragma comment(linker,"/entry:wWinMainCRTStartup /subsystem:console")
+#include <iostream>
+
 // Standard Headers
 #include <string>
 #include <list>
