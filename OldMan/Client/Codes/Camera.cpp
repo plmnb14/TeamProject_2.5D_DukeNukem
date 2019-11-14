@@ -359,6 +359,8 @@ void CCamera::SetUp_MouseRotate()
 		m_pCCamera_Component->Set_LookAt(tmpEyePos);
 	}
 
+	return;
+
 	if (tmpPT.y != 0)
 	{
 		if (m_pCCamera_Component->Get_Look().z < 0.2f && m_pCCamera_Component->Get_Look().z > 0.f)
@@ -448,8 +450,6 @@ D3DXVECTOR3 CCamera::Get_Up()
 
 int CCamera::Update()
 {
-	SetUp_ViewPoint(m_eCameraViewPoint);
-
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
