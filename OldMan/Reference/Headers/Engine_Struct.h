@@ -117,6 +117,15 @@ namespace ENGINE
 		// 불러올 텍스처의 정보
 		D3DXIMAGE_INFO		tImgInfo;
 	}TEX_INFO;
+
+	typedef struct tagPathInfo
+	{
+		wstring wstrObjectKey = L"";
+		wstring wstrStateKey = L"";
+		wstring wstrImgPath = L"";
+		wstring wstrFileName = L"";
+		int iImgCount = 0;
+	}PATH_INFO;
 }
 
 #define __ENGINE_STRUCT_H__

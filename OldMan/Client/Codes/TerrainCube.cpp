@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TerrainCube.h"
 #include "Trasform.h"
+#include "Collider.h"
 
 CTerrainCube::CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CTerrain(pGraphicDev)
@@ -17,6 +18,9 @@ int CTerrainCube::Update()
 		return DEAD_OBJ;
 
 	ENGINE::CGameObject::Update();
+
+	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
+	m_pCollider->SetUp_Box();
 
 	return NO_EVENT;
 }
@@ -80,6 +84,23 @@ HRESULT CTerrainCube::AddComponent()
 
 	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
+
+	// Collider
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Collider", pComponent });
+
+	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+	cout << m_pTransform->GetPos().x << endl;
+
+	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
+	m_pCollider->Set_Radius({ 1.f , 1.f , 1.f });
+	m_pCollider->Set_CenterPos();
+	m_pCollider->Set_Dynamic(false);
+	m_pCollider->Set_Trigger(false);
+	m_pCollider->SetUp_Box();
 
 	return S_OK;
 }

@@ -19,11 +19,8 @@ void CCollider::LateUpdate()
 
 void CCollider::SetUp_Box()
 {
-	m_tBoxCollider.vMinPos = m_tBoxCollider.vCenterPos;
-	m_tBoxCollider.vMaxPos = m_tBoxCollider.vCenterPos;
-
-	m_tBoxCollider.vMinPos += { -m_tBoxCollider.vRadius };
-	m_tBoxCollider.vMaxPos += { m_tBoxCollider.vRadius };
+	m_tBoxCollider.vMinPos = {m_tBoxCollider.vCenterPos - m_tBoxCollider.vRadius };
+	m_tBoxCollider.vMaxPos = {m_tBoxCollider.vCenterPos + m_tBoxCollider.vRadius };
 }
 
 void CCollider::Set_Radius(D3DXVECTOR3 _Radius)

@@ -60,10 +60,10 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	// Monster
-	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
+	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 
 	// Terrain
 	//pObject = CTerrain::Create(m_pGraphicDev);
@@ -159,7 +159,7 @@ void CStage::PipeLineSetUp()
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	// WireFrame
-	//pDeviceMgr->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 	D3DXMATRIX matView, matProj; // 뷰행렬, 투영행렬
 

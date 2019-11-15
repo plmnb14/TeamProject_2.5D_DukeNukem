@@ -48,12 +48,12 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
 			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
 			if(Check_AABB(rDstCol, rSrcCol))
 			{
-				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
-				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
+ 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
+				//rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
 			}
 		}
 	}
@@ -125,6 +125,11 @@ D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BO
 	vCross.y = vMax.y - vMin.y;
 	vCross.z = vMax.z - vMin.z;
 
+	if (vCross.x == vCross.y && vCross.y == vCross.z)
+	{
+		return { 0,0,0 };
+	}
+
 	//(vCross.x < vCross.y ? vCross.x < vCross.z ? 
 	//	vCross.y = 0 : vCross.z = 0 : 
 	//	vCross.y < vCross.z ? vCross.z = 0 : vCross.y = 0);
@@ -135,28 +140,27 @@ D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BO
 		{
 			vCross.z = 0;
 		}
-
+	
 		else
 		{
 			vCross.x = 0;
 		}
-
-
+	
 		vCross.y = 0;
 	}
-
+	
 	else
 	{
 		if (vCross.y < vCross.z)
 		{
 			vCross.z = 0;
 		}
-
+	
 		else
 		{
 			vCross.y = 0;
 		}
-
+	
 		vCross.x = 0;
 	}
 

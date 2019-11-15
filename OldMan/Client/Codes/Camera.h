@@ -52,6 +52,7 @@ public:
 	void SetUp_Zoom();
 	void SetUp_MouseRotate();
 
+
 public:
 	float Get_YAngle() { return m_fX_OriginYAngle; };
 	float Get_XAngle() { return m_fX_OriginXAngle; };
@@ -60,6 +61,7 @@ public:
 	D3DXVECTOR3 Get_Look();
 	D3DXVECTOR3 Get_Right();
 	D3DXVECTOR3 Get_Up();
+	CameraViewPoint Get_ViewPoint() { return m_eCameraViewPoint; }
 
 
 

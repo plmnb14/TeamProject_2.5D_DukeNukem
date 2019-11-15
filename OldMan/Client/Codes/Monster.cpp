@@ -24,12 +24,13 @@ int CMonster::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
+
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	//Player_Pursue();
 
-	//m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-//	m_pCollider->SetUp_Box();
+	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
+	m_pCollider->SetUp_Box();
 
 	//cout << m_pCollider->Get_BoxCollider()->vCenterPos.y << endl;
 

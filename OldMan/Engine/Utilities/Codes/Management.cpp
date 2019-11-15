@@ -44,7 +44,8 @@ void CManagement::LateUpdate()
 
 	m_mapLayer = m_pScene->Get_MapLayer();
 
-	CCollisionMgr::CollisionSphere(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER) , MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
+	CCollisionMgr::CollisionSphere(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
+	CCollisionMgr::CollisionSphere(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
 }
 
 void CManagement::Render()
