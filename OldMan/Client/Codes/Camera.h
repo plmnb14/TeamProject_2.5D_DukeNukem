@@ -61,6 +61,9 @@ public:
 	D3DXVECTOR3 Get_Right();
 	D3DXVECTOR3 Get_Up();
 
+public:
+	void KeyInput();
+
 
 
 public:
@@ -85,6 +88,7 @@ private:
 	LPDIRECT3DDEVICE9	m_pGraphicDev;
 	CameraMode			m_eCameraMode;
 	CameraViewPoint		m_eCameraViewPoint;
+	D3DXMATRIX			m_MatView;
 
 private:
 	ENGINE::CCamera_Component*	m_pCCamera_Component;
