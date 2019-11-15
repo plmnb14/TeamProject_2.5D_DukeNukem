@@ -180,13 +180,11 @@ void CPlayer::KeyInput()
 	if (GetAsyncKeyState('W'))
 	{
 		m_pTransform->MovePos(fMoveSpeed);
-		dynamic_cast<CCamera*>(m_pCamera)->Walk(fMoveSpeed);
 	}
 
 	if (GetAsyncKeyState('S'))
 	{
 		m_pTransform->MovePos(-fMoveSpeed);
-		dynamic_cast<CCamera*>(m_pCamera)->Walk(-fMoveSpeed);
 	}
 
 	if (GetAsyncKeyState('A'))
@@ -196,8 +194,6 @@ void CPlayer::KeyInput()
 		
 		D3DXVec3Cross(&vDir, &m_pTransform->GetDir(), &vWorldUp);
 		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z) , fMoveSpeed);
-
-		dynamic_cast<CCamera*>(m_pCamera)->Starfe(-fMoveSpeed);
 	}
 
 	if (GetAsyncKeyState('D'))
@@ -207,19 +203,15 @@ void CPlayer::KeyInput()
 		
 		D3DXVec3Cross(&vDir, &m_pTransform->GetDir(), &vWorldUp);
 		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z), -fMoveSpeed);
-
-		dynamic_cast<CCamera*>(m_pCamera)->Starfe(fMoveSpeed);
 	}
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
-		dynamic_cast<CCamera*>(m_pCamera)->Yaw(-fAngleSpeed);
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, -fAngleSpeed);
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
-		dynamic_cast<CCamera*>(m_pCamera)->Yaw(fAngleSpeed);
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
 	}
 }
