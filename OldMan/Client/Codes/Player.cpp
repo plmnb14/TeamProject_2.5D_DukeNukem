@@ -6,6 +6,7 @@
 #include "Bullet.h"
 #include "Collider.h"
 #include "CameraObserver.h"
+#include "RigidBody.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -13,7 +14,9 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr),
+	m_pTexture(nullptr), m_pBuffer(nullptr), 
+	m_pTransform(nullptr), m_pCollider(nullptr),
+	m_pRigid(nullptr),
 	m_pSubject(ENGINE::GetCameraSubject()),
 	m_pObserver(nullptr)
 {	
@@ -35,7 +38,37 @@ int CPlayer::Update()
 
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
 	m_pCollider->SetUp_Box();
- 
+
+	cout << m_pRigid->Get_Accel().y << endl;
+
+	if (m_pRigid->Get_IsJump())
+	{
+		D3DXVECTOR3 JumpLength = { 0,m_pRigid->Set_Jump(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()),0 };
+		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
+	
+		if (m_pRigid->Get_Accel().y <= 0)
+		{
+			m_pRigid->Set_Accel({0,0,0});
+			m_pRigid->Set_IsFall(true);
+			m_pRigid->Set_IsGround(false);
+			m_pRigid->Set_IsJump(false);
+		}
+	}
+	
+	if(m_pRigid->Get_IsJump() == false && m_pRigid->Get_IsGround() == false)
+	{
+		D3DXVECTOR3 JumpLength = { 0, -m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()),0 };
+		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
+
+		if (m_pCollider->Get_IsCollision())
+		{
+			m_pRigid->Set_IsGround(true);
+			m_pRigid->Set_IsFall(false);
+		}
+	}
+
+	//cout << m_pCollider->Get_IsCollision() << endl;
+
 	return NO_EVENT;
 }
 
@@ -55,7 +88,7 @@ HRESULT CPlayer::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, -3.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 	return S_OK;
@@ -122,6 +155,29 @@ HRESULT CPlayer::AddComponent()
 	m_pCollider->Set_Dynamic(true);
 	m_pCollider->Set_Trigger(false);
 	m_pCollider->SetUp_Box();
+
+	// Rigid
+	pComponent = ENGINE::CRigidBody::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"RigidBody", pComponent });
+	
+	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
+	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
+
+	m_pRigid->Set_UseGravity(true);
+
+	m_pRigid->Set_IsGround(false);
+	m_pRigid->Set_IsAir(true);
+	m_pRigid->Set_IsHit(false);
+	m_pRigid->Set_IsAttack(true);
+	m_pRigid->Set_IsFall(true);
+
+	m_pRigid->Set_fMass(1.f);
+	m_pRigid->Set_fPower(10.f);
+
+	m_pRigid->Set_Speed({ 1.f , 1.f , 1.f });
+	m_pRigid->Set_Accel({0, 0, 0});
+	m_pRigid->Set_MaxAccel({2.f , 5.f , 2.f});
 
 	return S_OK;
 }
@@ -213,6 +269,12 @@ void CPlayer::KeyInput()
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
+	}
+
+	if (m_pKeyMgr->KeyDown(ENGINE::KEY_SPACE))
+	{
+		m_pRigid->Set_Accel({ 0, 1.f, 0 });
+		m_pRigid->Set_IsJump(true);
 	}
 }
 

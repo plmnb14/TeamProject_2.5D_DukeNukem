@@ -49,6 +49,12 @@
     <Filter Include="03.Design\00. Collision">
       <UniqueIdentifier>{35849a72-409d-4dec-8aba-0c9a7da175d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.SuperClass\02.Component\02. Billborad">
+      <UniqueIdentifier>{c7022650-d7dc-45e6-b596-6974221bf264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.SuperClass\02.Component\03. RigidBody">
+      <UniqueIdentifier>{dea7e9dd-4258-4963-ae64-e337911626cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -93,6 +99,12 @@
     <ClInclude Include="..\Codes\CollisionMgr.h">
       <Filter>03.Design\00. Collision</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Billborad.h">
+      <Filter>02.SuperClass\02.Component\02. Billborad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\RigidBody.h">
+      <Filter>02.SuperClass\02.Component\03. RigidBody</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -133,6 +145,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\CollisionMgr.cpp">
       <Filter>03.Design\00. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Billborad.cpp">
+      <Filter>02.SuperClass\02.Component\02. Billborad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RigidBody.cpp">
+      <Filter>02.SuperClass\02.Component\03. RigidBody</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

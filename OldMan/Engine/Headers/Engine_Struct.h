@@ -109,6 +109,27 @@ namespace ENGINE
 
 	}BOXCOL;
 
+	typedef struct tagRigidBody
+	{
+		D3DXVECTOR3 vAccel;
+		D3DXVECTOR3 vMaxAccel;
+		D3DXVECTOR3 vSpeed;
+
+		bool bIsGravity; // 중력 영향력을 체크합니다.
+
+		bool bIsGround;	 // 땅인지 체크 합니다.
+		bool bIsAir;	 // 공중인지 체크합니다.
+
+		bool bIsHit;	 // 피격 체크
+		bool bIsAttck;	 // 공격 가능체크
+		bool bIsFall;    // 낙하 체크
+		bool bIsJump;	 // 점프 체크
+
+		float fPower;	// 힘
+		float fMass;	// 질량
+
+	}RIGID;
+
 	typedef struct tagTexture
 	{
 		// 불러온 텍스처를 조작하기 위한 Com객체.
