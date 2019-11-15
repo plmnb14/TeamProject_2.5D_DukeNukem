@@ -213,6 +213,8 @@ void CStage::LoadTexture()
 			iter->wstrImgPath, 1);
 		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
 	}
+
+	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 void CStage::LoadMapObj()

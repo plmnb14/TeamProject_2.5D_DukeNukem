@@ -39,8 +39,8 @@ void CToolTerrain::MouseInput()
 {
 	if (!m_bSetted)
 	{
-		if (m_bIsFitGrid)
-			return;
+		//if (m_bIsFitGrid)
+		//	return;
 
 		D3DXVECTOR3 v3 = CRay::GetDirection();
 
@@ -54,6 +54,13 @@ void CToolTerrain::MouseInput()
 		//cout << vPos.x << ", " << vPos.y << ", " << vPos.z << endl;
 
 		m_pTransform->SetPos(vPos);
+
+		if (m_bIsFitGrid)
+		{
+			int iPosArr[3] = { int(m_pTransform->GetPos().x) , int(m_pTransform->GetPos().y) , (int)(m_pTransform->GetPos().z) };
+			m_pTransform->SetPos(D3DXVECTOR3(float(iPosArr[0]), float(iPosArr[1]), float(iPosArr[2])));
+		}
+
 	}
 	else if (m_bSetted)
 	{

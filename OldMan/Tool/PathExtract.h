@@ -10,6 +10,8 @@ public:
 	void MakePathFile();
 	void ExportFile();
 
+	void Release();
+
 private:
 	void OnDropFiles(wstring _wstrPath, bool _bForClient = false);
 	void OnBnClickedSave(bool _bForClient = false);

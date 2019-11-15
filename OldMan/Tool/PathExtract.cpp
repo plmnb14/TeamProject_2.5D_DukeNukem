@@ -10,11 +10,7 @@ CPathExtract::CPathExtract()
 
 CPathExtract::~CPathExtract()
 {
-	for_each(m_PathInfoLst_Multi.begin(), m_PathInfoLst_Multi.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
-	m_PathInfoLst_Multi.clear();
-
-	for_each(m_PathInfoLst_Single.begin(), m_PathInfoLst_Single.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
-	m_PathInfoLst_Single.clear();
+	Release();
 }
 
 void CPathExtract::MakePathFile()
@@ -49,6 +45,17 @@ void CPathExtract::ExportFile()
 
 	OnDropFiles(L"..\\Client\\Texture");
 	OnBnClickedSave();
+}
+
+void CPathExtract::Release()
+{
+	cout << "Safe Delete Path_Info" << endl;
+
+	for_each(m_PathInfoLst_Multi.begin(), m_PathInfoLst_Multi.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
+	m_PathInfoLst_Multi.clear();
+
+	for_each(m_PathInfoLst_Single.begin(), m_PathInfoLst_Single.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
+	m_PathInfoLst_Single.clear();
 }
 
 void CPathExtract::OnDropFiles(wstring _wstrPath, bool _bForClient)

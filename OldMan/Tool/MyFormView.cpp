@@ -593,5 +593,6 @@ void CMyFormView::OnBnClickedButton_PathUpdate()
 
 	CPathExtract* pPath = new CPathExtract;
 	pPath->ExportFile();
+	pPath->Release();
 	ENGINE::Safe_Delete(pPath);
 }
