@@ -170,6 +170,7 @@
     <ClInclude Include="..\Codes\TerrainCube.h" />
     <ClInclude Include="..\Codes\TerrainRect.h" />
     <ClInclude Include="..\Codes\TerrainWallCube.h" />
+    <ClInclude Include="..\Codes\UI.h" />
     <ClInclude Include="..\Headers\Define.h" />
     <ClInclude Include="..\Headers\Extern.h" />
     <ClInclude Include="..\Headers\Function.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="..\Codes\TerrainCube.cpp" />
     <ClCompile Include="..\Codes\TerrainRect.cpp" />
     <ClCompile Include="..\Codes\TerrainWallCube.cpp" />
+    <ClCompile Include="..\Codes\UI.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

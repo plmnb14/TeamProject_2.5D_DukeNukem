@@ -312,17 +312,16 @@ void CToolView::PipeLineSetup()
 
 void CToolView::LoadTexture()
 {
-	m_pPathExtractor = new CPathExtract;
-	m_pPathExtractor->MakePathFile();
+	//m_pPathExtractor = new CPathExtract;
+	//m_pPathExtractor->MakePathFile();
 
-	HRESULT hr;
-	//// 임시.
-	//// 항상 MakePathFile하기 때문에 로딩느림.
-	//// TextureMgr가 txt 파일에서 읽어온 Map을 사용하면 좋겠지만 구현방법 생각중.
-	//HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
-	//FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
+	cout << "- Make PathInfo from text File" << endl;
+	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
+	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
 
-	for (auto& iter : m_pPathExtractor->m_PathInfoLst_Multi)
+	cout << "Add Texture" << endl;
+	cout << "- Add Multi Texture" << endl;
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Multi())
 	{
 		hr = m_pResourceMgr->AddTexture(
 			m_pDeviceMgr->GetDevice(),
@@ -333,8 +332,9 @@ void CToolView::LoadTexture()
 		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
 	}
 
+	cout << "- Add Single Texture" << endl;
 	// Single은 FileName
-	for (auto& iter : m_pPathExtractor->m_PathInfoLst_Single)
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
 	{
 		hr = m_pResourceMgr->AddTexture(
 			m_pDeviceMgr->GetDevice(),
@@ -348,10 +348,11 @@ void CToolView::LoadTexture()
 
 HRESULT CToolView::Initialize()
 {
+	cout << "PipeLine Setup" << endl;
 	PipeLineSetup();
 
+	cout << "Add Buffer" << endl;
 	// Player Buffer
-
 	// Terrain Buffer
 	HRESULT hr = m_pResourceMgr->AddBuffer(
 		m_pDeviceMgr->GetDevice(),
@@ -376,8 +377,10 @@ HRESULT CToolView::Initialize()
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
 
+	cout << "Load Texture" << endl;
 	LoadTexture();
 
+	cout << "Add Layer" << endl;
 	// Environment Layer
 	hr = Add_Environment_Layer();
 	FAILED_CHECK_RETURN(hr, E_FAIL);

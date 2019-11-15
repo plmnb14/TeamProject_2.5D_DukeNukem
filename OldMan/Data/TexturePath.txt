@@ -1,8 +1,22 @@
+Texture|LogoBack|LogoBack_%d|38|..\Client\Texture\LogoBack\LogoBack_%d.png
+Texture|Monster|monster_%d|51|..\Client\Texture\Monster\monster_%d.png
+Object|Blood_Grounded|%d|6|..\Client\Texture\Object\Blood_Grounded\%d.png
+Object|Explosion_Fire_Long|%d|19|..\Client\Texture\Object\Explosion_Fire_Long\%d.png
+Object|Explosion_Fire_Short_01|%d|1|..\Client\Texture\Object\Explosion_Fire_Short_01\%d.png
+Object|Explosion_Fire_Short_02|%d|1|..\Client\Texture\Object\Explosion_Fire_Short_02\%d.png
+Object|Explosion_Purple|%d|9|..\Client\Texture\Object\Explosion_Purple\%d.png
+Object|Fire_Wall_Big|%d|14|..\Client\Texture\Object\Fire_Wall_Big\%d.png
+Object|Fire_Wall_Small|%d|14|..\Client\Texture\Object\Fire_Wall_Small\%d.png
+Object|Rocket|%d|7|..\Client\Texture\Object\Rocket\%d.png
+Object|Siren|%d|4|..\Client\Texture\Object\Siren\%d.png
+Object|Smoke_Big|tile0672t|4|..\Client\Texture\Object\Smoke_Big\tile0672t.png
+Object|Smoke_Small|tile0754t|4|..\Client\Texture\Object\Smoke_Small\tile0754t.png
+Object|Water_Errupt|%d|4|..\Client\Texture\Object\Water_Errupt\%d.png
+Texture|Terrain|Height|2|..\Client\Texture\Terrain\Height.bmp
 Animation|Lava|%d|6|..\Client\Texture\Tiles\Animation\Lava\%d.png
 Animation|Screen_Broke|%d|3|..\Client\Texture\Tiles\Animation\Screen_Broke\%d.png
 Animation|Screen_Noise|9999 (10)|4|..\Client\Texture\Tiles\Animation\Screen_Noise\9999 (10).png
 Animation|Water|%d|3|..\Client\Texture\Tiles\Animation\Water\%d.png
-Texture|Monster|monster_%d|51|..\Client\Texture\Monster\monster_%d.png
 No_Animaition|128 x 128|Tile128x128_0|1|..\Client\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_0.png
 No_Animaition|128 x 128|Tile128x128_1|1|..\Client\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_1.png
 No_Animaition|128 x 128|Tile128x128_10|1|..\Client\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_10.png
@@ -452,3 +466,4 @@ No_Animaition|64 x 64|Tile64x64_6|1|..\Client\Texture\Tiles\No_Animaition\64 x 6
 No_Animaition|64 x 64|Tile64x64_7|1|..\Client\Texture\Tiles\No_Animaition\64 x 64\Tile64x64_7.png
 No_Animaition|64 x 64|Tile64x64_8|1|..\Client\Texture\Tiles\No_Animaition\64 x 64\Tile64x64_8.png
 No_Animaition|64 x 64|Tile64x64_9|1|..\Client\Texture\Tiles\No_Animaition\64 x 64\Tile64x64_9.png
+No_Animaition|Aim|Aim_0|1|..\Client\Texture\UI\No_Animaition\Aim\Aim_0.png
