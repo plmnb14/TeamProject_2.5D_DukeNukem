@@ -19,9 +19,6 @@
 #include "ToolTerrainRect.h"
 #include "Trasform.h"
 
-#include "PathExtract.h"
-//#include "FileInfo.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -49,7 +46,7 @@ END_MESSAGE_MAP()
 CToolView::CToolView()
 	:m_pDeviceMgr(ENGINE::CGraphicDev::GetInstance()),
 	m_pResourceMgr(ENGINE::CResourceMgr::GetInstance()),
-	m_pSelectCube(nullptr), m_pPathExtractor(nullptr)
+	m_pSelectCube(nullptr)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
@@ -57,7 +54,15 @@ CToolView::CToolView()
 
 CToolView::~CToolView()
 {
-	ENGINE::Safe_Delete(m_pPathExtractor);
+	for_each(m_mapLayer.begin(), m_mapLayer.end(),
+		[](auto& MyPair)
+	{
+		Safe_Delete(MyPair.second);
+	});
+
+	m_mapLayer.clear();
+
+	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 BOOL CToolView::PreCreateWindow(CREATESTRUCT& cs)
@@ -184,18 +189,29 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 
 	CView::OnMouseMove(nFlags, point);
 
+	//// Update =========================================================================
 	MAP_LAYER::iterator iter_begin = m_mapLayer.begin();
 	MAP_LAYER::iterator iter_end = m_mapLayer.end();
 
 	for (; iter_begin != iter_end; ++iter_begin)
 		iter_begin->second->Update();
 
+	//if (!CheckGrid())
+	CubeMoveToMouse();
+
+	//// Update End =======================================================================
+
+	//// Late Update ======================================================================
+
 	iter_begin = m_mapLayer.begin();
 	iter_end = m_mapLayer.end();
 
 	for (; iter_begin != iter_end; ++iter_begin)
 		iter_begin->second->LateUpdate();
+	//// Late Update End===================================================================
 
+
+	//// Check Cube List
 	auto& iter_begin_Cube = m_pCubeList.begin();
 	auto& iter_end_Cube = m_pCubeList.end();
 	for (; iter_begin_Cube != iter_end_Cube; )
@@ -209,9 +225,6 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	DragPicking((float)point.x, (float)point.y);
-	if(!CheckGrid())
-		CubeMoveToMouse();
-
 }
 
 
@@ -312,17 +325,13 @@ void CToolView::PipeLineSetup()
 
 void CToolView::LoadTexture()
 {
-	m_pPathExtractor = new CPathExtract;
-	m_pPathExtractor->MakePathFile();
+	cout << "- Make PathInfo from text File" << endl;
+	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
+	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
 
-	HRESULT hr;
-	//// 임시.
-	//// 항상 MakePathFile하기 때문에 로딩느림.
-	//// TextureMgr가 txt 파일에서 읽어온 Map을 사용하면 좋겠지만 구현방법 생각중.
-	//HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
-	//FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
-
-	for (auto& iter : m_pPathExtractor->m_PathInfoLst_Multi)
+	cout << "Add Texture" << endl;
+	cout << "- Add Multi Texture" << endl;
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Multi())
 	{
 		hr = m_pResourceMgr->AddTexture(
 			m_pDeviceMgr->GetDevice(),
@@ -333,8 +342,9 @@ void CToolView::LoadTexture()
 		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
 	}
 
+	cout << "- Add Single Texture" << endl;
 	// Single은 FileName
-	for (auto& iter : m_pPathExtractor->m_PathInfoLst_Single)
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
 	{
 		hr = m_pResourceMgr->AddTexture(
 			m_pDeviceMgr->GetDevice(),
@@ -348,10 +358,12 @@ void CToolView::LoadTexture()
 
 HRESULT CToolView::Initialize()
 {
+	cout << "PipeLine Setup" << endl;
 	PipeLineSetup();
 
-	// Player Buffer
+	cout << "Add Buffer" << endl;
 
+	// Player Buffer
 	// Terrain Buffer
 	HRESULT hr = m_pResourceMgr->AddBuffer(
 		m_pDeviceMgr->GetDevice(),
@@ -359,8 +371,6 @@ HRESULT CToolView::Initialize()
 		ENGINE::CVIBuffer::BUFFER_RCTEX,
 		L"Buffer_RcTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
-
-	int a = 0;
 
 	hr = m_pResourceMgr->AddBuffer(
 		m_pDeviceMgr->GetDevice(),
@@ -376,8 +386,10 @@ HRESULT CToolView::Initialize()
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
 
+	cout << "Load Texture" << endl;
 	LoadTexture();
 
+	cout << "Add Layer" << endl;
 	// Environment Layer
 	hr = Add_Environment_Layer();
 	FAILED_CHECK_RETURN(hr, E_FAIL);
@@ -428,13 +440,19 @@ void CToolView::AddCubeForLoad(CToolTerrain* _pTerrain)
 
 void CToolView::CubeMoveToMouse()
 {
-	if (m_pSelectCube)
-	{
-		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-		NULL_CHECK(pMainFrm);
+	if (!m_pSelectCube)
+		return;
 
-		CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
-		NULL_CHECK(pFormView);
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+
+	if (!(pFormView->m_CheckButton_Grid.GetCheck()))
+	{
+		m_pSelectCube->SetFitGrid(false);
 
 		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
 		pFormView->UpdateTransformStr(
@@ -442,9 +460,19 @@ void CToolView::CubeMoveToMouse()
 			D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z)),
 			pTransform->GetSize()
 		);
-
-		pFormView->EditDataExchange();
 	}
+	else
+	{
+		m_pSelectCube->SetFitGrid(true);
+		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
+		pFormView->UpdateTransformStr(
+			pTransform->GetPos(),
+			D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z)),
+			pTransform->GetSize()
+		);
+	}
+
+	pFormView->EditDataExchange();
 }
 
 void CToolView::CreateCube(bool _bIsChange)

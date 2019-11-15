@@ -35,10 +35,11 @@ public:
 
 private:
 	void SetData();
+	void Release();
 
 public:
-	OBJECT_TYPE				m_eType;
+	OBJECT_TYPE						m_eType;
 	list<ENGINE::PATH_INFO*>		m_listFileInfo;
-	wstring					m_wstrTex;
-	CImage					m_Img;
+	wstring							m_wstrTex;
+	CImage							m_Img;
 };

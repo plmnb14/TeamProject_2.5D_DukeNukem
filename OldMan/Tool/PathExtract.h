@@ -8,6 +8,9 @@ public:
 
 public:
 	void MakePathFile();
+	void ExportFile();
+
+	void Release();
 
 private:
 	void OnDropFiles(wstring _wstrPath, bool _bForClient = false);

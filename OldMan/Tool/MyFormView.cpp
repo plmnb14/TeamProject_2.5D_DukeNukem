@@ -592,6 +592,7 @@ void CMyFormView::OnBnClickedButton_PathUpdate()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
 	CPathExtract* pPath = new CPathExtract;
-	pPath->MakePathFile();
+	pPath->ExportFile();
+	pPath->Release();
 	ENGINE::Safe_Delete(pPath);
 }

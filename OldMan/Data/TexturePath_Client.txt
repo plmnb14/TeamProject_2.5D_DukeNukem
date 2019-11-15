@@ -1,8 +1,22 @@
+Texture|LogoBack|LogoBack_%d|0|..\Texture\LogoBack\LogoBack_%d.png
+Texture|Monster|monster_%d|0|..\Texture\Monster\monster_%d.png
+Object|Blood_Grounded|%d|0|..\Texture\Object\Blood_Grounded\%d.png
+Object|Explosion_Fire_Long|%d|0|..\Texture\Object\Explosion_Fire_Long\%d.png
+Object|Explosion_Fire_Short_01|%d|0|..\Texture\Object\Explosion_Fire_Short_01\%d.png
+Object|Explosion_Fire_Short_02|%d|0|..\Texture\Object\Explosion_Fire_Short_02\%d.png
+Object|Explosion_Purple|%d|0|..\Texture\Object\Explosion_Purple\%d.png
+Object|Fire_Wall_Big|%d|0|..\Texture\Object\Fire_Wall_Big\%d.png
+Object|Fire_Wall_Small|%d|0|..\Texture\Object\Fire_Wall_Small\%d.png
+Object|Rocket|%d|0|..\Texture\Object\Rocket\%d.png
+Object|Siren|%d|0|..\Texture\Object\Siren\%d.png
+Object|Smoke_Big|tile0672t|0|..\Texture\Object\Smoke_Big\tile0672t.png
+Object|Smoke_Small|tile0754t|0|..\Texture\Object\Smoke_Small\tile0754t.png
+Object|Water_Errupt|%d|0|..\Texture\Object\Water_Errupt\%d.png
+Texture|Terrain|Height|0|..\Texture\Terrain\Height.bmp
 Animation|Lava|%d|0|..\Texture\Tiles\Animation\Lava\%d.png
 Animation|Screen_Broke|%d|0|..\Texture\Tiles\Animation\Screen_Broke\%d.png
 Animation|Screen_Noise|9999 (10)|0|..\Texture\Tiles\Animation\Screen_Noise\9999 (10).png
 Animation|Water|%d|0|..\Texture\Tiles\Animation\Water\%d.png
-Texture|Monster|monster_%d|0|..\Texture\Monster\monster_%d.png
 No_Animaition|128 x 128|Tile128x128_0|1|..\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_0.png
 No_Animaition|128 x 128|Tile128x128_1|1|..\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_1.png
 No_Animaition|128 x 128|Tile128x128_10|1|..\Texture\Tiles\No_Animaition\128 x 128\Tile128x128_10.png
@@ -452,3 +466,4 @@ No_Animaition|64 x 64|Tile64x64_6|1|..\Texture\Tiles\No_Animaition\64 x 64\Tile6
 No_Animaition|64 x 64|Tile64x64_7|1|..\Texture\Tiles\No_Animaition\64 x 64\Tile64x64_7.png
 No_Animaition|64 x 64|Tile64x64_8|1|..\Texture\Tiles\No_Animaition\64 x 64\Tile64x64_8.png
 No_Animaition|64 x 64|Tile64x64_9|1|..\Texture\Tiles\No_Animaition\64 x 64\Tile64x64_9.png
+No_Animaition|Aim|Aim_0|1|..\Texture\UI\No_Animaition\Aim\Aim_0.png

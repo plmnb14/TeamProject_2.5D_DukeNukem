@@ -22,7 +22,6 @@ int CToolTerrainRect::Update()
 	ENGINE::CGameObject::Update();
 
 	//KeyInput();
-	MouseInput();
 
 	return NO_EVENT;
 }
@@ -30,6 +29,7 @@ int CToolTerrainRect::Update()
 void CToolTerrainRect::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
+	MouseInput();
 }
 
 void CToolTerrainRect::Render()

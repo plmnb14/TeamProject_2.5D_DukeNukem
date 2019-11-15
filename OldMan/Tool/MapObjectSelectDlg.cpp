@@ -24,6 +24,7 @@ CMapObjectSelectDlg::CMapObjectSelectDlg(CWnd* pParent /*=NULL*/)
 
 CMapObjectSelectDlg::~CMapObjectSelectDlg()
 {
+	Release();
 }
 
 void CMapObjectSelectDlg::DoDataExchange(CDataExchange* pDX)
@@ -78,6 +79,12 @@ void CMapObjectSelectDlg::SetData()
 	{
 		m_ListBox.AddString(iter->wstrFileName.c_str());
 	}
+}
+
+void CMapObjectSelectDlg::Release()
+{
+	for_each(m_listFileInfo.begin(), m_listFileInfo.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
+	m_listFileInfo.clear();
 }
 
 

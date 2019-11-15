@@ -10,17 +10,29 @@ CPathExtract::CPathExtract()
 
 CPathExtract::~CPathExtract()
 {
-	for_each(m_PathInfoLst_Multi.begin(), m_PathInfoLst_Multi.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
-	m_PathInfoLst_Multi.clear();
-
-	for_each(m_PathInfoLst_Single.begin(), m_PathInfoLst_Single.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
-	m_PathInfoLst_Single.clear();
+	Release();
 }
 
 void CPathExtract::MakePathFile()
 {
-	OnDropFiles(L"..\\Client\\Texture\\Tiles", true);
-	OnDropFiles(L"..\\Client\\Texture\\Monster", true);
+	OnDropFiles(L"..\\Client\\Texture", true);
+	//OnBnClickedSave(true);
+
+	//for (auto& iter : m_PathInfoLst_Multi)
+	//	Safe_Delete(iter);
+	//for (auto& iter : m_PathInfoLst_Single)
+	//	Safe_Delete(iter);
+
+	//m_PathInfoLst_Multi.clear();
+	//m_PathInfoLst_Single.clear();
+
+	//OnDropFiles(L"..\\Client\\Texture");
+	//OnBnClickedSave();
+}
+
+void CPathExtract::ExportFile()
+{
+	OnDropFiles(L"..\\Client\\Texture", true);
 	OnBnClickedSave(true);
 
 	for (auto& iter : m_PathInfoLst_Multi)
@@ -31,14 +43,24 @@ void CPathExtract::MakePathFile()
 	m_PathInfoLst_Multi.clear();
 	m_PathInfoLst_Single.clear();
 
-	OnDropFiles(L"..\\Client\\Texture\\Tiles");
-	OnDropFiles(L"..\\Client\\Texture\\Monster");
-
+	OnDropFiles(L"..\\Client\\Texture");
 	OnBnClickedSave();
+}
+
+void CPathExtract::Release()
+{
+	cout << "Safe Delete Path_Info" << endl;
+
+	for_each(m_PathInfoLst_Multi.begin(), m_PathInfoLst_Multi.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
+	m_PathInfoLst_Multi.clear();
+
+	for_each(m_PathInfoLst_Single.begin(), m_PathInfoLst_Single.end(), ENGINE::Safe_Delete<ENGINE::PATH_INFO*>);
+	m_PathInfoLst_Single.clear();
 }
 
 void CPathExtract::OnDropFiles(wstring _wstrPath, bool _bForClient)
 {
+	cout << "- Make PathInfo from FilePath" << endl;
 	TCHAR szFullPath[MAX_STR] = L"";
 	lstrcpy(szFullPath, _wstrPath.c_str());
 	CFileInfo::ExtractPathInfo(szFullPath, m_PathInfoLst_Multi, m_PathInfoLst_Single, _bForClient);

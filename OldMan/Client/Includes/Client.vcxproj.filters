@@ -52,6 +52,9 @@
     <Filter Include="03.CameraObserver">
       <UniqueIdentifier>{9b25728f-0336-4511-8f4d-c6c08e4c76b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\99.UI">
+      <UniqueIdentifier>{af78de8d-5e5e-405a-a912-37d3a7b8a282}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -123,6 +126,9 @@
     <ClInclude Include="..\Codes\CameraObserver.h">
       <Filter>03.CameraObserver</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\UI.h">
+      <Filter>02.GameObject\99.UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -169,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\CameraObserver.cpp">
       <Filter>03.CameraObserver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI.cpp">
+      <Filter>02.GameObject\99.UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
