@@ -27,44 +27,36 @@ int CMonster::Update()
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
-	Player_Pursue();
-
+	//Player_Pursue();
+	Monster_Range();
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
 	m_pCollider->SetUp_Box();
-
-	//cout << m_pCollider->Get_BoxCollider()->vCenterPos.y << endl;
+	
 
 	return NO_EVENT;
 }
 
 void CMonster::LateUpdate()
 {
-	ENGINE::CGameObject::LateUpdate();
-	D3DXMatrixIdentity(&matView);
-
-	D3DXMATRIX matView2, matView3;
-	D3DXVECTOR3 vSize;
-	matView2 = m_pTransform->GetWorldMatrix();
-	matView3 = m_pObserver->GetViewMatrix();
+	ENGINE::CGameObject::LateUpdate();    
+	D3DXMatrixIdentity(&m_matView);       
+	
+	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
+	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
+	Localmatrix = m_pTransform->GetWorldMatrix();
+	Cameramatrix = m_pObserver->GetViewMatrix();
 	vSize = m_pTransform->GetSize();
 
-	m_pBillborad->Billborad_Front(matView2, matView3 ,vSize);
-	matView = m_pBillborad->GetWorldMatrix_Billborad();
+	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix,vSize);                          // 빌보드 설정
+	m_matView = m_pBillborad->GetWorldMatrix_Billborad();                                    // 빌보드에서 설정된 행렬을 받아온다. 
 	
-	// 이거 하고도 문제있음 
-	cout << vSize.x << endl;
 
 }
 
 void CMonster::Render()
 {
 
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matView);
-
-
-	//Billborad_Front();
-	Billborad_YAngle();
-	//m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
 }
@@ -74,8 +66,12 @@ HRESULT CMonster::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(10.f, 2.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	m_pTransform->SetSize(D3DXVECTOR3(2.f, 2.f, 2.f));
 
+	m_fMaxRange = 8.0f;//최대사거리
+	m_MonsterDir = { 0.f,0.f,0.f };
+	m_fRange = 0.f;
+	m_fMinRange = 3.0f;
 	return S_OK;
 }
 
@@ -120,8 +116,7 @@ HRESULT CMonster::AddComponent()
 
 	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
-
-
+	
 	// Collider
 	pComponent = ENGINE::CCollider::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
@@ -135,12 +130,11 @@ HRESULT CMonster::AddComponent()
 	
 	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+	
+	float Radius[3] = { 2.f , 2.f , 2.f };
 
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->Set_Radius({ 1.f , 1.f, 1.f });
-	m_pCollider->Set_CenterPos();
-	m_pCollider->Set_Dynamic(true);
-	m_pCollider->Set_Trigger(false);
+	m_pCollider->Set_Radius(Radius);
 	m_pCollider->SetUp_Box();
 
 	return S_OK;
@@ -148,93 +142,75 @@ HRESULT CMonster::AddComponent()
 
 void CMonster::Player_Pursue()
 {
-	D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
-	//D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
-	D3DXVECTOR3 vMonsterPos =m_pTransform->GetPos();
-	
-	D3DXVECTOR3 vMonsterDir_Fowrd = m_pTransform->GetDir();
-	D3DXVECTOR3 vMonsterDir_Left = m_pTransform->GetDir();
-	
-	D3DXVECTOR3 vMonsterDir_Right = m_pTransform->GetDir();
-	D3DXVECTOR3 vMonsterDir = vTempPos - vMonsterPos;
+
+	D3DXVECTOR3 vMonsterDir_Fowrd = m_pTransform->GetDir();				 // 전방 방향벡터
+	 
+	//플레이어의 방향 벡터
 	
 	//좌우 방향벡터로 내적을 구하고  그것으로 도는 방향을 결정하는 값을 구해서 그쪽으로 돌게만드는게 핵심 
-	float m_Range =D3DXVec3Length(&(vMonsterPos - vTempPos));
 
 
 	D3DXVec3Normalize(&vMonsterDir_Fowrd, &vMonsterDir_Fowrd);
-	D3DXVec3Normalize(&vMonsterDir, &vMonsterDir);
+	D3DXVec3Normalize(&m_MonsterDir, &m_MonsterDir);
 
-	float Monster_Dot = D3DXVec3Dot(&vMonsterDir_Fowrd, &vMonsterDir);
-	D3DXVec3Cross(&vMonsterDir_Right, &vMonsterDir,&vMonsterDir_Left);
+	float Monster_Dot = D3DXVec3Dot(&vMonsterDir_Fowrd, &m_MonsterDir);
+	D3DXVec3Cross(&m_MonsterCroos, &m_MonsterDir,&vMonsterDir_Fowrd);
 	// 양수일때 왼쪽 음수일때 오른쪽 이다. y 값이 반영되면 된다. 
+	m_MoveSpeed = 3.f * m_pTimeMgr->GetDelta();   // 속도
 
-	bool m_Check;
-	m_Check = true;
-	if (m_Range < 5)
-	{
-		float fMoveSpeed = 1.f * m_pTimeMgr->GetDelta();
-		
-		//if (vMonsterDir_Right.y > 0)
-		{
-		if (m_Check) {
-			float fMoveSpeed = 1.f * m_pTimeMgr->GetDelta();
-			//m_pTransform->SetAngle(D3DXToDegree(vMonsterDir_Right.y), ENGINE::ANGLE_Y);
-			m_pTransform->MoveAngle(ENGINE::ANGLE_Y, D3DXToDegree(vMonsterDir_Right.y));
-	    	}
-		}
-		m_Check = false;
-		
-		m_pTransform->SetDir(vMonsterDir);
-		m_pTransform->MovePos(fMoveSpeed);
-	}
 	
-	//정면을 보면서 추격하게 만드는게 필요 
-
-
+	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, D3DXToDegree(m_MonsterCroos.y));
+	m_pTransform->Move_AdvancedPos(m_MonsterDir, m_MoveSpeed);
+	
+		
+		
 }
-void CMonster::Billborad_Front()
+
+void CMonster::Monster_Range()
 {
+	D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();					// 몬스터 위치
 
-	D3DXMATRIX matView;																		 //행렬 생성 
-	D3DXMatrixIdentity(&matView);															// 초기화 
-
-	matView = m_pObserver->GetViewMatrix();													//생성된 행렬에 카메라의 뷰행렬을 받아온다 
-	D3DXMatrixInverse(&matView, 0, &matView);											    //받은 뷰행렬을 역행렬로 만든다.   -> 항상 나를 보기 위해서 
-
-	memcpy(&matView._41, m_pTransform->GetWorldMatrix().m[3], sizeof(D3DXVECTOR3));         //몬스터의 이동행렬을 받은 뷰행렬에 덧씌운다. 
-
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matView);									  //생성된 행렬을 월드로 바꿔준다. 
-
-
+	m_MonsterDir = vTempPos - vMonsterPos;
+	m_fRange = D3DXVec3Length(&(vMonsterPos - vTempPos));				 // 사정거리
+	
+	if (m_fRange < m_fMaxRange && m_fRange >m_fMinRange)
+	{
+		Monster_State_Set(MONSTER_PURSUE);
+	}
+	else
+	{
+		Monster_State_Set(MONSTER_IDLE);
+	}
 
 }
-
-void CMonster::Billborad_YAngle()
+void CMonster::Monster_Idle()
 {
-
-	D3DXMATRIX matView;																	  //행렬 생성 
-	D3DXMatrixIdentity(&matView);														  // 초기화 
-
-	matView = m_pObserver->GetViewMatrix();												//생성된 행렬에 카메라의 뷰행렬을 받아온다 
-
-	D3DXMATRIX matBill;																	//카메라의 뷰행렬을 저장할 행렬 생성 
-	D3DXMatrixIdentity(&matBill);														// 초기화 
-
-	matBill._11 = matView._11;															// 11,13, 31,33 행렬에 값을 넣어준다. 
-	matBill._13 = matView._13;
-	matBill._31 = matView._31;
-	matBill._33 = matView._33;
-
-
-	D3DXMatrixInverse(&matBill, 0, &matBill);												     // 역행렬 로 만든다.
-	memcpy(&matBill._41, m_pTransform->GetWorldMatrix().m[3], sizeof(D3DXVECTOR3));             // 이동행렬을 넣어준다. matBill에다.
-
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matBill);                                           //월드로 바꿔준다.
-
-
+	m_pTransform->MovePos(0.f);
 
 }
+void CMonster::Monster_State_Set(Monster_State _state)
+{
+	switch (_state)
+	{
+	case MONSTER_IDLE:
+		Monster_Idle();
+		break;
+
+	case MONSTER_PURSUE:
+		Player_Pursue();
+		break;
+	}
+
+}
+
+
+	
+// 사정거리에 따른 기계상태 전환 구현 시작 
+
+
+
+
 
 
 
