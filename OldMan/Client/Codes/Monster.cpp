@@ -27,7 +27,7 @@ int CMonster::Update()
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
-	//Player_Pursue();
+	Player_Pursue();
 
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
 	m_pCollider->SetUp_Box();
@@ -63,7 +63,7 @@ void CMonster::Render()
 
 
 	//Billborad_Front();
-	// Billborad_YAngle();
+	Billborad_YAngle();
 	//m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
@@ -73,7 +73,7 @@ HRESULT CMonster::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(10.f, 0.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(10.f, 2.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 	return S_OK;
@@ -136,15 +136,11 @@ HRESULT CMonster::AddComponent()
 	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
-
-	
-
-
-
-	float Radius[3] = { 2.f , 2.f , 2.f };
-
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->Set_Radius(Radius);
+	m_pCollider->Set_Radius({ 1.f , 1.f, 1.f });
+	m_pCollider->Set_CenterPos();
+	m_pCollider->Set_Dynamic(true);
+	m_pCollider->Set_Trigger(false);
 	m_pCollider->SetUp_Box();
 
 	return S_OK;

@@ -50,10 +50,13 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
 			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
+			if (rDstCol == nullptr || rSrcCol == nullptr)
+				continue;
+
 			if(Check_AABB(rDstCol, rSrcCol))
 			{
  				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
-				//rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
+				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
 			}
 		}
 	}
@@ -61,6 +64,9 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 
 bool CCollisionMgr::Check_AABB(ENGINE::CCollider* rDst , ENGINE::CCollider* rSrc)
 {
+	if (rDst == nullptr || rSrc == nullptr)
+		return false;
+
 	ENGINE::BOXCOL* rDstBox = rDst->Get_BoxCollider();
 	ENGINE::BOXCOL* rSrtBox = rSrc->Get_BoxCollider();
 
@@ -73,8 +79,19 @@ bool CCollisionMgr::Check_AABB(ENGINE::CCollider* rDst , ENGINE::CCollider* rSrc
 			// A 가 Dynamic 이고 , B 도 Dynamic 일 때
 			if (rDstBox->bIsDynamic && rSrtBox->bIsDynamic)
 			{
-				rDst->Set_Length(Get_Length(rDstBox, rSrtBox, true));
-				rSrc->Set_Length(Get_Length(rDstBox, rSrtBox, true));
+				D3DXVECTOR3 tmpLength_Dst = Get_Length(rDstBox, rSrtBox, true);
+				D3DXVECTOR3 tmpLength_Srt = Get_Length(rDstBox, rSrtBox, true);
+
+				(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength_Dst.x *= -1.f : tmpLength_Dst.x *= 1.f);
+				(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength_Dst.y *= -1.f : tmpLength_Dst.y *= 1.f);
+				(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength_Dst.z *= -1.f : tmpLength_Dst.z *= 1.f);
+
+				(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength_Srt.x *= 1.f : tmpLength_Srt.x *= -1.f);
+				(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength_Srt.y *= 1.f : tmpLength_Srt.y *= -1.f);
+				(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength_Srt.z *= 1.f : tmpLength_Srt.z *= -1.f);
+
+				rDst->Set_Length(tmpLength_Dst);
+				rSrc->Set_Length(tmpLength_Srt);
 			}
 
 			// A 가 Dynamic 이고 , B 는 Static 일 때
