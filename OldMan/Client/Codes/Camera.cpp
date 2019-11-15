@@ -6,7 +6,7 @@
 
 CCamera::CCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
-	m_eCameraMode(FLY_MODE), m_eCameraViewPoint(FIRST_PERSON),
+	m_eCameraMode(LAND_MODE), m_eCameraViewPoint(FIRST_PERSON),
 	m_pGraphicDev(pGraphicDev), m_pSubject(ENGINE::GetCameraSubject()),
 	m_pTarget(nullptr), m_pCCamera_Component(nullptr),
 	m_fMax_PlayerRoll_Angle(0), m_fCamShake_Y(0),
@@ -510,8 +510,15 @@ int CCamera::Update()
 
 	//m_pCCamera_Component->Set_Look(dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetDir());
 
+	D3DXMATRIX matProj;
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(70.f), WINCX / (float)WINCY, 1.f, 1000.f);
+	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
+
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
 	m_pSubject->AddData(D3DTS_VIEW, &m_MatView);
+	
+	m_pSubject->AddData(D3DTS_PROJECTION, &matProj);
+
 
 	return NO_EVENT;
 }

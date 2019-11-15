@@ -11,10 +11,10 @@ namespace ENGINE
 	class CVIBuffer;
 	class CTexture;
 	class CTransform;
-	class CBillborad;
 	class CCollider;
 }
 
+class CCameraObserver;
 class CUI : public ENGINE::CGameObject
 {
 protected:
@@ -35,10 +35,10 @@ protected:
 
 public:
 	virtual void ChangeTex(wstring _wstrTex);
+	void SetSize(float _fSizeX, float _fSizeY);
 
 protected:
 	HRESULT AddComponent();
-	void KeyInput();
 
 public:
 	static CUI* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTex = L"");
@@ -50,10 +50,14 @@ protected:
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
-	ENGINE::CBillborad*		m_pBillboard;
 	ENGINE::CCollider*		m_pCollider;
 
+	ENGINE::CCameraSubject*	m_pSubject;
+	CCameraObserver*		m_pObserver;
+
 	wstring					m_wstrTex;
+	float					m_fSizeX;
+	float					m_fSizeY;
 };
 
 #define __TERRAIN_H__

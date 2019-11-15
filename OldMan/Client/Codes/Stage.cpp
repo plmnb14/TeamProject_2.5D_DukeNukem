@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Stage.h"
+
 #include "Player.h"
 #include "Terrain.h"
 #include "TerrainCube.h"
@@ -7,6 +8,8 @@
 #include "TerrainRect.h"
 #include "Camera.h"
 #include "Monster.h"
+#include "UI.h"
+
 #include "Trasform.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -81,6 +84,18 @@ HRESULT CStage::Add_Object_Layer()
 
 HRESULT CStage::Add_UI_Layer()
 {
+	// Object Layer
+	ENGINE::CLayer* pUILayer = ENGINE::CLayer::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pUILayer, L"UI Layer Create Failed", E_FAIL);
+	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
+
+	// Aim
+	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1");
+	NULL_CHECK_MSG_RETURN(pObject, L"Aim_0 Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(35.f, 35.f);
+
 	return S_OK;
 }
 
@@ -161,6 +176,11 @@ void CStage::PipeLineSetUp()
 	// WireFrame
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
+	// 알파테스트 
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00000088); // 88 ~ 77 ... 등의 값 아래의 알파값은 제외시킴
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
 	D3DXMATRIX matView, matProj; // 뷰행렬, 투영행렬
 
 								 // 뷰행렬(카메라의 역행렬) 생성하는 함수
@@ -219,7 +239,7 @@ void CStage::LoadTexture()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/MapObject_Test.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");

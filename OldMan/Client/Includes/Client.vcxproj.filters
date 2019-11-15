@@ -49,11 +49,20 @@
     <Filter Include="02.GameObject\01.Terrain\01.TerrainWallCube">
       <UniqueIdentifier>{67e2b66f-42a2-48d6-a68b-1dcd02aa4eaa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.CameraObserver">
-      <UniqueIdentifier>{9b25728f-0336-4511-8f4d-c6c08e4c76b0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\99.UI">
       <UniqueIdentifier>{af78de8d-5e5e-405a-a912-37d3a7b8a282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Observer">
+      <UniqueIdentifier>{9b25728f-0336-4511-8f4d-c6c08e4c76b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Observer\00.CameraObserver">
+      <UniqueIdentifier>{5eb79f9d-7589-4075-993f-650cc8c472e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Observer\01.PlayerObserver">
+      <UniqueIdentifier>{67848676-db98-40c7-9161-3a5c37fda9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\99.UI\00.Number">
+      <UniqueIdentifier>{702dd57f-020f-49b3-935b-b77b54955a34}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -123,11 +132,17 @@
     <ClInclude Include="..\Codes\TerrainWallCube.h">
       <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\CameraObserver.h">
-      <Filter>03.CameraObserver</Filter>
-    </ClInclude>
     <ClInclude Include="..\Codes\UI.h">
       <Filter>02.GameObject\99.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\CameraObserver.h">
+      <Filter>03.Observer\00.CameraObserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\PlayerObserver.h">
+      <Filter>03.Observer\01.PlayerObserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Number.h">
+      <Filter>02.GameObject\99.UI\00.Number</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,11 +188,17 @@
     <ClCompile Include="..\Codes\TerrainWallCube.cpp">
       <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\CameraObserver.cpp">
-      <Filter>03.CameraObserver</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\UI.cpp">
       <Filter>02.GameObject\99.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CameraObserver.cpp">
+      <Filter>03.Observer\00.CameraObserver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PlayerObserver.cpp">
+      <Filter>03.Observer\01.PlayerObserver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Number.cpp">
+      <Filter>02.GameObject\99.UI\00.Number</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
