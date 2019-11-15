@@ -93,8 +93,6 @@ HRESULT CTerrainCube::AddComponent()
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
-	cout << m_pTransform->GetPos().x << endl;
-
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
 	m_pCollider->Set_Radius({ 1.f , 1.f , 1.f });
 	m_pCollider->Set_CenterPos();
