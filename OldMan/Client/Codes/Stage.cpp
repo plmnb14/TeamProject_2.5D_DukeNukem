@@ -159,7 +159,7 @@ void CStage::PipeLineSetUp()
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	// WireFrame
-	//pDeviceMgr->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 	D3DXMATRIX matView, matProj; // 뷰행렬, 투영행렬
 
