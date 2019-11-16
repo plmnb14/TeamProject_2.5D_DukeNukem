@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __Collider_H__
+#ifndef __COLLIDER_H__
 
 #include "Component.h"
 
@@ -28,9 +28,7 @@ public:
 	void Set_UnderPos(D3DXVECTOR3 _UnderPos);
 	void Set_Dynamic(bool _Dynamic);
 	void Set_Trigger(bool _Trigger);
-
-public:
-	bool Check_AABB(ENGINE::BOXCOL* _DistCollider , ENGINE::BOXCOL* _TargetCollider);
+	void Set_IsCollision(bool _Collision);
 
 public:
 	bool Get_IsCollision() { return m_tBoxCollider.bIsCollision; }
@@ -49,5 +47,5 @@ private:
 
 END
 
-#define __Collider_H__
+#define __COLLIDER_H__
 #endif

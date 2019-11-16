@@ -13,6 +13,7 @@ namespace ENGINE
 	class CTransform;
 	class CCollider;
 	class CCameraSubject;
+	class CRigidBody;
 }
 
 class CCameraObserver;
@@ -50,6 +51,7 @@ private:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
+	ENGINE::CRigidBody*			m_pRigid;
 
 	ENGINE::CCameraSubject*	m_pSubject;
 	CCameraObserver*		m_pObserver;

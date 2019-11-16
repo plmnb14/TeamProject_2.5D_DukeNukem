@@ -6,7 +6,7 @@
 
 CCamera::CCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
-	m_eCameraMode(FLY_MODE), m_eCameraViewPoint(FIRST_PERSON),
+	m_eCameraMode(LAND_MODE), m_eCameraViewPoint(FIRST_PERSON),
 	m_pGraphicDev(pGraphicDev), m_pSubject(ENGINE::GetCameraSubject()),
 	m_pTarget(nullptr), m_pCCamera_Component(nullptr),
 	m_fMax_PlayerRoll_Angle(0), m_fCamShake_Y(0),
@@ -304,25 +304,25 @@ void CCamera::SetUp_FirstPerson_ViewPoint()
 
 void CCamera::SetUp_Zoom()
 {
-	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_SPACE))
-	{
-		if (m_pCCamera_Component->Get_Distance() > m_fZoom_Min)
-			m_pCCamera_Component->Add_Distance(-0.1f);
-
-		POINT pt;
-		pt.x = WINCX / 2;
-		pt.y = WINCY / 2;
-
-		ClientToScreen(g_hWnd, &pt);
-		SetCursorPos(pt.x, pt.y);
-
-	}
-
-	if (GetAsyncKeyState('X'))
-	{
-		if (m_pCCamera_Component->Get_Distance() < m_fZoom_Max)
-			m_pCCamera_Component->Add_Distance(0.1f);
-	}
+	//if (m_pKeyMgr->KeyPressing(ENGINE::KEY_SPACE))
+	//{
+	//	if (m_pCCamera_Component->Get_Distance() > m_fZoom_Min)
+	//		m_pCCamera_Component->Add_Distance(-0.1f);
+	//
+	//	POINT pt;
+	//	pt.x = WINCX / 2;
+	//	pt.y = WINCY / 2;
+	//
+	//	ClientToScreen(g_hWnd, &pt);
+	//	SetCursorPos(pt.x, pt.y);
+	//
+	//}
+	//
+	//if (GetAsyncKeyState('X'))
+	//{
+	//	if (m_pCCamera_Component->Get_Distance() < m_fZoom_Max)
+	//		m_pCCamera_Component->Add_Distance(0.1f);
+	//}
 }
 
 void CCamera::SetUp_MouseRotate()

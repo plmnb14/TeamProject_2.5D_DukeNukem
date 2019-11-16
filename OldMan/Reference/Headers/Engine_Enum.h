@@ -34,6 +34,14 @@ namespace ENGINE
 		RADIUS_END
 	};
 
+	enum ACCEL_TYPE
+	{
+		ACCEL_X,
+		ACCEL_Y,
+		ACCEL_Z,
+		ACCEL_END
+	};
+
 	enum LENGTH_TYPE
 	{
 		LENGTH_X,
