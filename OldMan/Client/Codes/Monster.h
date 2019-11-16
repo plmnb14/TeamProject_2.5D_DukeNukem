@@ -21,9 +21,9 @@ class CMonster : public ENGINE::CGameObject
 private:
 	explicit CMonster(LPDIRECT3DDEVICE9 pGraphicDev);
 private:
-	typedef enum { MONSTER_IDLE, MONSTER_PATROLL, MONSTER_PURSUE,
-		MONSTER_FIRE, MONSTER_ATTACK, MONSTER_DEAD, MONSTER_SHOT,
-		MONSTER_SIT, MONSTER_END } Monster_State;
+	 enum STATE { MONSTER_IDLE, MONSTER_PATROLL, MONSTER_PURSUE,
+		MONSTER_FIRE, MONSTER_MILL, MONSTER_DEAD, MONSTER_SHOT,
+		MONSTER_SIT, MONSTER_END } ;
 public:
 	virtual ~CMonster();
 
@@ -40,9 +40,13 @@ private:
 private:
 	HRESULT AddComponent();
 	void Player_Pursue();  //추격하다 
-	void Monster_State_Set(Monster_State _state);   //상태
+	void Monster_State_Set();   //상태
+	void Monster_State_Set2();   //상태
 	void Monster_Range();                           // 범위
 	void Monster_Idle();
+	void Monster_Shot();
+	void Object_Serch();
+	
 public: 
 	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
 
@@ -69,7 +73,15 @@ private:
 
 	D3DXVECTOR3				m_MonsterDir;			// 방향 
 	D3DXVECTOR3				m_MonsterCroos;		    //외적 받을값
+	
+	STATE m_eCurState;
+	STATE m_eNextState;
 
+
+	STATE m_eCurState2;
+	STATE m_eNextState2;
+
+	bool m_bShot;
 
 };
 

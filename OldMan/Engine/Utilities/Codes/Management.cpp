@@ -46,6 +46,8 @@ void CManagement::LateUpdate()
 
 	CCollisionMgr::CollisionSphere(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
 	CCollisionMgr::CollisionSphere(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionSphere(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+
 }
 
 void CManagement::Render()
