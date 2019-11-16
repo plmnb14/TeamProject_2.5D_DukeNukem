@@ -32,7 +32,10 @@ int CMonster::Update()
 
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
 	m_pCollider->SetUp_Box();
-	m_bShot = m_pCollider->Get_IsCollision();
+	
+	cout << m_bShot << endl;
+	// 피격시 한번 실행-> 어차피 또다시 피격 또 돌아옴 그냥 한번 실행해도됟ㅁ 이건 
+	
 	if (m_bShot)
 	{
 		m_eNextState = MONSTER_SHOT;
@@ -60,10 +63,9 @@ void CMonster::LateUpdate()
 
 	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix,vSize);                          // 빌보드 설정
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();                                    // 빌보드에서 설정된 행렬을 받아온다. 
+	m_bShot = m_pCollider->Get_IsCollision();
 	
 	
-	
-	cout << m_bShot << endl;
 	Monster_State_Set();
 	//Monster_State_Set2();
 }
