@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Collider.h"
 #include "Trasform.h"
+#include "RigidBody.h"
 
 USING(ENGINE)
 
@@ -50,10 +51,7 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
 			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
-			if (rDstCol == nullptr || rSrcCol == nullptr)
-				continue;
-
-			if(Check_AABB(rDstCol, rSrcCol))
+			if(Check_AABB(rDst, rSrc , rDstCol , rSrcCol))
 			{
  				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
@@ -62,23 +60,72 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 	}
 }
 
-bool CCollisionMgr::Check_AABB(ENGINE::CCollider* rDst , ENGINE::CCollider* rSrc)
+void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
 {
-	if (rDst == nullptr || rSrc == nullptr)
-		return false;
-
-	ENGINE::BOXCOL* rDstBox = rDst->Get_BoxCollider();
-	ENGINE::BOXCOL* rSrtBox = rSrc->Get_BoxCollider();
-
-	if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
-		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
-		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
+	for (auto& rDst : rDstList)
 	{
-		rDst->Set_IsCollision(true);
-		rSrc->Set_IsCollision(true);
+		for (auto& rSrc : rSrcList)
+		{
+			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
+			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
+				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
+			}
+		}
+	}
+}
+
+void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
+			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
+				return;
+			}
+
+			//else if ()
+			//{
+			//	dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
+			//}
+
+			//else
+			//{
+			//	dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
+			//}
+		}
+	}
+}
+
+bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* rSrc, CCollider* _rDstCol , CCollider* _rSrcCol)
+{
+	ENGINE::BOXCOL* rDstBox = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"))->Get_BoxCollider();
+	ENGINE::BOXCOL* rSrtBox = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"))->Get_BoxCollider();
+
+	if (rDstBox->vMinPos.x < rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x > rSrtBox->vMinPos.x &&
+		rDstBox->vMinPos.y < rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y > rSrtBox->vMinPos.y &&
+		rDstBox->vMinPos.z < rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z > rSrtBox->vMinPos.z)
+	{
+		// 콜리전 하는 물체끼리 체크
 		if (!rDstBox->bIsTrigger && !rDstBox->bIsTrigger)
 		{
+			_rDstCol->Set_IsCollision(true);
+
 			// A 가 Dynamic 이고 , B 도 Dynamic 일 때
 			if (rDstBox->bIsDynamic && rSrtBox->bIsDynamic)
 			{
@@ -93,8 +140,8 @@ bool CCollisionMgr::Check_AABB(ENGINE::CCollider* rDst , ENGINE::CCollider* rSrc
 				(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength_Srt.y *= 1.f : tmpLength_Srt.y *= -1.f);
 				(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength_Srt.z *= 1.f : tmpLength_Srt.z *= -1.f);
 
-				rDst->Set_Length(tmpLength_Dst);
-				rSrc->Set_Length(tmpLength_Srt);
+				_rDstCol->Set_Length(tmpLength_Dst);
+				_rSrcCol->Set_Length(tmpLength_Srt);
 			}
 
 			// A 가 Dynamic 이고 , B 는 Static 일 때
@@ -106,14 +153,20 @@ bool CCollisionMgr::Check_AABB(ENGINE::CCollider* rDst , ENGINE::CCollider* rSrc
 				(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength.y *= -1.f : tmpLength.y *= 1.f);
 				(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength.z *= -1.f : tmpLength.z *= 1.f);
 
-				rDst->Set_Length(tmpLength);
+				_rDstCol->Set_Length(tmpLength);
 			}
 
 			// A 가 Static 이고 , B 는 Dynamic 일 때
 			else if (!rDstBox->bIsDynamic && rSrtBox->bIsDynamic)
 			{
-				rSrc->Set_Length(Get_Length(rDstBox, rSrtBox));
+				_rSrcCol->Set_Length(Get_Length(rDstBox, rSrtBox));
 			}
+		}
+
+		// Dst 는 트리거, Src 는 트리거 아님
+		else if (rDstBox->bIsTrigger && !rDstBox->bIsTrigger)
+		{
+			
 		}
 
 		return true;
@@ -121,8 +174,7 @@ bool CCollisionMgr::Check_AABB(ENGINE::CCollider* rDst , ENGINE::CCollider* rSrc
 
 	else
 	{
-		rDst->Set_IsCollision(false);
-		rSrc->Set_IsCollision(false);
+
 
 		return false;
 	}

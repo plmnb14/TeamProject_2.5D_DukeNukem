@@ -16,7 +16,7 @@ public:
 	virtual ~CCollider();
 
 public:
-	virtual void LateUpdate();
+	virtual void LateUpdate(D3DXVECTOR3 _Pos);
 
 public:
 	void SetUp_Box();
@@ -31,6 +31,8 @@ public:
 	void Set_IsCollision(bool _Collision);
 
 public:
+	D3DXVECTOR3 Get_CenterPos() { return m_tBoxCollider.vCenterPos; }
+	D3DXVECTOR3 Get_UnderPos() { return m_tBoxCollider.vUnderPos; }
 	bool Get_IsCollision() { return m_tBoxCollider.bIsCollision; }
 	BOXCOL* Get_BoxCollider() { return &m_tBoxCollider; }
 	D3DXVECTOR3 Get_Length() { return m_tBoxCollider.vLength; };

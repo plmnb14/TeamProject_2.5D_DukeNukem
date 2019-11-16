@@ -12,9 +12,11 @@ CCollider::~CCollider()
 {
 }
 
-void CCollider::LateUpdate()
+void CCollider::LateUpdate(D3DXVECTOR3 _Pos)
 {
+	Set_UnderPos(_Pos);
 	Set_CenterPos();
+	SetUp_Box();
 }
 
 void CCollider::SetUp_Box()
@@ -36,7 +38,7 @@ void CCollider::Set_Length(D3DXVECTOR3 _Length)
 void CCollider::Set_CenterPos()
 {
 	m_tBoxCollider.vCenterPos = { m_tBoxCollider.vUnderPos.x ,
-								  m_tBoxCollider.vUnderPos.y - m_tBoxCollider.vRadius.y,
+								  m_tBoxCollider.vUnderPos.y ,
 								  m_tBoxCollider.vUnderPos.z };
 }
 

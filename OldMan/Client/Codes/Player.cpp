@@ -15,7 +15,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), 
-	m_pTransform(nullptr), m_pCollider(nullptr),
+	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
 	m_pRigid(nullptr),
 	m_pSubject(ENGINE::GetCameraSubject()),
 	m_pObserver(nullptr)
@@ -36,10 +36,7 @@ int CPlayer::Update()
 	ENGINE::CGameObject::Update();
 	KeyInput();
 
-	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->SetUp_Box();
-
-	cout << m_pRigid->Get_Accel().y << endl;
+	//cout << m_pRigid->Get_Accel().y << endl;
 
 	if (m_pRigid->Get_IsJump())
 	{
@@ -59,7 +56,7 @@ int CPlayer::Update()
 	{
 		D3DXVECTOR3 JumpLength = { 0, -m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()),0 };
 		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
-
+	
 		if (m_pCollider->Get_IsCollision())
 		{
 			m_pRigid->Set_IsGround(true);
@@ -67,7 +64,8 @@ int CPlayer::Update()
 		}
 	}
 
-	//cout << m_pCollider->Get_IsCollision() << endl;
+	//cout << m_pCollider->Get_CenterPos().y << endl;
+	//cout << m_pCollider->Get_UnderPos().y << endl;
 
 	return NO_EVENT;
 }
@@ -75,6 +73,12 @@ int CPlayer::Update()
 void CPlayer::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
+
+	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x , m_pTransform->GetPos().y - 0.5f , m_pTransform->GetPos().y };
+
+	m_pGroundChekCollider->LateUpdate(tmpPos);
+	m_pCollider->LateUpdate(m_pTransform->GetPos());
+	m_pCollider->Set_IsCollision(false);
 }
 
 void CPlayer::Render()
@@ -88,7 +92,7 @@ HRESULT CPlayer::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, -3.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 6.f, -4.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 	return S_OK;
@@ -150,11 +154,28 @@ HRESULT CPlayer::AddComponent()
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
 	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->Set_Radius({ 1.f , 1.f, 1.f });
+	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });
 	m_pCollider->Set_CenterPos();
 	m_pCollider->Set_Dynamic(true);
 	m_pCollider->Set_Trigger(false);
 	m_pCollider->SetUp_Box();
+
+	// GroundCheck_Collider
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
+
+	m_pGroundChekCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+
+	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x , m_pTransform->GetPos().y - 0.5f , m_pTransform->GetPos().y };
+
+	m_pGroundChekCollider->Set_UnderPos(tmpPos);
+	m_pGroundChekCollider->Set_Radius({ 0.5f , 0.5f, 0.5f });
+	m_pGroundChekCollider->Set_CenterPos();
+	m_pGroundChekCollider->Set_Dynamic(true);
+	m_pGroundChekCollider->Set_Trigger(true);
+	m_pGroundChekCollider->SetUp_Box();
 
 	// Rigid
 	pComponent = ENGINE::CRigidBody::Create();

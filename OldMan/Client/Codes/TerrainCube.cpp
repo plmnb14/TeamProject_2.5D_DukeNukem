@@ -19,15 +19,13 @@ int CTerrainCube::Update()
 
 	ENGINE::CGameObject::Update();
 
-	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->SetUp_Box();
-
 	return NO_EVENT;
 }
 
 void CTerrainCube::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
+	m_pCollider->LateUpdate(m_pTransform->GetPos());
 }
 
 void CTerrainCube::Render()

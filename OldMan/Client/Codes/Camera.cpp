@@ -6,7 +6,7 @@
 
 CCamera::CCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
-	m_eCameraMode(LAND_MODE), m_eCameraViewPoint(FIRST_PERSON),
+	m_eCameraMode(LAND_MODE), m_eCameraViewPoint(THIRD_PERSON),
 	m_pGraphicDev(pGraphicDev), m_pSubject(ENGINE::GetCameraSubject()),
 	m_pTarget(nullptr), m_pCCamera_Component(nullptr),
 	m_fMax_PlayerRoll_Angle(0), m_fCamShake_Y(0),
@@ -274,7 +274,7 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 		D3DXVec3Normalize(&vTempDir, &vTempDir);
 
 		m_pCCamera_Component->Set_EyePos({ vTempPos.x + (vTempDir.x * m_pCCamera_Component->Get_Distance()),
-			vTempPos.y + (vTempDir.y * m_pCCamera_Component->Get_Distance() * 0.5f) + 1 + m_pCCamera_Component->Get_Distance() * 0.5f,
+			vTempPos.y + (vTempDir.y * m_pCCamera_Component->Get_Distance() * 0.5f) + 4 + m_pCCamera_Component->Get_Distance() * 0.5f,
 			vTempPos.z + (vTempDir.z * m_pCCamera_Component->Get_Distance())
 		});
 
@@ -495,6 +495,26 @@ void CCamera::KeyInput()
 		m_pCCamera_Component->Add_EyePos({ 0 , -0.3f , 0 });
 		m_pCCamera_Component->Add_LookAt({ 0 , -0.3f , 0 });
 	}
+
+	if (GetAsyncKeyState(VK_NUMPAD6))
+	{
+		Yaw(0.5f);
+	}
+
+	if (GetAsyncKeyState(VK_NUMPAD4))
+	{
+		Yaw(-0.5f);
+	}
+
+	if (GetAsyncKeyState(VK_NUMPAD8))
+	{
+		Pitch(-0.5f);
+	}
+
+	if (GetAsyncKeyState(VK_NUMPAD2))
+	{
+		Pitch(0.5f);
+	}
 }
 
 int CCamera::Update()
@@ -508,7 +528,7 @@ int CCamera::Update()
 	SetUp_ViewPoint(m_eCameraViewPoint);
 	SetUp_ViewMatrix(&m_MatView);
 
-	//m_pCCamera_Component->Set_Look(dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetDir());
+	m_pCCamera_Component->Set_Look(dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetDir());
 
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
 	m_pSubject->AddData(D3DTS_VIEW, &m_MatView);
@@ -534,7 +554,7 @@ HRESULT CCamera::Initialize()
 	m_pCCamera_Component->Set_Look({ 0,0,1 });
 	m_pCCamera_Component->Set_LookAt({ 0,3,1 });
 
-	m_pCCamera_Component->Set_Distance(5.f);
+	m_pCCamera_Component->Set_Distance(5.5f);
 	m_pCCamera_Component->set_MainCamera(true);
 
 
