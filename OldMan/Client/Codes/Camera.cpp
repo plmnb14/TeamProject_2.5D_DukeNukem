@@ -304,25 +304,25 @@ void CCamera::SetUp_FirstPerson_ViewPoint()
 
 void CCamera::SetUp_Zoom()
 {
-	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_SPACE))
-	{
-		if (m_pCCamera_Component->Get_Distance() > m_fZoom_Min)
-			m_pCCamera_Component->Add_Distance(-0.1f);
-
-		POINT pt;
-		pt.x = WINCX / 2;
-		pt.y = WINCY / 2;
-
-		ClientToScreen(g_hWnd, &pt);
-		SetCursorPos(pt.x, pt.y);
-
-	}
-
-	if (GetAsyncKeyState('X'))
-	{
-		if (m_pCCamera_Component->Get_Distance() < m_fZoom_Max)
-			m_pCCamera_Component->Add_Distance(0.1f);
-	}
+	//if (m_pKeyMgr->KeyPressing(ENGINE::KEY_SPACE))
+	//{
+	//	if (m_pCCamera_Component->Get_Distance() > m_fZoom_Min)
+	//		m_pCCamera_Component->Add_Distance(-0.1f);
+	//
+	//	POINT pt;
+	//	pt.x = WINCX / 2;
+	//	pt.y = WINCY / 2;
+	//
+	//	ClientToScreen(g_hWnd, &pt);
+	//	SetCursorPos(pt.x, pt.y);
+	//
+	//}
+	//
+	//if (GetAsyncKeyState('X'))
+	//{
+	//	if (m_pCCamera_Component->Get_Distance() < m_fZoom_Max)
+	//		m_pCCamera_Component->Add_Distance(0.1f);
+	//}
 }
 
 void CCamera::SetUp_MouseRotate()

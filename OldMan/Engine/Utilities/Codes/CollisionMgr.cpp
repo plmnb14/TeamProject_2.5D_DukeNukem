@@ -74,6 +74,9 @@ bool CCollisionMgr::Check_AABB(ENGINE::CCollider* rDst , ENGINE::CCollider* rSrc
 		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
 		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 	{
+		rDst->Set_IsCollision(true);
+		rSrc->Set_IsCollision(true);
+
 		if (!rDstBox->bIsTrigger && !rDstBox->bIsTrigger)
 		{
 			// A 가 Dynamic 이고 , B 도 Dynamic 일 때
@@ -118,6 +121,9 @@ bool CCollisionMgr::Check_AABB(ENGINE::CCollider* rDst , ENGINE::CCollider* rSrc
 
 	else
 	{
+		rDst->Set_IsCollision(false);
+		rSrc->Set_IsCollision(false);
+
 		return false;
 	}
 

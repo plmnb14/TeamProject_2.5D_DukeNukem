@@ -32,6 +32,7 @@
     <ClInclude Include="..\Codes\Observer.h" />
     <ClInclude Include="..\Codes\PlayerSubject.h" />
     <ClInclude Include="..\Codes\Renderer.h" />
+    <ClInclude Include="..\Codes\RigidBody.h" />
     <ClInclude Include="..\Codes\Scene.h" />
     <ClInclude Include="..\Codes\Subject.h" />
     <ClInclude Include="..\Codes\Trasform.h" />
@@ -49,6 +50,7 @@
     <ClCompile Include="..\Codes\Observer.cpp" />
     <ClCompile Include="..\Codes\PlayerSubject.cpp" />
     <ClCompile Include="..\Codes\Renderer.cpp" />
+    <ClCompile Include="..\Codes\RigidBody.cpp" />
     <ClCompile Include="..\Codes\Scene.cpp" />
     <ClCompile Include="..\Codes\Subject.cpp" />
     <ClCompile Include="..\Codes\Trasform.cpp" />

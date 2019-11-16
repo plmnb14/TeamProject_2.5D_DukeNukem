@@ -55,21 +55,9 @@ void CCollider::Set_Trigger(bool _Trigger)
 	m_tBoxCollider.bIsTrigger = _Trigger;
 }
 
-bool CCollider::Check_AABB(ENGINE::BOXCOL* _DistCollider , ENGINE::BOXCOL* _TargetCollider)
+void CCollider::Set_IsCollision(bool _Collision)
 {
-	if (_DistCollider->vMinPos.x <= _TargetCollider->vMaxPos.x && _DistCollider->vMaxPos.x >= _TargetCollider->vMinPos.x &&
-		_DistCollider->vMinPos.y <= _TargetCollider->vMaxPos.y && _DistCollider->vMaxPos.y >= _TargetCollider->vMinPos.y &&
-		_DistCollider->vMinPos.z <= _TargetCollider->vMaxPos.z && _DistCollider->vMaxPos.z >= _TargetCollider->vMinPos.z)
-	{
-		m_tBoxCollider.bIsCollision = true;
-		return true;
-	}
-
-	else
-	{
-		m_tBoxCollider.bIsCollision = false;
-		return false;
-	}
+	m_tBoxCollider.bIsCollision = _Collision;
 }
 
 CCollider* CCollider::Create()

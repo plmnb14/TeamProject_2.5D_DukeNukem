@@ -21,6 +21,8 @@ using namespace NAME;
 #define WINCX 1280
 #define WINCY 720
 
+#define GRAVITY 9.81f
+
 #define MIN_STR 64
 #define MID_STR 128
 #define MAX_STR 256
