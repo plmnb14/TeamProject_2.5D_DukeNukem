@@ -35,8 +35,12 @@ int CNumber::Update()
 		break;
 	}
 	case CNumber::NUMBER_BULLET:
+	{
 		// юс╫ц.
-		GetNumberArr(9999, m_iNumArr, m_iArrCount);
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+			m_iBulletTest -= 1;
+		GetNumberArr(m_iBulletTest, m_iNumArr, m_iArrCount);
+	}
 		break;
 	case CNumber::NUMBER_END:
 		break;

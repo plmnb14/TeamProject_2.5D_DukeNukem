@@ -180,3 +180,19 @@ void CToolApp::OnAppAbout()
 
 
 
+
+
+BOOL CToolApp::OnIdle(LONG lCount)
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+
+	pView->Update();
+	//return CWinAppEx::OnIdle(lCount);
+	return true;
+}

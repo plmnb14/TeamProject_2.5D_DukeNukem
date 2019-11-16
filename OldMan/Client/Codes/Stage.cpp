@@ -2,16 +2,23 @@
 #include "Stage.h"
 
 #include "Player.h"
+
 #include "Terrain.h"
 #include "TerrainCube.h"
 #include "TerrainWallCube.h"
 #include "TerrainRect.h"
+
+#include "Door.h"
+#include "Elevator.h"
+
 #include "Camera.h"
 #include "Monster.h"
+
 #include "UI.h"
 #include "Number.h"
 
 #include "Trasform.h"
+
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
@@ -69,10 +76,19 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
-	// Terrain
-	//pObject = CTerrain::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+	// Door Test
+	pObject = CDoor::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
+	pObject = CDoor::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
+	dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"))->SetPos(D3DXVECTOR3(2.f, 2.f, -10.f));
+
+	// Elevator Test
+	pObject = CElevator::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());

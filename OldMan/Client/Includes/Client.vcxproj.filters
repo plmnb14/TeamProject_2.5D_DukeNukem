@@ -25,9 +25,6 @@
     <Filter Include="02.GameObject\00.Player">
       <UniqueIdentifier>{5af2b3a4-1739-43c3-bd2e-70cff2b89c31}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\01.Terrain">
-      <UniqueIdentifier>{1e8bfce0-2bb8-4ab8-a2fd-1a65ef0e2849}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\02.LogoBack">
       <UniqueIdentifier>{41fa388e-d35d-48cb-9700-d1e74400e86e}</UniqueIdentifier>
     </Filter>
@@ -39,15 +36,6 @@
     </Filter>
     <Filter Include="02.GameObject\05.Monster">
       <UniqueIdentifier>{9f248697-2114-42bd-901c-b5ee66fd906d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\01.Terrain\00.TerrainCube">
-      <UniqueIdentifier>{a639ca57-0b00-4fab-bd06-0fe908bfc841}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\01.Terrain\02.TerrainRect">
-      <UniqueIdentifier>{5d1fceae-deaf-4720-8f1d-4d4cf6fd5ca7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\01.Terrain\01.TerrainWallCube">
-      <UniqueIdentifier>{67e2b66f-42a2-48d6-a68b-1dcd02aa4eaa}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\99.UI">
       <UniqueIdentifier>{af78de8d-5e5e-405a-a912-37d3a7b8a282}</UniqueIdentifier>
@@ -63,6 +51,30 @@
     </Filter>
     <Filter Include="02.GameObject\99.UI\00.Number">
       <UniqueIdentifier>{702dd57f-020f-49b3-935b-b77b54955a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject">
+      <UniqueIdentifier>{3764b8b9-4905-4329-96fb-5e9bb7a90b84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\00.Terrain">
+      <UniqueIdentifier>{1e8bfce0-2bb8-4ab8-a2fd-1a65ef0e2849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\00.Terrain\00.TerrainCube">
+      <UniqueIdentifier>{a639ca57-0b00-4fab-bd06-0fe908bfc841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\00.Terrain\02.TerrainRect">
+      <UniqueIdentifier>{5d1fceae-deaf-4720-8f1d-4d4cf6fd5ca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\00.Terrain\01.TerrainWallCube">
+      <UniqueIdentifier>{67e2b66f-42a2-48d6-a68b-1dcd02aa4eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\01.Object">
+      <UniqueIdentifier>{d7f40ea0-ca7e-4d48-87d9-0ec883b60ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\01.Object\01.Elevator">
+      <UniqueIdentifier>{51078eab-f0a0-4154-ba48-63e405610a94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\01.Object\00.Door">
+      <UniqueIdentifier>{258afe6b-a693-4b65-82e4-d07e64af7ac2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +118,7 @@
       <Filter>02.GameObject\00.Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Terrain.h">
-      <Filter>02.GameObject\01.Terrain</Filter>
+      <Filter>02.GameObject\01.MapObject\00.Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\LogoBack.h">
       <Filter>02.GameObject\02.LogoBack</Filter>
@@ -124,13 +136,13 @@
       <Filter>02.GameObject\04.Bullet</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\TerrainCube.h">
-      <Filter>02.GameObject\01.Terrain\00.TerrainCube</Filter>
+      <Filter>02.GameObject\01.MapObject\00.Terrain\00.TerrainCube</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\TerrainRect.h">
-      <Filter>02.GameObject\01.Terrain\02.TerrainRect</Filter>
+      <Filter>02.GameObject\01.MapObject\00.Terrain\02.TerrainRect</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\TerrainWallCube.h">
-      <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
+      <Filter>02.GameObject\01.MapObject\00.Terrain\01.TerrainWallCube</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\UI.h">
       <Filter>02.GameObject\99.UI</Filter>
@@ -143,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="..\Codes\Number.h">
       <Filter>02.GameObject\99.UI\00.Number</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Door.h">
+      <Filter>02.GameObject\01.MapObject\01.Object\00.Door</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Elevator.h">
+      <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +183,7 @@
       <Filter>02.GameObject\00.Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Terrain.cpp">
-      <Filter>02.GameObject\01.Terrain</Filter>
+      <Filter>02.GameObject\01.MapObject\00.Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\LogoBack.cpp">
       <Filter>02.GameObject\02.LogoBack</Filter>
@@ -180,13 +198,13 @@
       <Filter>02.GameObject\04.Bullet</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TerrainCube.cpp">
-      <Filter>02.GameObject\01.Terrain\00.TerrainCube</Filter>
+      <Filter>02.GameObject\01.MapObject\00.Terrain\00.TerrainCube</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TerrainRect.cpp">
-      <Filter>02.GameObject\01.Terrain\02.TerrainRect</Filter>
+      <Filter>02.GameObject\01.MapObject\00.Terrain\02.TerrainRect</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TerrainWallCube.cpp">
-      <Filter>02.GameObject\01.Terrain\01.TerrainWallCube</Filter>
+      <Filter>02.GameObject\01.MapObject\00.Terrain\01.TerrainWallCube</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI.cpp">
       <Filter>02.GameObject\99.UI</Filter>
@@ -199,6 +217,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Number.cpp">
       <Filter>02.GameObject\99.UI\00.Number</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Door.cpp">
+      <Filter>02.GameObject\01.MapObject\01.Object\00.Door</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Elevator.cpp">
+      <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

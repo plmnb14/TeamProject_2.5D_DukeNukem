@@ -52,6 +52,8 @@ private:
 
 	ENGINE::CPlayerSubject*	m_pPlayerSubject;
 	CPlayerObserver*		m_pPlayerObserver;
+
+	int m_iBulletTest = 9999;
 };
 
 #define __NUMBER_H__

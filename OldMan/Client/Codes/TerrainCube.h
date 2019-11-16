@@ -6,7 +6,7 @@
 
 class CTerrainCube : public CTerrain
 {
-private:
+protected:
 	explicit CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
@@ -17,17 +17,17 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-private:
+protected:
 	virtual HRESULT Initialize() override;
 	virtual void Release() override;
 
-private:
+protected:
 	HRESULT AddComponent();
 
 public:
 	static CTerrainCube* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
-private:
+protected:
 
 };
 

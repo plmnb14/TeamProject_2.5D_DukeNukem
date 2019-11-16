@@ -47,15 +47,14 @@ void CUI::Render()
 	D3DXMatrixIdentity(&matTempProj);
 
 	// Get Temp
-	matTempView = m_pCameraObserver->GetViewMatrix();
-
-	matProj = m_pCameraObserver->GetProjMatrix();
-	matTempProj = m_pCameraObserver->GetProjMatrix();
+	matTempView	= m_pCameraObserver->GetViewMatrix();
+	matTempProj	= m_pCameraObserver->GetProjMatrix();
+	matProj		= m_pCameraObserver->GetProjMatrix();
 
 	// 직교투영
 	D3DXMatrixOrthoLH(&matProj, WINCX, WINCY, 0.f, 1.f);
 
-	// Set Sizs
+	// Set UI Size
 	float fScale[3];
 	fScale[0] = m_pTransform->GetSize().x * m_fSizeX;
 	fScale[1] = m_pTransform->GetSize().y * m_fSizeY;
@@ -64,17 +63,15 @@ void CUI::Render()
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 3; j++)
-		{
 			matView(i, j) *= fScale[i];
-		}
 	}
 
-	// Set Pos
+	// Set UI Pos
 	matView._41 = m_vPos.x;
 	matView._42 = m_vPos.y;
 	matView._43 = m_vPos.z;
 
-
+	// Set Device Ortho Transform
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matWorld);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matView);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
@@ -82,10 +79,10 @@ void CUI::Render()
 	// ===============================================================================
 	// Render
 	m_pTexture->Render(0);
-	m_pBuffer->Render();
+	m_pBuffer ->Render();
 
 	// Set Proj AfterRender ==========================================================
-	// 되돌리기
+	// Set Device Original Transform
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matTempView);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matTempProj);
 }
