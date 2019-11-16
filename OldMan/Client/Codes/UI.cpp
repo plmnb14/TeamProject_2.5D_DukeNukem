@@ -10,8 +10,8 @@ CUI::CUI(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
-	m_pSubject(ENGINE::GetCameraSubject()),
-	m_pObserver(nullptr)
+	m_pCameraSubject(ENGINE::GetCameraSubject()),
+	m_pCameraObserver(nullptr)
 {
 }
 
@@ -47,10 +47,10 @@ void CUI::Render()
 	D3DXMatrixIdentity(&matTempProj);
 
 	// Get Temp
-	matTempView = m_pObserver->GetViewMatrix();
+	matTempView = m_pCameraObserver->GetViewMatrix();
 
-	matProj = m_pObserver->GetProjMatrix();
-	matTempProj = m_pObserver->GetProjMatrix();
+	matProj = m_pCameraObserver->GetProjMatrix();
+	matTempProj = m_pCameraObserver->GetProjMatrix();
 
 	// 직교투영
 	D3DXMatrixOrthoLH(&matProj, WINCX, WINCY, 0.f, 1.f);
@@ -68,6 +68,12 @@ void CUI::Render()
 			matView(i, j) *= fScale[i];
 		}
 	}
+
+	// Set Pos
+	matView._41 = m_vPos.x;
+	matView._42 = m_vPos.y;
+	matView._43 = m_vPos.z;
+
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matWorld);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matView);
@@ -106,6 +112,11 @@ void CUI::SetSize(float _fSizeX, float _fSizeY)
 	m_fSizeY = _fSizeY;
 }
 
+void CUI::SetPos(D3DXVECTOR3 _vPos)
+{
+	m_vPos = _vPos;
+}
+
 HRESULT CUI::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
@@ -121,18 +132,21 @@ HRESULT CUI::Initialize()
 
 HRESULT CUI::LateInit()
 {
-	m_pObserver = CCameraObserver::Create();
-	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
+	m_pCameraObserver = CCameraObserver::Create();
+	NULL_CHECK_RETURN(m_pCameraObserver, E_FAIL);
 
-	m_pSubject->Subscribe(m_pObserver);
+	m_pCameraSubject->Subscribe(m_pCameraObserver);
 
 	return S_OK;
 }
 
 void CUI::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
+	// CNumber 안에서 m_vecNumberUI LateInit을 해줄 수 없어서 이렇게 처리해놓음...
+	if (!m_pCameraObserver) return;
+
+	m_pCameraSubject->UnSubscribe(m_pCameraObserver);
+	ENGINE::Safe_Delete(m_pCameraObserver);
 }
 
 HRESULT CUI::AddComponent()

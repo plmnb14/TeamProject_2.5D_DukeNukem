@@ -37,22 +37,21 @@ protected:
 	virtual HRESULT LateInit() override;
 	virtual void Release() override;
 
-public:
-	virtual void ChangeTex(wstring _wstrTex);
-
 protected:
 	HRESULT AddComponent();
+	void GetNumberArr(int _iNumber, int*& _iArr, int& _iCount);
 
 public:
 	static CNumber* Create(LPDIRECT3DDEVICE9 pGraphicDev, NUMBER_TYPE _eType);
 
 private:
+	vector<CUI*>			m_vecNumberUI;
 	int*					m_iNumArr;
 	int						m_iArrCount;
-
-	ENGINE::CPlayerSubject*	m_pSubject;
-	CPlayerObserver*		m_pObserver;
 	NUMBER_TYPE				m_eNumberType;
+
+	ENGINE::CPlayerSubject*	m_pPlayerSubject;
+	CPlayerObserver*		m_pPlayerObserver;
 };
 
 #define __NUMBER_H__

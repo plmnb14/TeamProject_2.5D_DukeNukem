@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Monster.h"
 #include "UI.h"
+#include "Number.h"
 
 #include "Trasform.h"
 
@@ -91,10 +92,27 @@ HRESULT CStage::Add_UI_Layer()
 
 	// Aim
 	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1");
-	NULL_CHECK_MSG_RETURN(pObject, L"Aim_0 Create Failed", E_FAIL);
+	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	dynamic_cast<CUI*>(pObject)->SetSize(35.f, 35.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f)); // Center (Default)
+
+	// HP
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
+	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_HP Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-500.f, -300.f, 0.f));
+
+	// Bullet
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
+	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_BULLET Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(500.f, -300.f, 0.f));
 
 	return S_OK;
 }

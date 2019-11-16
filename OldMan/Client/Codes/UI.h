@@ -34,8 +34,9 @@ protected:
 	virtual void Release() override;
 
 public:
-	virtual void ChangeTex(wstring _wstrTex);
+	void ChangeTex(wstring _wstrTex);
 	void SetSize(float _fSizeX, float _fSizeY);
+	void SetPos(D3DXVECTOR3 _vPos);
 
 protected:
 	HRESULT AddComponent();
@@ -52,12 +53,13 @@ protected:
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
 
-	ENGINE::CCameraSubject*	m_pSubject;
-	CCameraObserver*		m_pObserver;
+	ENGINE::CCameraSubject*	m_pCameraSubject;
+	CCameraObserver*		m_pCameraObserver;
 
 	wstring					m_wstrTex;
 	float					m_fSizeX;
 	float					m_fSizeY;
+	D3DXVECTOR3				m_vPos;
 };
 
 #define __TERRAIN_H__

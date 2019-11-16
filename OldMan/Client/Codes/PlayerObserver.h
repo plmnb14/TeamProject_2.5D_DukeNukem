@@ -18,7 +18,7 @@ public:
 	virtual ~CPlayerObserver();
 
 public:
-	const ENGINE::INFO GetPlayerInfo() const;
+	const ENGINE::ABILITY GetPlayerInfo() const;
 
 public:
 	virtual void Update(int iMessage) override;
@@ -28,7 +28,7 @@ public:
 
 private:
 	ENGINE::CPlayerSubject*	m_pSubject;
-	ENGINE::INFO			m_tInfo;
+	ENGINE::ABILITY			m_tInfo;
 };
 
 #define __PLAYEROBSERVER_H__
