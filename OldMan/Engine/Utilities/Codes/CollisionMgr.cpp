@@ -1,3 +1,4 @@
+#include <iostream>
 #include "CollisionMgr.h"
 #include "GameObject.h"
 #include "Component.h"
@@ -90,39 +91,37 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
 			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
-			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
-
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
+				cout << "충돌체크 됩니다" << endl;
+
+				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_Accel({ 0,0,0 });
+				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsJump(false);
+				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(false);
+				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsAir(false);
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
+
 				return;
 			}
-
-			//else if ()
-			//{
-			//	dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
-			//}
-
-			//else
-			//{
-			//	dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
-			//}
 		}
+
+		cout << "충돌 안함" << endl;
+		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
+		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 	}
 }
 
 bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* rSrc, CCollider* _rDstCol , CCollider* _rSrcCol)
 {
-	ENGINE::BOXCOL* rDstBox = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"))->Get_BoxCollider();
-	ENGINE::BOXCOL* rSrtBox = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"))->Get_BoxCollider();
+	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
+	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
 
-	if (rDstBox->vMinPos.x < rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x > rSrtBox->vMinPos.x &&
-		rDstBox->vMinPos.y < rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y > rSrtBox->vMinPos.y &&
-		rDstBox->vMinPos.z < rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z > rSrtBox->vMinPos.z)
+	if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
+		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
+		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 	{
 		// 콜리전 하는 물체끼리 체크
-		if (!rDstBox->bIsTrigger && !rDstBox->bIsTrigger)
+		if (!rDstBox->bIsTrigger && !rSrtBox->bIsTrigger)
 		{
 			_rDstCol->Set_IsCollision(true);
 
@@ -164,9 +163,9 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 		}
 
 		// Dst 는 트리거, Src 는 트리거 아님
-		else if (rDstBox->bIsTrigger && !rDstBox->bIsTrigger)
+		else if (rDstBox->bIsTrigger && !rSrtBox->bIsTrigger)
 		{
-			
+			return true;
 		}
 
 		return true;

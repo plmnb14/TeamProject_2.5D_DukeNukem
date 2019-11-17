@@ -61,6 +61,12 @@ void CKeyMgr::Update()
 
 	if (GetAsyncKeyState('F') * 0x8000)
 		m_dwKey |= KEY_F;
+
+	if (GetAsyncKeyState('X') * 0x8000)
+		m_dwKey |= KEY_X;
+
+	if (GetAsyncKeyState('Z') * 0x8000)
+		m_dwKey |= KEY_Z;
 }
 
 
@@ -114,18 +120,11 @@ bool CKeyMgr::KeyCombined(DWORD dwFirst, DWORD dwSecond)
 
 POINT CKeyMgr::Get_MouseGap(HWND _g_hWnd)
 {
-	
-
-	//if (m_CurMousePos.x != m_OldMousePos.x && m_CurMousePos.y != m_OldMousePos.y)
-	//	m_OldMousePos = m_CurMousePos;
-
 	GetCursorPos(&m_CurMousePos);
 	ScreenToClient(_g_hWnd, &m_CurMousePos);
 
-	m_MouseGap.x = m_CurMousePos.x - (float)WINCX * 0.5f;
-	m_MouseGap.y = m_CurMousePos.y - (float)WINCY * 0.5f;
-	//m_MouseGap.x = m_CurMousePos.x - m_OldMousePos.x;
-	//m_MouseGap.y = m_CurMousePos.y - m_OldMousePos.y;
+	m_MouseGap.x = (LONG)(m_CurMousePos.x - (float)WINCX * 0.5f);
+	m_MouseGap.y = (LONG)(m_CurMousePos.y - (float)WINCY * 0.5f);
 
 	return m_MouseGap;
 }

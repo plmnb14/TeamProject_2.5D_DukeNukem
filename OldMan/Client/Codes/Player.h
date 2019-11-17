@@ -19,6 +19,12 @@ namespace ENGINE
 class CCameraObserver;
 class CPlayer : public ENGINE::CGameObject
 {
+public:
+	enum WEAPON
+	{
+		MELLE, REVOLVER, RIFLE, SHOTGUN, LUNCHER
+	};
+
 private:
 	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
 
@@ -38,6 +44,9 @@ private:
 private:
 	HRESULT AddComponent();
 	void KeyInput();
+	void Physic();
+	void Shoot();
+	void Swap_Weapon();
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -56,6 +65,8 @@ private:
 
 	ENGINE::CCameraSubject*	m_pSubject;
 	CCameraObserver*		m_pObserver;
+
+	WEAPON					m_eWeaponState;
 };
 
 #define __PLAYER_H__

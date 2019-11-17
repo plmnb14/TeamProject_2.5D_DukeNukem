@@ -117,6 +117,12 @@ void CCamera::Yaw(float _Angle)
 	{
 	case LAND_MODE:
 	{
+		m_fX_Angle = _Angle;
+		m_fX_OriginXAngle += m_fX_Angle;
+
+		if (m_fX_OriginXAngle <= -360 || m_fX_OriginXAngle >= 360)
+			m_fX_OriginXAngle = 0;
+
 		vWorldUp = { 0,1,0 };
 
 		vView = m_pCCamera_Component->Get_LookAt() - m_pCCamera_Component->Get_EyePos();
@@ -249,8 +255,8 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 		case LAND_MODE:
 		{
 			D3DXVECTOR3 vTemp_TargetPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
-			m_pCCamera_Component->Set_EyePos({ vTemp_TargetPos.x, vTemp_TargetPos.y + 1 ,vTemp_TargetPos.z });
-			m_pCCamera_Component->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y + 2 ,vTemp_TargetPos.z + 1 });
+			m_pCCamera_Component->Set_EyePos({ vTemp_TargetPos.x, vTemp_TargetPos.y + 1.5f ,vTemp_TargetPos.z });
+			m_pCCamera_Component->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y + 2.5f ,vTemp_TargetPos.z + 1 });
 		}
 
 		}
@@ -274,11 +280,11 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 		D3DXVec3Normalize(&vTempDir, &vTempDir);
 
 		m_pCCamera_Component->Set_EyePos({ vTempPos.x + (vTempDir.x * m_pCCamera_Component->Get_Distance()),
-			vTempPos.y + (vTempDir.y * m_pCCamera_Component->Get_Distance() * 0.5f) + 4 + m_pCCamera_Component->Get_Distance() * 0.5f,
+			vTempPos.y + (vTempDir.y * m_pCCamera_Component->Get_Distance() * 0.5f) + 1 + m_pCCamera_Component->Get_Distance() * 0.5f,
 			vTempPos.z + (vTempDir.z * m_pCCamera_Component->Get_Distance())
 		});
 
-		m_pCCamera_Component->Set_LookAt({ vTempPos.x, vTempPos.y + 1.6f, vTempPos.z });
+		m_pCCamera_Component->Set_LookAt({ vTempPos.x, vTempPos.y + 1.3f, vTempPos.z });
 		m_pCCamera_Component->Set_Up({ 0, 1, 0 });
 
 		break;
@@ -293,36 +299,45 @@ void CCamera::SetUp_FirstPerson_ViewPoint()
 	if (m_eCameraMode == FLY_MODE)
 		return;
 
-	if (m_pCCamera_Component->Get_Distance() <= 1.f && m_eCameraViewPoint == THIRD_PERSON)
+	if (m_pCCamera_Component->Get_Distance() <= m_fZoom_Min && m_eCameraViewPoint == THIRD_PERSON)
 	{
+		D3DXVECTOR3 vTempDir = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetDir();
+
 		m_eCameraViewPoint = FIRST_PERSON;
+		//m_pCCamera_Component->Set_Look(vTempDir);
 	}
 
-	if (m_pCCamera_Component->Get_Distance() > 1.f)
+	if (m_pCCamera_Component->Get_Distance() > m_fZoom_Min)
 		m_eCameraViewPoint = THIRD_PERSON;
 }
 
 void CCamera::SetUp_Zoom()
 {
-	//if (m_pKeyMgr->KeyPressing(ENGINE::KEY_SPACE))
-	//{
-	//	if (m_pCCamera_Component->Get_Distance() > m_fZoom_Min)
-	//		m_pCCamera_Component->Add_Distance(-0.1f);
-	//
-	//	POINT pt;
-	//	pt.x = WINCX / 2;
-	//	pt.y = WINCY / 2;
-	//
-	//	ClientToScreen(g_hWnd, &pt);
-	//	SetCursorPos(pt.x, pt.y);
-	//
-	//}
-	//
-	//if (GetAsyncKeyState('X'))
-	//{
-	//	if (m_pCCamera_Component->Get_Distance() < m_fZoom_Max)
-	//		m_pCCamera_Component->Add_Distance(0.1f);
-	//}
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_Z))
+	{
+		if (m_pCCamera_Component->Get_Distance() > m_fZoom_Min)
+			m_pCCamera_Component->Add_Distance(-0.1f);
+	
+		POINT pt;
+		pt.x = WINCX / 2;
+		pt.y = WINCY / 2;
+	
+		ClientToScreen(g_hWnd, &pt);
+		SetCursorPos(pt.x, pt.y);
+	}
+	
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_X))
+	{
+		if (m_pCCamera_Component->Get_Distance() < m_fZoom_Max)
+			m_pCCamera_Component->Add_Distance(0.1f);
+
+		POINT pt;
+		pt.x = WINCX / 2;
+		pt.y = WINCY / 2;
+
+		ClientToScreen(g_hWnd, &pt);
+		SetCursorPos(pt.x, pt.y);
+	}
 }
 
 void CCamera::SetUp_MouseRotate()
@@ -338,7 +353,7 @@ void CCamera::SetUp_MouseRotate()
 		D3DXVECTOR3 tmpRight, tmpUp, tmpLook;
 		D3DXVECTOR3 tmpEyePos;
 
-		m_fX_Angle = tmpPT.x * 0.5f;
+		m_fX_Angle = tmpPT.x * 0.3f;
 		m_fX_OriginXAngle += m_fX_Angle;
 
 		if (m_fX_OriginXAngle <= -360 || m_fX_OriginXAngle >= 360)
@@ -376,13 +391,13 @@ void CCamera::SetUp_MouseRotate()
 	{
 		if (m_pCCamera_Component->Get_Look().z < 0.2f && m_pCCamera_Component->Get_Look().z > 0.f)
 		{
-			if (m_pCCamera_Component->Get_Look().y < -0.9f)
+			if (m_pCCamera_Component->Get_Look().y < -0.8f)
 			{
 				if (tmpPT.y > 0)
 					return;
 			}
 
-			if (m_pCCamera_Component->Get_Look().y > 0.9f)
+			if (m_pCCamera_Component->Get_Look().y > 0.8f)
 			{
 				if (tmpPT.y < 0)
 					return;
@@ -391,13 +406,13 @@ void CCamera::SetUp_MouseRotate()
 
 		else if (m_pCCamera_Component->Get_Look().z > -0.2f && m_pCCamera_Component->Get_Look().z < 0.f)
 		{
-			if (m_pCCamera_Component->Get_Look().y < -0.9f)
+			if (m_pCCamera_Component->Get_Look().y < -0.8f)
 			{
 				if (tmpPT.y > 0)
 					return;
 			}
 
-			if (m_pCCamera_Component->Get_Look().y > 0.9f)
+			if (m_pCCamera_Component->Get_Look().y > 0.8f)
 			{
 				if (tmpPT.y < 0)
 					return;
@@ -407,7 +422,7 @@ void CCamera::SetUp_MouseRotate()
 		D3DXVECTOR3 tmpRight, tmpUp, tmpLook;
 		D3DXVECTOR3 tmpEyePos;
 		
-		m_fY_Angle = tmpPT.y * 0.5f;
+		m_fY_Angle = tmpPT.y * 0.3f;
 		m_fX_OriginYAngle = m_pCCamera_Component->Get_Look().y * -90;
 		
 		if (m_fX_OriginYAngle <= -90 || m_fX_OriginYAngle >= 90)
@@ -528,8 +543,6 @@ int CCamera::Update()
 	SetUp_ViewPoint(m_eCameraViewPoint);
 	SetUp_ViewMatrix(&m_MatView);
 
-	m_pCCamera_Component->Set_Look(dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetDir());
-
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
 	m_pSubject->AddData(D3DTS_VIEW, &m_MatView);
 
@@ -554,13 +567,18 @@ HRESULT CCamera::Initialize()
 	m_pCCamera_Component->Set_Look({ 0,0,1 });
 	m_pCCamera_Component->Set_LookAt({ 0,3,1 });
 
-	m_pCCamera_Component->Set_Distance(5.5f);
 	m_pCCamera_Component->set_MainCamera(true);
+
+	if(m_eCameraViewPoint == THIRD_PERSON )
+		m_pCCamera_Component->Set_Distance(5.5f);
+
+	else if (m_eCameraViewPoint == FIRST_PERSON)
+		m_pCCamera_Component->Set_Distance(0.5f);
 
 
 	m_fMax_PlayerRoll_Angle = 25.f;			// 1 인칭 시, 좌우 기울이기 최대 각도
 	m_fEyeHeight = 3.f;
-	m_fZoom_Min = 1.f;
+	m_fZoom_Min = 0.5f;
 	m_fZoom_Max = 10.f;
 
 
@@ -572,7 +590,7 @@ HRESULT CCamera::Initialize()
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(70.f), WINCX / (float)WINCY, 1.f, 1000.f);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 
-	ShowCursor(false);
+	//ShowCursor(false);
 
 	m_pSubject->AddData(D3DTS_VIEW, &m_MatView);
 	m_pSubject->AddData(D3DTS_PROJECTION, &matProj);

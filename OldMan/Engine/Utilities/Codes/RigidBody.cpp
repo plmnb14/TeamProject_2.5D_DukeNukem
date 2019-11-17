@@ -77,7 +77,7 @@ void CRigidBody::Set_MaxAccel(D3DXVECTOR3 _MaxAccel)
 
 float CRigidBody::Set_Jump(D3DXVECTOR3 _TransForm , float _Time)
 {
-	m_tRigid.vAccel.y -= 1.f * _Time;
+	m_tRigid.vAccel.y -= 4.f * _Time;
 
 	return (m_tRigid.fPower * m_tRigid.vAccel.y + GRAVITY * m_tRigid.vAccel.y * m_tRigid.vAccel.y * 0.5f) * _Time;;
 }
@@ -87,16 +87,10 @@ float CRigidBody::Set_Fall(D3DXVECTOR3 _TransForm, float _Time)
 	if (!m_tRigid.bIsGravity)
 		return 0;
 
-	if (!m_tRigid.bIsJump && !m_tRigid.bIsGround)
-	{
+	if (m_tRigid.vAccel.y < 4.f)
+		m_tRigid.vAccel.y += 4.f * _Time;
 
-		if (m_tRigid.vAccel.y < 1.f)
-			m_tRigid.vAccel.y += 1.f * _Time;
-
-		return (m_tRigid.fPower * m_tRigid.vAccel.y + GRAVITY * m_tRigid.vAccel.y * m_tRigid.vAccel.y * 0.5f) * _Time;
-	}
-
-	return 0;
+	return (m_tRigid.fPower * m_tRigid.vAccel.y + GRAVITY * m_tRigid.vAccel.y * m_tRigid.vAccel.y * 0.5f) * _Time;
 }
 
 CRigidBody* CRigidBody::Create()

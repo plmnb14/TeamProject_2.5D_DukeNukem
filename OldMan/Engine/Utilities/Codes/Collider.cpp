@@ -14,8 +14,8 @@ CCollider::~CCollider()
 
 void CCollider::LateUpdate(D3DXVECTOR3 _Pos)
 {
-	Set_UnderPos(_Pos);
-	Set_CenterPos();
+	Set_CenterPos(_Pos);
+	Set_UnderPos();
 	SetUp_Box();
 }
 
@@ -35,16 +35,16 @@ void CCollider::Set_Length(D3DXVECTOR3 _Length)
 	m_tBoxCollider.vLength = _Length;
 }
 
-void CCollider::Set_CenterPos()
+void CCollider::Set_CenterPos(D3DXVECTOR3 _CenterPos)
 {
-	m_tBoxCollider.vCenterPos = { m_tBoxCollider.vUnderPos.x ,
-								  m_tBoxCollider.vUnderPos.y ,
-								  m_tBoxCollider.vUnderPos.z };
+	m_tBoxCollider.vCenterPos = _CenterPos;
 }
 
-void CCollider::Set_UnderPos(D3DXVECTOR3 _UnderPos)
+void CCollider::Set_UnderPos()
 {
-	m_tBoxCollider.vUnderPos = _UnderPos;
+	m_tBoxCollider.vUnderPos = { m_tBoxCollider.vCenterPos.x , 
+								 m_tBoxCollider.vCenterPos.y - m_tBoxCollider.vRadius.y ,
+								 m_tBoxCollider.vCenterPos.z };
 }
 
 void CCollider::Set_Dynamic(bool _Dynamic)
