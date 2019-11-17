@@ -30,13 +30,15 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
+	cout << m_pTransform->GetPos().y << endl;
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 	
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	KeyInput();
-	Physic();
+	//Physic();
 
 	return NO_EVENT;
 }

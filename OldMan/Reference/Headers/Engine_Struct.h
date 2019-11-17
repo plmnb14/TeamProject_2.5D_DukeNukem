@@ -147,6 +147,32 @@ namespace ENGINE
 		wstring wstrFileName = L"";
 		int iImgCount = 0;
 	}PATH_INFO;
+
+	typedef struct tagCondition
+	{
+		bool bIsHit;	 // 피격 체크
+		bool bIsAttck;	 // 공격 가능체크
+
+	}CONDITION;
+
+	typedef struct tagWeapon
+	{
+		WORD wWeaponDamage;		// 무기 데미지 입니다.
+
+		WORD wMaxBullet;		// 최대 총알 개수
+		WORD wCurBullet;		// 현재 총알 개수
+		WORD wUseBullet;		// 한번 사용 당 총알 개수
+
+		float fRebound_Value;	// 반동 수치
+		float fInterval;		// 발사 간격
+		float fKnockBack_Value;	// 넉백 수치
+
+		float fMaxZoom_Value;	// 최대 줌 수치
+		float fZoom_Value;		// 줌 수치
+
+		BULLET_TYPE eBulletType;
+
+	}W_INFO;
 }
 
 #define __ENGINE_STRUCT_H__
