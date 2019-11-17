@@ -1,13 +1,24 @@
 #include "stdafx.h"
 #include "Stage.h"
+
 #include "Player.h"
+
 #include "Terrain.h"
 #include "TerrainCube.h"
 #include "TerrainWallCube.h"
 #include "TerrainRect.h"
+
+#include "Door.h"
+#include "Elevator.h"
+
 #include "Camera.h"
 #include "Monster.h"
+
+#include "UI.h"
+#include "Number.h"
+
 #include "Trasform.h"
+
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
@@ -65,10 +76,19 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
 
-	// Terrain
-	//pObject = CTerrain::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+	// Door Test
+	pObject = CDoor::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
+	pObject = CDoor::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
+	dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"))->SetPos(D3DXVECTOR3(2.f, 2.f, -10.f));
+
+	// Elevator Test
+	pObject = CElevator::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -81,6 +101,35 @@ HRESULT CStage::Add_Object_Layer()
 
 HRESULT CStage::Add_UI_Layer()
 {
+	// Object Layer
+	ENGINE::CLayer* pUILayer = ENGINE::CLayer::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pUILayer, L"UI Layer Create Failed", E_FAIL);
+	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
+
+	// Aim
+	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1");
+	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(35.f, 35.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f)); // Center (Default)
+
+	// HP
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
+	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_HP Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-500.f, -300.f, 0.f));
+
+	// Bullet
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
+	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_BULLET Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(500.f, -300.f, 0.f));
+
 	return S_OK;
 }
 
@@ -161,6 +210,11 @@ void CStage::PipeLineSetUp()
 	// WireFrame
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
+	// 알파테스트 
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00000088); // 88 ~ 77 ... 등의 값 아래의 알파값은 제외시킴
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
 	D3DXMATRIX matView, matProj; // 뷰행렬, 투영행렬
 
 								 // 뷰행렬(카메라의 역행렬) 생성하는 함수
@@ -219,7 +273,7 @@ void CStage::LoadTexture()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/MapObject_Test.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");

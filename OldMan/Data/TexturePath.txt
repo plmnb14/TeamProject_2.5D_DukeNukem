@@ -467,3 +467,15 @@ No_Animaition|64 x 64|Tile64x64_7|1|..\Client\Texture\Tiles\No_Animaition\64 x 6
 No_Animaition|64 x 64|Tile64x64_8|1|..\Client\Texture\Tiles\No_Animaition\64 x 64\Tile64x64_8.png
 No_Animaition|64 x 64|Tile64x64_9|1|..\Client\Texture\Tiles\No_Animaition\64 x 64\Tile64x64_9.png
 No_Animaition|Aim|Aim_0|1|..\Client\Texture\UI\No_Animaition\Aim\Aim_0.png
+No_Animaition|Aim|Aim_1|1|..\Client\Texture\UI\No_Animaition\Aim\Aim_1.png
+No_Animaition|Aim|Aim_256x256_0|1|..\Client\Texture\UI\No_Animaition\Aim\Aim_256x256_0.png
+No_Animaition|Number|Number_0|1|..\Client\Texture\UI\No_Animaition\Number\Number_0.png
+No_Animaition|Number|Number_1|1|..\Client\Texture\UI\No_Animaition\Number\Number_1.png
+No_Animaition|Number|Number_2|1|..\Client\Texture\UI\No_Animaition\Number\Number_2.png
+No_Animaition|Number|Number_3|1|..\Client\Texture\UI\No_Animaition\Number\Number_3.png
+No_Animaition|Number|Number_4|1|..\Client\Texture\UI\No_Animaition\Number\Number_4.png
+No_Animaition|Number|Number_5|1|..\Client\Texture\UI\No_Animaition\Number\Number_5.png
+No_Animaition|Number|Number_6|1|..\Client\Texture\UI\No_Animaition\Number\Number_6.png
+No_Animaition|Number|Number_7|1|..\Client\Texture\UI\No_Animaition\Number\Number_7.png
+No_Animaition|Number|Number_8|1|..\Client\Texture\UI\No_Animaition\Number\Number_8.png
+No_Animaition|Number|Number_9|1|..\Client\Texture\UI\No_Animaition\Number\Number_9.png

@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __UI_H__
+#ifndef __DOOR_H__
 
 #include "GameObject.h"
 
@@ -14,14 +14,13 @@ namespace ENGINE
 	class CCollider;
 }
 
-class CCameraObserver;
-class CUI : public ENGINE::CGameObject
+class CDoor : public ENGINE::CGameObject
 {
 protected:
-	explicit CUI(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CDoor(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
-	virtual ~CUI();
+	virtual ~CDoor();
 
 public:
 	virtual int Update() override;
@@ -34,15 +33,14 @@ protected:
 	virtual void Release() override;
 
 public:
-	void ChangeTex(wstring _wstrTex);
-	void SetSize(float _fSizeX, float _fSizeY);
-	void SetPos(D3DXVECTOR3 _vPos);
+	virtual void ChangeTex(wstring _wstrTex);
 
 protected:
 	HRESULT AddComponent();
+	void Move();
 
 public:
-	static CUI* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTex = L"");
+	static CDoor* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -53,14 +51,14 @@ protected:
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
 
-	ENGINE::CCameraSubject*	m_pCameraSubject;
-	CCameraObserver*		m_pCameraObserver;
+	ENGINE::TERRAIN_TYPE	m_eTerrainType;
 
 	wstring					m_wstrTex;
-	float					m_fSizeX;
-	float					m_fSizeY;
-	D3DXVECTOR3				m_vPos;
+	float					m_fMoveSpeed;
+	bool					m_bIsOpened;
+	D3DXVECTOR3				m_vOriPos;
+
 };
 
-#define __TERRAIN_H__
+#define __DOOR_H__
 #endif

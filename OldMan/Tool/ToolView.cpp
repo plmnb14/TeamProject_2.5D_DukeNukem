@@ -18,6 +18,8 @@
 #include "ToolTerrainWallCube.h"
 #include "ToolTerrainRect.h"
 #include "Trasform.h"
+#include "Camera.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -84,15 +86,7 @@ void CToolView::OnDraw(CDC* /*pDC*/)
 		return;
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
-	m_pDeviceMgr->Render_Begin();
 
-	MAP_LAYER::iterator iter_begin = m_mapLayer.begin();
-	MAP_LAYER::iterator iter_end = m_mapLayer.end();
-
-	for (; iter_begin != iter_end; ++iter_begin)
-		iter_begin->second->Render();
-
-	m_pDeviceMgr->Render_End();
 }
 
 
@@ -189,42 +183,8 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 
 	CView::OnMouseMove(nFlags, point);
 
-	//// Update =========================================================================
-	MAP_LAYER::iterator iter_begin = m_mapLayer.begin();
-	MAP_LAYER::iterator iter_end = m_mapLayer.end();
-
-	for (; iter_begin != iter_end; ++iter_begin)
-		iter_begin->second->Update();
-
-	//if (!CheckGrid())
-	CubeMoveToMouse();
-
-	//// Update End =======================================================================
-
-	//// Late Update ======================================================================
-
-	iter_begin = m_mapLayer.begin();
-	iter_end = m_mapLayer.end();
-
-	for (; iter_begin != iter_end; ++iter_begin)
-		iter_begin->second->LateUpdate();
-	//// Late Update End===================================================================
-
-
-	//// Check Cube List
-	auto& iter_begin_Cube = m_pCubeList.begin();
-	auto& iter_end_Cube = m_pCubeList.end();
-	for (; iter_begin_Cube != iter_end_Cube; )
-	{
-		if ((*iter_begin_Cube) == nullptr ||(*iter_begin_Cube)->GetDead() == DEAD_OBJ)
-		{
-			iter_begin_Cube = m_pCubeList.erase(iter_begin_Cube);
-		}
-		else
-			iter_begin_Cube++;
-	}
-
 	DragPicking((float)point.x, (float)point.y);
+
 }
 
 
@@ -417,6 +377,12 @@ HRESULT CToolView::Add_Object_Layer()
 	NULL_CHECK_MSG_RETURN(pObject_Layer, L"Object Layer Create Failed", E_FAIL);
 	m_mapLayer.insert({ ENGINE::CLayer::OBJECT, pObject_Layer });
 
+	// Camera
+	ENGINE::CGameObject* pObject = CCamera::Create(m_pDeviceMgr->GetDevice(), nullptr);
+	NULL_CHECK_MSG_RETURN(pObject, L"Camera Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
+	//pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
+
 	return S_OK;
 }
 
@@ -436,6 +402,58 @@ void CToolView::AddCubeForLoad(CToolTerrain* _pTerrain)
 	_pTerrain->SetClicked();
 	m_pCubeList.push_back(_pTerrain);
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, _pTerrain);
+}
+
+void CToolView::Update()
+{
+	//// Update =========================================================================
+	MAP_LAYER::iterator iter_begin = m_mapLayer.begin();
+	MAP_LAYER::iterator iter_end = m_mapLayer.end();
+
+	for (; iter_begin != iter_end; ++iter_begin)
+		iter_begin->second->Update();
+
+	//if (!CheckGrid())
+	CubeMoveToMouse();
+
+	CCamera* pCamera = dynamic_cast<CCamera*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_List(ENGINE::CAMERA).front());
+	m_ViewMatrix = pCamera->GetViewMatrix();
+	m_ProjMatrix = pCamera->GetProjMatrix();
+
+	//// Update End =======================================================================
+
+	//// Late Update ======================================================================
+
+	iter_begin = m_mapLayer.begin();
+	iter_end = m_mapLayer.end();
+
+	for (; iter_begin != iter_end; ++iter_begin)
+		iter_begin->second->LateUpdate();
+	//// Late Update End===================================================================
+
+
+	//// Check Cube List
+	auto& iter_begin_Cube = m_pCubeList.begin();
+	auto& iter_end_Cube = m_pCubeList.end();
+	for (; iter_begin_Cube != iter_end_Cube; )
+	{
+		if ((*iter_begin_Cube) == nullptr || (*iter_begin_Cube)->GetDead() == DEAD_OBJ)
+		{
+			iter_begin_Cube = m_pCubeList.erase(iter_begin_Cube);
+		}
+		else
+			iter_begin_Cube++;
+	}
+
+	m_pDeviceMgr->Render_Begin();
+
+	iter_begin = m_mapLayer.begin();
+	iter_end = m_mapLayer.end();
+
+	for (; iter_begin != iter_end; ++iter_begin)
+		iter_begin->second->Render();
+
+	m_pDeviceMgr->Render_End();
 }
 
 void CToolView::CubeMoveToMouse()
@@ -613,7 +631,7 @@ void CToolView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
 	NULL_CHECK(pFormView);
 
-	if (GetAsyncKeyState('W') & 0x8000)
+	if (GetAsyncKeyState('Z') & 0x8000)
 	{
 		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
 		pTransform->SetPos(
@@ -630,7 +648,7 @@ void CToolView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		pFormView->EditDataExchange();
 	}
 
-	if (GetAsyncKeyState('S') & 0x8000)
+	if (GetAsyncKeyState('X') & 0x8000)
 	{
 		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
 		pTransform->SetPos(
