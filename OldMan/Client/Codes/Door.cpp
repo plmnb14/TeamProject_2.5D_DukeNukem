@@ -57,6 +57,13 @@ HRESULT CDoor::Initialize()
 	m_eTerrainType = ENGINE::TERRAIN_RECT;
 	m_fMoveSpeed = 3.f;
 
+	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Dynamic(false);							// 동적, 정적 Collider 유무
+	m_pCollider->Set_Trigger(false);						// 트리거 유무
+	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
+	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
+	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+
 	return S_OK;
 }
 
@@ -122,13 +129,6 @@ HRESULT CDoor::AddComponent()
 
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
-
-	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->Set_Radius({ 1.f , 1.f , 1.f });
-	m_pCollider->Set_CenterPos();
-	m_pCollider->Set_Dynamic(false);
-	m_pCollider->Set_Trigger(false);
-	m_pCollider->SetUp_Box();
 
 	return S_OK;
 }

@@ -4,11 +4,13 @@
 
 #include "Management.h"
 #include "CameraSubject.h"
+#include "PlayerSubject.h"
 
 BEGIN(ENGINE)
 
 inline CManagement* GetManagement();
 inline CCameraSubject* GetCameraSubject();
+inline CPlayerSubject* GetPlayerSubject();
 
 #include "Export_Utilities.inl"
 

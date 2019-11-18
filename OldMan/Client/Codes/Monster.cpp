@@ -29,9 +29,6 @@ int CMonster::Update()
 	ENGINE::CGameObject::Update();
 	//Player_Pursue();
 	Monster_Range();
-	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->SetUp_Box();
-	
 
 	return NO_EVENT;
 }
@@ -50,7 +47,7 @@ void CMonster::LateUpdate()
 	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix,vSize);                          // 빌보드 설정
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();                                    // 빌보드에서 설정된 행렬을 받아온다. 
 	
-
+	m_pCollider->LateUpdate(m_pTransform->GetPos());
 }
 
 void CMonster::Render()
@@ -72,6 +69,15 @@ HRESULT CMonster::Initialize()
 	m_MonsterDir = { 0.f,0.f,0.f };
 	m_fRange = 0.f;
 	m_fMinRange = 3.0f;
+
+	// 물리적 콜라이더
+	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
+	m_pCollider->Set_Trigger(false);						// 트리거 유무
+	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
+	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
+	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+
 	return S_OK;
 }
 
@@ -130,12 +136,6 @@ HRESULT CMonster::AddComponent()
 	
 	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
-	
-	float Radius[3] = { 2.f , 2.f , 2.f };
-
-	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->Set_Radius(Radius);
-	m_pCollider->SetUp_Box();
 
 	return S_OK;
 }

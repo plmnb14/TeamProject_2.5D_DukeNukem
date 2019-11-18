@@ -26,10 +26,7 @@ int CBullet::Update()
 
 	ENGINE::CGameObject::Update();
 
-	D3DXVECTOR3 vDir = m_pTransform->GetDir();
-
 	m_pTransform->MovePos(0.5f);
-	//m_pTransform->Move_AdvancedPos(vDir ,0.5f);
 
 	KeyInput();
 
@@ -123,7 +120,6 @@ void CBullet::Set_Angle(float * _Angle)
 	m_pTransform->SetAngle(_Angle[0], ENGINE::ANGLE_X);
 	m_pTransform->SetAngle(_Angle[1], ENGINE::ANGLE_Y);
 	m_pTransform->SetAngle(_Angle[2], ENGINE::ANGLE_Z);
-
 }
 
 CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir, float* _Angle)
