@@ -77,6 +77,11 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 			{
 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
+
+				if (rDst->Get_Tag() = ENGINE::BOXCOL)
+				{
+					r
+				}
 			}
 		}
 	}
@@ -179,6 +184,169 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 	}
 
 	return false;
+}
+
+bool CCollisionMgr::Check_Collision(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc, CCollider* _rDstCol, CCollider* _rSrcCol)
+{
+	if(_rDstCol->Get_CollisionType() == ENGINE::COLLISION_LINE)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
+
+	if (_rDstCol->Get_CollisionType() == ENGINE::COLLISION_PLANE)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
+
+	if (_rDstCol->Get_CollisionType() == ENGINE::COLLISION_AABB)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			if (Check_AABB(rDst, rSrc, _rDstCol, _rSrcCol))
+			{
+				return true;
+			}
+
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
+
+	if (_rDstCol->Get_CollisionType() == ENGINE::COLLISION_SHPERE)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
+
+	if (_rDstCol->Get_CollisionType() == ENGINE::COLLISION_CAPSHULE)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
 }
 
 D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BOXCOL * _TargetCollider, bool _Dynamic)

@@ -23,6 +23,7 @@ public:
 
 public:
 	static bool Check_AABB(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc , CCollider* _rDstCol, CCollider* _rSrcCol);
+	static bool Check_Collision(ENGINE::CGameObject * rDst, ENGINE::CGameObject * rSrc, CCollider * _rDstCol, CCollider * _rSrcCol);
 
 public:
 	static D3DXVECTOR3 Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BOXCOL * _TargetCollider, bool _Dynamic = false);

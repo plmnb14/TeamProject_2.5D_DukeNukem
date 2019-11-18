@@ -29,6 +29,7 @@ public:
 	void Set_Dynamic(bool _Dynamic);
 	void Set_Trigger(bool _Trigger);
 	void Set_IsCollision(bool _Collision);
+	void Set_Type(ENGINE::COLLISION_TYPE _Type) { m_eCollisionType = _Type; }
 
 public:
 	D3DXVECTOR3 Get_CenterPos() { return m_tBoxCollider.vCenterPos; }

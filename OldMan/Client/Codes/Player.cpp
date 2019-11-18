@@ -38,7 +38,7 @@ int CPlayer::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	KeyInput();
-	//Physic();
+	Physic();
 
 	return NO_EVENT;
 }

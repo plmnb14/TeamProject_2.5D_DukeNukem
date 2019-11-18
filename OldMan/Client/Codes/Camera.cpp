@@ -543,8 +543,14 @@ int CCamera::Update()
 	SetUp_ViewPoint(m_eCameraViewPoint);
 	SetUp_ViewMatrix(&m_MatView);
 
+	D3DXMATRIX matProj;
+
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(70.f), WINCX / (float)WINCY, 1.f, 1000.f);
+	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
+
 	m_pSubject->AddData(D3DTS_VIEW, &m_MatView);
+	m_pSubject->AddData(D3DTS_PROJECTION, &matProj);
 
 	return NO_EVENT;
 }
