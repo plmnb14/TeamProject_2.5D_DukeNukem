@@ -9,3 +9,8 @@ inline CCameraSubject * GetCameraSubject()
 {
 	return CCameraSubject::GetInstance();
 }
+
+inline CPlayerSubject* GetPlayerSubject()
+{
+	return CPlayerSubject::GetInstance();
+}

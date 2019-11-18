@@ -30,9 +30,11 @@ protected:
 public:
 	void Set_MainCamera(ENGINE::CGameObject* _Camera) { m_pCamera = _Camera; }
 	void Set_MapLayer(map<WORD, CLayer*> _mapLayer) { m_mapLayer = _mapLayer; }
+	void Set_Tag(ENGINE::OBJECT_TYPE _Tag) { m_eTag = _Tag; }
 
 public:
 	CComponent* Get_Component(wstring _key) { return m_mapComponent[_key]; }
+	ENGINE::OBJECT_TYPE Get_Tag() { return m_eTag; }
 	int GetDead();
 
 public:
@@ -48,6 +50,7 @@ protected:
 	MAP_LAYER	m_mapLayer;
 
 	CGameObject*	m_pCamera;
+	ENGINE::OBJECT_TYPE	m_eTag;
 
 	bool			m_bIsDead;
 	bool			m_bIsInit;

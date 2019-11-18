@@ -39,6 +39,8 @@ public:
 	D3DXVECTOR3 Get_Accel() { return m_tRigid.vAccel; }
 	bool Get_IsJump() { return m_tRigid.bIsJump; }
 	bool Get_IsGround() { return m_tRigid.bIsGround; }
+	bool Get_IsFall() { return m_tRigid.bIsFall; }
+	bool Get_IsAir() { return m_tRigid.bIsAir; }
 
 public:
 	float Set_Jump(D3DXVECTOR3 _TransForm, float _Time);

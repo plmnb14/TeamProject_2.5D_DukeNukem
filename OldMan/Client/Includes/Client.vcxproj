@@ -159,11 +159,15 @@
     <ClInclude Include="..\Codes\CameraObserver.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Codes\Door.h" />
+    <ClInclude Include="..\Codes\Elevator.h" />
     <ClInclude Include="..\Codes\Logo.h" />
     <ClInclude Include="..\Codes\LogoBack.h" />
     <ClInclude Include="..\Codes\MainApp.h" />
     <ClInclude Include="..\Codes\Monster.h" />
+    <ClInclude Include="..\Codes\Number.h" />
     <ClInclude Include="..\Codes\Player.h" />
+    <ClInclude Include="..\Codes\PlayerObserver.h" />
     <ClInclude Include="..\Codes\SceneSelector.h" />
     <ClInclude Include="..\Codes\Stage.h" />
     <ClInclude Include="..\Codes\Terrain.h" />
@@ -187,11 +191,15 @@
     <ClCompile Include="..\Codes\CameraObserver.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Codes\Door.cpp" />
+    <ClCompile Include="..\Codes\Elevator.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\LogoBack.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\Monster.cpp" />
+    <ClCompile Include="..\Codes\Number.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
+    <ClCompile Include="..\Codes\PlayerObserver.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainCube.cpp" />

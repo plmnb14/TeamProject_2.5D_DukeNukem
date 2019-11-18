@@ -188,9 +188,12 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraObserver.h" />
     <ClInclude Include="FileInfo.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapObjectSelectDlg.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="MyFormView.h" />
     <ClInclude Include="PathExtract.h" />
     <ClInclude Include="Ray.h" />
@@ -209,9 +212,12 @@
     <ClInclude Include="Tool_Struct.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraObserver.cpp" />
     <ClCompile Include="FileInfo.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapObjectSelectDlg.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MyFormView.cpp" />
     <ClCompile Include="PathExtract.cpp" />
     <ClCompile Include="Ray.cpp" />

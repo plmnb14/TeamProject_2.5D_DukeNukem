@@ -5,7 +5,7 @@
 
 class CTerrainRect : public CTerrain
 {
-private:
+protected:
 	explicit CTerrainRect(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
@@ -16,7 +16,7 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-private:
+protected:
 	virtual HRESULT Initialize() override;
 	virtual HRESULT LateInit() override;
 	virtual void Release() override;
@@ -24,13 +24,13 @@ private:
 public:
 	virtual void ChangeTex(wstring _wstrTex) override;
 
-private:
+protected:
 	HRESULT AddComponent();
 
 public:
 	static CTerrainRect* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
-private:
+protected:
 
 };
 

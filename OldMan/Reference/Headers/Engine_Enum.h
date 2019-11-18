@@ -50,6 +50,12 @@ namespace ENGINE
 		LENGTH_END
 	};
 
+	enum BULLET_TYPE
+	{
+		HITSCAN,
+		PROJECTILE
+	};
+
 	enum OBJECT_TYPE
 	{
 		TERRAIN,

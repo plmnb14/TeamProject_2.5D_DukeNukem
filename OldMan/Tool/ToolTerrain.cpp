@@ -3,6 +3,9 @@
 #include "Ray.h"
 #include "Trasform.h"
 
+#include "ToolView.h"
+#include "MainFrm.h"
+
 CToolTerrain::CToolTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev),
 	m_bSetted(false), m_bIsFitGrid(false),
@@ -42,17 +45,24 @@ void CToolTerrain::MouseInput()
 		//if (m_bIsFitGrid)
 		//	return;
 
+		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+		NULL_CHECK(pMainFrm);
+
+		CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+		NULL_CHECK(pView);
+
+		D3DXMATRIX matView, matProj;
+		matView = pView->m_ViewMatrix;
+		matProj = pView->m_ProjMatrix;
+
 		D3DXVECTOR3 v3 = CRay::GetDirection();
 
 		float fTestMul = 15.f;
-		D3DXVECTOR3 vPos = D3DXVECTOR3(v3.x * fTestMul, m_pTransform->GetPos().y, v3.y * fTestMul);
-		//D3DXMATRIX matWorld;
-		//ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_WORLD, &matWorld);
-		//D3DXMatrixInverse(&matWorld, 0, &matWorld);
-		//D3DXVec3TransformCoord(&vPos, &vPos, &matWorld);
+		D3DXVECTOR3 vPos = D3DXVECTOR3(v3.x * fTestMul, v3.y * fTestMul, v3.y * fTestMul + 10.f);
+		D3DXMatrixInverse(&matView, 0, &matView);
+		D3DXVec3TransformCoord(&vPos, &vPos, &matView);
 
-		//cout << vPos.x << ", " << vPos.y << ", " << vPos.z << endl;
-
+		vPos.y = m_pTransform->GetPos().y;
 		m_pTransform->SetPos(vPos);
 
 		if (m_bIsFitGrid)

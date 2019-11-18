@@ -49,6 +49,15 @@
     <Filter Include="95.PathExtract">
       <UniqueIdentifier>{e0d67a46-d9e1-43a3-84cd-28fbd28e67d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.GameObject\01.Camera">
+      <UniqueIdentifier>{a2f3a0a1-a8e5-4d7f-a76b-7a8430fc019c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Observer">
+      <UniqueIdentifier>{1eaa3e5a-be56-45e9-bd46-24cdd3365fc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.Mouse">
+      <UniqueIdentifier>{fb7085ad-0803-4036-ae27-9a612d6b1bc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -108,6 +117,15 @@
     <ClInclude Include="MyFormView.h">
       <Filter>03.View\00.FormView</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>05.GameObject\01.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraObserver.h">
+      <Filter>06.Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>07.Mouse</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -151,6 +169,15 @@
     </ClCompile>
     <ClCompile Include="MyFormView.cpp">
       <Filter>03.View\00.FormView</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>05.GameObject\01.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraObserver.cpp">
+      <Filter>06.Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>07.Mouse</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

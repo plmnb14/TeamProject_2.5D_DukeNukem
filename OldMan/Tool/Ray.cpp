@@ -1,8 +1,12 @@
 #include "stdafx.h"
 #include "Ray.h"
 #include "Trasform.h"
+
+#include "ToolView.h"
+#include "MainFrm.h"
+
 //юс╫ц
-#include "ToolTerrainCube.h"
+#include "ToolTerrain.h"
 
 CRay::CRay()
 	:m_vOrigin(0, 0, 0), m_vDirection(0, 0, 0)
@@ -37,6 +41,8 @@ CRay CRay::RayAtWorldSpace(int _iScreecX, int _iScreecY)
 	CRay r = CRay::RayAtViewSpace(_iScreecX, _iScreecY);
 
 	D3DXMATRIX matView, matInverseView;
+	D3DXMatrixIdentity(&matView);
+	D3DXMatrixIdentity(&matInverseView);
 	ENGINE::GetGraphicDev()->GetDevice()->GetTransform(D3DTS_VIEW, &matView);
 	D3DXMatrixInverse(&matInverseView, 0, &matView);
 
@@ -59,7 +65,7 @@ D3DXVECTOR3 CRay::GetDirection()
 	return _Ray.m_vDirection;
 }
 
-bool CRay::IsPicked(CToolTerrainCube* _pTerrainCube)
+bool CRay::IsPicked(CToolTerrain* _pTerrainCube)
 {
 	CRay r = (*this);
 

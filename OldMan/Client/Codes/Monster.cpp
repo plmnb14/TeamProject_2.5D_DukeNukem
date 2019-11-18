@@ -10,7 +10,7 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr),
 	m_pSubject(ENGINE::GetCameraSubject()),
-	m_pObserver(nullptr), m_pBillborad(nullptr) 
+	m_pObserver(nullptr), m_pBillborad(nullptr)
 {
 }
 
@@ -25,27 +25,10 @@ int CMonster::Update()
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
-	
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	//Player_Pursue();
-
-	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->SetUp_Box();
-	
-	cout << m_bShot << endl;
-	// 피격시 한번 실행-> 어차피 또다시 피격 또 돌아옴 그냥 한번 실행해도됟ㅁ 이건 
-	
-	if (m_bShot)
-	{
-		m_eNextState = MONSTER_SHOT;
-	}
-	else
-	{
-		Monster_Range();
-	}
-
-
+	Monster_Range();
 
 	return NO_EVENT;
 }
@@ -61,17 +44,15 @@ void CMonster::LateUpdate()
 	Cameramatrix = m_pObserver->GetViewMatrix();
 	vSize = m_pTransform->GetSize();
 
-	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix,vSize);                          // 빌보드 설정
+	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix,vSize);                          // 빌보드 설정
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();                                    // 빌보드에서 설정된 행렬을 받아온다. 
-	m_bShot = m_pCollider->Get_IsCollision();
 	
-	
-	Monster_State_Set();
-	//Monster_State_Set2();
+	m_pCollider->LateUpdate(m_pTransform->GetPos());
 }
 
 void CMonster::Render()
 {
+
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
@@ -84,10 +65,19 @@ HRESULT CMonster::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(10.f, 2.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(2.f, 2.f, 2.f));
 
-	m_fMaxRange = 10.0f;//최대사거리
+	m_fMaxRange = 8.0f;//최대사거리
 	m_MonsterDir = { 0.f,0.f,0.f };
-	//m_fRange = 0.f;
-	m_fMinRange = 5.0f;
+	m_fRange = 0.f;
+	m_fMinRange = 3.0f;
+
+	// 물리적 콜라이더
+	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
+	m_pCollider->Set_Trigger(false);						// 트리거 유무
+	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
+	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
+	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+
 	return S_OK;
 }
 
@@ -103,8 +93,6 @@ HRESULT CMonster::LateInit()
 
 void CMonster::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
 }
 
 HRESULT CMonster::AddComponent()
@@ -142,22 +130,12 @@ HRESULT CMonster::AddComponent()
 
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
-	//bilil
+
 	pComponent = ENGINE::CBillborad::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	
 	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
-	
-	float Radius[3] = { 2.f , 2.f , 2.f };
-
-	m_pCollider->Set_UnderPos(m_pTransform->GetPos());
-	m_pCollider->Set_Radius({ 1.f , 1.f, 1.f });
-	m_pCollider->Set_CenterPos();
-	m_pCollider->Set_Dynamic(true);
-	m_pCollider->Set_Trigger(false);
-	m_pCollider->SetUp_Box();
-
 
 	return S_OK;
 }
@@ -166,9 +144,9 @@ void CMonster::Player_Pursue()
 {
 
 	D3DXVECTOR3 vMonsterDir_Fowrd = m_pTransform->GetDir();				 // 전방 방향벡터
-
+	 
 	//플레이어의 방향 벡터
-
+	
 	//좌우 방향벡터로 내적을 구하고  그것으로 도는 방향을 결정하는 값을 구해서 그쪽으로 돌게만드는게 핵심 
 
 
@@ -176,107 +154,53 @@ void CMonster::Player_Pursue()
 	D3DXVec3Normalize(&m_MonsterDir, &m_MonsterDir);
 
 	float Monster_Dot = D3DXVec3Dot(&vMonsterDir_Fowrd, &m_MonsterDir);
-	D3DXVec3Cross(&m_MonsterCroos, &m_MonsterDir, &vMonsterDir_Fowrd);
+	D3DXVec3Cross(&m_MonsterCroos, &m_MonsterDir,&vMonsterDir_Fowrd);
 	// 양수일때 왼쪽 음수일때 오른쪽 이다. y 값이 반영되면 된다. 
-	 m_MoveSpeed = 3.f * m_pTimeMgr->GetDelta();
+	m_MoveSpeed = 3.f * m_pTimeMgr->GetDelta();   // 속도
 
+	
 	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, D3DXToDegree(m_MonsterCroos.y));
 	m_pTransform->Move_AdvancedPos(m_MonsterDir, m_MoveSpeed);
-	cout << m_fRange << endl;
-
-
+	
+		
+		
 }
 
-// fsm  상태 만들기 
-
-// 최근의 상태를 저장하였다가 -> 그 상태를 실행하고 -> 그 다음 상태가 들어오면 그것으로 체인지 하는 것?
 void CMonster::Monster_Range()
 {
 	D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();					// 몬스터 위치
 
 	m_MonsterDir = vTempPos - vMonsterPos;
-	m_fRange = D3DXVec3Length(&(vMonsterPos - vTempPos));		
-		
-	if (m_fRange < m_fMaxRange && m_fRange>m_fMinRange)
+	m_fRange = D3DXVec3Length(&(vMonsterPos - vTempPos));				 // 사정거리
+	
+	if (m_fRange < m_fMaxRange && m_fRange >m_fMinRange)
 	{
-		m_eNextState = MONSTER_PURSUE;
+		Monster_State_Set(MONSTER_PURSUE);
 	}
 	else
 	{
-		m_eNextState = MONSTER_IDLE;
-
+		Monster_State_Set(MONSTER_IDLE);
 	}
-	
-}	
-	
+
+}
 void CMonster::Monster_Idle()
 {
 	m_pTransform->MovePos(0.f);
 
 }
-void CMonster::Monster_Shot()
+void CMonster::Monster_State_Set(Monster_State _state)
 {
-	m_pTransform->MovePos(0.f);
-
-}
-void CMonster::Object_Serch()
-{
-}
-void CMonster::Monster_State_Set()
-{
-	if (m_eCurState != m_eNextState || m_eCurState == m_eCurState)
+	switch (_state)
 	{
-		switch (m_eNextState)
-		{
-		case MONSTER_IDLE:
-			cout << "쉼" << endl;
-			Monster_Idle();
-			break;
-		case MONSTER_PURSUE:
-			cout << "추격" << endl;
-			Player_Pursue();// 불변수로 하나 만들어서 돌리기 
-			break;
-		case MONSTER_FIRE:
-			cout << "사격" << endl;
-			break;
-		case MONSTER_MILL:
-			break;
-		case MONSTER_SHOT:
-			cout << "피격" << endl;
-			break;
-		default:
-			break;
+	case MONSTER_IDLE:
+		Monster_Idle();
+		break;
 
-		}
-		m_eCurState = m_eNextState;
+	case MONSTER_PURSUE:
+		Player_Pursue();
+		break;
 	}
-
-}
-
-void CMonster::Monster_State_Set2()
-{
-	if (m_eCurState2 != m_eNextState2 || m_eCurState2 == m_eCurState2)
-	{
-		switch (m_eNextState2)
-		{
-		case MONSTER_SHOT:
-			cout << "피격" << endl;
-			break;
-		case MONSTER_FIRE:
-			cout << "사격" << endl;
-			break;
-		case MONSTER_MILL:
-			break;
-		default:
-			break;
-
-		}
-		m_eCurState2 = m_eNextState2;
-	}
-
-
-
 
 }
 
