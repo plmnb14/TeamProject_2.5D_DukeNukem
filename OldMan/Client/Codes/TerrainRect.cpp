@@ -14,8 +14,6 @@ CTerrainRect::~CTerrainRect()
 
 int CTerrainRect::Update()
 {
-	cout << m_pCollider->Get_IsCollision() << endl;
-
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
@@ -60,6 +58,7 @@ HRESULT CTerrainRect::Initialize()
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+	m_pCollider->Set_Type(ENGINE::COLLISION_PLANE);
 
 	return S_OK;
 }

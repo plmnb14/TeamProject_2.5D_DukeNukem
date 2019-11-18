@@ -70,6 +70,7 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 		for (auto& rSrc : rSrcList)
 		{
 			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rDstGCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
 			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
 			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
@@ -79,6 +80,17 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 			{
 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
+
+
+				rDstCol->LateUpdate(rDstTrans->GetPos());
+				rDstGCol->LateUpdate({ rDstTrans->GetPos().x ,
+					rDstTrans->GetPos().y - rDstCol->Get_Radius().y,
+					rDstTrans->GetPos().z });
+
+				rSrcCol->LateUpdate(rSrcTrans->GetPos());
+
+				rDstCol->Set_Length({ 0,0,0 });
+				rSrcCol->Set_Length({ 0,0,0 });
 			}
 		}
 	}
@@ -95,16 +107,21 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
+				if (dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Get_IsJump())
+					return;
+
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_Accel({ 0,0,0 });
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsJump(false);
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(false);
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsAir(false);
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
 
+				cout << "ÀÀ! ´êÀ½!" << endl;
 				return;
 			}
 		}
 
+		cout << "¶¥¿¡ ´êÁö ¾ÊÀ½" << endl;
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 	}
@@ -112,6 +129,9 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* rSrc, CCollider* _rDstCol , CCollider* _rSrcCol)
 {
+	if (_rSrcCol->Get_CollisionType() != ENGINE::COLLISION_AABB)
+		return false;
+
 	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
 	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
 
@@ -246,7 +266,7 @@ bool CCollisionMgr::Check_AABB_to_PLANE(ENGINE::CGameObject* rDst, ENGINE::CGame
 		return false;
 	}
 
-	else if ( )
+	else
 	{
 		cout << "°ã Ä£´Ù" << endl;
 		return true;
