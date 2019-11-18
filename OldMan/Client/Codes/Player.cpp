@@ -30,7 +30,7 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
-	cout << m_pTransform->GetPos().y << endl;
+	cout << m_pTransform->GetPos().x << endl;
 
 	if (m_bIsDead)
 		return DEAD_OBJ;
@@ -38,7 +38,7 @@ int CPlayer::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	KeyInput();
-	Physic();
+	//Physic();
 
 	return NO_EVENT;
 }
@@ -79,7 +79,7 @@ HRESULT CPlayer::Initialize()
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 
 	// 트리거 콜라이더
-	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.6f, 0.3f });
+	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.51f, 0.3f });
 	m_pGroundChekCollider->Set_Dynamic(true);
 	m_pGroundChekCollider->Set_Trigger(true);
 	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,

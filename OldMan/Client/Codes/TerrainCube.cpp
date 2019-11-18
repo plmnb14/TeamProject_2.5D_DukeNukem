@@ -14,6 +14,8 @@ CTerrainCube::~CTerrainCube()
 
 int CTerrainCube::Update()
 {
+	cout << m_pCollider->Get_BoxCollider()->vMaxPos.x << endl;
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 

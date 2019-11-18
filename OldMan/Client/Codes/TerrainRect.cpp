@@ -14,6 +14,8 @@ CTerrainRect::~CTerrainRect()
 
 int CTerrainRect::Update()
 {
+	cout << m_pCollider->Get_IsCollision() << endl;
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
@@ -27,6 +29,7 @@ void CTerrainRect::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
+	m_pCollider->Set_PlaneVtx(m_pTransform->GetAllAngle() , m_pTransform->GetWorldMatrix());
 }
 
 void CTerrainRect::Render()
@@ -121,6 +124,15 @@ HRESULT CTerrainRect::AddComponent()
 
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+
+	// Terrain ¹öÅØ½º
+	ENGINE::CVIBuffer* pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(this->Get_Component(L"Buffer"));
+	m_myVtx = new ENGINE::VTX_TEX[4];
+	pBuffer->GetVertexInfo(m_myVtx);
+	m_pCollider->Set_CollisionVertex(m_pTransform, m_myVtx);
+
+
 
 	return S_OK;
 }
