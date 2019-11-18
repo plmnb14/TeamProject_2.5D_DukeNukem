@@ -18,7 +18,9 @@ CLayer::~CLayer()
 HRESULT CLayer::AddObject(ENGINE::OBJECT_TYPE _ObjType, CGameObject* pObject)
 {
 	NULL_CHECK_RETURN(pObject, E_FAIL);
+	pObject->Set_Tag(_ObjType);
 	m_mapGameObject[_ObjType].push_back(pObject);
+
 
 	return S_OK;
 }

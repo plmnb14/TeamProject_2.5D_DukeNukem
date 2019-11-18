@@ -54,6 +54,8 @@ public:
 	void ChangeTerrainType();
 	void AddCubeForLoad(CToolTerrain* _pTerrain);
 
+	void Update();
+
 private:
 	void PipeLineSetup();
 	void LoadTexture();
@@ -79,6 +81,9 @@ public:
 	D3DXVECTOR3 m_vBeforeMousePos;
 	float m_fDragX;
 	float m_fDragY;
+
+	D3DXMATRIX m_ViewMatrix;
+	D3DXMATRIX m_ProjMatrix;
 
 };
 

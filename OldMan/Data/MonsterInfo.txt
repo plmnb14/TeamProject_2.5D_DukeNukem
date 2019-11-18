@@ -1,0 +1,1 @@
+//MonsterName(enum)|wstrTex
