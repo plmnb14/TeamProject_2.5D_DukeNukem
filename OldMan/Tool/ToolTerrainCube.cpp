@@ -22,7 +22,6 @@ int CToolTerrainCube::Update()
 
 	ENGINE::CGameObject::Update();
 
-	//KeyInput();
 	MouseInput();
 
 	return NO_EVENT;
@@ -37,15 +36,36 @@ void CToolTerrainCube::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
-	//if (m_bIsPicked)
-		ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	if (m_pTexture) m_pTexture->Render(0);
+	else ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
-	//m_pTexture->Render(0);
 	m_pBuffer->Render();
 
-	//if (m_bIsPicked)
-		ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 
+}
+
+void CToolTerrainCube::ChangeTex()
+{
+	// Change Texture
+	m_mapComponent.erase(L"Texture");
+	m_pTexture = nullptr;
+
+	if (lstrcmp(m_wstrTex.c_str(), L""))
+	{
+		CString strCheckDDS = m_wstrTex.c_str();
+		strCheckDDS.Replace(L".png", L".dds");
+		m_wstrTex = strCheckDDS;
+	}
+
+	ENGINE::CComponent* pComponent = nullptr;
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, m_wstrTex);
+	if (!pComponent)
+		return;
+
+	m_mapComponent.insert({ L"Texture", pComponent });
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK(m_pTexture);
 }
 
 HRESULT CToolTerrainCube::Initialize()
@@ -68,16 +88,17 @@ HRESULT CToolTerrainCube::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
-	////Texture
-	//pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Texture_Player");
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent.insert({ L"Texture", pComponent });
-	//
-	//m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
-	//NULL_CHECK_RETURN(m_pTexture, E_FAIL);
+	m_wstrTex = L"Tile256x256_0.dds";
+	//Texture
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, m_wstrTex);
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Texture", pComponent });
+	
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_CubeCol");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_CubeTex");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 

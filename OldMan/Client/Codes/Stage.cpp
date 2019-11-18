@@ -107,7 +107,7 @@ HRESULT CStage::Add_UI_Layer()
 	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
 
 	// Aim
-	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1");
+	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1.png");
 	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
@@ -167,6 +167,13 @@ HRESULT CStage::Initialize()
 		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
+
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_CUBETEX,
+		L"Buffer_CubeTex");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
 
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
@@ -259,13 +266,30 @@ void CStage::LoadTexture()
 	// Single은 FileName
 	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
 	{
-		hr = m_pResourceMgr->AddTexture(
-			m_pGraphicDev,
-			ENGINE::RESOURCE_DYNAMIC,
-			ENGINE::TEX_NORMAL,
-			iter->wstrFileName,
-			iter->wstrImgPath, 1);
-		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		string strCheckDDS;
+		strCheckDDS.assign(iter->wstrFileName.begin(), iter->wstrFileName.end());
+
+		// .dds 를 찾았다면 TEX_CUBE
+		if (strCheckDDS.find(".dds") != string::npos)
+		{
+			hr = m_pResourceMgr->AddTexture(
+				m_pGraphicDev,
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_CUBE,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
+		else
+		{
+			hr = m_pResourceMgr->AddTexture(
+				m_pGraphicDev,
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_NORMAL,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
 	}
 
 	ENGINE::GetTextureMgr()->DestroyInstance();
@@ -300,6 +324,7 @@ void CStage::LoadMapObj()
 		{
 		case ENGINE::TERRAIN_CUBE:
 			pTerrain = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pTerrain->ChangeTex(szName);
 			break;
 		case ENGINE::TERRAIN_WALL:
 			pTerrain = CTerrainWallCube::Create(ENGINE::GetGraphicDev()->GetDevice());

@@ -78,13 +78,13 @@ public:
 	typedef map<WORD, ENGINE::CLayer*>	MAP_LAYER;
 	MAP_LAYER	m_mapLayer;
 
-	D3DXVECTOR3 m_vBeforeMousePos;
-	float m_fDragX;
-	float m_fDragY;
+	D3DXVECTOR3 m_vLastPickedCubePos;
+	bool m_bIsMousePressing;
 
 	D3DXMATRIX m_ViewMatrix;
 	D3DXMATRIX m_ProjMatrix;
 
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전
