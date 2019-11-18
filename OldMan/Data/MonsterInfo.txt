@@ -1,1 +1,1 @@
-//MonsterName(enum)|wstrTex
+No_Animation|MyMonsterTest|monster_0|1|..\Client\Texture\Monster\monster_0.png

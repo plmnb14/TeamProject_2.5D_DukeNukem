@@ -56,7 +56,20 @@ void CMapObjectSelectDlg::SetData()
 		//임시.
 		//몬스터는 텍스쳐로드가 아님... 종류별로 뜨도록 수정하기 +Trigger
 		//strRelativePath = L"..\\Client\\Texture\\Monster";
-		break;
+
+		HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/MonsterInfo.txt");
+		FAILED_CHECK_MSG(hr, L"MonsterInfo Failed");
+
+		m_ListBox.ResetContent();
+
+		m_listFileInfo = ENGINE::GetTextureMgr()->GetMapTexture_Single();
+		for (auto& iter : m_listFileInfo)
+		{
+			m_ListBox.AddString(iter->wstrFileName.c_str());
+		}
+
+		ENGINE::GetTextureMgr()->DestroyInstance();
+		return;
 	}
 	case CMapObjectSelectDlg::OBJ_TRIGGER:
 		break;
@@ -79,6 +92,8 @@ void CMapObjectSelectDlg::SetData()
 	{
 		m_ListBox.AddString(iter->wstrFileName.c_str());
 	}
+
+
 }
 
 void CMapObjectSelectDlg::Release()

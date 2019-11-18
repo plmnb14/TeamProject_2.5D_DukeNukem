@@ -7,6 +7,7 @@ CElevator::CElevator(LPDIRECT3DDEVICE9 pGraphicDev)
 	:ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
+	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_eTerrainType(ENGINE::TERRAIN_END),
 	m_bIsUp(false)
@@ -31,7 +32,7 @@ int CElevator::Update()
 	m_pCollider->SetUp_Box();
 
 	// юс╫ц
-	if (GetAsyncKeyState('Z') & 0x8000)
+	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LCTRL))
 		m_bIsUp = !m_bIsUp;
 
 	return NO_EVENT;
@@ -57,7 +58,7 @@ HRESULT CElevator::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(10.f, 2.f, -10.f));
+	m_pTransform->SetPos(D3DXVECTOR3(10.f, 2.f, 10.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 	m_eTerrainType = ENGINE::TERRAIN_CUBE;
 	m_fMoveSpeed = 2.f;
