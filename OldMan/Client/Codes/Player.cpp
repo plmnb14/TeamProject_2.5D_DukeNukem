@@ -10,15 +10,15 @@
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
-	: ENGINE::CGameObject(pGraphicDev),	
+	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), 
+	m_pTexture(nullptr), m_pBuffer(nullptr),
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
 	m_pRigid(nullptr),
 	m_pSubject(ENGINE::GetCameraSubject()),
-	m_eWeaponState(),
+	m_eWeaponState(REVOLVER),
 	m_pObserver(nullptr)
 {	
 }
@@ -30,13 +30,16 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
+	cout << m_pTransform->GetPos().x << endl;
+	cout << m_pTransform->GetPos().y << endl;
+	cout << m_pTransform->GetPos().z << endl;
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 	
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	KeyInput();
-	//Physic();
 
 	return NO_EVENT;
 }
@@ -65,7 +68,7 @@ HRESULT CPlayer::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(11.f, 2.f, 13.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 

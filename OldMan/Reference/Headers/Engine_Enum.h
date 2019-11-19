@@ -56,6 +56,11 @@ namespace ENGINE
 		PROJECTILE
 	};
 
+	enum WEAPON_TAG
+	{
+		MELLE, REVOLVER, RIFLE, SHOTGUN, LUNCHER
+	};
+
 	enum OBJECT_TYPE
 	{
 		TERRAIN,
@@ -64,6 +69,7 @@ namespace ENGINE
 		MONSTER,
 		BULLET,
 		PROPS,
+		WEAPON,
 		VFX,
 		CAMERA,
 		UI

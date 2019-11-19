@@ -69,9 +69,9 @@ void CFileInfo::ExtractPathInfo(
 			*/
 			CString strFullPath = find.GetFilePath();
 
-			bool bIsNoAnim = strFullPath.Find(L"\\No_Animaition") != -1;
+			bool bIsNoAnim = strFullPath.Find(L"\\No_Animation") != -1;
 			// 타일 이미지들의 제목이 숫자로 되어있어서 예외처리
-			if (!bIsNoAnim)
+			if (!bIsNoAnim && bForClientPath)
 			{
 				// CString::Replace(old, new)
 				// old -> new로 교체
@@ -93,7 +93,7 @@ void CFileInfo::ExtractPathInfo(
 			TCHAR szFileName[MAX_STR] = L"";
 			strFileName = ::PathFindFileName(strRelative);
 			lstrcpy(szFileName, strFileName);
-			::PathRemoveExtension(szFileName);
+			//::PathRemoveExtension(szFileName);
 			pPathInfo->wstrFileName = szFileName;
 			///////////////////////////////////////////////////////////////////////////
 
@@ -110,11 +110,17 @@ void CFileInfo::ExtractPathInfo(
 			// 파일명을 찾는다. 파일명이 없으면 말단 폴더명을 찾는다.
 			pPathInfo->wstrStateKey = ::PathFindFileName(szBuf);
 
-			if (!lstrcmp(pPathInfo->wstrStateKey.c_str(), L"Single") || bIsNoAnim)
+			if (!lstrcmp(pPathInfo->wstrStateKey.c_str(), L"Single") || bIsNoAnim || !bForClientPath)
 			{
 				::PathRemoveFileSpec(szBuf);
 				pPathInfo->wstrObjectKey = ::PathFindFileName(szBuf);
 				pPathInfo->iImgCount = 1;
+				if (!bForClientPath && !bIsNoAnim)
+				{
+					pPathInfo->wstrObjectKey = pPathInfo->wstrFileName;
+					pPathInfo->wstrStateKey = pPathInfo->wstrFileName;
+				}
+
 				rPathInfoLst_Single.push_back(pPathInfo);
 				continue;
 			}
@@ -197,4 +203,44 @@ void CFileInfo::GetMapToolFiles(const TCHAR* pFullPath, list<ENGINE::PATH_INFO*>
 			rPathInfoLst.push_back(pPathInfo);
 		}
 	}
+}
+
+void CFileInfo::GetMonsterInfoFromTextFile(const TCHAR* pFullPath, list<ENGINE::PATH_INFO*>& rPathInfoLst_Single)
+{
+	wifstream fin;
+
+	fin.open(pFullPath);
+
+	if (fin.fail())
+		return;
+
+	TCHAR szObjectKey[MAX_STR] = L"";
+	TCHAR szStateKey[MAX_STR] = L"";
+	TCHAR szFileName[MAX_STR] = L"";
+	TCHAR szImgCount[MAX_STR] = L"";
+	TCHAR szImgPath[MAX_STR] = L"";
+
+	while (true)
+	{
+		fin.getline(szObjectKey, MAX_STR, '|');
+		fin.getline(szStateKey, MAX_STR, '|');
+		fin.getline(szFileName, MAX_STR, '|');
+		fin.getline(szImgCount, MAX_STR, '|');
+		fin.getline(szImgPath, MAX_STR);
+
+		if (fin.eof())
+			break;
+
+		ENGINE::PATH_INFO* pPathInfo = new ENGINE::PATH_INFO;
+		pPathInfo->iImgCount = 1;
+		pPathInfo->wstrObjectKey = szObjectKey;
+		pPathInfo->wstrStateKey = szStateKey;
+		pPathInfo->wstrImgPath = szImgPath;
+		pPathInfo->wstrFileName = szFileName;
+		rPathInfoLst_Single.push_back(pPathInfo);
+	}
+
+	fin.close();
+
+	return;
 }

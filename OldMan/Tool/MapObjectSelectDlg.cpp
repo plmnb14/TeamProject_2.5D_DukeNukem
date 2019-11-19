@@ -48,15 +48,21 @@ void CMapObjectSelectDlg::SetData()
 	{
 	case CMapObjectSelectDlg::OBJ_MAP:
 	{
-		strRelativePath = L"..\\Client\\Texture\\Tiles\\No_Animaition";
+		strRelativePath = L"..\\Client\\Texture\\Tiles\\No_Animation";
 		break;
 	}
 	case CMapObjectSelectDlg::OBJ_MONSTER:
 	{
-		//임시.
-		//몬스터는 텍스쳐로드가 아님... 종류별로 뜨도록 수정하기 +Trigger
-		//strRelativePath = L"..\\Client\\Texture\\Monster";
-		break;
+		CFileInfo::GetMonsterInfoFromTextFile(L"../Data/MonsterInfo.txt", m_listFileInfo);
+
+		m_ListBox.ResetContent();
+
+		for (auto& iter : m_listFileInfo)
+		{
+			m_ListBox.AddString(iter->wstrFileName.c_str());
+		}
+
+		return;
 	}
 	case CMapObjectSelectDlg::OBJ_TRIGGER:
 		break;
@@ -72,13 +78,22 @@ void CMapObjectSelectDlg::SetData()
 	m_ListBox.ResetContent();
 
 	CFileInfo::GetMapToolFiles(strRelativePath, m_listFileInfo);
-	//list<ENGINE::PATH_INFO*> listMultiTexture;
-	//CFileInfo::ExtractPathInfo(strRelativePath, listMultiTexture, m_listFileInfo);
 
-	for (auto& iter : m_listFileInfo)
+	auto& iter_begin = m_listFileInfo.begin();
+	auto& iter_end = m_listFileInfo.end();
+	for ( ; iter_begin != iter_end; )
 	{
-		m_ListBox.AddString(iter->wstrFileName.c_str());
+		CString strCheckDDS = (*iter_begin)->wstrFileName.c_str();
+		if (strCheckDDS.Find(L".dds") > 0)
+		{
+			iter_begin = m_listFileInfo.erase(iter_begin);
+			continue;
+		}
+
+		m_ListBox.AddString((*iter_begin)->wstrFileName.c_str());
+		iter_begin++;
 	}
+
 }
 
 void CMapObjectSelectDlg::Release()
@@ -123,7 +138,7 @@ void CMapObjectSelectDlg::OnLbnSelchangeListBox()
 		m_PictureControl.SetBitmap(NULL);
 
 		// CImage 초기화가 안되서 임시 방편.
-		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64\\Tile64x64_9.png");
+		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animation\\64 x 64\\Tile64x64_9.png");
 		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
 		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
 		if (iWidth <= 0) iWidth = StaticPictureRect.Width();
@@ -137,7 +152,10 @@ void CMapObjectSelectDlg::OnLbnSelchangeListBox()
 		m_Img.Destroy();
 	}
 
-	m_Img.Load((*iter_begin)->wstrImgPath.c_str());
+	CString strCheckDDS = (*iter_begin)->wstrImgPath.c_str();
+	strCheckDDS.Replace(L".dds", L".png");
+
+	m_Img.Load(strCheckDDS);
 
 	int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
 	int iHeeght = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());

@@ -96,6 +96,26 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 	}
 }
 
+void CCollisionMgr::CollisionPlayer_To_Item(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				rSrc->SetDead();
+			}
+		}
+	}
+}
+
 void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
 {
 	for (auto& rDst : rDstList)

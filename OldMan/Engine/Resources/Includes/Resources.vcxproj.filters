@@ -37,6 +37,9 @@
     <Filter Include="01.Resources\00.VIBuffer\06.WallCubeCol">
       <UniqueIdentifier>{1ed0c28f-3266-4b2b-bfb7-ee80dd44d104}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Resources\00.VIBuffer\07.CubeTex">
+      <UniqueIdentifier>{487abd7e-4a4b-4776-8e9b-5e042e2f5534}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\ResourceMgr.h">
@@ -75,6 +78,9 @@
     <ClInclude Include="..\Codes\WallCubeCol.h">
       <Filter>01.Resources\00.VIBuffer\06.WallCubeCol</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\CubeTex.h">
+      <Filter>01.Resources\00.VIBuffer\07.CubeTex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\ResourceMgr.cpp">
@@ -109,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\WallCubeCol.cpp">
       <Filter>01.Resources\00.VIBuffer\06.WallCubeCol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CubeTex.cpp">
+      <Filter>01.Resources\00.VIBuffer\07.CubeTex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

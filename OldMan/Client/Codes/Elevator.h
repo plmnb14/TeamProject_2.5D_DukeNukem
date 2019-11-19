@@ -45,6 +45,7 @@ public:
 protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
+	ENGINE::CKeyMgr*		m_pKeyMgr;
 
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;

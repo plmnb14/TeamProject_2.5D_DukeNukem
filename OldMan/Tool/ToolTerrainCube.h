@@ -15,6 +15,7 @@ public:
 	virtual int Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
+	virtual void ChangeTex() override;
 
 private:
 	virtual HRESULT Initialize() override;

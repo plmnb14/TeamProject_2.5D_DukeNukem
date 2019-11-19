@@ -68,7 +68,14 @@ private:
 	ENGINE::CCameraSubject*	m_pSubject;
 	CCameraObserver*		m_pObserver;
 
+	// 현재 장착중인 무기 정보
+	ENGINE::W_INFO			m_pWInfo;
+
+	// 현재 플레이어의 정보 ( 체력 등 수치 값 & 각종 bool 값 )
+	ENGINE::CONDITION		m_pCondition;
+
 	WEAPON					m_eWeaponState;
+	
 
 };
 

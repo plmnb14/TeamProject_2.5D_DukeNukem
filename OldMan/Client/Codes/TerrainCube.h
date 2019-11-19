@@ -16,6 +16,7 @@ public:
 	virtual int Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
+	virtual void ChangeTex(wstring _wstrTex) override;
 
 protected:
 	virtual HRESULT Initialize() override;

@@ -20,6 +20,14 @@ namespace ENGINE
 
 	const DWORD VTXFVF_TEX = D3DFVF_XYZ | D3DFVF_TEX1 ;
 
+	typedef struct tagVertexCube
+	{
+		D3DXVECTOR3 vPos;
+		D3DXVECTOR3 vTex;
+	}VTX_CUBE;
+
+	const DWORD VTXFVF_CUBE = D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_TEXCOORDSIZE3(0);
+
 	typedef struct tagIndex16
 	{
 		WORD _1, _2, _3;
@@ -153,9 +161,16 @@ namespace ENGINE
 		float fHp;			// 체력 수치
 		float fShield;		// 보호막 수치
 		float fArmor;		// 방어력 수치 ( 방어력만큼 공격력이 감소 됩니다. )
+		float fStamina;		// 스태미너 ( 달리기, 슬라이드 등 행동관련 )
 
+		float fFuel;		// 연료 게이지 ( 제트팩이나, 특수 무기 장착시 활성화 )
+
+		bool bIsCinematic;	// 연출 중 인지 ( 연출 중엔 무적 상태가되고, 조작이 불가능 ) 
+
+		bool bIsDodge;		// 회피 상태
 		bool bIsHit;		// 피격 체크
 		bool bIsAttck;		// 공격 가능체크
+		bool bIsJetPak;		// 제트팩을 장착했는지
 
 	}CONDITION;
 
@@ -174,7 +189,10 @@ namespace ENGINE
 		float fMaxZoom_Value;	// 최대 줌 수치
 		float fZoom_Value;		// 줌 수치
 
+		float fDelayTimer;		// 발사, 재장전 시 타이머
+
 		BULLET_TYPE eBulletType;
+		WEAPON_TAG	eWeaponTag;
 
 	}W_INFO;
 }

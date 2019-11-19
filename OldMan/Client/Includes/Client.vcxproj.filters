@@ -76,6 +76,12 @@
     <Filter Include="02.GameObject\01.MapObject\01.Object\00.Door">
       <UniqueIdentifier>{258afe6b-a693-4b65-82e4-d07e64af7ac2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Weapon">
+      <UniqueIdentifier>{688d4201-50a2-4b9a-8aff-8bff494f4e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Weapon\00. Revolver">
+      <UniqueIdentifier>{d9db9cc0-d2d7-4676-8d98-a9ad803e09c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -162,6 +168,15 @@
     <ClInclude Include="..\Codes\Elevator.h">
       <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Raycast.h">
+      <Filter>02.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Weapon.h">
+      <Filter>02.GameObject\06.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Weapon_Revolver.h">
+      <Filter>02.GameObject\06.Weapon\00. Revolver</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -223,6 +238,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Elevator.cpp">
       <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Raycast.cpp">
+      <Filter>02.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon.cpp">
+      <Filter>02.GameObject\06.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon_Revolver.cpp">
+      <Filter>02.GameObject\06.Weapon\00. Revolver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

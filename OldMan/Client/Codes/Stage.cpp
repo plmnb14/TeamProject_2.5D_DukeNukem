@@ -18,6 +18,7 @@
 #include "Number.h"
 
 #include "Trasform.h"
+#include "Weapon_Revolver.h"
 
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -70,11 +71,23 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PLAYER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
-	// Monster
-	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	// Camera
+	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
+	pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
+
+	// Revolver
+	pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{-7,2,14});
+	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
+
+	//// Monster
+	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 
 	// Door Test
 	//pObject = CDoor::Create(m_pGraphicDev);
@@ -90,12 +103,6 @@ HRESULT CStage::Add_Object_Layer()
 	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
 
-	// Camera
-	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
-	pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
-
 	return S_OK;
 }
 
@@ -107,7 +114,7 @@ HRESULT CStage::Add_UI_Layer()
 	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
 
 	// Aim
-	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1");
+	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1.png");
 	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
@@ -167,6 +174,13 @@ HRESULT CStage::Initialize()
 		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
+
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_CUBETEX,
+		L"Buffer_CubeTex");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
 
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
@@ -259,13 +273,30 @@ void CStage::LoadTexture()
 	// Single은 FileName
 	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
 	{
-		hr = m_pResourceMgr->AddTexture(
-			m_pGraphicDev,
-			ENGINE::RESOURCE_DYNAMIC,
-			ENGINE::TEX_NORMAL,
-			iter->wstrFileName,
-			iter->wstrImgPath, 1);
-		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		string strCheckDDS;
+		strCheckDDS.assign(iter->wstrFileName.begin(), iter->wstrFileName.end());
+
+		// .dds 를 찾았다면 TEX_CUBE
+		if (strCheckDDS.find(".dds") != string::npos)
+		{
+			hr = m_pResourceMgr->AddTexture(
+				m_pGraphicDev,
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_CUBE,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
+		else
+		{
+			hr = m_pResourceMgr->AddTexture(
+				m_pGraphicDev,
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_NORMAL,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
 	}
 
 	ENGINE::GetTextureMgr()->DestroyInstance();
@@ -300,6 +331,7 @@ void CStage::LoadMapObj()
 		{
 		case ENGINE::TERRAIN_CUBE:
 			pTerrain = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pTerrain->ChangeTex(szName);
 			break;
 		case ENGINE::TERRAIN_WALL:
 			pTerrain = CTerrainWallCube::Create(ENGINE::GetGraphicDev()->GetDevice());

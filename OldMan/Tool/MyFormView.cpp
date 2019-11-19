@@ -152,6 +152,7 @@ void CMyFormView::OnInitialUpdate()
 	}
 
 	m_TerrainTypeRadioBtn[0].SetCheck(true);
+	m_CheckButton_Grid.SetCheck(true);
 }
 
 void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
@@ -175,7 +176,7 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 		m_PictureControl.SetBitmap(NULL);
 
 		// CImage 초기화가 안되서 임시 방편.
-		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animaition\\64 x 64\\Tile64x64_9.png");
+		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animation\\64 x 64\\Tile64x64_9.png");
 		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
 		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
 		if (iWidth <= 0) iWidth = StaticPictureRect.Width();
@@ -189,7 +190,10 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 		m_Img.Destroy();
 	}
 
-	m_Img.Load(_wstrPath.c_str());
+	CString strCheckDDS = m_wstrFilePath.c_str();
+	strCheckDDS.Replace(L".dds", L".png");
+
+	m_Img.Load(strCheckDDS);
 
 	int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
 	int iHeeght = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
@@ -201,25 +205,6 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 		StaticPictureRect.TopLeft().y,
 		iWidth,
 		iHeeght);
-
-	//// TextureMgr 사용
-	//const ENGINE::TEX_INFO* pTexInfo = ENGINE::GetTextureMgr()->GetTexInfo(m_wstrFileName);
-	//NULL_CHECK(pTexInfo);
-
-	//ENGINE::GetGraphicDev()->Render_Begin();
-
-	//D3DXMATRIX matScale, matTrans, matWorld;
-	//D3DXMatrixIdentity(&matWorld);
-	//D3DXMatrixScaling(&matScale, (float)WINCX / pTexInfo->tImgInfo.Width, (float)WINCY / pTexInfo->tImgInfo.Height, 0.f);
-	//D3DXMatrixTranslation(&matTrans, 0.f, 0.f, 0.f);
-
-	//matWorld = matScale * matTrans;
-
-	//ENGINE::GetGraphicDev()->GetSprite()->SetTransform(&matWorld);
-	//ENGINE::GetGraphicDev()->GetSprite()->Draw(pTexInfo->pTexture,
-	//	nullptr, nullptr, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	//ENGINE::GetGraphicDev()->Render_End(m_PictureControl.m_hWnd);
 
 	UpdateData(FALSE);
 }
@@ -551,6 +536,8 @@ void CMyFormView::OnBnClickedButton_Load()
 			case ENGINE::TERRAIN_CUBE:
 			{
 				pTerrain = CToolTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+				pTerrain->SetTexName(szName);
+				pTerrain->ChangeTex();
 				break;
 			}
 			case ENGINE::TERRAIN_WALL:

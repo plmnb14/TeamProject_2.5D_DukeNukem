@@ -30,6 +30,7 @@ public:
 public:
 	void SetClicked();
 	void SetFitGrid(bool _bIsFit);
+	void SetFitX(bool _bIsFit);
 	void SetTexName(wstring _wstrTex);
 
 protected:
@@ -49,6 +50,7 @@ protected:
 	bool					m_bIsPicked;
 	bool					m_bSetted;
 	bool					m_bIsFitGrid;
+	bool					m_bIsFitX;
 };
 
 #define __TOOL_TERRAIN_H__

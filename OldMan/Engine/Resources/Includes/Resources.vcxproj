@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Exports\Export_Resource.h" />
     <ClInclude Include="..\Codes\CubeCol.h" />
+    <ClInclude Include="..\Codes\CubeTex.h" />
     <ClInclude Include="..\Codes\RcCol.h" />
     <ClInclude Include="..\Codes\RcTex.h" />
     <ClInclude Include="..\Codes\ResourceMgr.h" />
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\CubeCol.cpp" />
+    <ClCompile Include="..\Codes\CubeTex.cpp" />
     <ClCompile Include="..\Codes\RcCol.cpp" />
     <ClCompile Include="..\Codes\RcTex.cpp" />
     <ClCompile Include="..\Codes\ResourceMgr.cpp" />
