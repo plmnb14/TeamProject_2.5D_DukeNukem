@@ -5,6 +5,8 @@
 #include "Layer.h"
 
 BEGIN(ENGINE)
+
+class CComponent;
 class ENGINE_DLL CScene
 {
 protected:

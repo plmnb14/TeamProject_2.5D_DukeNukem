@@ -3,7 +3,8 @@
 USING(ENGINE)
 
 CCollider::CCollider()
-	: m_pTarget(nullptr) , m_eCollisionType(ENGINE::COLLISION_AABB)
+	: m_pTarget(nullptr) , m_eCollisionType(ENGINE::COLLISION_AABB),
+	m_pVtx(nullptr)
 {
 	ZeroMemory(&m_tBoxCollider, sizeof(BOXCOL));
 }
@@ -17,6 +18,39 @@ void CCollider::LateUpdate(D3DXVECTOR3 _Pos)
 	Set_CenterPos(_Pos);
 	Set_UnderPos();
 	SetUp_Box();
+}
+
+void CCollider::Set_CollisionVertex(ENGINE::CTransform* pTarget, ENGINE::VTX_TEX* pTerrainVtx)
+{
+	m_pVtx = pTerrainVtx;
+}
+
+void CCollider::Set_PlaneVtx(float* _Angle, D3DXMATRIX _World)
+{
+	D3DXVECTOR3 tmpPos = m_tBoxCollider.vCenterPos;
+	D3DXVECTOR3 tmpRad = m_tBoxCollider.vRadius;
+	D3DXVECTOR3 tmpPlaneVtx[4] = {};
+
+	tmpPlaneVtx[0] = { -tmpRad.x, tmpRad.y , -tmpRad.z };
+	tmpPlaneVtx[1] = { tmpRad.x, tmpRad.y , tmpRad.z };
+	tmpPlaneVtx[2] = { tmpRad.x, -tmpRad.y , tmpRad.z };
+	tmpPlaneVtx[3] = { -tmpRad.x, -tmpRad.y , -tmpRad.z };
+
+	//m_vPlaneVtx[0] = { tmpPos.x - tmpRad.x, tmpPos.y + tmpRad.y , tmpPos.z };
+	//m_vPlaneVtx[1] = { tmpPos.x + tmpRad.x, tmpPos.y + tmpRad.y , tmpPos.z };
+	//m_vPlaneVtx[2] = { tmpPos.x + tmpRad.x, tmpPos.y - tmpRad.y , tmpPos.z };
+	//m_vPlaneVtx[3] = { tmpPos.x - tmpRad.x, tmpPos.y - tmpRad.y , tmpPos.z };
+
+	//m_vPlaneVtx[0].x = (cosf(_Angle[1]) * m_vPlaneVtx[0].x - sinf(_Angle[1]) * m_vPlaneVtx[0].z);
+	//m_vPlaneVtx[0].z = (sinf(_Angle[1]) * m_vPlaneVtx[0].x + cosf(_Angle[1]) * m_vPlaneVtx[0].z);
+	//
+	//m_vPlaneVtx[3].x = (cosf(_Angle[1]) * m_vPlaneVtx[3].x - sinf(_Angle[1]) * m_vPlaneVtx[3].z);
+	//m_vPlaneVtx[3].z = (sinf(_Angle[1]) * m_vPlaneVtx[3].x + cosf(_Angle[1]) * m_vPlaneVtx[3].z);
+
+	for (int i = 0; i < 4; i++)
+	{
+		D3DXVec3TransformCoord(&m_vPlaneVtx[i], &tmpPlaneVtx[i], &_World);
+	}
 }
 
 void CCollider::SetUp_Box()

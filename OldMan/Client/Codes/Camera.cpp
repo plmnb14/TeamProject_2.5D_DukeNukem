@@ -255,7 +255,7 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 		case LAND_MODE:
 		{
 			D3DXVECTOR3 vTemp_TargetPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
-			m_pCCamera_Component->Set_EyePos({ vTemp_TargetPos.x, vTemp_TargetPos.y + 1.5f ,vTemp_TargetPos.z });
+			m_pCCamera_Component->Set_EyePos({ vTemp_TargetPos.x, vTemp_TargetPos.y + 2.5f ,vTemp_TargetPos.z });
 			m_pCCamera_Component->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y + 2.5f ,vTemp_TargetPos.z + 1 });
 		}
 
@@ -423,10 +423,15 @@ void CCamera::SetUp_MouseRotate()
 		D3DXVECTOR3 tmpEyePos;
 		
 		m_fY_Angle = tmpPT.y * 0.3f;
-		m_fX_OriginYAngle = m_pCCamera_Component->Get_Look().y * -90;
+		m_fX_OriginYAngle += m_fY_Angle;
 		
-		if (m_fX_OriginYAngle <= -90 || m_fX_OriginYAngle >= 90)
-			m_fX_OriginYAngle = 0;
+		//dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->MoveAngle(ENGINE::ANGLE_X, m_fY_Angle);
+
+		if (m_fX_OriginYAngle <= -80)
+			m_fX_OriginYAngle = -80;
+
+		if (m_fX_OriginYAngle >= 80)
+			m_fX_OriginYAngle = 80;
 		
 		D3DXMatrixRotationAxis(&matRot, &m_pCCamera_Component->Get_Right(), D3DXToRadian(m_fY_Angle));
 		memcpy(&matRot._41, &m_pCCamera_Component->Get_LookAt(), sizeof(D3DXVECTOR3));

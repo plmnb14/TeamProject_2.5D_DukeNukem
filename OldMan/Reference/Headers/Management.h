@@ -6,6 +6,7 @@
 
 BEGIN(ENGINE)
 
+class CComponent;
 class CLayer;
 class ENGINE_DLL CManagement
 {
@@ -20,6 +21,8 @@ public:
 	void Update();
 	void LateUpdate();
 	void Render();
+
+public:
 
 private:
 	void Release();

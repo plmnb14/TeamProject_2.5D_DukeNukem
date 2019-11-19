@@ -63,11 +63,13 @@ private:
 	ENGINE::CCollider*		m_pGroundChekCollider;
 	ENGINE::CRigidBody*		m_pRigid;
 
+	ENGINE::VTX_TEX*		m_myVtx;
+
 	ENGINE::CCameraSubject*	m_pSubject;
 	CCameraObserver*		m_pObserver;
 
 	WEAPON					m_eWeaponState;
-	float					m_time;
+
 };
 
 #define __PLAYER_H__
