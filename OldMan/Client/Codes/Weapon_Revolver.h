@@ -2,7 +2,7 @@
 
 #ifndef __WEAPON_REVOLVER__
 
-#include "GameObject.h"
+#include "Weapon.h"
 
 namespace ENGINE
 {
@@ -18,7 +18,7 @@ namespace ENGINE
 }
 
 class CCameraObserver;
-class CWeapon_Revolver : public ENGINE::CGameObject
+class CWeapon_Revolver : public CWeapon
 {
 private:
 	explicit CWeapon_Revolver(LPDIRECT3DDEVICE9 pGraphicDev);

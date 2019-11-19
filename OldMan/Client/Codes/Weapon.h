@@ -36,15 +36,6 @@ private:
 	virtual HRESULT LateInit();
 	virtual void Release() override;
 
-private:
-	HRESULT AddComponent();
-
-public:
-	void Set_Pos(D3DXVECTOR3 _Pos);
-
-public:
-	void Physic();
-
 public:
 	static CWeapon_Revolver* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos);
 
