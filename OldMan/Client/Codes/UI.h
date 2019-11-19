@@ -34,6 +34,9 @@ protected:
 	virtual void Release() override;
 
 public:
+	D3DXVECTOR3 GetPos();
+
+public:
 	void ChangeTex(wstring _wstrTex);
 	void SetSize(float _fSizeX, float _fSizeY);
 	void SetPos(D3DXVECTOR3 _vPos);

@@ -10,12 +10,14 @@
 
 #include "Door.h"
 #include "Elevator.h"
+#include "Skybox.h"
 
 #include "Camera.h"
 #include "Monster.h"
 
 #include "UI.h"
 #include "Number.h"
+#include "Aim.h"
 
 #include "Trasform.h"
 #include "Weapon_Revolver.h"
@@ -110,6 +112,17 @@ HRESULT CStage::Add_Object_Layer()
 	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
 
+	// Skybox
+	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_sky.dds", pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Skybox Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+
+	//// Camera
+	//pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
+	//pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
+
 	return S_OK;
 }
 
@@ -121,12 +134,10 @@ HRESULT CStage::Add_UI_Layer()
 	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
 
 	// Aim
-	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1.png");
+	ENGINE::CGameObject* pObject = CAim::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(35.f, 35.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f)); // Center (Default)
 
 	// HP
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);

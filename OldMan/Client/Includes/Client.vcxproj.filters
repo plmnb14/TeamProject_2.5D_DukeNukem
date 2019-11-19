@@ -76,11 +76,17 @@
     <Filter Include="02.GameObject\01.MapObject\01.Object\00.Door">
       <UniqueIdentifier>{258afe6b-a693-4b65-82e4-d07e64af7ac2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\06.Weapon">
-      <UniqueIdentifier>{688d4201-50a2-4b9a-8aff-8bff494f4e64}</UniqueIdentifier>
+    <Filter Include="02.GameObject\01.MapObject\02.Skybox">
+      <UniqueIdentifier>{234bc33b-5e4b-4fc3-873d-af308246adfd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\06.Weapon\00. Revolver">
-      <UniqueIdentifier>{d9db9cc0-d2d7-4676-8d98-a9ad803e09c1}</UniqueIdentifier>
+    <Filter Include="02.GameObject\99.UI\01.Aim">
+      <UniqueIdentifier>{81c48dbf-2f76-452c-8644-0b3dc192203f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Weapon">
+      <UniqueIdentifier>{a4d40683-0154-4f93-81b7-0b46cddbb7ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Weapon\00.Revolver">
+      <UniqueIdentifier>{00e78a05-926d-433d-af60-6feb64810df7}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\06.Weapon\01. SMG">
       <UniqueIdentifier>{bbadecbc-f28b-4194-af7b-6b827618818e}</UniqueIdentifier>
@@ -171,14 +177,17 @@
     <ClInclude Include="..\Codes\Elevator.h">
       <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Raycast.h">
-      <Filter>02.GameObject</Filter>
+    <ClInclude Include="..\Codes\Skybox.h">
+      <Filter>02.GameObject\01.MapObject\02.Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Aim.h">
+      <Filter>02.GameObject\99.UI\01.Aim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Weapon_Revolver.h">
+      <Filter>02.GameObject\06.Weapon\00.Revolver</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Weapon.h">
       <Filter>02.GameObject\06.Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Codes\Weapon_Revolver.h">
-      <Filter>02.GameObject\06.Weapon\00. Revolver</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Weapon_SMG.h">
       <Filter>02.GameObject\06.Weapon\01. SMG</Filter>
@@ -245,14 +254,17 @@
     <ClCompile Include="..\Codes\Elevator.cpp">
       <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Raycast.cpp">
-      <Filter>02.GameObject</Filter>
+    <ClCompile Include="..\Codes\Skybox.cpp">
+      <Filter>02.GameObject\01.MapObject\02.Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aim.cpp">
+      <Filter>02.GameObject\99.UI\01.Aim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon_Revolver.cpp">
+      <Filter>02.GameObject\06.Weapon\00.Revolver</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Weapon.cpp">
       <Filter>02.GameObject\06.Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Weapon_Revolver.cpp">
-      <Filter>02.GameObject\06.Weapon\00. Revolver</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Weapon_SMG.cpp">
       <Filter>02.GameObject\06.Weapon\01. SMG</Filter>

@@ -146,6 +146,11 @@ void CUI::Release()
 	ENGINE::Safe_Delete(m_pCameraObserver);
 }
 
+D3DXVECTOR3 CUI::GetPos()
+{
+	return m_vPos;
+}
+
 HRESULT CUI::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
