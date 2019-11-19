@@ -20,6 +20,14 @@ namespace ENGINE
 
 	const DWORD VTXFVF_TEX = D3DFVF_XYZ | D3DFVF_TEX1 ;
 
+	typedef struct tagVertexCube
+	{
+		D3DXVECTOR3 vPos;
+		D3DXVECTOR3 vTex;
+	}VTX_CUBE;
+
+	const DWORD VTXFVF_CUBE = D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_TEXCOORDSIZE3(0);
+
 	typedef struct tagIndex16
 	{
 		WORD _1, _2, _3;

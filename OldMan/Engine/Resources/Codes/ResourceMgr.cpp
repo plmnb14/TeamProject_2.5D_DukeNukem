@@ -6,6 +6,7 @@
 #include "TerrainTex.h"
 #include "CubeCol.h"
 #include "WallCubeCol.h"
+#include "CubeTex.h"
 
 USING(ENGINE)
 
@@ -76,6 +77,9 @@ HRESULT CResourceMgr::AddBuffer(
 		break;
 	case CVIBuffer::BUFFER_WALLCUBECOL:
 		pResource = CWallCubeCol::Create(pGraphicDev);
+		break;
+	case CVIBuffer::BUFFER_CUBETEX:
+		pResource = CCubeTex::Create(pGraphicDev);
 		break;
 	}
 

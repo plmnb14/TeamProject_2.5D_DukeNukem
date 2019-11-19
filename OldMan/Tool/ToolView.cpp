@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(CToolView, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_RBUTTONDOWN()
 	ON_WM_KEYDOWN()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 // CToolView 생성/소멸
@@ -200,9 +201,8 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 		CreateCube(false);
 	}
 
-	m_vBeforeMousePos = D3DXVECTOR3((float)point.x, (float)point.y, 0.f);
-	m_fDragX = 0.f;
-	m_fDragY = 0.f;
+	m_vLastPickedCubePos = D3DXVECTOR3((float)point.x, (float)point.y, 0.f);
+	m_bIsMousePressing = true;
 }
 
 
@@ -306,13 +306,27 @@ void CToolView::LoadTexture()
 	// Single은 FileName
 	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
 	{
-		hr = m_pResourceMgr->AddTexture(
-			m_pDeviceMgr->GetDevice(),
-			ENGINE::RESOURCE_DYNAMIC,
-			ENGINE::TEX_NORMAL,
-			iter->wstrFileName,
-			iter->wstrImgPath, 1);
-		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		CString strCheckDDS = iter->wstrFileName.c_str();
+		if (strCheckDDS.Find(L".dds") > 0)
+		{
+			hr = m_pResourceMgr->AddTexture(
+				m_pDeviceMgr->GetDevice(),
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_CUBE,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
+		else
+		{
+			hr = m_pResourceMgr->AddTexture(
+				m_pDeviceMgr->GetDevice(),
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_NORMAL,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
 	}
 }
 
@@ -345,6 +359,13 @@ HRESULT CToolView::Initialize()
 		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
+
+	hr = m_pResourceMgr->AddBuffer(
+		m_pDeviceMgr->GetDevice(),
+		ENGINE::RESOURCE_STATIC,
+		ENGINE::CVIBuffer::BUFFER_CUBETEX,
+		L"Buffer_CubeTex");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
 
 	cout << "Load Texture" << endl;
 	LoadTexture();
@@ -541,36 +562,18 @@ void CToolView::DragPicking(float _fPointX, float _fPointY)
 {
 	// Drag Picking
 	// 임시 (Ray로 옆면 벗어났는지 체크하는 것으로 수정하기)
-	if (::GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) && m_pSelectCube)
 	{
-		D3DXVECTOR3 vMouse = { float(_fPointX), float(_fPointY), 0.f };
-
-		m_fDragX += vMouse.x - m_vBeforeMousePos.x;
-		m_fDragY += vMouse.y - m_vBeforeMousePos.y;
-		m_vBeforeMousePos = vMouse;
-
-		// 타일 사이즈만큼 움직였는지 체크
 		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
-		float fTestMul = 100.f;
-		float fSizeX = pTransform->GetSize().x * 2.f * fTestMul;
-		float fSizeY = pTransform->GetSize().y * 2.f * fTestMul;
-
-		if (abs(m_fDragX) >= fSizeX)
+		if (m_vLastPickedCubePos.x >= pTransform->GetPos().x + 2
+			|| m_vLastPickedCubePos.x <= pTransform->GetPos().x - 2)
 		{
-			m_fDragX = 0.f;
-			m_vBeforeMousePos = vMouse;
+			m_vLastPickedCubePos = pTransform->GetPos();
 
 			m_pSelectCube->SetClicked();
 			CreateCube(false);
 		}
-		else if(abs(m_fDragY) >= fSizeY)
-		{
-			m_fDragY = 0.f;
-			m_vBeforeMousePos = vMouse;
 
-			m_pSelectCube->SetClicked();
-			CreateCube(false);
-		}
 	}
 
 	CView::Invalidate(FALSE); // 화면 갱신
@@ -664,4 +667,12 @@ void CToolView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		);
 		pFormView->EditDataExchange();
 	}
+}
+
+void CToolView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CView::OnLButtonUp(nFlags, point);
+	m_bIsMousePressing = false;
 }

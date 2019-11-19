@@ -1,1 +1,2 @@
-//MonsterName(enum)|wstrTex
+Monster|MyMonsterTest|monster_0.png|1|..\Client\Texture\Monster\monster_0.png
+Monster|MyMonsterTest2|monster_1.png|1|..\Client\Texture\Monster\monster_1.png

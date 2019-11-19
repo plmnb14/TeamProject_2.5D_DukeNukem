@@ -67,7 +67,7 @@ HRESULT CTextureMgr::LoadTextureFromImgPath(const wstring& wstrImgPath)
 		if (fin.eof())
 			break;
 
-		if (!lstrcmp(szObjectKey, L"No_Animaition"))
+		if (!lstrcmp(szObjectKey, L"No_Animation"))
 		{
 			HRESULT hr = LoadTexture(SINGLE_TEXTURE, szImgPath,
 				szFileName);

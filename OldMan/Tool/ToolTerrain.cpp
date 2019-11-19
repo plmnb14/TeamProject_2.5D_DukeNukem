@@ -33,6 +33,11 @@ void CToolTerrain::SetFitGrid(bool _bIsFit)
 	m_bIsFitGrid = _bIsFit;
 }
 
+void CToolTerrain::SetFitX(bool _bIsFit)
+{
+	m_bIsFitX = true;
+}
+
 void CToolTerrain::SetTexName(wstring _wstrTex)
 {
 	m_wstrTex = _wstrTex;

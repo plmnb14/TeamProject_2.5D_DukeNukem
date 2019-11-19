@@ -7,6 +7,7 @@ CDoor::CDoor(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
+	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_eTerrainType(ENGINE::TERRAIN_END),
 	m_bIsOpened(false)
@@ -28,8 +29,8 @@ int CDoor::Update()
 	Move();
 
 	// юс╫ц
-	if (GetAsyncKeyState('Z') & 0x8000)
-		m_bIsOpened = !m_bIsOpened;
+	//if (m_pKeyMgr->KeyDown(ENGINE::KEY_LCTRL))
+	//	m_bIsOpened = !m_bIsOpened;
 
 	return NO_EVENT;
 }
@@ -98,7 +99,7 @@ HRESULT CDoor::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Tile256x256_15");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Tile256x256_15.png");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

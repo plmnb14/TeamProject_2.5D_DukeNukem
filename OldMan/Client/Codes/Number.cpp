@@ -116,7 +116,7 @@ HRESULT CNumber::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Tile256x256_0");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Tile256x256_0.png");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -180,7 +180,7 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount)
 		_iNumber /= 10;
 
 		TCHAR _szNum[MIN_STR];
-		swprintf_s(_szNum, L"Number_%d", _iArr[i]);
+		swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
 		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
 	}
 }
