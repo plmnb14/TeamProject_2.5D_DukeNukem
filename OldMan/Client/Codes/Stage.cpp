@@ -110,11 +110,11 @@ HRESULT CStage::Add_Object_Layer()
 	NULL_CHECK_MSG_RETURN(pObject, L"Skybox Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
 
-	// Camera
-	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
-	pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
+	//// Camera
+	//pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
+	//pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
 
 	return S_OK;
 }

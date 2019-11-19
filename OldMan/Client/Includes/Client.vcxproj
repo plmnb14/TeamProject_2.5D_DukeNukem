@@ -177,6 +177,10 @@
     <ClInclude Include="..\Codes\TerrainRect.h" />
     <ClInclude Include="..\Codes\TerrainWallCube.h" />
     <ClInclude Include="..\Codes\UI.h" />
+    <ClInclude Include="..\Codes\Weapon.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Weapon_Revolver.h" />
     <ClInclude Include="..\Headers\Define.h" />
     <ClInclude Include="..\Headers\Extern.h" />
     <ClInclude Include="..\Headers\Function.h" />
@@ -210,6 +214,10 @@
     <ClCompile Include="..\Codes\TerrainRect.cpp" />
     <ClCompile Include="..\Codes\TerrainWallCube.cpp" />
     <ClCompile Include="..\Codes\UI.cpp" />
+    <ClCompile Include="..\Codes\Weapon.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon_Revolver.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
