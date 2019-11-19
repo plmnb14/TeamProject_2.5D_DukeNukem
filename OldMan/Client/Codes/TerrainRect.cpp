@@ -27,6 +27,7 @@ void CTerrainRect::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
+	m_pCollider->Set_PlaneVtx(m_pTransform->GetAllAngle() , m_pTransform->GetWorldMatrix());
 }
 
 void CTerrainRect::Render()
@@ -57,6 +58,7 @@ HRESULT CTerrainRect::Initialize()
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+	m_pCollider->Set_Type(ENGINE::COLLISION_PLANE);
 
 	return S_OK;
 }
@@ -121,6 +123,15 @@ HRESULT CTerrainRect::AddComponent()
 
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+
+	// Terrain 버텍스
+	ENGINE::CVIBuffer* pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(this->Get_Component(L"Buffer"));
+	m_myVtx = new ENGINE::VTX_TEX[4];
+	pBuffer->GetVertexInfo(m_myVtx);
+	m_pCollider->Set_CollisionVertex(m_pTransform, m_myVtx);
+
+
 
 	return S_OK;
 }

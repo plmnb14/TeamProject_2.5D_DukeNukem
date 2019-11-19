@@ -20,6 +20,7 @@ public:
 	const D3DXVECTOR3& GetSize() const;
 	const D3DXMATRIX& GetWorldMatrix() const;
 	const float& GetAngle(ANGLE_TYPE eAxis) const;
+	float* GetAllAngle();
 
 public:
 	void SetPos(const D3DXVECTOR3& vPos);

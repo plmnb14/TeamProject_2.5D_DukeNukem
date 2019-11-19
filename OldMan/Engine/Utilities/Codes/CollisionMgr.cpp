@@ -52,10 +52,12 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
 			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
-			if(Check_AABB(rDst, rSrc , rDstCol , rSrcCol))
+			if(Check_AABB_to_PLANE(rDst, rSrc , rDstCol , rSrcCol))
 			{
- 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
-				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
+				cout << "진짜 겹친다고!" << endl;
+				rSrcCol->Set_IsCollision(true);
+ 				//rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
+				//rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
 			}
 		}
 	}
@@ -68,6 +70,7 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 		for (auto& rSrc : rSrcList)
 		{
 			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rDstGCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
 			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
 			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
@@ -77,6 +80,17 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 			{
 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
+
+
+				rDstCol->LateUpdate(rDstTrans->GetPos());
+				rDstGCol->LateUpdate({ rDstTrans->GetPos().x ,
+					rDstTrans->GetPos().y - rDstCol->Get_Radius().y,
+					rDstTrans->GetPos().z });
+
+				rSrcCol->LateUpdate(rSrcTrans->GetPos());
+
+				rDstCol->Set_Length({ 0,0,0 });
+				rSrcCol->Set_Length({ 0,0,0 });
 			}
 		}
 	}
@@ -93,7 +107,8 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				cout << "충돌체크 됩니다" << endl;
+				if (dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Get_IsJump())
+					return;
 
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_Accel({ 0,0,0 });
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsJump(false);
@@ -101,11 +116,12 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsAir(false);
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
 
+				cout << "응! 닿음!" << endl;
 				return;
 			}
 		}
 
-		cout << "충돌 안함" << endl;
+		cout << "땅에 닿지 않음" << endl;
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 	}
@@ -113,6 +129,9 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* rSrc, CCollider* _rDstCol , CCollider* _rSrcCol)
 {
+	if (_rSrcCol->Get_CollisionType() != ENGINE::COLLISION_AABB)
+		return false;
+
 	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
 	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
 
@@ -176,6 +195,246 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 
 
 		return false;
+	}
+
+	return false;
+}
+
+bool CCollisionMgr::Check_AABB_to_PLANE(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc, CCollider* _rDstCol, CCollider* _rSrcCol)
+{
+	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
+	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
+
+	ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+	ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+
+	D3DXVECTOR3* tmpVtx =  _rSrcCol->Get_PlaneVtx();
+	D3DXVECTOR3 tmpMax , tmpMin;
+	
+	
+	D3DXPLANE tmpPlane;
+	D3DXPlaneFromPoints(&tmpPlane, &tmpVtx[0] , &tmpVtx[1] , &tmpVtx[2]);
+
+	if (rSrcTrans->GetDir().x >= 0)
+	{
+		tmpMax.x = rDstBox->vMaxPos.x;
+		tmpMin.x = rDstBox->vMinPos.x;
+	}
+	
+	else
+	{
+		tmpMax.x = rDstBox->vMinPos.x;
+		tmpMin.x = rDstBox->vMaxPos.x;
+	}
+
+
+	if (rSrcTrans->GetDir().y >= 0)
+	{
+		tmpMax.y = rDstBox->vMaxPos.y;
+		tmpMin.y = rDstBox->vMinPos.y;
+	}
+
+	else
+	{
+		tmpMax.y = rDstBox->vMinPos.y;
+		tmpMin.y = rDstBox->vMaxPos.y;
+	}
+
+
+	if (rSrcTrans->GetDir().z >= 0)
+	{
+		tmpMax.z = rDstBox->vMaxPos.z;
+		tmpMin.z = rDstBox->vMinPos.z;
+	}
+
+	else
+	{
+		tmpMax.z = rDstBox->vMinPos.z;
+		tmpMin.z = rDstBox->vMaxPos.z;
+	}
+	
+	if (D3DXPlaneDotCoord(&tmpPlane, &tmpMin) < 0)
+	{
+		cout << " 뒤에 있어" << endl;
+		return false;
+	}
+	
+	else if (D3DXPlaneDotCoord(&tmpPlane, &tmpMax) > 0)
+	{
+		cout << " 앞에 있어" << endl;
+		return false;
+	}
+
+	else
+	{
+		cout << "겹 친다" << endl;
+		return true;
+	}
+
+	return false;
+}
+
+bool CCollisionMgr::Check_Collision(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc, CCollider* _rDstCol, CCollider* _rSrcCol)
+{
+	if(_rDstCol->Get_CollisionType() == ENGINE::COLLISION_LINE)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
+
+	if (_rDstCol->Get_CollisionType() == ENGINE::COLLISION_PLANE)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
+
+	if (_rDstCol->Get_CollisionType() == ENGINE::COLLISION_AABB)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			if (Check_AABB(rDst, rSrc, _rDstCol, _rSrcCol))
+			{
+				return true;
+			}
+
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
+
+	if (_rDstCol->Get_CollisionType() == ENGINE::COLLISION_SHPERE)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
+	}
+
+	if (_rDstCol->Get_CollisionType() == ENGINE::COLLISION_CAPSHULE)
+	{
+		switch (_rSrcCol->Get_CollisionType())
+		{
+		case ENGINE::COLLISION_LINE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_PLANE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_AABB:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_SHPERE:
+		{
+			break;
+		}
+
+		case ENGINE::COLLISION_CAPSHULE:
+		{
+			break;
+		}
+		}
 	}
 
 	return false;

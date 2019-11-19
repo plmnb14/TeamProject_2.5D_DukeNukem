@@ -77,18 +77,18 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	// Door Test
-	pObject = CDoor::Create(m_pGraphicDev);
-	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
-	pObject = CDoor::Create(m_pGraphicDev);
-	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
-	dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"))->SetPos(D3DXVECTOR3(2.f, 2.f, -10.f));
-
-	// Elevator Test
-	pObject = CElevator::Create(m_pGraphicDev);
-	NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
+	//pObject = CDoor::Create(m_pGraphicDev);
+	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
+	//pObject = CDoor::Create(m_pGraphicDev);
+	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
+	//dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"))->SetPos(D3DXVECTOR3(2.f, 2.f, -10.f));
+	//
+	//// Elevator Test
+	//pObject = CElevator::Create(m_pGraphicDev);
+	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());

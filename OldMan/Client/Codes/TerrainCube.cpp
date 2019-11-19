@@ -55,6 +55,7 @@ HRESULT CTerrainCube::Initialize()
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
 
 	return S_OK;
 }

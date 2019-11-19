@@ -30,8 +30,6 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
-	cout << m_pTransform->GetPos().y << endl;
-
 	if (m_bIsDead)
 		return DEAD_OBJ;
 	
@@ -47,10 +45,11 @@ void CPlayer::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 
-	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
-										m_pTransform->GetPos().y - m_pGroundChekCollider->Get_Radius().y,
-										m_pTransform->GetPos().z });
+	Physic();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
+	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+										m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+										m_pTransform->GetPos().z });
 	m_pCollider->Set_IsCollision(false);
 }
 
@@ -66,7 +65,7 @@ HRESULT CPlayer::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 
@@ -79,11 +78,11 @@ HRESULT CPlayer::Initialize()
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 
 	// 트리거 콜라이더
-	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.6f, 0.3f });
+	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.2f, 0.3f });
 	m_pGroundChekCollider->Set_Dynamic(true);
 	m_pGroundChekCollider->Set_Trigger(true);
 	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
-										   m_pTransform->GetPos().y - m_pGroundChekCollider->Get_Radius().y,
+										   m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 										   m_pTransform->GetPos().z });
 	m_pGroundChekCollider->Set_UnderPos();
 	m_pGroundChekCollider->SetUp_Box();
@@ -95,6 +94,7 @@ HRESULT CPlayer::Initialize()
 	m_pRigid->Set_IsGround(false);							// 지상인지 체크
 	m_pRigid->Set_IsAir(true);								// 공중인지 체크
 	m_pRigid->Set_IsFall(true);								// 낙하중인지 체크
+	m_pRigid->Set_IsJump(false);
 
 	m_pRigid->Set_fMass(1.f);								// 물체의 무게
 	m_pRigid->Set_fPower(5.f);								// 점프 파워
@@ -276,38 +276,17 @@ void CPlayer::Shoot()
 
 	if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 	{
-		D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 3 - 2 * tmpUp.x + tmpRight.x * 2,
-			dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 3 - 2 * tmpUp.y + tmpRight.y * 2,
-			dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 3 - 2 * tmpUp.z + tmpRight.z * 2 };
-
-		//D3DXVECTOR3 vRight2 = dynamic_cast<CCamera*>(m_pCamera)->Get_Right();
-		//D3DXVECTOR3 vUp2 = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
-		//D3DXVECTOR3 vLook2 = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
-		//
-		//D3DXVec3Normalize(&vLook2, &vLook2);
-		//
-		//D3DXVec3Cross(&vRight2, &vUp2, &vLook2);
-		//D3DXVec3Normalize(&vRight2, &vRight2);
-		//
-		//D3DXVec3Cross(&vUp2, &vLook2, &vRight2);
-		//D3DXVec3Normalize(&vUp2, &vUp2);
-
-		//float Monster_Dot = D3DXVec3Dot(&vMonsterDir_Fowrd, &m_MonsterDir);
-		//D3DXVec3Cross(&m_MonsterCroos, &m_MonsterDir, &vMonsterDir_Fowrd);
-		//// 양수일때 왼쪽 음수일때 오른쪽 이다. y 값이 반영되면 된다. 
-		//m_MoveSpeed = 3.f * m_pTimeMgr->GetDelta();   // 속도
+		D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 2 * tmpUp.x + tmpRight.x * 2,
+			dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 2 * tmpUp.y + tmpRight.y * 2,
+			dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 2 * tmpUp.z + tmpRight.z * 2 };
 
 		float fAngle[3];
 
-		//fAngle[0] = D3DXToDegree(vRight2.x);
-		//fAngle[1] = D3DXToDegree(vUp2.y);
-		//fAngle[2] = 0;
-
-		fAngle[0] = dynamic_cast<CCamera*>(m_pCamera)->Get_YAngle();
-		fAngle[1] = dynamic_cast<CCamera*>(m_pCamera)->Get_XAngle();
+		fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 96;
+		fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) - 6;
 		fAngle[2] = 0;
 
-		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle);
+		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
 	}
 

@@ -26,7 +26,7 @@ int CBullet::Update()
 
 	ENGINE::CGameObject::Update();
 
-	m_pTransform->MovePos(0.5f);
+	m_pTransform->MovePos(2.5f);
 
 	KeyInput();
 
@@ -50,7 +50,7 @@ HRESULT CBullet::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	m_pTransform->SetSize(D3DXVECTOR3(0.2f, 0.2f, 0.2f));
 
 	return S_OK;
 }
