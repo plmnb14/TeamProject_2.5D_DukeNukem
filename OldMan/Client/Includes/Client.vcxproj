@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Codes\Aim.h" />
     <ClInclude Include="..\Codes\Bullet.h" />
     <ClInclude Include="..\Codes\Camera.h" />
     <ClInclude Include="..\Codes\CameraObserver.h">
@@ -169,6 +170,7 @@
     <ClInclude Include="..\Codes\Player.h" />
     <ClInclude Include="..\Codes\PlayerObserver.h" />
     <ClInclude Include="..\Codes\SceneSelector.h" />
+    <ClInclude Include="..\Codes\Skybox.h" />
     <ClInclude Include="..\Codes\Stage.h" />
     <ClInclude Include="..\Codes\Terrain.h" />
     <ClInclude Include="..\Codes\TerrainCube.h" />
@@ -186,6 +188,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\Aim.cpp" />
     <ClCompile Include="..\Codes\Bullet.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp" />
     <ClCompile Include="..\Codes\CameraObserver.cpp">
@@ -200,6 +203,7 @@
     <ClCompile Include="..\Codes\Number.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\PlayerObserver.cpp" />
+    <ClCompile Include="..\Codes\Skybox.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainCube.cpp" />

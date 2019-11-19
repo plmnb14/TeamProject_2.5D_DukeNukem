@@ -76,6 +76,12 @@
     <Filter Include="02.GameObject\01.MapObject\01.Object\00.Door">
       <UniqueIdentifier>{258afe6b-a693-4b65-82e4-d07e64af7ac2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\01.MapObject\02.Skybox">
+      <UniqueIdentifier>{234bc33b-5e4b-4fc3-873d-af308246adfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\99.UI\01.Aim">
+      <UniqueIdentifier>{81c48dbf-2f76-452c-8644-0b3dc192203f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -162,6 +168,12 @@
     <ClInclude Include="..\Codes\Elevator.h">
       <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Skybox.h">
+      <Filter>02.GameObject\01.MapObject\02.Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Aim.h">
+      <Filter>02.GameObject\99.UI\01.Aim</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -223,6 +235,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Elevator.cpp">
       <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Skybox.cpp">
+      <Filter>02.GameObject\01.MapObject\02.Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aim.cpp">
+      <Filter>02.GameObject\99.UI\01.Aim</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

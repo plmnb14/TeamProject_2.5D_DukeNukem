@@ -3,8 +3,6 @@
 #include "PlayerObserver.h"
 #include "Trasform.h"
 
-USING(ENGINE)
-
 CNumber::CNumber(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CUI(pGraphicDev),
 	m_pPlayerSubject(ENGINE::GetPlayerSubject()),
@@ -58,6 +56,7 @@ int CNumber::Update()
 
 void CNumber::LateUpdate()
 {
+	ENGINE::CGameObject::LateUpdate();
 }
 
 void CNumber::Render()
