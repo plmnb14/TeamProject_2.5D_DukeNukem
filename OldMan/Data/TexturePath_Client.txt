@@ -17,7 +17,11 @@ Animation|Lava|Lava_%d.png|0|..\Texture\Tiles\Animation\Lava\Lava_%d.png
 Animation|Screen_Broke|ScreenBroke_%d.png|0|..\Texture\Tiles\Animation\Screen_Broke\ScreenBroke_%d.png
 Animation|Screen_Noise|ScreenNoise_%d.png|0|..\Texture\Tiles\Animation\Screen_Noise\ScreenNoise_%d.png
 Animation|Water|Water_%d.png|0|..\Texture\Tiles\Animation\Water\Water_%d.png
+No_Animation|dds|skybox_hell.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_hell.dds
+No_Animation|dds|skybox_redSpace.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_redSpace.dds
 No_Animation|dds|skybox_sky.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_sky.dds
+No_Animation|dds|skybox_space.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_space.dds
+No_Animation|dds|skybox_ufo.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_ufo.dds
 No_Animation|128 x 128|Tile128x128_0.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_0.png
 No_Animation|128 x 128|Tile128x128_1.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_1.png
 No_Animation|128 x 128|Tile128x128_10.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_10.png
