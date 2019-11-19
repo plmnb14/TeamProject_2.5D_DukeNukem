@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Weapon_Revolver.h"
+#include "Weapon_SMG.h"
 #include "Trasform.h"
 #include "Collider.h"
 #include "RigidBody.h"
@@ -8,17 +8,17 @@
 #include "Billborad.h"
 #include "Player.h"
 
-CWeapon_Revolver::CWeapon_Revolver(LPDIRECT3DDEVICE9 pGraphicDev)
+CWeapon_SMG::CWeapon_SMG(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CWeapon(pGraphicDev)
 {
 	//ZeroMemory(m_pWInfo, sizeof(ENGINE::W_INFO));
 }
 
-CWeapon_Revolver::~CWeapon_Revolver()
+CWeapon_SMG::~CWeapon_SMG()
 {
 }
 
-int CWeapon_Revolver::Update()
+int CWeapon_SMG::Update()
 {
 	if (m_bIsDead)
 	{
@@ -32,7 +32,7 @@ int CWeapon_Revolver::Update()
 	return NO_EVENT;
 }
 
-void CWeapon_Revolver::LateUpdate()
+void CWeapon_SMG::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 
@@ -58,33 +58,38 @@ void CWeapon_Revolver::LateUpdate()
 	m_pCollider->Set_IsCollision(false);
 }
 
-void CWeapon_Revolver::Render()
+void CWeapon_SMG::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
 }
 
-HRESULT CWeapon_Revolver::Initialize()
+HRESULT CWeapon_SMG::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 
 	m_pWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
-	m_pWInfo.fInterval = 0.2f;				// 발사 간격
+	m_pWInfo.fInterval = 0.02f;				// 발사 간격
 	m_pWInfo.fKnockBack_Value = 0.1f;		// 저지력
 
-	m_pWInfo.wMaxBullet = 128;				// 최대 탄환 수
+	m_pWInfo.wMaxBullet = 512;				// 최대 탄환 수
 	m_pWInfo.wUseBullet = 1;				// 한번 발사 당 소모 탄환 수
-	m_pWInfo.wCurBullet = 36;				// 현재  수, 최초 획득 시 탄창 수
-	m_pWInfo.wMagazineSize = 12;			// 한 탄창 최대 보관 수
-	m_pWInfo.wMagazineBullet = 12;			// 현재 탄창의 총알 개수
+	m_pWInfo.wCurBullet = 256;				// 현재  수, 최초 획득 시 탄창 수
+	m_pWInfo.wMagazineSize = 40;			// 한 탄창 최대 보관 수
+	m_pWInfo.wMagazineBullet = 40;			// 현재 탄창의 총알 개수
 
-	m_pWInfo.fVertical_Rebound = 0.1f;		// 수직 반동
-	m_pWInfo.fHorizontal_Rebound = 2.f;		// 수평 반동
+	m_pWInfo.fVertical_Rebound = 0.4f;		// 수직 반동
+	m_pWInfo.fHorizontal_Rebound = 0.4f;		// 수평 반동
 
-	m_pWInfo.wWeaponDamage = 3;				// 무기 데미지
-	m_pWInfo.eWeaponTag = ENGINE::REVOLVER;
+	m_pWInfo.fSpread_X = 50;
+	m_pWInfo.fSpread_Y = 50;
+
+	m_pWInfo.fBullet_Speed = 300.f;
+
+	m_pWInfo.wWeaponDamage = 2;				// 무기 데미지
+	m_pWInfo.eWeaponTag = ENGINE::SMG;
 
 
 	// 트랜스폼 세팅
@@ -129,7 +134,7 @@ HRESULT CWeapon_Revolver::Initialize()
 	return S_OK;
 }
 
-HRESULT CWeapon_Revolver::LateInit()
+HRESULT CWeapon_SMG::LateInit()
 {
 	m_pObserver = CCameraObserver::Create();
 	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
@@ -139,11 +144,11 @@ HRESULT CWeapon_Revolver::LateInit()
 	return S_OK;
 }
 
-void CWeapon_Revolver::Release()
+void CWeapon_SMG::Release()
 {
 }
 
-HRESULT CWeapon_Revolver::AddComponent()
+HRESULT CWeapon_SMG::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
@@ -208,12 +213,12 @@ HRESULT CWeapon_Revolver::AddComponent()
 	return S_OK;
 }
 
-void CWeapon_Revolver::Set_Pos(D3DXVECTOR3 _Pos)
+void CWeapon_SMG::Set_Pos(D3DXVECTOR3 _Pos)
 {
 	m_pTransform->SetPos(_Pos);
 }
 
-void CWeapon_Revolver::Physic()
+void CWeapon_SMG::Physic()
 {
 	if (m_pRigid->Get_IsJump() == true)
 	{
@@ -238,19 +243,19 @@ void CWeapon_Revolver::Physic()
 	}
 }
 
-CWeapon_Revolver * CWeapon_Revolver::Create(LPDIRECT3DDEVICE9 pGraphicDev ,D3DXVECTOR3 _Pos)
+CWeapon_SMG * CWeapon_SMG::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
-	
-	CWeapon_Revolver* pInstance = new CWeapon_Revolver(pGraphicDev);
-	
+
+	CWeapon_SMG* pInstance = new CWeapon_SMG(pGraphicDev);
+
 	if (FAILED(pInstance->Initialize()))
 	{
 		ENGINE::Safe_Delete(pInstance);
 		return nullptr;
 	}
-	
+
 	pInstance->Set_Pos(_Pos);
-	
+
 	return pInstance;
 }

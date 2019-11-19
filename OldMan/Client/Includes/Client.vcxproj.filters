@@ -82,6 +82,9 @@
     <Filter Include="02.GameObject\06.Weapon\00. Revolver">
       <UniqueIdentifier>{d9db9cc0-d2d7-4676-8d98-a9ad803e09c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Weapon\01. SMG">
+      <UniqueIdentifier>{bbadecbc-f28b-4194-af7b-6b827618818e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -177,6 +180,9 @@
     <ClInclude Include="..\Codes\Weapon_Revolver.h">
       <Filter>02.GameObject\06.Weapon\00. Revolver</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Weapon_SMG.h">
+      <Filter>02.GameObject\06.Weapon\01. SMG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -247,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Weapon_Revolver.cpp">
       <Filter>02.GameObject\06.Weapon\00. Revolver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon_SMG.cpp">
+      <Filter>02.GameObject\06.Weapon\01. SMG</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -188,10 +188,18 @@ namespace ENGINE
 		float fInterval;		// 발사 간격
 		float fKnockBack_Value;	// 넉백 수치
 
+		float fVertical_Rebound;	// 수평 반동
+		float fHorizontal_Rebound;	// 수직 반동
+
 		float fMaxZoom_Value;	// 최대 줌 수치
 		float fZoom_Value;		// 줌 수치
 
 		float fDelayTimer;		// 발사, 재장전 시 타이머
+
+		float fBullet_Speed;	// 투사체일 시, 총알 속도
+
+		int fSpread_X;			// 수평 탄 퍼짐
+		int fSpread_Y;			// 수직 탄 퍼짐
 
 		BULLET_TYPE eBulletType;
 		WEAPON_TAG	eWeaponTag;

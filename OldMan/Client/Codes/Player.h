@@ -45,7 +45,12 @@ private:
 	HRESULT AddComponent();
 	void KeyInput();
 	void Physic();
+
+private:
 	void Shoot();
+	void ShootDelay();
+	void ShootType();
+	void Reload();
 	void Swap_Weapon();
 
 public:
@@ -78,7 +83,7 @@ private:
 	ENGINE::CONDITION		m_pCondition;
 
 	// 현재 장착중인 무기 정보
-	WEAPON					m_eWeaponState;
+	ENGINE::WEAPON_TAG		m_eWeaponState;
 	map<ENGINE::WEAPON_TAG, ENGINE::W_INFO*>	m_mWeaponInfo;
 	
 

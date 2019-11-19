@@ -19,6 +19,7 @@
 
 #include "Trasform.h"
 #include "Weapon_Revolver.h"
+#include "Weapon_SMG.h"
 
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -79,6 +80,12 @@ HRESULT CStage::Add_Object_Layer()
 
 	// Revolver
 	pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{-7,2,14});
+	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
+	// SMG
+	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -4,2,14 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
