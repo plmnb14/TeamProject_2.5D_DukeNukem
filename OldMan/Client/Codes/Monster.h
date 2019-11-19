@@ -14,6 +14,8 @@ namespace ENGINE
 	class CCollider;
 	class CCameraSubject;
 	class CBillborad;
+	class CRigidBody;
+
 }
 class CCameraObserver;
 class CMonster : public ENGINE::CGameObject
@@ -41,11 +43,12 @@ private:
 	HRESULT AddComponent();
 	void Player_Pursue();  //추격하다 
 	void Monster_State_Set();   //상태
-	void Monster_State_Set2();   //상태
+//	void Monster_State_Set2();   //상태
 	void Monster_Range();                           // 범위
 	void Monster_Idle();
-	void Monster_Shot();
-	void Object_Serch();
+//	void Monster_Shot();
+//	void Object_Serch();
+	void Monster_Fire();
 	
 public: 
 	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
@@ -65,12 +68,13 @@ private:
 	ENGINE::CCollider*		m_pCollider;
 	ENGINE::CCameraSubject*	m_pSubject;
 	ENGINE::CBillborad*		m_pBillborad;
+	ENGINE::CRigidBody*		m_pRigid;
 
 	float				m_fRange;                   // 범위
 	float				m_MoveSpeed;                // 속도
 	float				m_fMaxRange;                // 최대범위
 	float				m_fMinRange;                // 최소범위
-
+	float				m_fTime;
 	D3DXVECTOR3				m_MonsterDir;			// 방향 
 	D3DXVECTOR3				m_MonsterCroos;		    //외적 받을값
 	

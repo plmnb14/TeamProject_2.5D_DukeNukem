@@ -41,7 +41,7 @@ public:
 	bool Get_IsGround() { return m_tRigid.bIsGround; }
 	bool Get_IsFall() { return m_tRigid.bIsFall; }
 	bool Get_IsAir() { return m_tRigid.bIsAir; }
-
+	bool Get_IsHit() { return m_tRigid.bIsHit; }
 public:
 	float Set_Jump(D3DXVECTOR3 _TransForm, float _Time);
 	float Set_Fall(D3DXVECTOR3 _TransForm, float _Time);

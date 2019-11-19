@@ -30,7 +30,7 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
-	cout << m_pTransform->GetPos().y << endl;
+	//cout << m_pTransform->GetPos().y << endl;
 
 	if (m_bIsDead)
 		return DEAD_OBJ;
@@ -39,6 +39,8 @@ int CPlayer::Update()
 	ENGINE::CGameObject::Update();
 	KeyInput();
 	Physic();
+	m_time += m_pTimeMgr->GetDelta();
+
 
 	return NO_EVENT;
 }
@@ -182,7 +184,7 @@ HRESULT CPlayer::AddComponent()
 
 void CPlayer::KeyInput()
 {
-	float fMoveSpeed = 5.f * m_pTimeMgr->GetDelta();
+	float fMoveSpeed = 15.f * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
 	srand(unsigned(time(NULL)));
@@ -257,14 +259,14 @@ void CPlayer::Physic()
 		}
 	}
 
-	if (m_pRigid->Get_IsJump() == false)
+	/*if (m_pRigid->Get_IsJump() == false)
 	{
 		if (m_pRigid->Get_IsGround() == true && m_pRigid->Get_IsFall() == false)
 			return;
 
 		D3DXVECTOR3 JumpLength = { 0, -m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()),0 };
 		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
-	}
+	}*/
 }
 
 void CPlayer::Shoot()

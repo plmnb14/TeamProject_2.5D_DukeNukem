@@ -3,6 +3,10 @@
 #include "Camera.h"
 #include "Trasform.h"
 #include "Camera_Component.h"
+#include "Billborad.h"
+#include "CameraObserver.h"
+#include "Collider.h"
+#include "RigidBody.h"
 
 
 CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -10,7 +14,11 @@ CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
+	m_pCollider(nullptr),
+	m_pSubject(ENGINE::GetCameraSubject()),
+	m_pObserver(nullptr), m_pBillborad(nullptr), m_pRigid(nullptr)
+
 {
 }
 
@@ -23,10 +31,13 @@ int CBullet::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
-
+	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 
 	m_pTransform->MovePos(0.5f);
+	
+		
+
 
 	KeyInput();
 
@@ -36,11 +47,31 @@ int CBullet::Update()
 void CBullet::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
+	
+	D3DXMatrixIdentity(&m_matView);
+
+	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
+	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
+	Localmatrix = m_pTransform->GetWorldMatrix();
+	Cameramatrix = m_pObserver->GetViewMatrix();
+	vSize = m_pTransform->GetSize();
+
+	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
+	m_matView = m_pBillborad->GetWorldMatrix_Billborad();                                    // 빌보드에서 설정된 행렬을 받아온다. 
+
+	m_pCollider->LateUpdate(m_pTransform->GetPos());
+	m_bullet = m_pRigid->Get_IsHit();
+	if (m_bullet)
+	{
+		//cout << "sdfasdfw죽" << endl;
+		//m_bIsDead = true;
+		//m_pRigid->Set_IsHit(false);
+	}
 }
 
 void CBullet::Render()
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
 }
@@ -51,12 +82,34 @@ HRESULT CBullet::Initialize()
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	
+	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
+	m_pCollider->Set_Trigger(false);						// 트리거 유무
+	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
+	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
+	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+
+	m_pRigid->Set_IsHit(false);
 
 	return S_OK;
 }
 
+HRESULT CBullet::LateInit()
+{
+	m_pObserver = CCameraObserver::Create();
+	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
+
+	m_pSubject->Subscribe(m_pObserver);
+
+	return S_OK;
+}
+
+
 void CBullet::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 HRESULT CBullet::AddComponent()
@@ -86,6 +139,29 @@ HRESULT CBullet::AddComponent()
 
 	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
+	// collder
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Collider", pComponent });
+
+	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+	//bill
+	pComponent = ENGINE::CBillborad::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+
+	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
+	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+	// Rigid
+	pComponent = ENGINE::CRigidBody::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"RigidBody", pComponent });
+
+	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
+	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
+
+
 
 	return S_OK;
 }
