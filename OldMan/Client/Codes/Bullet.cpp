@@ -55,11 +55,6 @@ HRESULT CBullet::Initialize()
 	return S_OK;
 }
 
-HRESULT CBullet::LateInit()
-{
-	return E_NOTIMPL;
-}
-
 void CBullet::Release()
 {
 }
