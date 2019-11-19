@@ -46,6 +46,7 @@ void CManagement::LateUpdate()
 
 	CCollisionMgr::CollisionTarget_To_Ground(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
 	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionPlayer_To_Item(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::WEAPON));
 }
 
 void CManagement::Render()

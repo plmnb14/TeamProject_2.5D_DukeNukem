@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __PLAYER_H__
+#ifndef __WEAPON_H__
 
 #include "GameObject.h"
 
@@ -14,22 +14,17 @@ namespace ENGINE
 	class CCollider;
 	class CCameraSubject;
 	class CRigidBody;
+	class CBillborad;
 }
 
 class CCameraObserver;
-class CPlayer : public ENGINE::CGameObject
+class CWeapon : public ENGINE::CGameObject
 {
-public:
-	enum WEAPON
-	{
-		MELLE, REVOLVER, RIFLE, SHOTGUN, LUNCHER
-	};
-
 private:
-	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CWeapon(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
-	virtual ~CPlayer();
+	virtual ~CWeapon();
 
 public:
 	virtual int Update() override;
@@ -43,41 +38,34 @@ private:
 
 private:
 	HRESULT AddComponent();
-	void KeyInput();
-	void Physic();
-	void Shoot();
-	void Swap_Weapon();
 
 public:
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	void Set_Pos(D3DXVECTOR3 _Pos);
 
-private:	
+public:
+	void Physic();
+
+public:
+	static CWeapon_Revolver* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos);
+
+private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
-	ENGINE::CKeyMgr*		m_pKeyMgr;
-
-	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
 	ENGINE::CCollider*		m_pGroundChekCollider;
 	ENGINE::CRigidBody*		m_pRigid;
+	ENGINE::CTexture*		m_pTexture;
 
-	ENGINE::VTX_TEX*		m_myVtx;
-
-	ENGINE::CCameraSubject*	m_pSubject;
-	CCameraObserver*		m_pObserver;
-
-	// 현재 장착중인 무기 정보
 	ENGINE::W_INFO			m_pWInfo;
 
-	// 현재 플레이어의 정보 ( 체력 등 수치 값 & 각종 bool 값 )
-	ENGINE::CONDITION		m_pCondition;
-
-	WEAPON					m_eWeaponState;
-	
-
+private:
+	CCameraObserver*		m_pObserver;
+	ENGINE::CCameraSubject*	m_pSubject;
+	ENGINE::CBillborad*		m_pBillborad;
+	D3DXMATRIX              m_matView;
 };
 
-#define __PLAYER_H__
+#define __WEAPON_H__
 #endif

@@ -1,92 +1,108 @@
 #include "stdafx.h"
-#include "Player.h"
-#include "Camera.h"
+#include "Weapon_Revolver.h"
 #include "Trasform.h"
-#include "Camera_Component.h"
-#include "Bullet.h"
 #include "Collider.h"
-#include "CameraObserver.h"
 #include "RigidBody.h"
+#include "CameraObserver.h"
+#include "CameraSubject.h"
+#include "Billborad.h"
 
-
-CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
+CWeapon_Revolver::CWeapon_Revolver(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr),
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
-	m_pRigid(nullptr),
-	m_pSubject(ENGINE::GetCameraSubject()),
-	m_eWeaponState(REVOLVER),
-	m_pObserver(nullptr)
-{	
+	m_pRigid(nullptr), m_pSubject(ENGINE::GetCameraSubject()), m_pBillborad(nullptr), m_pObserver(nullptr)
+{
+	//ZeroMemory(m_pWInfo, sizeof(ENGINE::W_INFO));
 }
 
-CPlayer::~CPlayer()
+CWeapon_Revolver::~CWeapon_Revolver()
 {
-	Release();
 }
 
-int CPlayer::Update() 
+int CWeapon_Revolver::Update()
 {
-	cout << m_pTransform->GetPos().x << endl;
-	cout << m_pTransform->GetPos().y << endl;
-	cout << m_pTransform->GetPos().z << endl;
-
 	if (m_bIsDead)
 		return DEAD_OBJ;
-	
+
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
-	KeyInput();
 
 	return NO_EVENT;
 }
 
-void CPlayer::LateUpdate()
+void CWeapon_Revolver::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 
-	Physic();
+	//Physic();
+
+	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
+	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
+	Localmatrix = m_pTransform->GetWorldMatrix();
+	Cameramatrix = m_pObserver->GetViewMatrix();
+	vSize = m_pTransform->GetSize();
+
+	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
+	m_matView = m_pBillborad->GetWorldMatrix_Billborad();                                    // 빌보드에서 설정된 행렬을 받아온다. 
+
+
+
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
+
 	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
-										m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-										m_pTransform->GetPos().z });
+		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+		m_pTransform->GetPos().z });
+
 	m_pCollider->Set_IsCollision(false);
 }
 
-void CPlayer::Render()
+void CWeapon_Revolver::Render()
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
 }
 
-HRESULT CPlayer::Initialize()
+HRESULT CWeapon_Revolver::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
+
+	m_pWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
+	m_pWInfo.fInterval = 0.2f;				// 발사 간격
+	m_pWInfo.fKnockBack_Value = 0.1f;		// 저지력
+
+	m_pWInfo.wMaxBullet = 128;				// 최대 탄환 수
+	m_pWInfo.wUseBullet = 1;				// 한번 발사 당 소모 탄환 수
+	m_pWInfo.wCurBullet = 0;				// 현재 탄창 수, 최초 획득 시 탄창 수
+
+	m_pWInfo.wWeaponDamage = 3;				// 무기 데미지
+	m_pWInfo.eWeaponTag = ENGINE::REVOLVER;
+
+
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(11.f, 2.f, 13.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
-	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
-	m_pCollider->Set_Trigger(false);						// 트리거 유무
+	m_pCollider->Set_Dynamic(true);					// 동적, 정적 Collider 유무
+	m_pCollider->Set_Trigger(true);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 
-	// 트리거 콜라이더
+															// 트리거 콜라이더
 	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.2f, 0.3f });
 	m_pGroundChekCollider->Set_Dynamic(true);
 	m_pGroundChekCollider->Set_Trigger(true);
 	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
-										   m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-										   m_pTransform->GetPos().z });
+		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+		m_pTransform->GetPos().z });
 	m_pGroundChekCollider->Set_UnderPos();
 	m_pGroundChekCollider->SetUp_Box();
 
@@ -109,7 +125,7 @@ HRESULT CPlayer::Initialize()
 	return S_OK;
 }
 
-HRESULT CPlayer::LateInit()
+HRESULT CWeapon_Revolver::LateInit()
 {
 	m_pObserver = CCameraObserver::Create();
 	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
@@ -119,13 +135,11 @@ HRESULT CPlayer::LateInit()
 	return S_OK;
 }
 
-void CPlayer::Release()
+void CWeapon_Revolver::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
 }
 
-HRESULT CPlayer::AddComponent()
+HRESULT CWeapon_Revolver::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
@@ -176,76 +190,26 @@ HRESULT CPlayer::AddComponent()
 	pComponent = ENGINE::CRigidBody::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"RigidBody", pComponent });
-	
+
 	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
 	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
+
+	pComponent = ENGINE::CBillborad::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+
+	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
+	NULL_CHECK_RETURN(m_pBillborad, E_FAIL);
+	m_mapComponent.insert({ L"BillBoard", pComponent });
 
 	return S_OK;
 }
 
-void CPlayer::KeyInput()
+void CWeapon_Revolver::Set_Pos(D3DXVECTOR3 _Pos)
 {
-	float fMoveSpeed = 5.f * m_pTimeMgr->GetDelta();
-	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
-
-	srand(unsigned(time(NULL)));
-
-	float xRand = rand() % (100 - 50) * 0.01f;
-	float yRand = rand() % (100 - 50) * 0.01f;
-
-	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_LBUTTON))
-	{
-		Shoot();
-	}
-
-
-	if (GetAsyncKeyState('W'))
-	{
-		m_pTransform->MovePos(fMoveSpeed);
-	}
-
-	if (GetAsyncKeyState('S'))
-	{
-		m_pTransform->MovePos(-fMoveSpeed);
-	}
-
-	if (GetAsyncKeyState('A'))
-	{
-		D3DXVECTOR3 vDir, vWorldUp;
-		vWorldUp = { 0.f , 1.f , 0.f };
-		
-		D3DXVec3Cross(&vDir, &m_pTransform->GetDir(), &vWorldUp);
-		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z) , fMoveSpeed);
-	}
-
-	if (GetAsyncKeyState('D'))
-	{
-		D3DXVECTOR3 vDir, vWorldUp;
-		vWorldUp = { 0.f , 1.f , 0.f };
-		
-		D3DXVec3Cross(&vDir, &m_pTransform->GetDir(), &vWorldUp);
-		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z), -fMoveSpeed);
-	}
-
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-	{
-		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, -fAngleSpeed);
-	}
-
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	{
-		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
-	}
-
-	if (m_pKeyMgr->KeyDown(ENGINE::KEY_SPACE))
-	{
-		m_pRigid->Set_Accel({ 0, 1.5f, 0 });
-		m_pRigid->Set_IsJump(true);
-		m_pRigid->Set_IsGround(false);
-	}
+	m_pTransform->SetPos(_Pos);
 }
 
-void CPlayer::Physic()
+void CWeapon_Revolver::Physic()
 {
 	if (m_pRigid->Get_IsJump() == true)
 	{
@@ -270,61 +234,19 @@ void CPlayer::Physic()
 	}
 }
 
-void CPlayer::Shoot()
-{
-	D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
-	D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
-	D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
-	D3DXVECTOR3 tmpRight = dynamic_cast<CCamera*>(m_pCamera)->Get_Right();
-
-	if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
-	{
-		D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 2 * tmpUp.x + tmpRight.x * 2,
-			dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 2 * tmpUp.y + tmpRight.y * 2,
-			dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 2 * tmpUp.z + tmpRight.z * 2 };
-
-		float fAngle[3];
-
-		fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 96;
-		fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) - 6;
-		fAngle[2] = 0;
-
-		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle);
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
-	}
-
-	else if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->THIRD_PERSON)
-	{
-		D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x * 3,
-			m_pTransform->GetPos().y + 1.5f,
-			m_pTransform->GetPos().z + tmpDir.z * 3 };
-
-		float fAngle[3];
-
-		fAngle[0] = m_pTransform->GetAngle(ENGINE::ANGLE_X);
-		fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
-		fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
-
-		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle);
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
-	}
-}
-
-void CPlayer::Swap_Weapon()
-{
-}
-
-CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CWeapon_Revolver * CWeapon_Revolver::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CPlayer* pInstance = new CPlayer(pGraphicDev);
+	CWeapon_Revolver* pInstance = new CWeapon_Revolver(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{
 		ENGINE::Safe_Delete(pInstance);
 		return nullptr;
 	}
+
+	pInstance->Set_Pos(_Pos);
 
 	return pInstance;
 }

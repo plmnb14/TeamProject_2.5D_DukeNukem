@@ -135,7 +135,8 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	
 	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
-	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+	NULL_CHECK_RETURN(m_pBillborad, E_FAIL);
+	m_mapComponent.insert({ L"BillBoard", pComponent });
 
 	return S_OK;
 }

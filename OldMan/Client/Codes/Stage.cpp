@@ -18,6 +18,7 @@
 #include "Number.h"
 
 #include "Trasform.h"
+#include "Weapon_Revolver.h"
 
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -70,6 +71,18 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PLAYER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
+	// Camera
+	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
+	pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
+
+	// Revolver
+	pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{-7,2,14});
+	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
 	//// Monster
 	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
 	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
@@ -89,12 +102,6 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject = CElevator::Create(m_pGraphicDev);
 	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
-
-	// Camera
-	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
-	pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
 
 	return S_OK;
 }

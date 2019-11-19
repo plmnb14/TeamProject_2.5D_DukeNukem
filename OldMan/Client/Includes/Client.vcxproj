@@ -168,6 +168,7 @@
     <ClInclude Include="..\Codes\Number.h" />
     <ClInclude Include="..\Codes\Player.h" />
     <ClInclude Include="..\Codes\PlayerObserver.h" />
+    <ClInclude Include="..\Codes\Raycast.h" />
     <ClInclude Include="..\Codes\SceneSelector.h" />
     <ClInclude Include="..\Codes\Stage.h" />
     <ClInclude Include="..\Codes\Terrain.h" />
@@ -175,6 +176,8 @@
     <ClInclude Include="..\Codes\TerrainRect.h" />
     <ClInclude Include="..\Codes\TerrainWallCube.h" />
     <ClInclude Include="..\Codes\UI.h" />
+    <ClInclude Include="..\Codes\Weapon.h" />
+    <ClInclude Include="..\Codes\Weapon_Revolver.h" />
     <ClInclude Include="..\Headers\Define.h" />
     <ClInclude Include="..\Headers\Extern.h" />
     <ClInclude Include="..\Headers\Function.h" />
@@ -200,12 +203,15 @@
     <ClCompile Include="..\Codes\Number.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\PlayerObserver.cpp" />
+    <ClCompile Include="..\Codes\Raycast.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainCube.cpp" />
     <ClCompile Include="..\Codes\TerrainRect.cpp" />
     <ClCompile Include="..\Codes\TerrainWallCube.cpp" />
     <ClCompile Include="..\Codes\UI.cpp" />
+    <ClCompile Include="..\Codes\Weapon.cpp" />
+    <ClCompile Include="..\Codes\Weapon_Revolver.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
