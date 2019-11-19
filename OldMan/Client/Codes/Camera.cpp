@@ -719,7 +719,7 @@ HRESULT CCamera::Initialize()
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(70.f), WINCX / (float)WINCY, 1.f, 1000.f);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 
-	//ShowCursor(false);
+	ShowCursor(false);
 
 	m_pSubject->AddData(D3DTS_VIEW, &m_MatView);
 	m_pSubject->AddData(D3DTS_PROJECTION, &matProj);
