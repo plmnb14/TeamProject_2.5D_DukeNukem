@@ -158,8 +158,12 @@ namespace ENGINE
 
 	typedef struct tagCondition
 	{
-		bool bIsHit;	 // 피격 체크
-		bool bIsAttck;	 // 공격 가능체크
+		float fHp;			// 체력 수치
+		float fShield;		// 보호막 수치
+		float fArmor;		// 방어력 수치 ( 방어력만큼 공격력이 감소 됩니다. )
+
+		bool bIsHit;		// 피격 체크
+		bool bIsAttck;		// 공격 가능체크
 
 	}CONDITION;
 

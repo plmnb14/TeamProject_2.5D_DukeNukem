@@ -17,6 +17,12 @@ private:
 	~CResourceMgr();
 
 public:
+	void GetVertexInfo(
+		RESOURCE_TYPE eResourceType,
+		const wstring& wstrResourceKey,
+		void* pVertex);
+
+public:
 	HRESULT AddBuffer(
 		LPDIRECT3DDEVICE9 pGraphicDev,
 		RESOURCE_TYPE eResourceType,
@@ -25,6 +31,7 @@ public:
 		const WORD& wCntX = 0, /* 지형배치할 때 가로 버텍스 개수 */
 		const WORD& wCntZ = 0, /* 지형배치할 때 세로 버텍스 개수 */
 		const WORD& wItv = 1 /* 지형배치할 때 버텍스 간격 */);
+
 	HRESULT AddTexture(
 		LPDIRECT3DDEVICE9 pGraphicDev,
 		RESOURCE_TYPE eResourceType, 
@@ -32,6 +39,7 @@ public:
 		const wstring& wstrResourceKey,
 		const wstring& wstrFilePath,
 		const DWORD& dwCnt);
+
 	void Render(const wstring& wstrResourceKey, const int& iIndex = -1);
 	void ResetDynamicResource();
 
@@ -39,8 +47,6 @@ public:
 	CComponent* CloneResource(
 		RESOURCE_TYPE eResourceType,
 		const wstring& wstrResourceKey);
-
-	void GetVertexInfo(RESOURCE_TYPE eResourceType, const wstring& wstrResourceKey, void* pVertex);
 
 private:
 	void Release();

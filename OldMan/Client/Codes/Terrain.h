@@ -43,6 +43,7 @@ public:
 	static CTerrain* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 protected:
+	ENGINE::CManagement*	m_pManagement;
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
 
@@ -52,6 +53,7 @@ protected:
 	ENGINE::CCollider*		m_pCollider;
 
 	ENGINE::TERRAIN_TYPE	m_eTerrainType;
+	ENGINE::VTX_TEX*		m_myVtx;
 
 	wstring					m_wstrTex;
 

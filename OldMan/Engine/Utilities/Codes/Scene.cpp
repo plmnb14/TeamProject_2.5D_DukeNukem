@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Component.h"
 
 USING(ENGINE)
 
@@ -12,6 +13,7 @@ CScene::~CScene()
 {
 	Release();
 }
+
 
 HRESULT CScene::Initialize()
 {

@@ -52,6 +52,11 @@ const float& CTransform::GetAngle(ANGLE_TYPE eAxis) const
 	return m_fAngle[eAxis];
 }
 
+float * CTransform::GetAllAngle()
+{
+	return m_fAngle;
+}
+
 void CTransform::SetPos(const D3DXVECTOR3& vPos)
 {
 	m_vPos = vPos;
