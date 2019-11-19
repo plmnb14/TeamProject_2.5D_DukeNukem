@@ -49,6 +49,9 @@ private:
 	void Swap_Weapon();
 
 public:
+	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
+
+public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:	
@@ -74,7 +77,9 @@ private:
 	// 현재 플레이어의 정보 ( 체력 등 수치 값 & 각종 bool 값 )
 	ENGINE::CONDITION		m_pCondition;
 
+	// 현재 장착중인 무기 정보
 	WEAPON					m_eWeaponState;
+	map<ENGINE::WEAPON_TAG, ENGINE::W_INFO*>	m_mWeaponInfo;
 	
 
 };

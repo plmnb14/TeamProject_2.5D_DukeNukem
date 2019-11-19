@@ -30,10 +30,6 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
-	cout << m_pTransform->GetPos().x << endl;
-	cout << m_pTransform->GetPos().y << endl;
-	cout << m_pTransform->GetPos().z << endl;
-
 	if (m_bIsDead)
 		return DEAD_OBJ;
 	
@@ -193,23 +189,31 @@ void CPlayer::KeyInput()
 	float xRand = rand() % (100 - 50) * 0.01f;
 	float yRand = rand() % (100 - 50) * 0.01f;
 
+	// 공격
 	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_LBUTTON))
 	{
 		Shoot();
 	}
 
+	// 재장전
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_R))
+	{
 
-	if (GetAsyncKeyState('W'))
+	}
+
+
+	// 이동관련
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_W))
 	{
 		m_pTransform->MovePos(fMoveSpeed);
 	}
 
-	if (GetAsyncKeyState('S'))
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_S))
 	{
 		m_pTransform->MovePos(-fMoveSpeed);
 	}
 
-	if (GetAsyncKeyState('A'))
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_A))
 	{
 		D3DXVECTOR3 vDir, vWorldUp;
 		vWorldUp = { 0.f , 1.f , 0.f };
@@ -218,7 +222,7 @@ void CPlayer::KeyInput()
 		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z) , fMoveSpeed);
 	}
 
-	if (GetAsyncKeyState('D'))
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_D))
 	{
 		D3DXVECTOR3 vDir, vWorldUp;
 		vWorldUp = { 0.f , 1.f , 0.f };
@@ -227,22 +231,30 @@ void CPlayer::KeyInput()
 		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z), -fMoveSpeed);
 	}
 
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_LEFT))
 	{
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, -fAngleSpeed);
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_RIGHT))
 	{
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, fAngleSpeed);
 	}
 
+	// 점프
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_SPACE))
 	{
 		m_pRigid->Set_Accel({ 0, 1.5f, 0 });
 		m_pRigid->Set_IsJump(true);
 		m_pRigid->Set_IsGround(false);
 	}
+
+	//if (m_pKeyMgr->KeyDown(ENGINE::KEY_1))
+	//{
+	//	cout << "1번 눌림" << endl;
+	//}
+
+
 }
 
 void CPlayer::Physic()
@@ -272,6 +284,9 @@ void CPlayer::Physic()
 
 void CPlayer::Shoot()
 {
+	if (m_mWeaponInfo.empty())
+		return;
+
 	D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
 	D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
 	D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
@@ -312,6 +327,19 @@ void CPlayer::Shoot()
 
 void CPlayer::Swap_Weapon()
 {
+}
+
+void CPlayer::Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo)
+{
+	auto iter_find = m_mWeaponInfo.find(_WeaponInfo->eWeaponTag);
+
+	if (m_mWeaponInfo.end() == iter_find)
+	{
+		m_mWeaponInfo.insert(make_pair(_WeaponInfo->eWeaponTag, _WeaponInfo));
+	}
+
+	else
+		m_mWeaponInfo[_WeaponInfo->eWeaponTag]->wCurBullet += _WeaponInfo->wCurBullet;
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)

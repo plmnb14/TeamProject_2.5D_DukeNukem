@@ -181,6 +181,8 @@ namespace ENGINE
 		WORD wMaxBullet;		// 최대 총알 개수
 		WORD wCurBullet;		// 현재 총알 개수
 		WORD wUseBullet;		// 한번 사용 당 총알 개수
+		WORD wMagazineSize;		// 한 탄창의 크기
+		WORD wMagazineBullet;	// 한 탄창 속 총알의 개수
 
 		float fRebound_Value;	// 반동 수치
 		float fInterval;		// 발사 간격

@@ -20,7 +20,7 @@ namespace ENGINE
 class CCameraObserver;
 class CWeapon : public ENGINE::CGameObject
 {
-private:
+protected:
 	explicit CWeapon(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
@@ -31,15 +31,15 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-private:
+protected:
 	virtual HRESULT Initialize() override;
 	virtual HRESULT LateInit();
 	virtual void Release() override;
 
 public:
-	static CWeapon_Revolver* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos);
+	static CWeapon* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
-private:
+protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
 	ENGINE::CVIBuffer*		m_pBuffer;
@@ -51,7 +51,7 @@ private:
 
 	ENGINE::W_INFO			m_pWInfo;
 
-private:
+protected:
 	CCameraObserver*		m_pObserver;
 	ENGINE::CCameraSubject*	m_pSubject;
 	ENGINE::CBillborad*		m_pBillborad;

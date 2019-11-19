@@ -161,6 +161,7 @@ HRESULT CStage::Initialize()
 		TERRAIN_VTX_X, TERRAIN_VTX_Z, TERRAIN_VTX_ITV);
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Terrain Add Failed", E_FAIL);
 
+	// 
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -168,6 +169,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_CubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -175,6 +177,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -182,6 +185,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_CubeTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,

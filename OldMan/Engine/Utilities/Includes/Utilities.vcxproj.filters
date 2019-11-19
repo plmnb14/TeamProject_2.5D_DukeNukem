@@ -55,6 +55,9 @@
     <Filter Include="02.SuperClass\02.Component\03. RigidBody">
       <UniqueIdentifier>{dea7e9dd-4258-4963-ae64-e337911626cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.SuperClass\01.GameObject\00. Weapon">
+      <UniqueIdentifier>{ef2bc189-9bd9-4a3f-a6ba-7be133d8ca8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -105,6 +108,7 @@
     <ClInclude Include="..\Codes\RigidBody.h">
       <Filter>02.SuperClass\02.Component\03. RigidBody</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\PlayerSubject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -152,6 +156,7 @@
     <ClCompile Include="..\Codes\RigidBody.cpp">
       <Filter>02.SuperClass\02.Component\03. RigidBody</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\PlayerSubject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Exports\Export_Utilities.inl">
