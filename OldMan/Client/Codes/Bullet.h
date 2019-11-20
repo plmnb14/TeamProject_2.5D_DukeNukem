@@ -11,6 +11,8 @@ namespace ENGINE
 	class CVIBuffer;
 	class CTexture;
 	class CTransform;
+	class CRigidBody;
+	class CCollider;
 }
 
 class CBullet : public ENGINE::CGameObject
@@ -39,6 +41,7 @@ private:
 private:
 	HRESULT AddComponent();
 	void KeyInput();
+	void BulletType();
 
 private:
 	void Set_Target(CGameObject* _Target);
@@ -47,9 +50,10 @@ private:
 	void Set_Dir(D3DXVECTOR3 _Dir);
 	void Set_Angle(float* _Angle);
 	void Set_Speed(float _Speed) { m_fSpeed = _Speed; }
+	void Set_WeaponTag(ENGINE::WEAPON_TAG _WeaponTag) { m_eWeaponTag = _WeaponTag; }
 
 public:
-	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle, float _Speed);
+	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle, float _Speed, ENGINE::WEAPON_TAG _WeaponTag);
 
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -63,8 +67,9 @@ private:
 private:
 	CGameObject*	m_pTarget;
 	float			m_fSpeed;
-	D3DXVECTOR3		m_dir;
-
+	ENGINE::WEAPON_TAG	m_eWeaponTag;
+	ENGINE::CRigidBody*		m_pRigid;
+	ENGINE::CCollider*		m_pCollider;
 };
 
 #define __BULLET_H__
