@@ -29,6 +29,8 @@ int CBullet::Update()
 		return DEAD_OBJ;
 
 	ENGINE::CGameObject::Update();
+
+	m_pCollider->Set_OldPos(m_pTransform->GetPos());
 	BulletType();
 
 	KeyInput();
@@ -39,6 +41,12 @@ int CBullet::Update()
 void CBullet::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
+	m_pCollider->LateUpdate(m_pTransform->GetPos());
+
+	//m_fLifetime -= m_pTimeMgr->GetDelta();
+	//
+	//if (m_fLifetime < 0)
+	//	m_bIsDead = true;
 }
 
 void CBullet::Render()
@@ -78,6 +86,8 @@ HRESULT CBullet::Initialize()
 	m_pRigid->Set_Speed({ 1.f , 1.f , 1.f });				// 각 축에 해당하는 속도
 	m_pRigid->Set_Accel({ 0.f, -1.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 1.f , 1.f , 1.f });			// 각 축에 해당하는 MaxAccel 값
+
+	m_fLifetime = 1.f;
 
 	return S_OK;
 }

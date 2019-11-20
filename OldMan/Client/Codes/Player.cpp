@@ -7,6 +7,7 @@
 #include "Collider.h"
 #include "CameraObserver.h"
 #include "RigidBody.h"
+#include "Condition.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -66,7 +67,7 @@ HRESULT CPlayer::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(11.f, 2.f, 13.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 
@@ -100,14 +101,32 @@ HRESULT CPlayer::Initialize()
 	m_pRigid->Set_fMass(1.f);								// 물체의 무게
 	m_pRigid->Set_fPower(5.f);								// 점프 파워
 
-	m_pRigid->Set_Speed({ 1.f , 1.f , 1.f });				// 각 축에 해당하는 속도
+	m_pRigid->Set_Speed({ 10.f , 10.f , 10.f });				// 각 축에 해당하는 속도
 	m_pRigid->Set_Accel({ 0.f, 0.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 2.f , 4.f , 2.f });			// 각 축에 해당하는 MaxAccel 값
+
+	
+	// 컨디션
+	m_pCondition->Set_Hp(100.f);
+	m_pCondition->Set_Armor(0.f);
+	m_pCondition->Set_Shield(0.f);
+	m_pCondition->Set_Fuel(0.f);
+	m_pCondition->Set_Stamina(100.f);
+
+	m_pCondition->Set_Dodge(false);
+	m_pCondition->Set_Cinematic(false);
+	m_pCondition->Set_Hit(false);
+	m_pCondition->Set_Attack(false);
+	m_pCondition->Set_Invincible(false);
+	m_pCondition->Set_JetPack(false);
+	m_pCondition->Set_MeleeAttack(true);
+	m_pCondition->Set_RangeAttack(true);
+	m_pCondition->Set_SpecialAttack(true);
 
 
 	// 임시
 	// Player Info
-	m_pCondition.fHp = 100;
+	
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &m_pCondition);
 	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
 	m_pWInfo.wCurBullet = 0;
@@ -187,12 +206,20 @@ HRESULT CPlayer::AddComponent()
 	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
 	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
 
+	// Condition
+	pComponent = ENGINE::CCondition::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Condition", pComponent });
+
+	m_pCondition = dynamic_cast<ENGINE::CCondition*>(pComponent);
+	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
+
 	return S_OK;
 }
 
 void CPlayer::KeyInput()
 {
-	float fMoveSpeed = 5.f * m_pTimeMgr->GetDelta();
+	float fMoveSpeed = m_pRigid->Get_Speed().x * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
 

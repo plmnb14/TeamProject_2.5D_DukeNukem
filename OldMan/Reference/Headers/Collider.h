@@ -33,6 +33,7 @@ public:
 	void Set_Type(ENGINE::COLLISION_TYPE _Type) { m_eCollisionType = _Type; }
 	void Set_CollisionVertex(ENGINE::CTransform* pTarget, ENGINE::VTX_TEX* pTerrainVtx);
 	void Set_PlaneVtx(float* _Angle, D3DXMATRIX _World);
+	void Set_OldPos(D3DXVECTOR3 _OldPos);
 
 
 public:
@@ -41,6 +42,7 @@ public:
 	D3DXVECTOR3 Get_Length() { return m_tBoxCollider.vLength; };
 	D3DXVECTOR3 Get_Radius() { return m_tBoxCollider.vRadius; }
 	D3DXVECTOR3* Get_PlaneVtx() {return m_vPlaneVtx; }
+	D3DXVECTOR3 Get_OldPos() { return m_vOldPos; }
 
 	bool Get_IsCollision() { return m_tBoxCollider.bIsCollision; }
 
@@ -53,10 +55,12 @@ public:
 
 private:
 	D3DXVECTOR3 m_vPlaneVtx[4];
+	D3DXVECTOR3 m_vOldPos;
 	BOXCOL m_tBoxCollider;
 	CGameObject* m_pTarget;
 	ENGINE::COLLISION_TYPE m_eCollisionType;
 	ENGINE::VTX_TEX*	m_pVtx;
+
 };
 
 END

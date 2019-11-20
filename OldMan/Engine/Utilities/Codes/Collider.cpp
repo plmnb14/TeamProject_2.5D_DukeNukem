@@ -4,7 +4,7 @@ USING(ENGINE)
 
 CCollider::CCollider()
 	: m_pTarget(nullptr) , m_eCollisionType(ENGINE::COLLISION_AABB),
-	m_pVtx(nullptr)
+	m_pVtx(nullptr), m_vOldPos()
 {
 	ZeroMemory(&m_tBoxCollider, sizeof(BOXCOL));
 }
@@ -51,6 +51,11 @@ void CCollider::Set_PlaneVtx(float* _Angle, D3DXMATRIX _World)
 	{
 		D3DXVec3TransformCoord(&m_vPlaneVtx[i], &tmpPlaneVtx[i], &_World);
 	}
+}
+
+void CCollider::Set_OldPos(D3DXVECTOR3 _OldPos)
+{
+	m_vOldPos = _OldPos;
 }
 
 void CCollider::SetUp_Box()

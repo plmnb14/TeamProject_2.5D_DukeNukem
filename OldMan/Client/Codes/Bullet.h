@@ -70,6 +70,9 @@ private:
 	ENGINE::WEAPON_TAG	m_eWeaponTag;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCollider*		m_pCollider;
+
+	float m_fLifetime;
+
 };
 
 #define __BULLET_H__
