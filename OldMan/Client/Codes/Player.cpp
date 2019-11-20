@@ -66,7 +66,7 @@ HRESULT CPlayer::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(11.f, 2.f, 13.f));
+	m_pTransform->SetPos(D3DXVECTOR3(11.f, 12.f, 13.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 

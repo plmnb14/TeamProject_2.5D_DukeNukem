@@ -26,8 +26,9 @@ int CBullet::Update()
 
 	ENGINE::CGameObject::Update();
 
-	m_pTransform->MovePos(m_fSpeed * m_pTimeMgr->GetDelta());
-
+	
+	
+	//m_pTransform->MovePos(m_fSpeed);
 	KeyInput();
 
 	return NO_EVENT;
@@ -35,7 +36,12 @@ int CBullet::Update()
 
 void CBullet::LateUpdate()
 {
+	D3DXVECTOR3 dir = m_pTransform->GetDir();
+	m_pTransform->Move_AdvancedPos(m_dir, 1.f);
+	cout << dir.x << endl;
+
 	ENGINE::CGameObject::LateUpdate();
+
 }
 
 void CBullet::Render()
@@ -136,7 +142,8 @@ CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVE
 
 	pInstance->Set_Pos(_Pos);
 	pInstance->Set_Dir(_Dir);
-	pInstance->Set_Angle(_Angle);
+	pInstance->m_dir = _Dir;
+	//pInstance->Set_Angle(_Angle);
 	pInstance->Set_Speed(_Speed);
 
 	return pInstance;

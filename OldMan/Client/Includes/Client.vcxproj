@@ -179,11 +179,11 @@
     <ClInclude Include="..\Codes\TerrainWallCube.h" />
     <ClInclude Include="..\Codes\UI.h" />
     <ClInclude Include="..\Codes\Weapon.h">
-<<<<<<< HEAD
+
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-=======
+
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
->>>>>>> origin/MERGE_BRANCH
+
     </ClInclude>
     <ClInclude Include="..\Codes\Weapon_Revolver.h" />
     <ClInclude Include="..\Codes\Weapon_SMG.h" />
@@ -222,11 +222,8 @@
     <ClCompile Include="..\Codes\TerrainWallCube.cpp" />
     <ClCompile Include="..\Codes\UI.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp">
-<<<<<<< HEAD
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-=======
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
->>>>>>> origin/MERGE_BRANCH
     </ClCompile>
     <ClCompile Include="..\Codes\Weapon_Revolver.cpp" />
     <ClCompile Include="..\Codes\Weapon_SMG.cpp" />

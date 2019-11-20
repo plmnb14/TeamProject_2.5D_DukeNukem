@@ -79,6 +79,7 @@ HRESULT CWeapon_Revolver::Initialize()
 	m_pWInfo.wCurBullet = 36;				// 현재  수, 최초 획득 시 탄창 수
 	m_pWInfo.wMagazineSize = 12;			// 한 탄창 최대 보관 수
 	m_pWInfo.wMagazineBullet = 12;			// 현재 탄창의 총알 개수
+	m_pWInfo.fBullet_Speed = 100.f;
 
 	m_pWInfo.fVertical_Rebound = 0.1f;		// 수직 반동
 	m_pWInfo.fHorizontal_Rebound = 2.f;		// 수평 반동

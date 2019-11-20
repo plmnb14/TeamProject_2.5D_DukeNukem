@@ -66,9 +66,13 @@ private:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
+	ENGINE::CCollider*		m_pMelleCollider;
+
 	ENGINE::CCameraSubject*	m_pSubject;
 	ENGINE::CBillborad*		m_pBillborad;
 	ENGINE::CRigidBody*		m_pRigid;
+	ENGINE::CONDITION		m_pCondition;
+
 
 	float				m_fRange;                   // 범위
 	float				m_MoveSpeed;                // 속도

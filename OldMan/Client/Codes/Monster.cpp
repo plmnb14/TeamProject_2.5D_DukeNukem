@@ -14,9 +14,11 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr),
 	m_pSubject(ENGINE::GetCameraSubject()),
-	m_pObserver(nullptr), m_pBillborad(nullptr), m_bShot(false),m_pRigid(nullptr)
-{
-}
+	m_pObserver(nullptr), m_pBillborad(nullptr), m_bShot(false),m_pRigid(nullptr),
+	m_pMelleCollider(nullptr)
+	{
+			ZeroMemory(&m_pCondition,sizeof(ENGINE::CONDITION));
+	}
 
 
 CMonster::~CMonster()
@@ -33,8 +35,7 @@ int CMonster::Update()
 	ENGINE::CGameObject::Update();
 	//Player_Pursue();
 	m_fTime += m_pTimeMgr->GetDelta();
-	// 사격거리 하나 만들기  사격거리 도달하면 사격하게 만들기 그뒤 다시 최소거리까지 추적 ㄱ 
-
+// 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	m_bShot = m_pRigid->Get_IsHit();
 	
 	if (m_pRigid->Get_IsHit())
@@ -110,6 +111,24 @@ HRESULT CMonster::Initialize()
 	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
 
 	m_pRigid->Set_IsHit(false);
+
+	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
+	m_pMelleCollider->Set_Radius({ 1.3f , 1.2f, 1.3f });
+	m_pMelleCollider->Set_Dynamic(true);
+	m_pMelleCollider->Set_Trigger(true);
+	m_pMelleCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
+		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+		m_pTransform->GetPos().z });
+	m_pMelleCollider->Set_UnderPos();
+	m_pMelleCollider->SetUp_Box();
+	//일단 트리거 설정은 되었지만 -> 의문점 충돌을 판정하지만 
+	// 밀리 공격 상태는 어떤식으로 설정해야 하지? 
+	// 1. 물리 공격의 사거리가 되었을때까지 이동한후 플레이어를 공격한다. 
+	// 2. 여기서 공격은? 더 이동했다가 멈추는것을 말하는가?
+	// 3. 그럼 피격시 플레이어가 뒤로 밀리는 것인가 ? 
+	// 4.  다시 근접공격 가능한 거리까지 추적을 하는것 우선시 해야함 
+	// 5. 근접 가능한 공격 사거리까지 도달했을때 
+
 	//공중으로 안쫓게 해야한다. 
 	return S_OK;
 }
@@ -162,7 +181,7 @@ HRESULT CMonster::AddComponent()
 	pComponent = ENGINE::CCollider::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Collider", pComponent });
-
+	// 컴포넌트 하나 추가 
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
@@ -186,11 +205,13 @@ HRESULT CMonster::AddComponent()
 
 void CMonster::Player_Pursue()
 {
+	D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 
 	D3DXVECTOR3 vMonsterDir_Fowrd = m_pTransform->GetDir();				 // 전방 방향벡터
-	 
+	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();
 	//플레이어의 방향 벡터
-	
+	D3DXVECTOR3 vMonster = vTempPos - vMonsterPos;
+
 	//좌우 방향벡터로 내적을 구하고  그것으로 도는 방향을 결정하는 값을 구해서 그쪽으로 돌게만드는게 핵심 
 	
 
@@ -199,12 +220,9 @@ void CMonster::Player_Pursue()
 	// 양수일때 왼쪽 음수일때 오른쪽 이다.
 	//y 값이 반영되면 된다. 
 	m_MoveSpeed = 1.f * m_pTimeMgr->GetDelta();   // 속도
-
 	
-	m_pTransform->SetDir(m_MonsterDir);
-	//m_pTransform->Move_AdvancedPos(m_MonsterDir, m_MoveSpeed);
-	m_pTransform->MovePos(m_MoveSpeed);
-		
+	m_pTransform->Move_AdvancedPos(vMonster, m_MoveSpeed);
+	
 		
 }
 
@@ -282,12 +300,18 @@ void CMonster::Monster_Fire()
 
 	
 	//뭔가 공식이 나사가 빠진듯한 기분 -? ㅇ
-	float fan2 = 57.f;
-
-	float gar = 20.f;
 
 	m_MoveSpeed = 1.f * m_pTimeMgr->GetDelta();   // 속도
 
+
+	//cout << vMonster.y << endl;
+	//cout << vMonster.x << endl;
+
+	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos, vMonster, fAngle, m_MoveSpeed);
+	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+
+
+	/*
 
 
 	m_pTransform->SetAngle((float)45.f, ENGINE::ANGLE_Y);
@@ -304,15 +328,14 @@ void CMonster::Monster_Fire()
 		fAngle[1] = fShotDirTemp;
 		fAngle[2] = 0.f;
 
-		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos, vMonster, fAngle);
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+		
 	}
 	// << fAngle[1] << " 일" << endl;      // 우좌 
 	cout << D3DXToDegree(acosf(Dot)) << " 앞뒤" << endl;     // 좌우 
 	cout << D3DXToDegree(acosf(cross.y)) << " 좌우" << endl;     // - 이면 뒤 +이면 앞이다 
 	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y)<< " 사" << endl;
 
-
+	*/
 }
 void CMonster::Monster_State_Set()
 {
@@ -331,6 +354,7 @@ void CMonster::Monster_State_Set()
 		case MONSTER_SHOT:
 		//	cout << "피" << endl;
 			Monster_Idle();
+			Player_Pursue();
 			break;
 		}
 		m_eCurState = m_eNextState;
@@ -339,15 +363,6 @@ void CMonster::Monster_State_Set()
 	// 맞았을 경우 탐색이 켜진다. 
 	
 }
-
-
-	
-// 사정거리에 따른 기계상태 전환 구현 시작 
-
-//피격시 쫓는거 
-
-
-
 
 
 CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)

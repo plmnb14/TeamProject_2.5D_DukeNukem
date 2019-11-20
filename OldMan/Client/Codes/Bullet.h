@@ -63,6 +63,8 @@ private:
 private:
 	CGameObject*	m_pTarget;
 	float			m_fSpeed;
+	D3DXVECTOR3		m_dir;
+
 };
 
 #define __BULLET_H__

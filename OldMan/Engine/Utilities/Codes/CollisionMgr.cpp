@@ -136,18 +136,13 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsAir(false);
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
 
-<<<<<<< HEAD
 				//cout << "응! 닿음!" << endl;
-=======
->>>>>>> origin/MERGE_BRANCH
+
 				return;
 			}
 		}
 
-<<<<<<< HEAD
 	//	cout << "땅에 닿지 않음" << endl;
-=======
->>>>>>> origin/MERGE_BRANCH
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 	}
@@ -184,6 +179,40 @@ void CCollisionMgr::CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list
 
 
 	}
+
+}
+
+void CCollisionMgr::CollisionTarget_To_Monstr_Melle(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Monster_M"));
+
+			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			if(rdS)
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				//cout << "충돌체크 됩니다" << endl;
+
+				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsHit(true);
+				return;
+			}
+			else
+			{
+				//cout << "충돌 안함" << endl;
+				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsHit(false);
+				dynamic_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"))->Set_IsHit(false);
+
+			}
+		}
+
+
 
 }
 
