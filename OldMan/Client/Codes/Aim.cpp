@@ -144,8 +144,7 @@ void CAim::CheckWeaponAim()
 
 void CAim::CheckMoveRifleAim()
 {
-	if (m_eWeaponType != ENGINE::WEAPON_TAG::RIFLE
-		|| m_eWeaponType != ENGINE::WEAPON_TAG::SMG)
+	if (m_eWeaponType != ENGINE::WEAPON_TAG::RIFLE && m_eWeaponType != ENGINE::WEAPON_TAG::SMG)
 		return;
 
 	// юс╫ц
