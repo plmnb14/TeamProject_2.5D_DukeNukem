@@ -50,6 +50,7 @@ private:
 
 private:
 	void Shoot();
+	void Shoot_Shotgun();
 	void ShootDelay();
 	void ShootType();
 	void Reload();

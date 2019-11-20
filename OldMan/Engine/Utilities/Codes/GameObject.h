@@ -51,6 +51,7 @@ protected:
 
 	CGameObject*	m_pCamera;
 	ENGINE::OBJECT_TYPE	m_eTag;
+	ENGINE::CONDITION m_eCondition;
 
 	bool			m_bIsDead;
 	bool			m_bIsInit;

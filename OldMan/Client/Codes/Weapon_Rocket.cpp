@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Weapon_Revolver.h"
+#include "Weapon_Rocket.h"
 #include "Trasform.h"
 #include "Collider.h"
 #include "RigidBody.h"
@@ -8,17 +8,17 @@
 #include "Billborad.h"
 #include "Player.h"
 
-CWeapon_Revolver::CWeapon_Revolver(LPDIRECT3DDEVICE9 pGraphicDev)
+CWeapon_Rocket::CWeapon_Rocket(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CWeapon(pGraphicDev)
 {
 	//ZeroMemory(m_pWInfo, sizeof(ENGINE::W_INFO));
 }
 
-CWeapon_Revolver::~CWeapon_Revolver()
+CWeapon_Rocket::~CWeapon_Rocket()
 {
 }
 
-int CWeapon_Revolver::Update()
+int CWeapon_Rocket::Update()
 {
 	if (m_bIsDead)
 	{
@@ -32,7 +32,7 @@ int CWeapon_Revolver::Update()
 	return NO_EVENT;
 }
 
-void CWeapon_Revolver::LateUpdate()
+void CWeapon_Rocket::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 
@@ -58,40 +58,38 @@ void CWeapon_Revolver::LateUpdate()
 	m_pCollider->Set_IsCollision(false);
 }
 
-void CWeapon_Revolver::Render()
+void CWeapon_Rocket::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	//m_pTexture->Render(0);
 	m_pBuffer->Render();
 }
 
-HRESULT CWeapon_Revolver::Initialize()
+HRESULT CWeapon_Rocket::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 
 	m_pWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
-	m_pWInfo.fInterval = 0.2f;				// 발사 간격
-	m_pWInfo.fKnockBack_Value = 0.1f;		// 저지력
+	m_pWInfo.fInterval = 1.00f;				// 발사 간격
+	m_pWInfo.fKnockBack_Value = 5.0f;		// 저지력
 
 	m_pWInfo.wMaxBullet = 128;				// 최대 탄환 수
 	m_pWInfo.wUseBullet = 1;				// 한번 발사 당 소모 탄환 수
-	m_pWInfo.wCurBullet = 36;				// 현재  수, 최초 획득 시 탄창 수
-	m_pWInfo.wMagazineSize = 12;			// 한 탄창 최대 보관 수
-	m_pWInfo.wMagazineBullet = 12;			// 현재 탄창의 총알 개수
+	m_pWInfo.wCurBullet = 256;				// 현재  수, 최초 획득 시 탄창 수
+	m_pWInfo.wMagazineSize = 6;			// 한 탄창 최대 보관 수
+	m_pWInfo.wMagazineBullet = 6;			// 현재 탄창의 총알 개수
 
-	m_pWInfo.fVertical_Rebound = 0.1f;		// 수직 반동
-	m_pWInfo.fHorizontal_Rebound = 2.f;		// 수평 반동
+	m_pWInfo.fVertical_Rebound = 0.5f;		// 수직 반동
+	m_pWInfo.fHorizontal_Rebound = 8.0f;		// 수평 반동
 
-	m_pWInfo.fBullet_Speed = 200.f;
+	m_pWInfo.fSpread_X = 1;
+	m_pWInfo.fSpread_Y = 1;
 
-	// 터저서 임시로 추가함 - 정은혜
-	m_pWInfo.fSpread_X = 5;
-	m_pWInfo.fSpread_Y = 5;
+	m_pWInfo.fBullet_Speed = 20.f;
 
-	m_pWInfo.wWeaponDamage = 3;				// 무기 데미지
-	m_pWInfo.eWeaponTag = ENGINE::REVOLVER;
-
+	m_pWInfo.wWeaponDamage = 10.f;				// 무기 데미지
+	m_pWInfo.eWeaponTag = ENGINE::LUNCHER;
 
 	// 트랜스폼 세팅
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
@@ -106,16 +104,6 @@ HRESULT CWeapon_Revolver::Initialize()
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 
-															// 트리거 콜라이더
-	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.2f, 0.3f });
-	m_pGroundChekCollider->Set_Dynamic(true);
-	m_pGroundChekCollider->Set_Trigger(true);
-	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
-		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-		m_pTransform->GetPos().z });
-	m_pGroundChekCollider->Set_UnderPos();
-	m_pGroundChekCollider->SetUp_Box();
-
 
 	// 리지드 바디 세팅
 	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
@@ -128,7 +116,6 @@ HRESULT CWeapon_Revolver::Initialize()
 	m_pRigid->Set_fMass(1.f);								// 물체의 무게
 	m_pRigid->Set_fPower(5.f);								// 점프 파워
 
-
 	m_pRigid->Set_Speed({ 1.f , 1.f , 1.f });				// 각 축에 해당하는 속도
 	m_pRigid->Set_Accel({ 0.f, 0.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 2.f , 6.f , 2.f });			// 각 축에 해당하는 MaxAccel 값
@@ -136,7 +123,7 @@ HRESULT CWeapon_Revolver::Initialize()
 	return S_OK;
 }
 
-HRESULT CWeapon_Revolver::LateInit()
+HRESULT CWeapon_Rocket::LateInit()
 {
 	m_pObserver = CCameraObserver::Create();
 	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
@@ -146,11 +133,11 @@ HRESULT CWeapon_Revolver::LateInit()
 	return S_OK;
 }
 
-void CWeapon_Revolver::Release()
+void CWeapon_Rocket::Release()
 {
 }
 
-HRESULT CWeapon_Revolver::AddComponent()
+HRESULT CWeapon_Rocket::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
@@ -215,12 +202,12 @@ HRESULT CWeapon_Revolver::AddComponent()
 	return S_OK;
 }
 
-void CWeapon_Revolver::Set_Pos(D3DXVECTOR3 _Pos)
+void CWeapon_Rocket::Set_Pos(D3DXVECTOR3 _Pos)
 {
 	m_pTransform->SetPos(_Pos);
 }
 
-void CWeapon_Revolver::Physic()
+void CWeapon_Rocket::Physic()
 {
 	if (m_pRigid->Get_IsJump() == true)
 	{
@@ -245,19 +232,19 @@ void CWeapon_Revolver::Physic()
 	}
 }
 
-CWeapon_Revolver * CWeapon_Revolver::Create(LPDIRECT3DDEVICE9 pGraphicDev ,D3DXVECTOR3 _Pos)
+CWeapon_Rocket * CWeapon_Rocket::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
-	
-	CWeapon_Revolver* pInstance = new CWeapon_Revolver(pGraphicDev);
-	
+
+	CWeapon_Rocket* pInstance = new CWeapon_Rocket(pGraphicDev);
+
 	if (FAILED(pInstance->Initialize()))
 	{
 		ENGINE::Safe_Delete(pInstance);
 		return nullptr;
 	}
-	
+
 	pInstance->Set_Pos(_Pos);
-	
+
 	return pInstance;
 }

@@ -22,6 +22,8 @@
 #include "Trasform.h"
 #include "Weapon_Revolver.h"
 #include "Weapon_SMG.h"
+#include "Weapon_Pump.h"
+#include "Weapon_Rocket.h"
 
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -87,7 +89,19 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	// SMG
-	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -4,2,14 });
+	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -5,2,14 });
+	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
+	// PumpShotgun
+	pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,14 });
+	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
+	// RocketLuncher
+	pObject = CWeapon_Rocket::Create(m_pGraphicDev, D3DXVECTOR3{ -1,2,14 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);

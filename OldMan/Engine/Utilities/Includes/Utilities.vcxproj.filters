@@ -61,6 +61,9 @@
     <Filter Include="03.Design\00.Observer\00.Subject\01. PlayerSubject">
       <UniqueIdentifier>{914f0c0f-9d31-40d4-92c6-1d3078f695df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.SuperClass\02.Component\04. Condition">
+      <UniqueIdentifier>{6d21007d-a4fa-412e-8263-390ad7042345}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -114,6 +117,9 @@
     <ClInclude Include="..\Codes\PlayerSubject.h">
       <Filter>03.Design\00.Observer\00.Subject\01. PlayerSubject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Condition.h">
+      <Filter>02.SuperClass\02.Component\04. Condition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -163,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\PlayerSubject.cpp">
       <Filter>03.Design\00.Observer\00.Subject\01. PlayerSubject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Condition.cpp">
+      <Filter>02.SuperClass\02.Component\04. Condition</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

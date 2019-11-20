@@ -122,6 +122,7 @@ namespace ENGINE
 		D3DXVECTOR3 vAccel;
 		D3DXVECTOR3 vMaxAccel;
 		D3DXVECTOR3 vSpeed;
+		D3DXVECTOR3 vMaxSpeed;
 
 		bool bIsGravity; // 중력 영향력을 체크합니다.
 
@@ -135,6 +136,7 @@ namespace ENGINE
 
 		float fPower;	// 힘
 		float fMass;	// 질량
+		float fForce;	// 넉백할 량
 
 	}RIGID;
 
@@ -163,6 +165,8 @@ namespace ENGINE
 		float fArmor;		// 방어력 수치 ( 방어력만큼 공격력이 감소 됩니다. )
 		float fStamina;		// 스태미너 ( 달리기, 슬라이드 등 행동관련 )
 
+		float fMoveSpeed;
+
 		float fFuel;		// 연료 게이지 ( 제트팩이나, 특수 무기 장착시 활성화 )
 
 		bool bIsCinematic;	// 연출 중 인지 ( 연출 중엔 무적 상태가되고, 조작이 불가능 ) 
@@ -171,6 +175,11 @@ namespace ENGINE
 		bool bIsHit;		// 피격 체크
 		bool bIsAttck;		// 공격 가능체크
 		bool bIsJetPak;		// 제트팩을 장착했는지
+		bool bMeleeAttack;	// 근접 공격 체크
+		bool bRangeAttack;	// 원거리 공격 체크
+		bool bSpecialAttack;// 특수 공격 체크
+
+		bool bInvincible;	// 무적 ( 피격에 대한 면역 )
 
 	}CONDITION;
 

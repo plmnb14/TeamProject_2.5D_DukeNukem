@@ -12,6 +12,9 @@ class ENGINE_DLL CPlayerSubject : public CSubject
 {
 	DECLARE_SINGLETON(CPlayerSubject)
 
+public:
+	enum PLAYER_SUBJECT { PLAYER_INFO, WEAPON_INFO, };
+
 private:
 	explicit CPlayerSubject();
 	virtual ~CPlayerSubject();

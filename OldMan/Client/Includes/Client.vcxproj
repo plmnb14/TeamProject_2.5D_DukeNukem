@@ -181,7 +181,9 @@
     <ClInclude Include="..\Codes\Weapon.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Codes\Weapon_Pump.h" />
     <ClInclude Include="..\Codes\Weapon_Revolver.h" />
+    <ClInclude Include="..\Codes\Weapon_Rocket.h" />
     <ClInclude Include="..\Codes\Weapon_SMG.h" />
     <ClInclude Include="..\Headers\Define.h" />
     <ClInclude Include="..\Headers\Extern.h" />
@@ -220,7 +222,9 @@
     <ClCompile Include="..\Codes\Weapon.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Codes\Weapon_Pump.cpp" />
     <ClCompile Include="..\Codes\Weapon_Revolver.cpp" />
+    <ClCompile Include="..\Codes\Weapon_Rocket.cpp" />
     <ClCompile Include="..\Codes\Weapon_SMG.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">

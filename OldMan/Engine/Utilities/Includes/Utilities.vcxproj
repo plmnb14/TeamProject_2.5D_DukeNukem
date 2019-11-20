@@ -26,6 +26,7 @@
     <ClInclude Include="..\Codes\Collider.h" />
     <ClInclude Include="..\Codes\CollisionMgr.h" />
     <ClInclude Include="..\Codes\Component.h" />
+    <ClInclude Include="..\Codes\Condition.h" />
     <ClInclude Include="..\Codes\GameObject.h" />
     <ClInclude Include="..\Codes\Layer.h" />
     <ClInclude Include="..\Codes\Management.h" />
@@ -44,6 +45,7 @@
     <ClCompile Include="..\Codes\Collider.cpp" />
     <ClCompile Include="..\Codes\CollisionMgr.cpp" />
     <ClCompile Include="..\Codes\Component.cpp" />
+    <ClCompile Include="..\Codes\Condition.cpp" />
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\Layer.cpp" />
     <ClCompile Include="..\Codes\Management.cpp" />
