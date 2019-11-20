@@ -30,9 +30,9 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
-	cout << m_pTransform->GetPos().x << endl;
-	cout << m_pTransform->GetPos().y << endl;
-	cout << m_pTransform->GetPos().z << endl;
+	//cout << m_pTransform->GetPos().x << endl;
+//	cout << m_pTransform->GetPos().y << endl;
+	//cout << m_pTransform->GetPos().z << endl;
 
 	if (m_bIsDead)
 		return DEAD_OBJ;
@@ -48,7 +48,7 @@ void CPlayer::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 
-	Physic();
+//	Physic();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
 										m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
@@ -185,7 +185,7 @@ HRESULT CPlayer::AddComponent()
 
 void CPlayer::KeyInput()
 {
-	float fMoveSpeed = 5.f * m_pTimeMgr->GetDelta();
+	float fMoveSpeed = 15.f * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
 	srand(unsigned(time(NULL)));

@@ -93,7 +93,7 @@ HRESULT CMonster::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(10.f, 2.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(2.f, 2.f, 2.f));
+	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 	m_fMaxRange = 15.0f;//최대사거리
 	m_MonsterDir = { 0.f,0.f,0.f };
@@ -107,9 +107,10 @@ HRESULT CMonster::Initialize()
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
 
 	m_pRigid->Set_IsHit(false);
-
+	//공중으로 안쫓게 해야한다. 
 	return S_OK;
 }
 
@@ -200,9 +201,9 @@ void CMonster::Player_Pursue()
 	m_MoveSpeed = 1.f * m_pTimeMgr->GetDelta();   // 속도
 
 	
-	
-	m_pTransform->Move_AdvancedPos(m_MonsterDir, m_MoveSpeed);
-	
+	m_pTransform->SetDir(m_MonsterDir);
+	//m_pTransform->Move_AdvancedPos(m_MonsterDir, m_MoveSpeed);
+	m_pTransform->MovePos(m_MoveSpeed);
 		
 		
 }
@@ -241,49 +242,75 @@ void CMonster::Monster_Fire()
 
 	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();					// 몬스터 위치
 	
-	D3DXVECTOR3 vMonster =  vTempPos- vMonsterPos;
+	D3DXVECTOR3 vMonster =  vTempPos - vMonsterPos;
 	
 	D3DXVECTOR3 vMonsterDir_Fowrd = m_pTransform->GetDir();
+
+	D3DXVECTOR3 vMonsterDir_Fowrd2 = { 0.f, 0.f,1.f };
 
 	D3DXVECTOR3 vMonsterCroos2;
 	D3DXVec3Normalize(&vMonsterDir_Fowrd, &vMonsterDir_Fowrd);
 	D3DXVec3Normalize(&vMonster, &vMonster);
-
+	D3DXVec3Normalize(&vMonsterDir_Fowrd2, &vMonsterDir_Fowrd2);
 	float Dot; 
+	float Dot2;
 	float Radian; 
 	float test;
 	float test2;
 
 	Dot = D3DXVec3Dot(&vMonster,&vMonsterDir_Fowrd);
-	Radian = (float)acos(Dot);
+	Dot2 = D3DXVec3Dot(&vMonster, &vMonsterDir_Fowrd2);
+
 
 	D3DXVECTOR3 Mon_RIght_Dir;
 	D3DXVECTOR3 Mon_Left_Dir;
+	D3DXVECTOR3 cross;
 
 	D3DXVec3Cross(&Mon_RIght_Dir, &vMonsterDir_Fowrd, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	
 	D3DXVec3Cross(&Mon_Left_Dir, &vMonsterDir_Fowrd, &D3DXVECTOR3(0.0f, -1.0f, 0.0f));
+
+
+	D3DXVec3Cross(&cross, &vMonsterDir_Fowrd, &vMonster);
+
 
 	test = D3DXVec3Dot(&Mon_RIght_Dir, &vMonster);
 	test2 = D3DXVec3Dot(&Mon_Left_Dir, &vMonster);
 	
-	m_pTransform->SetAngle(D3DXToDegree((float)acos(test)), ENGINE::ANGLE_X);
-	m_pTransform->SetAngle(D3DXToDegree((float)acos(Dot)), ENGINE::ANGLE_Y);
+	//m_pTransform->SetAngle(D3DXToDegree((float)acos(test)), ENGINE::ANGLE_X);
+	//m_pTransform->SetAngle(D3DXToDegree((float)acos(Dot)), ENGINE::ANGLE_Y);
 	float fAngle[3];
 
-	fAngle[0] = 
-	fAngle[1] = 
-	fAngle[2] =0;
+	
 	//뭔가 공식이 나사가 빠진듯한 기분 -? ㅇ
 	float fan2 = 57.f;
 
-	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos, vMonster, fAngle);
-	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+	float gar = 20.f;
 
-	cout << fAngle[1] << " 일" << endl;      // 우좌 
-	cout << D3DXToDegree((float)acos(test2)) << " 이" << endl;     // 좌우 
-	cout << D3DXToDegree((float)acos(Dot)) << " 삼" << endl;     // - 이면 뒤 +이면 앞이다 
-	cout << vTempPos.x << " 사" << endl;
+	m_MoveSpeed = 1.f * m_pTimeMgr->GetDelta();   // 속도
+
+
+
+	m_pTransform->SetAngle((float)45.f, ENGINE::ANGLE_Y);
+	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, m_MoveSpeed);
+
+	float fShotDirTemp = D3DXToDegree((float)acosf(Dot2));
+
+	if (vMonster.x < 0.f)
+		fShotDirTemp = 360.f - fShotDirTemp;
+
+	if (D3DXToDegree(acosf(Dot))<45)
+	{
+		fAngle[0] = 0.f;
+		fAngle[1] = fShotDirTemp;
+		fAngle[2] = 0.f;
+
+		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos, vMonster, fAngle);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+	}
+	// << fAngle[1] << " 일" << endl;      // 우좌 
+	cout << D3DXToDegree(acosf(Dot)) << " 앞뒤" << endl;     // 좌우 
+	cout << D3DXToDegree(acosf(cross.y)) << " 좌우" << endl;     // - 이면 뒤 +이면 앞이다 
+	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y)<< " 사" << endl;
 
 
 }

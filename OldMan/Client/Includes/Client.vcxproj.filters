@@ -171,11 +171,11 @@
     <ClInclude Include="..\Codes\Raycast.h">
       <Filter>02.GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Weapon.h">
-      <Filter>02.GameObject\06.Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="..\Codes\Weapon_Revolver.h">
       <Filter>02.GameObject\06.Weapon\00. Revolver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Weapon.h">
+      <Filter>02.GameObject\06.Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -242,11 +242,11 @@
     <ClCompile Include="..\Codes\Raycast.cpp">
       <Filter>02.GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Weapon.cpp">
-      <Filter>02.GameObject\06.Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Weapon_Revolver.cpp">
       <Filter>02.GameObject\06.Weapon\00. Revolver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon.cpp">
+      <Filter>02.GameObject\06.Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

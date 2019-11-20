@@ -3,14 +3,19 @@
 #include "Camera.h"
 #include "Trasform.h"
 #include "Camera_Component.h"
-
+#include "Billborad.h"
+#include "CameraObserver.h"
+#include "Collider.h"
+#include "RigidBody.h"
 
 CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), 
+	m_pObserver(nullptr), m_pBillborad(nullptr), m_pRigid(nullptr),
+	m_pSubject(ENGINE::GetCameraSubject())
 {
 }
 
@@ -23,10 +28,10 @@ int CBullet::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
-
+	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 
-	m_pTransform->MovePos(2.5f);
+	m_pTransform->MovePos(0.2f);
 
 	KeyInput();
 
@@ -51,6 +56,16 @@ HRESULT CBullet::Initialize()
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(0.2f, 0.2f, 0.2f));
+
+	return S_OK;
+}
+
+HRESULT CBullet::LateInit()
+{
+	m_pObserver = CCameraObserver::Create();
+	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
+
+	m_pSubject->Subscribe(m_pObserver);
 
 	return S_OK;
 }
