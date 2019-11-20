@@ -32,7 +32,7 @@ int CBullet::Update()
 
 	m_pCollider->Set_OldPos(m_pTransform->GetPos());
 	BulletType();
-
+	
 	KeyInput();
 
 	return NO_EVENT;
@@ -43,10 +43,10 @@ void CBullet::LateUpdate()
 	ENGINE::CGameObject::LateUpdate();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 
-	//m_fLifetime -= m_pTimeMgr->GetDelta();
-	//
-	//if (m_fLifetime < 0)
-	//	m_bIsDead = true;
+	m_fLifetime -= m_pTimeMgr->GetDelta();
+	
+	if (m_fLifetime < 0)
+		m_bIsDead = true;
 }
 
 void CBullet::Render()
@@ -64,7 +64,7 @@ HRESULT CBullet::Initialize()
 	m_pTransform->SetSize(D3DXVECTOR3(0.2f, 0.2f, 0.2f));
 
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 0.5f , 0.5f, 0.5f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 0.3f , 0.3f, 0.3f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(true);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표

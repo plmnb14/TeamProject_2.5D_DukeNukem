@@ -187,6 +187,7 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 			{
 				rDst->SetDead();
 				cout << "Ãæµ¹" << endl;
+				continue;
 			}
 		}
 	}
@@ -277,12 +278,35 @@ bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameO
 		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
 		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 	{
-		
+		return true;
 	}
 
 	else 
 	{
-		float a = D3DXVec3Length(&(_rDstCol->Get_OldPos() - _rDstCol->Get_CenterPos()));
+		D3DXVECTOR3 vTemPos[9] = {};
+		vTemPos[0] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.9f);
+		vTemPos[1] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.8f);
+		vTemPos[2] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.7f);
+		vTemPos[3] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.6f);
+		vTemPos[4] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.5f);
+		vTemPos[5] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.4f);
+		vTemPos[6] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.3f);
+		vTemPos[7] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.2f);
+		vTemPos[8] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.1f);
+
+		for (int i = 0; i < 9; ++i)
+		{
+			_rDstCol->Set_CenterPos(vTemPos[i]);
+			_rDstCol->SetUp_Box();
+
+			if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
+				rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
+				rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	return false;

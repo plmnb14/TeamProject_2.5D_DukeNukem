@@ -166,6 +166,7 @@ namespace ENGINE
 		float fStamina;		// 스태미너 ( 달리기, 슬라이드 등 행동관련 )
 
 		float fMoveSpeed;
+		float fMoveAccel;
 
 		float fFuel;		// 연료 게이지 ( 제트팩이나, 특수 무기 장착시 활성화 )
 
@@ -178,6 +179,8 @@ namespace ENGINE
 		bool bMeleeAttack;	// 근접 공격 체크
 		bool bRangeAttack;	// 원거리 공격 체크
 		bool bSpecialAttack;// 특수 공격 체크
+		bool bSlide;		// 슬라이딩
+		bool bRun;
 
 		bool bInvincible;	// 무적 ( 피격에 대한 면역 )
 

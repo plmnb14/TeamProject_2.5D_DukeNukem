@@ -17,7 +17,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr),
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
-	m_pRigid(nullptr),
+	m_pRigid(nullptr), m_fSlideUp(0),
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE),
 	m_pObserver(nullptr)
@@ -37,8 +37,13 @@ int CPlayer::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	KeyInput();
-	UpdateObserverData();
+
+	Check_Slide();
+	Check_Run();
+	Check_Physic();
 	
+	UpdateObserverData();
+
 	return NO_EVENT;
 }
 
@@ -47,7 +52,6 @@ void CPlayer::LateUpdate()
 	ENGINE::CGameObject::LateUpdate();
 
 	ShootDelay();
-	Physic();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
 										m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
@@ -99,10 +103,10 @@ HRESULT CPlayer::Initialize()
 	m_pRigid->Set_IsJump(false);
 
 	m_pRigid->Set_fMass(1.f);								// 물체의 무게
-	m_pRigid->Set_fPower(5.f);								// 점프 파워
+	m_pRigid->Set_fPower(10.f);								// 점프 파워
 
 	m_pRigid->Set_Speed({ 10.f , 10.f , 10.f });				// 각 축에 해당하는 속도
-	m_pRigid->Set_Accel({ 0.f, 0.f, 0.f });					// 각 축에 해당하는 Accel 값
+	m_pRigid->Set_Accel({ 1.f, 0.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 2.f , 4.f , 2.f });			// 각 축에 해당하는 MaxAccel 값
 
 	
@@ -122,6 +126,10 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_MeleeAttack(true);
 	m_pCondition->Set_RangeAttack(true);
 	m_pCondition->Set_SpecialAttack(true);
+	m_pCondition->Set_Slide(false);
+	m_pCondition->Set_Run(false);
+	m_pCondition->Set_MoveSpeed(10.f);
+	m_pCondition->Set_MoveAccel(1.f);
 
 
 	// 임시
@@ -219,11 +227,40 @@ HRESULT CPlayer::AddComponent()
 
 void CPlayer::KeyInput()
 {
-	float fMoveSpeed = m_pRigid->Get_Speed().x * m_pTimeMgr->GetDelta();
+	float fMoveSpeed = m_pCondition->Get_MoveSpeed() * m_pCondition->Get_MoveAccel() * m_pCondition->Get_MoveAccel() * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
-
-
 	ShootType();
+
+	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LSHIFT))
+	{
+		m_pCondition->Set_Run(true);
+		m_pCondition->Set_MoveSpeed(16.f);
+	}
+
+	else if (m_pKeyMgr->KeyUp(ENGINE::KEY_LSHIFT))
+	{
+		m_pCondition->Set_Run(false);
+	
+		m_pCondition->Set_MoveSpeed(10.f);
+		D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
+		dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
+	}
+
+	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LCTRL))
+	{
+		if (m_pCondition->Get_Run() == false || m_pCondition->Get_Slide())
+			return;
+
+		//dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-2);
+
+		m_pCondition->Set_MoveAccel(2.5f);
+		m_pCondition->Set_Slide(true);
+
+		m_pCondition->Set_MoveSpeed(10.f);
+		D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
+		dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
+
+	}
 
 	// 재장전
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_R))
@@ -274,7 +311,10 @@ void CPlayer::KeyInput()
 	// 점프
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_SPACE))
 	{
-		m_pRigid->Set_Accel({ 0, 1.5f, 0 });
+		//D3DXVECTOR3 vTemp = { 0.f , 0.f , 0.f };
+		//dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
+
+		m_pRigid->Set_Accel({ 1, 1.5f, 1 });
 		m_pRigid->Set_IsJump(true);
 		m_pRigid->Set_IsGround(false);
 	}
@@ -388,10 +428,9 @@ void CPlayer::KeyInput()
 			}
 		}
 	}
-
 }
 
-void CPlayer::Physic()
+void CPlayer::Check_Physic()
 {
 	if (m_pRigid->Get_IsJump() == true)
 	{
@@ -400,7 +439,7 @@ void CPlayer::Physic()
 
 		if (m_pRigid->Get_Accel().y <= 0.f)
 		{
-			m_pRigid->Set_Accel({ 0,0,0 });
+			m_pRigid->Set_Accel({ 1,0,1 });
 			m_pRigid->Set_IsFall(true);
 			m_pRigid->Set_IsJump(false);
 		}
@@ -409,7 +448,16 @@ void CPlayer::Physic()
 	if (m_pRigid->Get_IsJump() == false)
 	{
 		if (m_pRigid->Get_IsGround() == true && m_pRigid->Get_IsFall() == false)
+		{
+			//if (m_pCondition->Get_Run())
+			//{
+			//	m_pCondition->Set_MoveSpeed(16.f);
+			//	D3DXVECTOR3 vTemp = { 0.3f , 0.2f , 0.3f };
+			//	dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
+			//}
+
 			return;
+		}
 
 		D3DXVECTOR3 JumpLength = { 0, -m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()),0 };
 		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
@@ -521,9 +569,9 @@ void CPlayer::Shoot_Shotgun()
 
 			if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 			{
-				D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 2 * tmpUp.x + tmpRight.x * 2,
-					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 2 * tmpUp.y + tmpRight.y * 2,
-					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 2 * tmpUp.z + tmpRight.z * 2 };
+				D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
+					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
+					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
 
 				float fAngle[3];
 
@@ -599,8 +647,66 @@ void CPlayer::Reload()
 	cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;
 }
 
-void CPlayer::Swap_Weapon()
+void CPlayer::Check_Slide()
 {
+	if (m_pCondition->Get_Slide())
+	{
+		if (m_pCondition->Get_MoveAccel() > 0)
+		{
+			float tmpX = m_pCondition->Get_MoveAccel() - m_pTimeMgr->GetDelta() * 3;
+			m_pCondition->Set_MoveAccel(tmpX);
+
+			if (tmpX * tmpX - 6 > -2.f)
+				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(tmpX * tmpX - 6);
+
+			else
+				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-2);
+		}
+
+		else if (m_pCondition->Get_MoveAccel() <= 0)
+		{
+			//m_pCondition->Set_MoveAccel(0.f);
+			m_pCondition->Set_MoveSpeed(10.f);
+
+			m_fSlideUp += m_pTimeMgr->GetDelta() * m_pTimeMgr->GetDelta() * 400 + 0.1f;
+
+			if (m_fSlideUp < 2.f)
+				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-2 + m_fSlideUp);
+
+			else if (m_fSlideUp >= 2.f)
+			{
+				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(0.f);
+				m_pCondition->Set_Slide(false);
+				m_pCondition->Set_MoveAccel(1.f);
+				m_pCondition->Set_MoveSpeed(10.f);
+				m_fSlideUp = 0.f;
+
+				if (m_pCondition->Get_Run())
+				{
+					m_pCondition->Set_MoveSpeed(16.f);
+				}
+			}
+		}
+	}
+}
+
+void CPlayer::Check_Run()
+{
+	if (m_pCondition->Get_Run())
+	{
+		if (dynamic_cast<CCamera*>(m_pCamera)->Get_CamShakePos() == D3DXVECTOR3{ 0,0,0 } &&
+			!m_pRigid->Get_IsJump() && !m_pRigid->Get_IsFall())
+		{
+			D3DXVECTOR3 vTemp = { 0.3f , 0.2f , 0.3f };
+			dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
+		}
+
+		if (m_pRigid->Get_IsJump() || m_pRigid->Get_IsFall() || m_pCondition->Get_Slide())
+		{
+			D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
+			dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
+		}
+	}
 }
 
 void CPlayer::ShootType()
