@@ -11,13 +11,8 @@ namespace ENGINE
 	class CVIBuffer;
 	class CTexture;
 	class CTransform;
-	class CCollider;
-	class CCameraSubject;
-	class CBillborad;
-	class CRigidBody;
-
 }
-class CCameraObserver;
+
 class CBullet : public ENGINE::CGameObject
 {
 private:
@@ -39,7 +34,6 @@ public:
 
 private:
 	virtual HRESULT Initialize() override;
-	virtual HRESULT LateInit();
 	virtual void Release() override;
 
 private:
@@ -52,9 +46,10 @@ private:
 	void Set_Pos(D3DXVECTOR3 _Pos);
 	void Set_Dir(D3DXVECTOR3 _Dir);
 	void Set_Angle(float* _Angle);
+	void Set_Speed(float _Speed) { m_fSpeed = _Speed; }
 
 public:
-	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle);
+	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle, float _Speed);
 
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -64,18 +59,10 @@ private:
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
-	ENGINE::CCollider*		m_pCollider;
-	ENGINE::CCameraSubject*	m_pSubject;
-	ENGINE::CBillborad*		m_pBillborad;
-	ENGINE::CRigidBody*		m_pRigid;
-
-
 
 private:
-	CGameObject*			m_pTarget;
-	CCameraObserver*		m_pObserver;
-	D3DXMATRIX              m_matView;
-	bool					m_bullet;
+	CGameObject*	m_pTarget;
+	float			m_fSpeed;
 };
 
 #define __BULLET_H__

@@ -10,15 +10,18 @@
 
 #include "Door.h"
 #include "Elevator.h"
+#include "Skybox.h"
 
 #include "Camera.h"
 #include "Monster.h"
 
 #include "UI.h"
 #include "Number.h"
+#include "Aim.h"
 
 #include "Trasform.h"
 #include "Weapon_Revolver.h"
+#include "Weapon_SMG.h"
 
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -83,11 +86,17 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
-	// Monster
-	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	// SMG
+	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -4,2,14 });
+	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
+
+	//// Monster
+	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 
 	// Door Test
 	//pObject = CDoor::Create(m_pGraphicDev);
@@ -103,6 +112,17 @@ HRESULT CStage::Add_Object_Layer()
 	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
 
+	// Skybox
+	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_sky.dds", pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Skybox Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
+
+	//// Camera
+	//pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
+	//pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
+
 	return S_OK;
 }
 
@@ -114,12 +134,10 @@ HRESULT CStage::Add_UI_Layer()
 	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
 
 	// Aim
-	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Aim_1.png");
+	ENGINE::CGameObject* pObject = CAim::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(35.f, 35.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f)); // Center (Default)
 
 	// HP
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
@@ -161,6 +179,7 @@ HRESULT CStage::Initialize()
 		TERRAIN_VTX_X, TERRAIN_VTX_Z, TERRAIN_VTX_ITV);
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Terrain Add Failed", E_FAIL);
 
+	// 
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -168,6 +187,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_CubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -175,6 +195,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -182,6 +203,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_CubeTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,

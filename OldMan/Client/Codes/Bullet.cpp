@@ -3,19 +3,14 @@
 #include "Camera.h"
 #include "Trasform.h"
 #include "Camera_Component.h"
-#include "Billborad.h"
-#include "CameraObserver.h"
-#include "Collider.h"
-#include "RigidBody.h"
+
 
 CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), 
-	m_pObserver(nullptr), m_pBillborad(nullptr), m_pRigid(nullptr),
-	m_pSubject(ENGINE::GetCameraSubject())
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
 {
 }
 
@@ -28,10 +23,10 @@ int CBullet::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
-	ENGINE::CGameObject::LateInit();
+
 	ENGINE::CGameObject::Update();
 
-	m_pTransform->MovePos(0.2f);
+	m_pTransform->MovePos(m_fSpeed * m_pTimeMgr->GetDelta());
 
 	KeyInput();
 
@@ -56,16 +51,6 @@ HRESULT CBullet::Initialize()
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(0.2f, 0.2f, 0.2f));
-
-	return S_OK;
-}
-
-HRESULT CBullet::LateInit()
-{
-	m_pObserver = CCameraObserver::Create();
-	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
-
-	m_pSubject->Subscribe(m_pObserver);
 
 	return S_OK;
 }
@@ -137,7 +122,7 @@ void CBullet::Set_Angle(float * _Angle)
 	m_pTransform->SetAngle(_Angle[2], ENGINE::ANGLE_Z);
 }
 
-CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir, float* _Angle)
+CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir, float* _Angle, float _Speed)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
@@ -152,6 +137,7 @@ CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVE
 	pInstance->Set_Pos(_Pos);
 	pInstance->Set_Dir(_Dir);
 	pInstance->Set_Angle(_Angle);
+	pInstance->Set_Speed(_Speed);
 
 	return pInstance;
 }

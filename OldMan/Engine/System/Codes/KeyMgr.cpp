@@ -67,6 +67,31 @@ void CKeyMgr::Update()
 
 	if (GetAsyncKeyState('Z') * 0x8000)
 		m_dwKey |= KEY_Z;
+
+	if (GetAsyncKeyState('1') * 0x8000)
+		m_dwKey |= KEY_1;
+
+	if (GetAsyncKeyState('2') * 0x8000)
+		m_dwKey |= KEY_2;
+
+	if (GetAsyncKeyState('3') * 0x8000)
+		m_dwKey |= KEY_3;
+
+	if (GetAsyncKeyState('4') * 0x8000)
+		m_dwKey |= KEY_4;
+
+
+	if (GetAsyncKeyState('5') * 0x8000)
+		m_dwKey |= KEY_5;
+
+	if (GetAsyncKeyState('6') * 0x8000)
+		m_dwKey |= KEY_6;
+
+	if (GetAsyncKeyState('7') * 0x8000)
+		m_dwKey |= KEY_7;
+
+	if (GetAsyncKeyState('8') * 0x8000)
+		m_dwKey |= KEY_8;
 }
 
 

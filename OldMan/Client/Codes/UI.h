@@ -15,6 +15,7 @@ namespace ENGINE
 }
 
 class CCameraObserver;
+class CPlayerObserver;
 class CUI : public ENGINE::CGameObject
 {
 protected:
@@ -32,6 +33,9 @@ protected:
 	virtual HRESULT Initialize() override;
 	virtual HRESULT LateInit() override;
 	virtual void Release() override;
+
+public:
+	D3DXVECTOR3 GetPos();
 
 public:
 	void ChangeTex(wstring _wstrTex);
@@ -55,6 +59,9 @@ protected:
 
 	ENGINE::CCameraSubject*	m_pCameraSubject;
 	CCameraObserver*		m_pCameraObserver;
+
+	ENGINE::CPlayerSubject*	m_pPlayerSubject;
+	CPlayerObserver*		m_pPlayerObserver;
 
 	wstring					m_wstrTex;
 	float					m_fSizeX;

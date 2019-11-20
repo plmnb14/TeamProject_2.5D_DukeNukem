@@ -4,6 +4,7 @@
 #include "Billborad.h"
 #include "Camera_Component.h"
 #include "CameraObserver.h"
+#include "PlayerObserver.h"
 
 CUI::CUI(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
@@ -11,7 +12,9 @@ CUI::CUI(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_pCameraSubject(ENGINE::GetCameraSubject()),
-	m_pCameraObserver(nullptr)
+	m_pCameraObserver(nullptr),
+	m_pPlayerSubject(ENGINE::GetPlayerSubject()),
+	m_pPlayerObserver(nullptr)
 {
 }
 
@@ -134,6 +137,11 @@ HRESULT CUI::LateInit()
 
 	m_pCameraSubject->Subscribe(m_pCameraObserver);
 
+	m_pPlayerObserver = CPlayerObserver::Create();
+	NULL_CHECK_RETURN(m_pPlayerObserver, E_FAIL);
+
+	m_pPlayerSubject->Subscribe(m_pPlayerObserver);
+
 	return S_OK;
 }
 
@@ -144,6 +152,16 @@ void CUI::Release()
 
 	m_pCameraSubject->UnSubscribe(m_pCameraObserver);
 	ENGINE::Safe_Delete(m_pCameraObserver);
+
+	if (!m_pPlayerObserver) return;
+
+	m_pPlayerSubject->UnSubscribe(m_pPlayerObserver);
+	ENGINE::Safe_Delete(m_pPlayerObserver);
+}
+
+D3DXVECTOR3 CUI::GetPos()
+{
+	return m_vPos;
 }
 
 HRESULT CUI::AddComponent()

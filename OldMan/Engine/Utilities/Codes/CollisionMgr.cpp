@@ -136,12 +136,18 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsAir(false);
 				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
 
+<<<<<<< HEAD
 				//cout << "ÀÀ! ´êÀ½!" << endl;
+=======
+>>>>>>> origin/MERGE_BRANCH
 				return;
 			}
 		}
 
+<<<<<<< HEAD
 	//	cout << "¶¥¿¡ ´êÁö ¾ÊÀ½" << endl;
+=======
+>>>>>>> origin/MERGE_BRANCH
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 	}

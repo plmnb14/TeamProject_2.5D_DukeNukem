@@ -49,11 +49,6 @@ private:
 	int*					m_iNumArr;
 	int						m_iArrCount;
 	NUMBER_TYPE				m_eNumberType;
-
-	ENGINE::CPlayerSubject*	m_pPlayerSubject;
-	CPlayerObserver*		m_pPlayerObserver;
-
-	int m_iBulletTest = 9999;
 };
 
 #define __NUMBER_H__
