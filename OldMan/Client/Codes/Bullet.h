@@ -46,9 +46,10 @@ private:
 	void Set_Pos(D3DXVECTOR3 _Pos);
 	void Set_Dir(D3DXVECTOR3 _Dir);
 	void Set_Angle(float* _Angle);
+	void Set_Speed(float _Speed) { m_fSpeed = _Speed; }
 
 public:
-	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle);
+	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle, float _Speed);
 
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -61,6 +62,7 @@ private:
 
 private:
 	CGameObject*	m_pTarget;
+	float			m_fSpeed;
 };
 
 #define __BULLET_H__

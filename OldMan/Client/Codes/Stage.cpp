@@ -21,6 +21,7 @@
 
 #include "Trasform.h"
 #include "Weapon_Revolver.h"
+#include "Weapon_SMG.h"
 
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -81,6 +82,12 @@ HRESULT CStage::Add_Object_Layer()
 
 	// Revolver
 	pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{-7,2,14});
+	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
+	// SMG
+	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -4,2,14 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
@@ -172,6 +179,7 @@ HRESULT CStage::Initialize()
 		TERRAIN_VTX_X, TERRAIN_VTX_Z, TERRAIN_VTX_ITV);
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Terrain Add Failed", E_FAIL);
 
+	// 
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -179,6 +187,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_CubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -186,6 +195,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_WallCubeCol");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
@@ -193,6 +203,7 @@ HRESULT CStage::Initialize()
 		L"Buffer_CubeTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
 
+	//
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,

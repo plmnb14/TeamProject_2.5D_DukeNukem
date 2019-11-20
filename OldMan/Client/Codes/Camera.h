@@ -64,7 +64,13 @@ public:
 	CameraViewPoint Get_ViewPoint() { return m_eCameraViewPoint; }
 
 public:
+	void SetLookAt(D3DXVECTOR3 _LookAt);
+	void Set_Hotizontal(float _Horizontal) { m_fHorizontal_Move = -_Horizontal; m_fReverse_Horizontal = _Horizontal; };
+	void Set_Vertical(float _Vertical);
+
+public:
 	void KeyInput();
+	void CamShake();
 
 
 
@@ -102,6 +108,15 @@ private:
 	CGameObject*	m_pTarget;	// 추후 Obj Target 으로 변경 예정
 
 private:
+	float m_fVertical_Move;
+	float m_fHorizontal_Move;
+	float m_fReverse_Vertical;
+	float m_fReverse_Horizontal;
+
+private:
+	bool m_bLeft;
+
+private:
 	float m_fEyeHeight;
 	float m_fZoom_Max;
 	float m_fZoom_Min;
@@ -119,6 +134,7 @@ private:
 private:
 	float m_fMax_PlayerRoll_Angle;
 	float m_fCamShake_Y;
+	float m_fCamShake_X;
 };
 
 #define __CAMERA_H__

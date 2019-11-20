@@ -88,6 +88,9 @@
     <Filter Include="02.GameObject\06.Weapon\00.Revolver">
       <UniqueIdentifier>{00e78a05-926d-433d-af60-6feb64810df7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Weapon\01. SMG">
+      <UniqueIdentifier>{bbadecbc-f28b-4194-af7b-6b827618818e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -174,17 +177,21 @@
     <ClInclude Include="..\Codes\Elevator.h">
       <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Skybox.h">
-      <Filter>02.GameObject\01.MapObject\02.Skybox</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Codes\Aim.h">
-      <Filter>02.GameObject\99.UI\01.Aim</Filter>
-    </ClInclude>
     <ClInclude Include="..\Codes\Weapon_Revolver.h">
       <Filter>02.GameObject\06.Weapon\00.Revolver</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Weapon.h">
       <Filter>02.GameObject\06.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Weapon_SMG.h">
+      <Filter>02.GameObject\06.Weapon\01. SMG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Raycast.h" />
+    <ClInclude Include="..\Codes\Skybox.h">
+      <Filter>02.GameObject\01.MapObject\02.Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Aim.h">
+      <Filter>02.GameObject\99.UI\01.Aim</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,17 +255,21 @@
     <ClCompile Include="..\Codes\Elevator.cpp">
       <Filter>02.GameObject\01.MapObject\01.Object\01.Elevator</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Skybox.cpp">
-      <Filter>02.GameObject\01.MapObject\02.Skybox</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Aim.cpp">
-      <Filter>02.GameObject\99.UI\01.Aim</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Weapon_Revolver.cpp">
       <Filter>02.GameObject\06.Weapon\00.Revolver</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Weapon.cpp">
       <Filter>02.GameObject\06.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon_SMG.cpp">
+      <Filter>02.GameObject\06.Weapon\01. SMG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Raycast.cpp" />
+    <ClCompile Include="..\Codes\Skybox.cpp">
+      <Filter>02.GameObject\01.MapObject\02.Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aim.cpp">
+      <Filter>02.GameObject\99.UI\01.Aim</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

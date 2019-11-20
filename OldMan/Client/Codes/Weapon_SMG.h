@@ -1,16 +1,16 @@
 #pragma once
 
-#ifndef __WEAPON_REVOLVER__
+#ifndef __WEAPON_SMG__
 
 #include "Weapon.h"
 
-class CWeapon_Revolver : public CWeapon
+class CWeapon_SMG : public CWeapon
 {
 private:
-	explicit CWeapon_Revolver(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CWeapon_SMG(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
-	virtual ~CWeapon_Revolver();
+	virtual ~CWeapon_SMG();
 
 public:
 	virtual int Update() override;
@@ -32,8 +32,8 @@ public:
 	void Physic();
 
 public:
-	static CWeapon_Revolver* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos);
+	static CWeapon_SMG* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos);
 };
 
-#define __WEAPON_REVOLVER__
+#define __WEAPON_SMG__
 #endif
