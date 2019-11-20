@@ -19,6 +19,7 @@ public:
 
 public:
 	const ENGINE::ABILITY GetPlayerInfo() const;
+	const ENGINE::W_INFO  GetWeaponInfo() const;
 
 public:
 	virtual void Update(int iMessage) override;
@@ -29,6 +30,7 @@ public:
 private:
 	ENGINE::CPlayerSubject*	m_pSubject;
 	ENGINE::ABILITY			m_tInfo;
+	ENGINE::W_INFO			m_tWeaponInfo;
 };
 
 #define __PLAYEROBSERVER_H__

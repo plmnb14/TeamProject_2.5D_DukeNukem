@@ -2,10 +2,10 @@
 #include "Aim.h"
 #include "Trasform.h"
 #include "CameraObserver.h"
-
+#include "PlayerObserver.h"
 
 CAim::CAim(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CUI(pGraphicDev), m_eWeaponType(CPlayer::RIFLE)
+	:CUI(pGraphicDev), m_eWeaponType(ENGINE::WEAPON_TAG::RIFLE)
 {
 }
 
@@ -44,25 +44,28 @@ void CAim::Render()
 {
 	switch (m_eWeaponType)
 	{
-	case CPlayer::MELLE:
+	case ENGINE::WEAPON_TAG::MELLE:
+		CUI::Render();
 		break;
-	case CPlayer::REVOLVER:
+	case ENGINE::WEAPON_TAG::REVOLVER:
+		CUI::Render();
 		break;
-	case CPlayer::RIFLE:
+	case ENGINE::WEAPON_TAG::RIFLE:
+	case ENGINE::WEAPON_TAG::SMG:
 	{
 		for (auto& iter : m_RifleAimArr)
 			iter->Render();
 
 		break;
 	}
-	case CPlayer::SHOTGUN:
+	case ENGINE::WEAPON_TAG::SHOTGUN:
 	{
 		for (auto& iter : m_ShotgunAimArr)
 			iter->Render();
 
 		break;
 	}
-	case CPlayer::LUNCHER:
+	case ENGINE::WEAPON_TAG::LUNCHER:
 		CUI::Render();
 		break;
 	}
@@ -82,7 +85,7 @@ HRESULT CAim::Initialize()
 	m_fMaxMoveAim = 5.f;
 	m_fMoveAim = 0.f;
 
-	m_eWeaponType_Old = CPlayer::RIFLE;
+	m_eWeaponType_Old = ENGINE::WEAPON_TAG::RIFLE;
 
 	InitRifleAim();
 	InitShotgunAim();
@@ -92,10 +95,7 @@ HRESULT CAim::Initialize()
 
 HRESULT CAim::LateInit()
 {
-	m_pCameraObserver = CCameraObserver::Create();
-	NULL_CHECK_RETURN(m_pCameraObserver, E_FAIL);
-
-	m_pCameraSubject->Subscribe(m_pCameraObserver);
+	CUI::LateInit();
 
 	return S_OK;
 }
@@ -114,6 +114,7 @@ void CAim::Release()
 void CAim::CheckWeaponAim()
 {
 	// player에서 weapon 받아오기
+	m_eWeaponType = m_pPlayerObserver->GetWeaponInfo().eWeaponTag;
 
 	if (m_eWeaponType_Old == m_eWeaponType)
 		return;
@@ -121,15 +122,19 @@ void CAim::CheckWeaponAim()
 	m_eWeaponType_Old = m_eWeaponType;
 	switch (m_eWeaponType)
 	{
-	case CPlayer::MELLE:
+	case ENGINE::WEAPON_TAG::MELLE:
+		ChangeTex(L"Aim_dot.png");
 		break;
-	case CPlayer::REVOLVER:
+	case ENGINE::WEAPON_TAG::REVOLVER:
+		ChangeTex(L"Aim_3.png");
 		break;
-	case CPlayer::RIFLE:
+	case ENGINE::WEAPON_TAG::RIFLE:
 		break;
-	case CPlayer::SHOTGUN:
+	case ENGINE::WEAPON_TAG::SHOTGUN:
 		break;
-	case CPlayer::LUNCHER:
+	case ENGINE::WEAPON_TAG::SMG:
+		break;
+	case ENGINE::WEAPON_TAG::LUNCHER:
 		ChangeTex(L"LuncherAim.png");
 		break;
 	default:
@@ -139,7 +144,8 @@ void CAim::CheckWeaponAim()
 
 void CAim::CheckMoveRifleAim()
 {
-	if (m_eWeaponType != CPlayer::RIFLE)
+	if (m_eWeaponType != ENGINE::WEAPON_TAG::RIFLE
+		|| m_eWeaponType != ENGINE::WEAPON_TAG::SMG)
 		return;
 
 	// 임시
@@ -171,7 +177,7 @@ void CAim::CheckMoveRifleAim()
 
 void CAim::CheckMoveShotgunAim()
 {
-	if (m_eWeaponType != CPlayer::SHOTGUN)
+	if (m_eWeaponType != ENGINE::WEAPON_TAG::SHOTGUN)
 		return;
 
 	// 임시

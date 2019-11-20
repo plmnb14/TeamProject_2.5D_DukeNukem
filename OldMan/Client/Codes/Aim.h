@@ -37,17 +37,17 @@ public:
 	static CAim* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 protected:
-	float			m_fMaxMoveAim;
-	float			m_fMoveAim;
+	float				m_fMaxMoveAim;
+	float				m_fMoveAim;
 
-	CUI*			m_RifleAimArr[AIM_END];
-	D3DVECTOR		m_RifleAimOriPos[AIM_END];
+	CUI*				m_RifleAimArr[AIM_END];
+	D3DVECTOR			m_RifleAimOriPos[AIM_END];
 
-	CUI*			m_ShotgunAimArr[AIM_END];
-	D3DVECTOR		m_ShotgunAimOriPos[AIM_END];
+	CUI*				m_ShotgunAimArr[AIM_END];
+	D3DVECTOR			m_ShotgunAimOriPos[AIM_END];
 
-	CPlayer::WEAPON m_eWeaponType;
-	CPlayer::WEAPON m_eWeaponType_Old;
+	ENGINE::WEAPON_TAG	m_eWeaponType;
+	ENGINE::WEAPON_TAG	m_eWeaponType_Old;
 };
 
 #define __AIM_H__

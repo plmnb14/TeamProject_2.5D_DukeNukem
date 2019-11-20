@@ -13,6 +13,7 @@ namespace ENGINE
 	class CTransform;
 	class CCollider;
 	class CCameraSubject;
+	class CPlayerSubject;
 	class CRigidBody;
 }
 
@@ -45,6 +46,7 @@ private:
 	HRESULT AddComponent();
 	void KeyInput();
 	void Physic();
+	void UpdateObserverData();
 
 private:
 	void Shoot();
@@ -75,6 +77,7 @@ private:
 
 	ENGINE::CCameraSubject*	m_pSubject;
 	CCameraObserver*		m_pObserver;
+	ENGINE::CPlayerSubject*	m_pPlayerSubject;
 
 	// 현재 장착중인 무기 정보
 	ENGINE::W_INFO			m_pWInfo;

@@ -16,6 +16,11 @@ const ENGINE::ABILITY CPlayerObserver::GetPlayerInfo() const
 	return m_tInfo;
 }
 
+const ENGINE::W_INFO CPlayerObserver::GetWeaponInfo() const
+{
+	return m_tWeaponInfo;
+}
+
 void CPlayerObserver::Update(int iMessage)
 {
 	// Pull
@@ -24,8 +29,11 @@ void CPlayerObserver::Update(int iMessage)
 
 	switch (iMessage)
 	{
-	case 0:
+	case ENGINE::CPlayerSubject::PLAYER_INFO:
 		m_tInfo = *reinterpret_cast<ENGINE::ABILITY*>(pData);
+		break;
+	case ENGINE::CPlayerSubject::WEAPON_INFO:
+		m_tWeaponInfo = *reinterpret_cast<ENGINE::W_INFO*>(pData);
 		break;
 	}
 }

@@ -4,9 +4,7 @@
 #include "Trasform.h"
 
 CNumber::CNumber(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CUI(pGraphicDev),
-	m_pPlayerSubject(ENGINE::GetPlayerSubject()),
-	m_pPlayerObserver(nullptr)
+	:CUI(pGraphicDev)
 {
 }
 
@@ -27,17 +25,12 @@ int CNumber::Update()
 	{
 	case CNumber::NUMBER_HP:
 	{
-		// 임시.
-		GetNumberArr(100, m_iNumArr, m_iArrCount);
-		//GetNumberArr(m_pObserver->GetPlayerInfo().fHitPoint, m_iNumArr, m_iArrCount);
+		GetNumberArr(m_pPlayerObserver->GetPlayerInfo().fHitPoint, m_iNumArr, m_iArrCount);
 		break;
 	}
 	case CNumber::NUMBER_BULLET:
 	{
-		// 임시.
-		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-			m_iBulletTest -= 1;
-		GetNumberArr(m_iBulletTest, m_iNumArr, m_iArrCount);
+		GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wMagazineBullet, m_iNumArr, m_iArrCount);
 	}
 		break;
 	case CNumber::NUMBER_END:
@@ -91,19 +84,12 @@ HRESULT CNumber::Initialize()
 
 HRESULT CNumber::LateInit()
 {
-	m_pPlayerObserver = CPlayerObserver::Create();
-	NULL_CHECK_RETURN(m_pPlayerObserver, E_FAIL);
-
-	m_pPlayerSubject->Subscribe(m_pPlayerObserver);
-
+	CUI::LateInit();
 	return S_OK;
 }
 
 void CNumber::Release()
 {
-	m_pPlayerSubject->UnSubscribe(m_pPlayerObserver);
-	ENGINE::Safe_Delete(m_pPlayerObserver);
-
 	for (auto& iter : m_vecNumberUI)
 	{
 		ENGINE::Safe_Delete(iter);

@@ -17,7 +17,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTexture(nullptr), m_pBuffer(nullptr),
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
 	m_pRigid(nullptr),
-	m_pSubject(ENGINE::GetCameraSubject()),
+	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE),
 	m_pObserver(nullptr)
 {	
@@ -36,7 +36,8 @@ int CPlayer::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	KeyInput();
-
+	UpdateObserverData();
+	
 	return NO_EVENT;
 }
 
@@ -102,6 +103,15 @@ HRESULT CPlayer::Initialize()
 	m_pRigid->Set_Speed({ 1.f , 1.f , 1.f });				// 각 축에 해당하는 속도
 	m_pRigid->Set_Accel({ 0.f, 0.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 2.f , 4.f , 2.f });			// 각 축에 해당하는 MaxAccel 값
+
+
+	// 임시
+	// Player Info
+	m_pCondition.fHp = 100;
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &m_pCondition);
+	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
+	m_pWInfo.wCurBullet = 0;
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
 
 	return S_OK;
 }
@@ -326,6 +336,12 @@ void CPlayer::Physic()
 		D3DXVECTOR3 JumpLength = { 0, -m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()),0 };
 		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
 	}
+}
+
+void CPlayer::UpdateObserverData()
+{
+	// Update Observer Data
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
 }
 
 void CPlayer::Shoot()

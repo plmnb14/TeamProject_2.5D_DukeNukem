@@ -83,6 +83,10 @@ HRESULT CWeapon_Revolver::Initialize()
 	m_pWInfo.fVertical_Rebound = 0.1f;		// 수직 반동
 	m_pWInfo.fHorizontal_Rebound = 2.f;		// 수평 반동
 
+	// 터저서 임시로 추가함 - 정은혜
+	m_pWInfo.fSpread_X = 1;
+	m_pWInfo.fSpread_Y = 1;
+
 	m_pWInfo.wWeaponDamage = 3;				// 무기 데미지
 	m_pWInfo.eWeaponTag = ENGINE::REVOLVER;
 
