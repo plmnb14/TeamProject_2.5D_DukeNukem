@@ -14,6 +14,7 @@
 #include "MainFrm.h"
 #include "MyFormView.h"
 
+#include "ToolTerrain.h"
 #include "ToolTerrainCube.h"
 #include "ToolTerrainWallCube.h"
 #include "ToolTerrainRect.h"
@@ -199,6 +200,38 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		m_pSelectCube->SetClicked();
 		CreateCube(false);
+	}
+
+	if (!m_bIsMousePressing && (GetAsyncKeyState(VK_MENU) & 0x8000)) //ALT
+	{
+		// Delete Data
+		auto& iter_DataBegin = m_pCubeList.begin();
+		auto& iter_DataEnd = m_pCubeList.end();
+		for (; iter_DataBegin != iter_DataEnd;)
+		{
+			if ((*iter_DataBegin)->GetPicked())
+			{
+				iter_DataBegin = m_pCubeList.erase(iter_DataBegin);
+			}
+			else
+				iter_DataBegin++;
+		}
+
+		// Delete Obj in MapLayer
+		list<ENGINE::CGameObject*> pList = m_mapLayer[ENGINE::CLayer::OBJECT]->Get_List(ENGINE::OBJECT_TYPE::PROPS);
+		list<ENGINE::CGameObject*>::iterator iter_Begin = pList.begin();
+		list<ENGINE::CGameObject*>::iterator iter_End = pList.end();
+		for (;iter_Begin != iter_End;)
+		{
+			CToolTerrain* pTerrain = dynamic_cast<CToolTerrain*>((*iter_Begin));
+			if (pTerrain->GetPicked())
+			{
+				pTerrain->SetDead();
+				iter_Begin = pList.erase(iter_Begin);
+			}
+			else
+				iter_Begin++;
+		}
 	}
 
 	m_vLastPickedCubePos = D3DXVECTOR3((float)point.x, (float)point.y, 0.f);

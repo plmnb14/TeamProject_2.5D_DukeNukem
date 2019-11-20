@@ -24,7 +24,7 @@ IMPLEMENT_DYNCREATE(CMyFormView, CFormView)
 CMyFormView::CMyFormView()
 	: CFormView(IDD_MYFORMVIEW),
 	m_strObjectName(_T("")),
-	m_wstrFileName(L"Tile64x64_9"), m_wstrFilePath(L""),
+	m_wstrFileName(L"Tile64x64_9.png"), m_wstrFilePath(L""),
 	m_eTerrainType(ENGINE::TERRAIN_END)
 	, m_strPositionX(_T("0"))
 	, m_strPositionY(_T("0"))

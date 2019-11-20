@@ -497,34 +497,34 @@ void CCamera::KeyInput()
 
 	if (GetAsyncKeyState('R') & 0x8000)
 	{
-		Pitch(-fMoveSpeed);
+		Pitch(-fMoveSpeed * 1.5f);
 	}
 
 	if (GetAsyncKeyState('F') & 0x8000)
 	{
-		Pitch(fMoveSpeed);
+		Pitch(fMoveSpeed * 1.5f);
 	}
 
 	if (GetAsyncKeyState('Q') & 0x8000)
 	{
-		Yaw(-fMoveSpeed);
+		Yaw(-fMoveSpeed * 1.5f);
 	}
 
 	if (GetAsyncKeyState('E') & 0x8000)
 	{
-		Yaw(fMoveSpeed);
+		Yaw(fMoveSpeed * 1.5f);
 	}
 
 	if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
 	{
-		m_pCCamera_Component->Add_EyePos({ 0 ,fMoveSpeed , 0 });
-		m_pCCamera_Component->Add_LookAt({ 0 ,fMoveSpeed , 0 });
+		m_pCCamera_Component->Add_EyePos({ 0 ,fMoveSpeed * 0.7f , 0 });
+		m_pCCamera_Component->Add_LookAt({ 0 ,fMoveSpeed * 0.7f, 0 });
 	}
 
 	if (GetAsyncKeyState(VK_LCONTROL) & 0x8000)
 	{
-		m_pCCamera_Component->Add_EyePos({ 0 , -fMoveSpeed , 0 });
-		m_pCCamera_Component->Add_LookAt({ 0 , -fMoveSpeed , 0 });
+		m_pCCamera_Component->Add_EyePos({ 0 , -fMoveSpeed * 0.7f, 0 });
+		m_pCCamera_Component->Add_LookAt({ 0 , -fMoveSpeed * 0.7f, 0 });
 	}
 }
 

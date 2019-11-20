@@ -17,7 +17,7 @@
 //// VLD
 //#include <vld.h>
 // memory leaks finder
-#include <crtdbg.h>
+//#include <crtdbg.h>
 
 // MFC의 공통 부분과 무시 가능한 경고 메시지에 대한 숨기기를 해제합니다.
 #define _AFX_ALL_WARNINGS
