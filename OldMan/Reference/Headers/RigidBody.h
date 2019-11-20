@@ -29,11 +29,13 @@ public:
 public:
 	void Set_fMass(float _Mass);
 	void Set_fPower(float _Power);
+	void Set_fForce(float _Force);
 
 public:
 	void Set_Speed(D3DXVECTOR3 _Speed = { 1.f, 1.f, 1.f });
 	void Set_Accel(D3DXVECTOR3 _Accel = { 0.f, 0.f, 0.f });
 	void Set_MaxAccel(D3DXVECTOR3 _MaxAccel = { 0.1f, 0.1f, 0.1f });
+	void Set_MaxSpeed(D3DXVECTOR3 _MaxSpeed = { 1.f, 1.f, 1.f });
 
 public:
 	D3DXVECTOR3 Get_Accel() { return m_tRigid.vAccel; }
@@ -42,6 +44,9 @@ public:
 	bool Get_IsFall() { return m_tRigid.bIsFall; }
 	bool Get_IsAir() { return m_tRigid.bIsAir; }
 	bool Get_IsHit() { return m_tRigid.bIsHit; }
+public:
+	float Get_Force() { return m_tRigid.fForce; }
+
 public:
 	float Set_Jump(D3DXVECTOR3 _TransForm, float _Time);
 	float Set_Fall(D3DXVECTOR3 _TransForm, float _Time);

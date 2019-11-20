@@ -52,7 +52,7 @@ public:
 public:	 
 	inline bool Get_Cinematic(bool _Cinematic) { return m_tCondition.bIsCinematic; };
 	inline bool Get_Dodge(bool _Dodge) { return m_tCondition.bIsDodge; };
-	inline bool Get_Hit(bool _Hit) { return m_tCondition.bIsHit; };
+	inline bool Get_Hit() { return m_tCondition.bIsHit; };
 	inline bool Get_Attack(bool _Attack) { return m_tCondition.bIsAttck; };
 	inline bool Get_JetPack(bool _Jetpack) { return m_tCondition.bIsJetPak; };
 	inline bool Get_Invincible(bool _Invincible) { return m_tCondition.bInvincible; };

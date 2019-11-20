@@ -38,6 +38,7 @@ int CPlayer::Update()
 	KeyInput();
 	UpdateObserverData();
 	
+
 	return NO_EVENT;
 }
 

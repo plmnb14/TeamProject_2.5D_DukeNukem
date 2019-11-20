@@ -39,6 +39,8 @@ int CBullet::Update()
 void CBullet::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
+	m_pCollider->LateUpdate(m_pTransform->GetPos());
+
 }
 
 void CBullet::Render()
@@ -62,6 +64,7 @@ HRESULT CBullet::Initialize()
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
 
 
 	// 리지드 바디 세팅
@@ -78,6 +81,8 @@ HRESULT CBullet::Initialize()
 	m_pRigid->Set_Speed({ 1.f , 1.f , 1.f });				// 각 축에 해당하는 속도
 	m_pRigid->Set_Accel({ 0.f, -1.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 1.f , 1.f , 1.f });			// 각 축에 해당하는 MaxAccel 값
+
+	m_fSpeed = 5.f;
 
 	return S_OK;
 }
@@ -144,6 +149,11 @@ void CBullet::BulletType()
 	{
 	case ENGINE::RIFLE:
 	case ENGINE::REVOLVER:
+	case ENGINE::MONSTER_REVOLVER:
+	{
+		m_pTransform->Move_AdvancedPos(m_dir,m_fSpeed * m_pTimeMgr->GetDelta());
+		break;
+	}
 	case ENGINE::SHOTGUN:
 	case ENGINE::SMG:
 	{
@@ -203,6 +213,7 @@ CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVE
 
 	pInstance->Set_Pos(_Pos);
 	pInstance->Set_Dir(_Dir);
+	pInstance->m_dir = _Dir;
 	pInstance->Set_Angle(_Angle);
 	pInstance->Set_Speed(_Speed);
 	pInstance->Set_WeaponTag(_WeaponTag);

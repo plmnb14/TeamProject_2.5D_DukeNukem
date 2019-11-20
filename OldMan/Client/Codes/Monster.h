@@ -15,6 +15,7 @@ namespace ENGINE
 	class CCameraSubject;
 	class CBillborad;
 	class CRigidBody;
+	class CCondition;
 
 }
 class CCameraObserver;
@@ -49,6 +50,7 @@ private:
 //	void Monster_Shot();
 //	void Object_Serch();
 	void Monster_Fire();
+	void Monster_Bogan();
 	
 public: 
 	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
@@ -71,7 +73,7 @@ private:
 	ENGINE::CCameraSubject*	m_pSubject;
 	ENGINE::CBillborad*		m_pBillborad;
 	ENGINE::CRigidBody*		m_pRigid;
-	ENGINE::CONDITION		m_pCondition;
+	ENGINE::CCondition*		m_pCondition;
 
 
 	float				m_fRange;                   // ¹üÀ§

@@ -6,6 +6,7 @@
 #include "CameraObserver.h"
 #include "RigidBody.h"
 #include "Bullet.h"
+#include "Condition.h"
 
 
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -15,9 +16,8 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr),
 	m_pSubject(ENGINE::GetCameraSubject()),
 	m_pObserver(nullptr), m_pBillborad(nullptr), m_bShot(false),m_pRigid(nullptr),
-	m_pMelleCollider(nullptr)
+	m_pMelleCollider(nullptr),m_pCondition(nullptr)
 	{
-			ZeroMemory(&m_pCondition,sizeof(ENGINE::CONDITION));
 	}
 
 
@@ -36,23 +36,8 @@ int CMonster::Update()
 	//Player_Pursue();
 	m_fTime += m_pTimeMgr->GetDelta();
 // 근접공격 만들기 1. 때리기 2. 물어뜯기 
-	m_bShot = m_pRigid->Get_IsHit();
+	m_bShot = m_pCondition->Get_Hit();
 	
-	if (m_pRigid->Get_IsHit())
-	{
-		m_eNextState = MONSTER_SHOT;
-		m_pRigid->Set_IsHit(false);
-	}
-	else
-	{
-		Monster_Range();
-	
-	}
-	if (m_fTime > 1)
-	{
-		Monster_Fire();
-		m_fTime = 0;
-	}
 	
 
 	return NO_EVENT;
@@ -76,7 +61,23 @@ void CMonster::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 
 	Monster_State_Set();
-	
+
+	if (m_pCondition->Get_Hit())
+	{
+		m_eNextState = MONSTER_SHOT;
+		m_pCondition->Set_Hit(false);
+
+	}
+	else
+	{
+		//Monster_Range();
+
+	}
+	if (m_fTime > 1)
+	{
+		//	Monster_Fire();
+		m_fTime = 0;
+	}
 
 
 }
@@ -130,6 +131,8 @@ HRESULT CMonster::Initialize()
 	// 5. 근접 가능한 공격 사거리까지 도달했을때 
 
 	//공중으로 안쫓게 해야한다. 
+
+	m_pCondition->Set_Hit(false);
 	return S_OK;
 }
 
@@ -199,6 +202,24 @@ HRESULT CMonster::AddComponent()
 
 	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
 	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
+	// MEELE
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Monster_Mell", pComponent });
+	
+	m_pMelleCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+	// conditoin  
+	pComponent = ENGINE::CCondition::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Condition", pComponent });
+
+	m_pCondition = dynamic_cast<ENGINE::CCondition*>(pComponent);
+	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
+
+
+
 
 	return S_OK;
 }
@@ -252,73 +273,71 @@ void CMonster::Monster_Range()
 void CMonster::Monster_Idle()
 {
 	m_pTransform->MovePos(0.f);
+	//cout << "sadfsadf" << endl;
+	m_eNextState = MONSTER_PURSUE;
 
 }
 void CMonster::Monster_Fire()
 {
 	D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();					// 몬스터 위치
+	D3DXVECTOR3 vMonster =  vTempPos - vMonsterPos;						 // 방향 
+	
+	D3DXVec3Normalize(&vMonster, &vMonster);
+	
+	//정면이 되야 쏜다. 
+	// 각도에 따른 렌더와 정면 사격 하게 만든다. 
+	m_MoveSpeed = 300.f * m_pTimeMgr->GetDelta();   // 속도
+	float fAngle[1] = { 0.f };
+
+	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos, vMonster, fAngle, m_MoveSpeed,ENGINE::MONSTER_REVOLVER);
+	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+	
+	
+}
+void CMonster::Monster_Bogan()
+{
+	D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 
 	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();					// 몬스터 위치
-	
-	D3DXVECTOR3 vMonster =  vTempPos - vMonsterPos;
-	
-	D3DXVECTOR3 vMonsterDir_Fowrd = m_pTransform->GetDir();
 
-	D3DXVECTOR3 vMonsterDir_Fowrd2 = { 0.f, 0.f,1.f };
+	D3DXVECTOR3 vMonster = vTempPos - vMonsterPos;						 // 방향 
+
+	D3DXVECTOR3 vMonsterDir_Fowrd = m_pTransform->GetDir();              // 몬스터가 보는 방향 
+
+	D3DXVECTOR3 vMonsterDir_Fowrd2 = { 0.f, 0.f,1.f };                // 몬스터의 룩 벡터 
 
 	D3DXVECTOR3 vMonsterCroos2;
 	D3DXVec3Normalize(&vMonsterDir_Fowrd, &vMonsterDir_Fowrd);
 	D3DXVec3Normalize(&vMonster, &vMonster);
 	D3DXVec3Normalize(&vMonsterDir_Fowrd2, &vMonsterDir_Fowrd2);
-	float Dot; 
-	float Dot2;
-	float Radian; 
-	float test;
-	float test2;
 
-	Dot = D3DXVec3Dot(&vMonster,&vMonsterDir_Fowrd);
+	float Dot, Dot2, test, test2;    //  외적, 내적을 구하기 위한 것들 정리 필요 
+
+	Dot = D3DXVec3Dot(&vMonster, &vMonsterDir_Fowrd);
 	Dot2 = D3DXVec3Dot(&vMonster, &vMonsterDir_Fowrd2);
 
+	D3DXVECTOR3 Mon_RIght_Dir, Mon_Left_Dir, cross;
 
-	D3DXVECTOR3 Mon_RIght_Dir;
-	D3DXVECTOR3 Mon_Left_Dir;
-	D3DXVECTOR3 cross;
-
-	D3DXVec3Cross(&Mon_RIght_Dir, &vMonsterDir_Fowrd, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	D3DXVec3Cross(&Mon_Left_Dir, &vMonsterDir_Fowrd, &D3DXVECTOR3(0.0f, -1.0f, 0.0f));
-
-
+	D3DXVec3Cross(&Mon_RIght_Dir, &vMonsterDir_Fowrd, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); // 우향 벡터를 구하기 위한 외적 
+	D3DXVec3Cross(&Mon_Left_Dir, &vMonsterDir_Fowrd, &D3DXVECTOR3(0.0f, -1.0f, 0.0f)); // 좌향 벡터를 구하기 위한 외적 
 	D3DXVec3Cross(&cross, &vMonsterDir_Fowrd, &vMonster);
-
 
 	test = D3DXVec3Dot(&Mon_RIght_Dir, &vMonster);
 	test2 = D3DXVec3Dot(&Mon_Left_Dir, &vMonster);
-	
-	//m_pTransform->SetAngle(D3DXToDegree((float)acos(test)), ENGINE::ANGLE_X);
-	//m_pTransform->SetAngle(D3DXToDegree((float)acos(Dot)), ENGINE::ANGLE_Y);
-	float fAngle[3];
 
-	
-	//뭔가 공식이 나사가 빠진듯한 기분 -? ㅇ
-
+	//정면이 되야 쏜다. 
+	// 각도에 따른 렌더와 정면 사격 하게 만든다. 
 	m_MoveSpeed = 1.f * m_pTimeMgr->GetDelta();   // 속도
+	float fAngle[1] = { 0.f };
 
-
-	//cout << vMonster.y << endl;
-	//cout << vMonster.x << endl;
-
-	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos, vMonster, fAngle, m_MoveSpeed);
+	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos, vMonster, fAngle, m_MoveSpeed, ENGINE::REVOLVER);
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
 
-
-	/*
-
-
+	
 	m_pTransform->SetAngle((float)45.f, ENGINE::ANGLE_Y);
 	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, m_MoveSpeed);
-
 	float fShotDirTemp = D3DXToDegree((float)acosf(Dot2));
-
 	if (vMonster.x < 0.f)
 		fShotDirTemp = 360.f - fShotDirTemp;
 
@@ -327,19 +346,19 @@ void CMonster::Monster_Fire()
 		fAngle[0] = 0.f;
 		fAngle[1] = fShotDirTemp;
 		fAngle[2] = 0.f;
-
-		
 	}
 	// << fAngle[1] << " 일" << endl;      // 우좌 
 	cout << D3DXToDegree(acosf(Dot)) << " 앞뒤" << endl;     // 좌우 
 	cout << D3DXToDegree(acosf(cross.y)) << " 좌우" << endl;     // - 이면 뒤 +이면 앞이다 
-	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y)<< " 사" << endl;
+	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << " 사" << endl;
 
-	*/
+
 }
+
+// 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CMonster::Monster_State_Set()
 {
-	if (m_eCurState != m_eNextState || m_eNextState == MONSTER_PURSUE)
+	if (m_eCurState != m_eNextState || m_eNextState == MONSTER_SHOT || m_eNextState == MONSTER_PURSUE)
 	{
 		switch (m_eCurState)
 		{
@@ -352,9 +371,8 @@ void CMonster::Monster_State_Set()
 			Player_Pursue();
 			break;
 		case MONSTER_SHOT:
-		//	cout << "피" << endl;
+			cout << "피" << endl;
 			Monster_Idle();
-			Player_Pursue();
 			break;
 		}
 		m_eCurState = m_eNextState;

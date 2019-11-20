@@ -5,7 +5,7 @@
 #include "Collider.h"
 #include "Trasform.h"
 #include "RigidBody.h"
-
+#include "Condition.h"
 USING(ENGINE)
 
 CCollisionMgr::CCollisionMgr()
@@ -164,15 +164,13 @@ void CCollisionMgr::CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list
 			{
 				//cout << "충돌체크 됩니다" << endl;
 
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsHit(true);
-				dynamic_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"))->Set_IsHit(true);
+				dynamic_cast<CCondition*>(rDst->Get_Component(L"Condition"))->Set_Hit(true);
 				return;
 			}
 			else
 			{
-				//cout << "충돌 안함" << endl;
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsHit(false);
-				dynamic_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"))->Set_IsHit(false);
+			//cout << "충돌 안함" << endl;
+				dynamic_cast<CCondition*>(rDst->Get_Component(L"Condition"))->Set_Hit(false);
 
 			}
 		}
@@ -182,39 +180,6 @@ void CCollisionMgr::CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list
 
 }
 
-void CCollisionMgr::CollisionTarget_To_Monstr_Melle(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
-{
-	for (auto& rDst : rDstList)
-	{
-		for (auto& rSrc : rSrcList)
-		{
-			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
-			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Monster_M"));
-
-			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
-
-			if(rdS)
-
-			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
-			{
-				//cout << "충돌체크 됩니다" << endl;
-
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsHit(true);
-				return;
-			}
-			else
-			{
-				//cout << "충돌 안함" << endl;
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsHit(false);
-				dynamic_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"))->Set_IsHit(false);
-
-			}
-		}
-
-
-
-}
 
 bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* rSrc, CCollider* _rDstCol , CCollider* _rSrcCol)
 {
