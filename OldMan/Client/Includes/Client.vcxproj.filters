@@ -91,6 +91,12 @@
     <Filter Include="02.GameObject\06.Weapon\01. SMG">
       <UniqueIdentifier>{bbadecbc-f28b-4194-af7b-6b827618818e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Weapon\02. Pump">
+      <UniqueIdentifier>{31ea12ab-ea0b-457d-8a70-b430577ca44a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Weapon\03. Rocket">
+      <UniqueIdentifier>{9e8378cd-9723-49b1-905c-59881153d1c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -193,6 +199,12 @@
     <ClInclude Include="..\Codes\Aim.h">
       <Filter>02.GameObject\99.UI\01.Aim</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Weapon_Pump.h">
+      <Filter>02.GameObject\06.Weapon\02. Pump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Weapon_Rocket.h">
+      <Filter>02.GameObject\06.Weapon\03. Rocket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -270,6 +282,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Aim.cpp">
       <Filter>02.GameObject\99.UI\01.Aim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon_Pump.cpp">
+      <Filter>02.GameObject\06.Weapon\02. Pump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon_Rocket.cpp">
+      <Filter>02.GameObject\06.Weapon\03. Rocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

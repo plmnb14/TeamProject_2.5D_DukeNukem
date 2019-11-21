@@ -7,6 +7,7 @@ CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphicDev)
 	: m_pGraphicDev(pGraphicDev) , m_pCamera(nullptr), m_bIsDead(false)
 {
 	m_pGraphicDev->AddRef();
+	ZeroMemory(&m_eCondition, sizeof(CONDITION));
 }
 
 CGameObject::~CGameObject()

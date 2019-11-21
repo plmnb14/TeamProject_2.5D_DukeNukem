@@ -171,6 +171,11 @@ namespace ENGINE
 		bool bIsHit;		// 피격 체크
 		bool bIsAttck;		// 공격 가능체크
 		bool bIsJetPak;		// 제트팩을 장착했는지
+		bool bMeleeAttack;	// 근접 공격 체크
+		bool bRangeAttack;	// 원거리 공격 체크
+		bool bSpecialAttack;// 특수 공격 체크
+
+		bool bInvincible;	// 무적 ( 피격에 대한 면역 )
 
 	}CONDITION;
 

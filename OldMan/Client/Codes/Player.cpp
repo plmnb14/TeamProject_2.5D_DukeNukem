@@ -310,6 +310,57 @@ void CPlayer::KeyInput()
 		}
 	}
 
+	if (m_pKeyMgr->KeyDown(ENGINE::KEY_4))
+	{
+		auto iter_find = m_mWeaponInfo.find(ENGINE::WEAPON_TAG::SHOTGUN);
+
+		if (m_mWeaponInfo.end() == iter_find)
+			return;
+
+		else
+		{
+			if (m_eWeaponState == iter_find->second->eWeaponTag)
+			{
+				cout << "Pump_Shotgun already selected" << endl;
+
+				return;
+			}
+
+			else
+			{
+				cout << "Select Pump_Shotgun" << endl;
+
+				m_eWeaponState = iter_find->second->eWeaponTag;
+				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+			}
+		}
+	}
+
+	if (m_pKeyMgr->KeyDown(ENGINE::KEY_5))
+	{
+		auto iter_find = m_mWeaponInfo.find(ENGINE::WEAPON_TAG::LUNCHER);
+
+		if (m_mWeaponInfo.end() == iter_find)
+			return;
+
+		else
+		{
+			if (m_eWeaponState == iter_find->second->eWeaponTag)
+			{
+				cout << "Rocket_Luncher already selected" << endl;
+
+				return;
+			}
+
+			else
+			{
+				cout << "Select Rocket_Luncher" << endl;
+
+				m_eWeaponState = iter_find->second->eWeaponTag;
+				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+			}
+		}
+	}
 
 }
 
@@ -383,7 +434,7 @@ void CPlayer::Shoot()
 			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) - 6 + yRand;
 			fAngle[2] = 0;
 
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed);
+			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
 
 			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_pWInfo.fHorizontal_Rebound);
@@ -402,9 +453,86 @@ void CPlayer::Shoot()
 			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
 			fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
 
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle , m_pWInfo.fBullet_Speed);
+			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle , m_pWInfo.fBullet_Speed, m_pWInfo.eWeaponTag);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
 		}
+	}
+}
+
+void CPlayer::Shoot_Shotgun()
+{
+	if (m_pWInfo.wMagazineBullet > 0)
+	{
+		for (int i = 0; i < 30; ++i)
+		{
+			float a = 0;
+			float c = 0;
+			float b = rand() % 2;
+
+			if (b == 1)
+			{
+				a = 1;
+				c = -1;
+			}
+			else if (b == 0)
+			{
+				a = -1;
+				c = 1;
+			}
+
+
+			int xSpread = m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2) + (i * a * 2);
+			int ySpread = m_pWInfo.fSpread_Y - (m_pWInfo.fSpread_Y * 2) + (i * c * 2);
+
+			float xRand = rand() % xSpread * 0.01f;
+			float yRand = rand() % ySpread * 0.01f;
+
+			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+			D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
+			D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
+			D3DXVECTOR3 tmpRight = dynamic_cast<CCamera*>(m_pCamera)->Get_Right();
+
+			if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
+			{
+				D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 2 * tmpUp.x + tmpRight.x * 2,
+					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 2 * tmpUp.y + tmpRight.y * 2,
+					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 2 * tmpUp.z + tmpRight.z * 2 };
+
+				float fAngle[3];
+
+				// Åº ÆÛÁü °ü·Ã
+				fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 96 + xRand;
+				fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) - 6 + yRand;
+				fAngle[2] = 0;
+
+				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+
+				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_pWInfo.fHorizontal_Rebound);
+				dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_pWInfo.fVertical_Rebound);
+			}
+
+			else if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->THIRD_PERSON)
+			{
+				D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x * 3,
+					m_pTransform->GetPos().y + 1.5f,
+					m_pTransform->GetPos().z + tmpDir.z * 3 };
+
+				float fAngle[3];
+
+				fAngle[0] = m_pTransform->GetAngle(ENGINE::ANGLE_X);
+				fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
+				fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
+
+				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+			}
+		}
+
+		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
+		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;
+
+		cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
 	}
 }
 
@@ -454,6 +582,7 @@ void CPlayer::ShootType()
 	{
 	case ENGINE::MELLE:
 	case ENGINE::REVOLVER:
+	case ENGINE::LUNCHER:
 	{
 		if (m_pKeyMgr->KeyDown(ENGINE::KEY_LBUTTON))
 		{
@@ -469,6 +598,16 @@ void CPlayer::ShootType()
 		if (m_pKeyMgr->KeyPressing(ENGINE::KEY_LBUTTON))
 		{
 			Shoot();
+		}
+
+		break;
+	}
+	
+	case ENGINE::SHOTGUN:
+	{
+		if (m_pKeyMgr->KeyDown(ENGINE::KEY_LBUTTON))
+		{
+			Shoot_Shotgun();
 		}
 
 		break;
