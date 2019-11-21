@@ -71,7 +71,7 @@ HRESULT CWeapon_SMG::Initialize()
 
 
 	m_pWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
-	m_pWInfo.fInterval = 0.02f;				// 발사 간격
+	m_pWInfo.fInterval = 0.05f;				// 발사 간격
 	m_pWInfo.fKnockBack_Value = 0.1f;		// 저지력
 
 	m_pWInfo.wMaxBullet = 512;				// 최대 탄환 수
@@ -86,7 +86,7 @@ HRESULT CWeapon_SMG::Initialize()
 	m_pWInfo.fSpread_X = 50;
 	m_pWInfo.fSpread_Y = 50;
 
-	m_pWInfo.fBullet_Speed = 300.f;
+	m_pWInfo.fBullet_Speed = 200.f;
 
 	m_pWInfo.wWeaponDamage = 2;				// 무기 데미지
 	m_pWInfo.eWeaponTag = ENGINE::SMG;

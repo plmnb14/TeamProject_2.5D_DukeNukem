@@ -54,9 +54,6 @@ public:
 	
 
 public:
-	float Get_Force() { return m_tRigid.fForce; }
-
-public:
 	float Set_Jump(D3DXVECTOR3 _TransForm, float _Time);
 	float Set_Fall(D3DXVECTOR3 _TransForm, float _Time);
 

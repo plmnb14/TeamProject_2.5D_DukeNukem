@@ -926,3 +926,6 @@ No_Animation|Number|Number_Blue_7.png|1|..\Client\Texture\UI\No_Animation\Number
 No_Animation|Number|Number_Blue_8.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_8.png
 No_Animation|Number|Number_Blue_9.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_9.png
 No_Animation|Number|Slash.png|1|..\Client\Texture\UI\No_Animation\Number\Slash.png
+SMG_Fire_0.png|SMG_Fire_0.png|SMG_Fire_0.png|1|..\Client\Texture\Weapon\SMG\SMG_Fire\SMG_Fire_0.png
+SMG_Fire_1.png|SMG_Fire_1.png|SMG_Fire_1.png|1|..\Client\Texture\Weapon\SMG\SMG_Fire\SMG_Fire_1.png
+SMG_Fire_2.png|SMG_Fire_2.png|SMG_Fire_2.png|1|..\Client\Texture\Weapon\SMG\SMG_Fire\SMG_Fire_2.png

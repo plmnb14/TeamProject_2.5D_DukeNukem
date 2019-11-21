@@ -27,6 +27,8 @@
 #include "Weapon_Pump.h"
 #include "Weapon_Rocket.h"
 
+#include "Player_Hand.h"
+
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
@@ -83,6 +85,12 @@ HRESULT CStage::Add_Object_Layer()
 	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::CAMERA, pObject);
 	pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
+
+	// Player_Hand
+	pObject = CPlayer_Hand::Create(m_pGraphicDev , pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Player Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
 
 	// Revolver
 	pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{-7,2,8});
@@ -156,37 +164,37 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
-	//// HP Number
-	//pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
-	//NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_HP Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -330.f, 0.f));
-	//
-	//// Shield Number
-	//pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_SHIELD);
-	//NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_SHIELD Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -295.f, 0.f));
-	//
-	//// HP Icon
-	//pObject = CUI::Create(m_pGraphicDev, L"HpIcon.png");
-	//NULL_CHECK_MSG_RETURN(pObject, L"HpIcon Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(10.f, 10.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -330.f, 0.f));
-	//
-	//// Shield Icon
-	//pObject = CUI::Create(m_pGraphicDev, L"ArmorIcon.png");
-	//NULL_CHECK_MSG_RETURN(pObject, L"ArmorIcon Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(10.f, 13.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -295.f, 0.f));
+	// HP Number
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
+	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_HP Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -330.f, 0.f));
+	
+	// Shield Number
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_SHIELD);
+	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_SHIELD Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -295.f, 0.f));
+	
+	// HP Icon
+	pObject = CUI::Create(m_pGraphicDev, L"HpIcon.png");
+	NULL_CHECK_MSG_RETURN(pObject, L"HpIcon Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 10.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -330.f, 0.f));
+	
+	// Shield Icon
+	pObject = CUI::Create(m_pGraphicDev, L"ArmorIcon.png");
+	NULL_CHECK_MSG_RETURN(pObject, L"ArmorIcon Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 13.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -295.f, 0.f));
 
 
 	// Bullet
@@ -197,29 +205,29 @@ HRESULT CStage::Add_UI_Layer()
 	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
 	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -280.f, 0.f));
 
-	//// Buller Line
-	//pObject = CUI::Create(m_pGraphicDev, L"WeaponRightLine.png");
-	//NULL_CHECK_MSG_RETURN(pObject, L"WeaponRightLine Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(600.f, -310.f, 0.f));
-	//
-	//// HP Bar
-	//pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_HP);
-	//NULL_CHECK_MSG_RETURN(pObject, L"BAR_HP Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -330.f, 0.f));
-	//
-	//// Shield Bar
-	//pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_SHIELD);
-	//NULL_CHECK_MSG_RETURN(pObject, L"BAR_SHIELD Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -295.f, 0.f));
+	// Buller Line
+	pObject = CUI::Create(m_pGraphicDev, L"WeaponRightLine.png");
+	NULL_CHECK_MSG_RETURN(pObject, L"WeaponRightLine Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(600.f, -310.f, 0.f));
+	
+	// HP Bar
+	pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_HP);
+	NULL_CHECK_MSG_RETURN(pObject, L"BAR_HP Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -330.f, 0.f));
+	
+	// Shield Bar
+	pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_SHIELD);
+	NULL_CHECK_MSG_RETURN(pObject, L"BAR_SHIELD Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	dynamic_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
+	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -295.f, 0.f));
 
 	// Weapon Icon
 	pObject = CWeaponIcon::Create(m_pGraphicDev);
@@ -236,8 +244,22 @@ HRESULT CStage::Initialize()
 {
 	PipeLineSetUp();
 
+	HRESULT hr = m_pResourceMgr->AddTexture(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::TEX_NORMAL,
+		L"SMG_Fire1",
+		L"../Texture/Weapon/SMG/SMG_Fire/SMG_Fire_%d.png", 3);
+
+	m_pResourceMgr->AddTexture(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::TEX_NORMAL,
+		L"SMG_Zoom1",
+		L"../Texture/Weapon/SMG/SMG_Zoom/SMG_Zoom_%d.png", 4);
+
 	// Player Buffer
-	HRESULT hr = m_pResourceMgr->AddBuffer(
+	m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_STATIC,
 		ENGINE::CVIBuffer::BUFFER_RCTEX,

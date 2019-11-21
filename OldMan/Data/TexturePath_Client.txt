@@ -17,6 +17,7 @@ Animation|Lava|Lava_%d.png|0|..\Texture\Tiles\Animation\Lava\Lava_%d.png
 Animation|Screen_Broke|ScreenBroke_%d.png|0|..\Texture\Tiles\Animation\Screen_Broke\ScreenBroke_%d.png
 Animation|Screen_Noise|ScreenNoise_%d.png|0|..\Texture\Tiles\Animation\Screen_Noise\ScreenNoise_%d.png
 Animation|Water|Water_%d.png|0|..\Texture\Tiles\Animation\Water\Water_%d.png
+SMG|SMG_Fire|SMG_Fire_%d.png|0|..\Texture\Weapon\SMG\SMG_Fire\SMG_Fire_%d.png
 No_Animation|dds|skybox_hell.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_hell.dds
 No_Animation|dds|skybox_redSpace.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_redSpace.dds
 No_Animation|dds|skybox_sky.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_sky.dds

@@ -103,6 +103,9 @@
     <Filter Include="02.GameObject\99.UI\03.WeaponIcon">
       <UniqueIdentifier>{b95507a5-ab33-48d9-97bd-398571f62a72}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\00.Player\00. Player_Hand">
+      <UniqueIdentifier>{ac776010-fcd6-4a05-98d0-543420771881}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -217,6 +220,9 @@
     <ClInclude Include="..\Codes\WeaponIcon.h">
       <Filter>02.GameObject\99.UI\03.WeaponIcon</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Player_Hand.h">
+      <Filter>02.GameObject\00.Player\00. Player_Hand</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -306,6 +312,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\WeaponIcon.cpp">
       <Filter>02.GameObject\99.UI\03.WeaponIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player_Hand.cpp">
+      <Filter>02.GameObject\00.Player\00. Player_Hand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -323,10 +323,6 @@ void CMonster::Monster_Foward()
 	
 	test = D3DXVec3Dot(&Mon_RIght_Dir, &vMonster);                 // - 일때 오른쪽 +왼쪽이다. 
 	test2 = D3DXVec3Dot(&Mon_Left_Dir, &vMonster);
-
-	cout << test << " 우" << endl;     // 앞뒤   0~90 도 앞 90~ 180 도 뒤 
-	//cout << D3DXToDegree(acosf(test2)) << "좌 " << endl;     // 앞뒤   0~90 도 앞 90~ 180 도 뒤 
-	cout << Mon_RIght_Dir.x << endl;
 	
 }
 
@@ -431,10 +427,6 @@ void CMonster::Monster_Bogan()
 		fAngle[1] = fShotDirTemp;
 		fAngle[2] = 0.f;
 	}
-	// << fAngle[1] << " 일" << endl;      // 우좌 
-	cout << D3DXToDegree(acosf(Dot)) << " 앞뒤" << endl;     // 좌우 
-	cout << D3DXToDegree(acosf(cross.y)) << " 좌우" << endl;     // - 이면 뒤 +이면 앞이다 
-	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << " 사" << endl;
 
 
 }
@@ -492,7 +484,7 @@ void CMonster::Monster_State_Set()
 			Player_Pursue();
 			break;
 		case MONSTER_SHOT:
-			cout << "피" << endl;
+			//cout << "피" << endl;
 			Monster_Shot();
 			break;
 		}

@@ -324,18 +324,73 @@ bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameO
 
 	else 
 	{
-		D3DXVECTOR3 vTemPos[9] = {};
-		vTemPos[0] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.9f);
-		vTemPos[1] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.8f);
-		vTemPos[2] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.7f);
-		vTemPos[3] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.6f);
-		vTemPos[4] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.5f);
-		vTemPos[5] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.4f);
-		vTemPos[6] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.3f);
-		vTemPos[7] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.2f);
-		vTemPos[8] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.1f);
+		// 현재 거리와 과거 거리의 차이를 구한다. 그리고, 차이의 일정 비율만큼 빼준다.
 
-		for (int i = 0; i < 9; ++i)
+		D3DXVECTOR3 vTempGap = _rDstCol->Get_OldPos() - rDstBox->vCenterPos;
+		D3DXVECTOR3 vTemPos[19] = {};
+		vTemPos[0] = rDstBox->vCenterPos + vTempGap * 0.95f;
+		vTemPos[1] = rDstBox->vCenterPos + vTempGap * 0.9f;
+		vTemPos[2] = rDstBox->vCenterPos + vTempGap * 0.85f;
+		vTemPos[3] = rDstBox->vCenterPos + vTempGap * 0.8f;
+		vTemPos[4] = rDstBox->vCenterPos + vTempGap * 0.75f;
+		vTemPos[5] = rDstBox->vCenterPos + vTempGap * 0.7f;
+		vTemPos[6] = rDstBox->vCenterPos + vTempGap * 0.65f;
+		vTemPos[7] = rDstBox->vCenterPos + vTempGap * 0.6f;
+		vTemPos[8] = rDstBox->vCenterPos + vTempGap * 0.55f;
+		vTemPos[9] = rDstBox->vCenterPos + vTempGap * 0.5f;
+		vTemPos[10] = rDstBox->vCenterPos+ vTempGap  * 0.45f;
+		vTemPos[11] = rDstBox->vCenterPos+ vTempGap  * 0.4f;
+		vTemPos[12] = rDstBox->vCenterPos+ vTempGap  * 0.35f;
+		vTemPos[13] = rDstBox->vCenterPos+ vTempGap  * 0.3f;
+		vTemPos[14] = rDstBox->vCenterPos+ vTempGap  * 0.25f;
+		vTemPos[15] = rDstBox->vCenterPos+ vTempGap  * 0.2f;
+		vTemPos[16] = rDstBox->vCenterPos+ vTempGap  * 0.15f;
+		vTemPos[17] = rDstBox->vCenterPos+ vTempGap  * 0.1f;
+		vTemPos[18] = rDstBox->vCenterPos+ vTempGap  * 0.05f; 
+
+		//D3DXVECTOR3 vTemPos[19] = {};
+		//vTemPos[0] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.95f);
+		//vTemPos[1] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.9f);
+		//vTemPos[2] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.85f);
+		//vTemPos[3] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.8f);
+		//vTemPos[4] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.75f);
+		//vTemPos[5] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.7f);
+		//vTemPos[6] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.65f);
+		//vTemPos[7] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.6f);
+		//vTemPos[8] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.55f);
+		//vTemPos[9] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.5f);
+		//vTemPos[10] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.45f);
+		//vTemPos[11] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.4f);
+		//vTemPos[12] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.35f);
+		//vTemPos[13] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.3f);
+		//vTemPos[14] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.25f);
+		//vTemPos[15] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.2f);
+		//vTemPos[16] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.15f);
+		//vTemPos[17] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.1f);
+		//vTemPos[18] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.05f); 
+
+		//D3DXVECTOR3 vTemPos[19] = {};
+		//vTemPos[0] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.95f);
+		//vTemPos[1] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.9f);
+		//vTemPos[2] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.85f);
+		//vTemPos[3] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.8f);
+		//vTemPos[4] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.75f);
+		//vTemPos[5] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.7f);
+		//vTemPos[6] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.65f);
+		//vTemPos[7] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.6f);
+		//vTemPos[8] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.55f);
+		//vTemPos[9] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.5f);
+		//vTemPos[10] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.45f);
+		//vTemPos[11] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.4f);
+		//vTemPos[12] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.35f);
+		//vTemPos[13] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.3f);
+		//vTemPos[14] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.25f);
+		//vTemPos[15] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.2f);
+		//vTemPos[16] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.15f);
+		//vTemPos[17] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.1f);
+		//vTemPos[18] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.05f);
+
+		for (int i = 0; i < 19; ++i)
 		{
 			_rDstCol->Set_CenterPos(vTemPos[i]);
 			_rDstCol->SetUp_Box();

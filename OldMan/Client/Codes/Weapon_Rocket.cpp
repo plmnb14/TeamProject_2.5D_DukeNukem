@@ -86,7 +86,7 @@ HRESULT CWeapon_Rocket::Initialize()
 	m_pWInfo.fSpread_X = 1;
 	m_pWInfo.fSpread_Y = 1;
 
-	m_pWInfo.fBullet_Speed = 20.f;
+	m_pWInfo.fBullet_Speed = 30.f;
 
 	m_pWInfo.wWeaponDamage = 10.f;				// 무기 데미지
 	m_pWInfo.eWeaponTag = ENGINE::LUNCHER;

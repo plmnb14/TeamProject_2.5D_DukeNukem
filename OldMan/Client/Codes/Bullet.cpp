@@ -28,9 +28,8 @@ int CBullet::Update()
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
-	ENGINE::CGameObject::Update();
-
 	m_pCollider->Set_OldPos(m_pTransform->GetPos());
+	ENGINE::CGameObject::Update();
 	BulletType();
 	
 	KeyInput();
@@ -64,7 +63,7 @@ HRESULT CBullet::Initialize()
 	m_pTransform->SetSize(D3DXVECTOR3(0.2f, 0.2f, 0.2f));
 
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 0.3f , 0.3f, 0.3f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 0.5f , 0.5f, 0.5f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(true);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표

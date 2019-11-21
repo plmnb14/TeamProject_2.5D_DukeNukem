@@ -508,14 +508,14 @@ void CPlayer::Shoot()
 			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
 			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
 
-			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x - 1 * tmpUp.x,
-				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 1 * tmpUp.y,
-				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z - 1 * tmpUp.z };
+			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x - 0.5f * tmpUp.x,
+				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 0.5f * tmpUp.y,
+				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z - 0.5f * tmpUp.z };
 
 			float fAngle[3];
 
 			// Åº ÆÛÁü °ü·Ã
-			fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 90 + xRand;
+			fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 93 + xRand;
 			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) + yRand;
 			fAngle[2] = 0;
 
@@ -579,9 +579,9 @@ void CPlayer::Shoot_Shotgun()
 
 			if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 			{
-				D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
-					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
-					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
+				D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x  - 1 * tmpUp.x,
+					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 1 * tmpUp.y,
+					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z - 1 * tmpUp.z };
 
 				float fAngle[3];
 
@@ -766,7 +766,7 @@ void CPlayer::ShootType()
 
 void CPlayer::Zoom()
 {
-	float velocity = (m_fZoomAccel * m_fZoomAccel) * m_pTimeMgr->GetDelta();
+	float velocity = (m_fZoomAccel * m_fZoomAccel * 2) * m_pTimeMgr->GetDelta();
 
 	if (m_bZoom == true)
 	{
@@ -801,7 +801,7 @@ void CPlayer::Zoom()
 	//		m_fZoomAccel += 15.f * m_pTimeMgr->GetDelta();
 	//}
 
-	cout << velocity << endl;
+	//cout << velocity << endl;
 
 	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_RBUTTON))
 	{

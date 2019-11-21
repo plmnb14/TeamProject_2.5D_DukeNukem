@@ -68,6 +68,8 @@ private:
 
 public:
 	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
+	bool Get_Zoom() { return m_bZoom; }
+	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev);
