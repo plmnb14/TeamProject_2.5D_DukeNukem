@@ -299,7 +299,7 @@ void CMyFormView::Update()
 {
 	UpdateData(TRUE);
 
-	m_bIsOnDlg = m_ObjSelect_Map.IsWindowVisible();
+	//m_bIsOnDlg = m_ObjSelect_Map.IsWindowVisible();
 
 	for (int i = 0; i < 3; i++)
 	{

@@ -25,7 +25,7 @@ int CNumber::Update()
 	{
 	case CNumber::NUMBER_HP:
 	{
-		GetNumberArr(m_pPlayerObserver->GetPlayerInfo().fHitPoint, m_iNumArr, m_iArrCount);
+		GetNumberArr((int)m_pPlayerObserver->GetPlayerInfo().fHitPoint, m_iNumArr, m_iArrCount);
 		break;
 	}
 	case CNumber::NUMBER_BULLET:
