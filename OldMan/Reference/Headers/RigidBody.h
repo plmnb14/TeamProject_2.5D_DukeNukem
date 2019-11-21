@@ -49,9 +49,6 @@ public:
 	bool Get_IsHit() { return m_tRigid.bIsHit; }
 public:
 	float Get_Force() { return m_tRigid.fForce; }
-
-public:
-	float Get_Force() { return m_tRigid.fForce; }
 	
 
 public:

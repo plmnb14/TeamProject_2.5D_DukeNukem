@@ -43,14 +43,19 @@ private:
 private:
 	HRESULT AddComponent();
 	void Player_Pursue();  //추격하다 
+	void Monster_Foward();
 	void Monster_State_Set();   //상태
 //	void Monster_State_Set2();   //상태
 	void Monster_Range();                           // 범위
 	void Monster_Idle();
-//	void Monster_Shot();
+	void Monster_Shot();
 //	void Object_Serch();
 	void Monster_Fire();
 	void Monster_Bogan();
+private:											//물리 
+	void Check_Physic();
+
+
 	
 public: 
 	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
@@ -74,6 +79,7 @@ private:
 	ENGINE::CBillborad*		m_pBillborad;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCondition*		m_pCondition;
+	ENGINE::CCollider*		m_pGroundChekCollider;
 
 
 	float				m_fRange;                   // 범위

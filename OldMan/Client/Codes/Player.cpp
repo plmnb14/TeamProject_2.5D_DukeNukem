@@ -40,7 +40,7 @@ int CPlayer::Update()
 
 	Check_Slide();
 	Check_Run();
-	Check_Physic();
+//	Check_Physic();
 	
 	UpdateObserverData();
 
@@ -510,7 +510,7 @@ void CPlayer::Shoot()
 			fAngle[2] = 0;
 
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 
 			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_pWInfo.fHorizontal_Rebound);
 			dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_pWInfo.fVertical_Rebound);
@@ -529,7 +529,7 @@ void CPlayer::Shoot()
 			fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
 
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle , m_pWInfo.fBullet_Speed, m_pWInfo.eWeaponTag);
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 		}
 	}
 }
@@ -581,7 +581,7 @@ void CPlayer::Shoot_Shotgun()
 				fAngle[2] = 0;
 
 				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 
 				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_pWInfo.fHorizontal_Rebound);
 				dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_pWInfo.fVertical_Rebound);
@@ -600,7 +600,7 @@ void CPlayer::Shoot_Shotgun()
 				fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
 
 				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET, pInstance);
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 			}
 		}
 

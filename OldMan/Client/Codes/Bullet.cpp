@@ -87,7 +87,7 @@ HRESULT CBullet::Initialize()
 	m_pRigid->Set_Accel({ 0.f, -1.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 1.f , 1.f , 1.f });			// 각 축에 해당하는 MaxAccel 값
 
-	m_fLifetime = 1.f;
+	m_fLifetime = 10.f;
 
 	return S_OK;
 }
@@ -169,6 +169,11 @@ void CBullet::BulletType()
 
 		break;
 	}
+	case ENGINE::MONSTER_REVOLVER:
+	{
+		m_pTransform->Move_AdvancedPos(m_dir,m_fSpeed * m_pTimeMgr->GetDelta());
+		break;
+	}
 	}
 }
 
@@ -213,6 +218,7 @@ CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVE
 
 	pInstance->Set_Pos(_Pos);
 	pInstance->Set_Dir(_Dir);
+	pInstance->m_dir = _Dir;
 	pInstance->Set_Angle(_Angle);
 	pInstance->Set_Speed(_Speed);
 	pInstance->Set_WeaponTag(_WeaponTag);

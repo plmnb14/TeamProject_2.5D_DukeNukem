@@ -160,11 +160,11 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 			}
 		}
 
-<<<<<<< HEAD
+
 	//	cout << "¶¥¿¡ ´êÁö ¾ÊÀ½" << endl;
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
-=======
+
 		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 	}
@@ -197,7 +197,7 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 				continue;
 			}
 		}
->>>>>>> origin/_1120
+
 	}
 }
 

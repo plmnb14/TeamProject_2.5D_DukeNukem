@@ -105,9 +105,6 @@
     <ClInclude Include="..\Codes\Subject.h">
       <Filter>03.Design\00.Observer\00.Subject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\CollisionMgr.h">
-      <Filter>03.Design\00. Collision</Filter>
-    </ClInclude>
     <ClInclude Include="..\Codes\Billborad.h">
       <Filter>02.SuperClass\02.Component\02. Billborad</Filter>
     </ClInclude>
@@ -119,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="..\Codes\Condition.h">
       <Filter>02.SuperClass\02.Component\04. Condition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\CollisionMgr.h">
+      <Filter>03.Design\00. Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
