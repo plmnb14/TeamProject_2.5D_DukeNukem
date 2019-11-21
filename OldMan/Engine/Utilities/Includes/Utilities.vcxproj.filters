@@ -64,6 +64,9 @@
     <Filter Include="02.SuperClass\02.Component\04. Condition">
       <UniqueIdentifier>{6d21007d-a4fa-412e-8263-390ad7042345}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.SuperClass\02.Component\05. Animator">
+      <UniqueIdentifier>{a84fdc89-5189-4459-990c-7fdba78aeca7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">

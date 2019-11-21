@@ -184,6 +184,14 @@ HRESULT CStage::Initialize()
 		L"Buffer_Player");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
 
+	// Player Motion Buffer
+	//HRESULT hr = m_pResourceMgr->AddBuffer(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_STATIC,
+	//	ENGINE::CVIBuffer::BUFFER_RCTEX,
+	//	L"Buffer_Player_Motion");
+	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player_Motion Add Failed", E_FAIL);
+
 	// Terrain Buffer
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
@@ -334,6 +342,13 @@ void CStage::LoadTexture()
 			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
 		}
 	}
+
+	//HRESULT hr = m_pResourceMgr->AddTexture(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::TEX_NORMAL,
+	//	L"Texture_LogoBack",
+	//	L"../Texture/LogoBack/LogoBack_%d.png", 38);
 
 	ENGINE::GetTextureMgr()->DestroyInstance();
 }

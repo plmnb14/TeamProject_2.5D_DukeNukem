@@ -19,8 +19,8 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
 	m_pRigid(nullptr), m_fSlideUp(0),
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
-	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE),
-	m_pObserver(nullptr)
+	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE), m_fZoomAccel(0),
+	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0)
 {	
 }
 
@@ -131,6 +131,11 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_MoveSpeed(10.f);
 	m_pCondition->Set_MoveAccel(1.f);
 
+
+	m_fZoomAccel	= 0.f;
+	m_fZoomSpeed	= 5;
+	m_fMaxZoom		= 70;
+	m_fMinZoom		= 20;
 
 	// ¿”Ω√
 	// Player Info
@@ -498,15 +503,19 @@ void CPlayer::Shoot()
 
 		if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 		{
-			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 2 * tmpUp.x + tmpRight.x * 2,
-				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 2 * tmpUp.y + tmpRight.y * 2,
-				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 2 * tmpUp.z + tmpRight.z * 2 };
+			//D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
+			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
+			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
+
+			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x - 1 * tmpUp.x,
+				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 1 * tmpUp.y,
+				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z - 1 * tmpUp.z };
 
 			float fAngle[3];
 
 			// ≈∫ ∆€¡¸ ∞¸∑√
-			fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 96 + xRand;
-			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) - 6 + yRand;
+			fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 90 + xRand;
+			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) + yRand;
 			fAngle[2] = 0;
 
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
@@ -722,6 +731,8 @@ void CPlayer::ShootType()
 			Shoot();
 		}
 
+		Zoom();
+
 		break;
 	}
 
@@ -733,6 +744,8 @@ void CPlayer::ShootType()
 			Shoot();
 		}
 
+		Zoom();
+
 		break;
 	}
 	
@@ -743,9 +756,64 @@ void CPlayer::ShootType()
 			Shoot_Shotgun();
 		}
 
+		Zoom();
+
 		break;
 	}
 	}
+}
+
+void CPlayer::Zoom()
+{
+	float velocity = (m_fZoomAccel * m_fZoomAccel) * m_pTimeMgr->GetDelta();
+
+	if (m_bZoom == true)
+	{
+		if(velocity < 20)
+			m_fZoomAccel -= 100.f * m_pTimeMgr->GetDelta();
+
+		if (velocity >= 20)
+			velocity = 20.f;
+	}	
+
+	if (m_bZoom == false)
+	{
+		if (velocity > 20)
+			velocity = 20.f;
+
+		if (velocity > 1)
+		{
+			m_fZoomAccel += 100.f * m_pTimeMgr->GetDelta();
+			dynamic_cast<CCamera*>(m_pCamera)->Set_AimZoom(70 - velocity);
+		}
+
+		if (velocity <= 1)
+		{
+			m_fZoomAccel = 0;
+			dynamic_cast<CCamera*>(m_pCamera)->Set_AimZoom(70);
+		}
+	}
+
+	//if (m_bZoom == false)
+	//{
+	//	if (velocity < 70)
+	//		m_fZoomAccel += 15.f * m_pTimeMgr->GetDelta();
+	//}
+
+	cout << velocity << endl;
+
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_RBUTTON))
+	{
+		dynamic_cast<CCamera*>(m_pCamera)->Set_AimZoom(70 - velocity);
+		m_bZoom = true;
+	}
+
+	if (m_pKeyMgr->KeyUp(ENGINE::KEY_RBUTTON))
+	{
+		m_bZoom = false;
+	}
+
+
 }
 
 void CPlayer::Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo)

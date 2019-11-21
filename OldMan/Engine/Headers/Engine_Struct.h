@@ -38,6 +38,16 @@ namespace ENGINE
 		DWORD _1, _2, _3;
 	}INDEX32;
 
+	typedef struct tagFrame
+	{
+		float fCurrentFrame = 0.f;
+		float fMaxFrameCnt = 0.f;
+
+		bool bStopFrame;
+		bool bStopPlay;
+
+	}FRAME;
+
 	typedef struct tagInfo
 	{
 		D3DXVECTOR3 vPos;
@@ -128,6 +138,7 @@ namespace ENGINE
 
 		bool bIsGround;	 // 땅인지 체크 합니다.
 		bool bIsAir;	 // 공중인지 체크합니다.
+		bool bIsLanding; // 착지 시
 
 		bool bIsHit;	 // 피격 체크
 		bool bIsAttck;	 // 공격 가능체크
@@ -210,8 +221,13 @@ namespace ENGINE
 
 		float fBullet_Speed;	// 투사체일 시, 총알 속도
 
+		float fBullet_Lifetime;	// 지속시간
+
 		int fSpread_X;			// 수평 탄 퍼짐
 		int fSpread_Y;			// 수직 탄 퍼짐
+
+		bool fCanZoom;			// 줌 가능 한지
+		bool fFovValue;			// 줌 수치
 
 		BULLET_TYPE eBulletType;
 		WEAPON_TAG	eWeaponTag;

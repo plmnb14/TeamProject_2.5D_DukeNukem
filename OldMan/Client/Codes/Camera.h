@@ -67,6 +67,8 @@ public:
 	void SetLookAt(D3DXVECTOR3 _LookAt);
 	void Set_Hotizontal(float _Horizontal) { m_fHorizontal_Move = -_Horizontal; m_fReverse_Horizontal = _Horizontal; };
 	void Set_Vertical(float _Vertical);
+	void Set_AimZoom(float _ZoomValue);
+	void AimZoom();
 
 public:
 	void KeyInput();
@@ -75,6 +77,7 @@ public:
 	void Set_CamShakePos(D3DXVECTOR3 _MovePos) { m_vCamShakePos = _MovePos; m_vMaxCamShakePos = _MovePos; }
 	D3DXVECTOR3 Get_CamShakePos() { return m_vMaxCamShakePos; };
 	void Set_CamYPos(float _y) { m_fCam_PosY = _y; };
+
 
 
 
@@ -148,6 +151,9 @@ private:
 	float m_fCamShake_Y;
 	float m_fCamShake_X;
 	float m_fCam_PosY;
+
+	private:
+		float m_fFov;
 };
 
 #define __CAMERA_H__
