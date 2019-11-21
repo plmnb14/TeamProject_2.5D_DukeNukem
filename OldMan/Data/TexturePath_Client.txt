@@ -22,6 +22,10 @@ No_Animation|dds|skybox_redSpace.dds|1|..\Texture\Skybox\No_Animation\dds\skybox
 No_Animation|dds|skybox_sky.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_sky.dds
 No_Animation|dds|skybox_space.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_space.dds
 No_Animation|dds|skybox_ufo.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_ufo.dds
+No_Animation|1080 x 1080|Tile_HQ_0.dds|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.dds
+No_Animation|1080 x 1080|Tile_HQ_0.png|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.png
+No_Animation|1080 x 1080|Tile_HQ_1.dds|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_1.dds
+No_Animation|1080 x 1080|Tile_HQ_1.png|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_1.png
 No_Animation|128 x 128|Tile128x128_0.dds|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_0.dds
 No_Animation|128 x 128|Tile128x128_0.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_0.png
 No_Animation|128 x 128|Tile128x128_1.dds|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_1.dds

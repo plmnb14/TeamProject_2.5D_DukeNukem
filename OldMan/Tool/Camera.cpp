@@ -515,6 +515,16 @@ void CCamera::KeyInput()
 		Yaw(fMoveSpeed * 1.5f);
 	}
 
+	if (GetAsyncKeyState('C') & 0x8000)
+	{
+		m_fFov -= fMoveSpeed;
+	}
+
+	if (GetAsyncKeyState('V') & 0x8000)
+	{
+		m_fFov += fMoveSpeed;
+	}
+
 	if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
 	{
 		m_pCCamera_Component->Add_EyePos({ 0 ,fMoveSpeed * 0.7f , 0 });
@@ -542,7 +552,7 @@ int CCamera::Update()
 	//m_pCCamera_Component->Set_Look(dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetDir());
 
 	D3DXMATRIX matProj;
-	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(70.f), WINCX / (float)WINCY, 1.f, 1000.f);
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(m_fFov), WINCX / (float)WINCY, 1.f, 1000.f);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
@@ -580,7 +590,7 @@ HRESULT CCamera::Initialize()
 	m_fEyeHeight = 3.f;
 	m_fZoom_Min = 1.f;
 	m_fZoom_Max = 10.f;
-
+	m_fFov = 70.f;
 
 	D3DXMATRIX matProj;
 

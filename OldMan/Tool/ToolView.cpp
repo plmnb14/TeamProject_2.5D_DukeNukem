@@ -694,6 +694,7 @@ void CToolView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 
+	if (!m_pSelectCube) return;
 
 	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
 	NULL_CHECK(pMainFrm);

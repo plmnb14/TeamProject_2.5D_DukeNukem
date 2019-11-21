@@ -62,6 +62,9 @@ public:
 	D3DXVECTOR3 GetRotationVec();
 	D3DXVECTOR3 GetScaleVec();
 
+private:
+	bool CheckNumber(CString _str, float& _fValue);
+
 public:
 	CStatic m_PictureControl;
 	CButton m_TerrainTypeRadioBtn[3];

@@ -197,6 +197,10 @@ ScreenNoise_3.png|ScreenNoise_3.png|ScreenNoise_3.png|1|..\Client\Texture\Tiles\
 Water_0.png|Water_0.png|Water_0.png|1|..\Client\Texture\Tiles\Animation\Water\Water_0.png
 Water_1.png|Water_1.png|Water_1.png|1|..\Client\Texture\Tiles\Animation\Water\Water_1.png
 Water_2.png|Water_2.png|Water_2.png|1|..\Client\Texture\Tiles\Animation\Water\Water_2.png
+No_Animation|1080 x 1080|Tile_HQ_0.dds|1|..\Client\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.dds
+No_Animation|1080 x 1080|Tile_HQ_0.png|1|..\Client\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.png
+No_Animation|1080 x 1080|Tile_HQ_1.dds|1|..\Client\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_1.dds
+No_Animation|1080 x 1080|Tile_HQ_1.png|1|..\Client\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_1.png
 No_Animation|128 x 128|Tile128x128_0.dds|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_0.dds
 No_Animation|128 x 128|Tile128x128_0.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_0.png
 No_Animation|128 x 128|Tile128x128_1.dds|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_1.dds

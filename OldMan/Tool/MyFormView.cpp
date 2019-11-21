@@ -230,18 +230,54 @@ void CMyFormView::UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXV
 
 D3DXVECTOR3 CMyFormView::GetPositionVec()
 {
-	return D3DXVECTOR3(stof((wstring)m_strPositionX), stof((wstring)m_strPositionY), stof((wstring)m_strPositionZ));
+	float fPos[3];
+	CheckNumber(m_strPositionX, fPos[0]);
+	CheckNumber(m_strPositionY, fPos[1]);
+	CheckNumber(m_strPositionZ, fPos[2]);
+
+	return D3DXVECTOR3(fPos[0], fPos[1], fPos[2]);
 }
 
 D3DXVECTOR3 CMyFormView::GetRotationVec()
 {
-	return D3DXVECTOR3(stof((wstring)m_strRotationX), stof((wstring)m_strRotationY), stof((wstring)m_strRotationZ));
+	float fRot[3];
+	CheckNumber(m_strRotationX, fRot[0]);
+	CheckNumber(m_strRotationY, fRot[1]);
+	CheckNumber(m_strRotationZ, fRot[2]);
+
+	return D3DXVECTOR3(fRot[0], fRot[1], fRot[2]);
 }
 
 D3DXVECTOR3 CMyFormView::GetScaleVec()
 {
-	return D3DXVECTOR3(stof((wstring)m_strScaleX), stof((wstring)m_strScaleY), stof((wstring)m_strScaleZ));
+	float fSize[3];
+	CheckNumber(m_strScaleX, fSize[0]);
+	CheckNumber(m_strScaleY, fSize[1]);
+	CheckNumber(m_strScaleZ, fSize[2]);
+
+	return D3DXVECTOR3(fSize[0], fSize[1], fSize[2]);
 }
+
+bool CMyFormView::CheckNumber(CString _str, float& _fValue)
+{
+	bool bCheck = true;
+	for (int i = 0; i < _str.GetLength(); i++)
+	{
+		// 0 ~ 9, '.' , '-'
+		if ((_str[i] >= 48) && (_str[i] <= 57) || (_str[i] == 46) || (_str[i] == 45))
+		{}
+		else
+			bCheck = false;
+	}
+
+	if (bCheck)
+		_fValue = stof((wstring)_str);
+	else
+		_fValue = 0.f;
+
+	return bCheck;
+}
+
 
 void CMyFormView::EditDataExchange()
 {
