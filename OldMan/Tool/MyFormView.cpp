@@ -173,21 +173,21 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 	if (!m_Img.IsNull())
 	{
 		m_Img.Destroy();
-		m_PictureControl.SetBitmap(NULL);
+		//m_PictureControl.SetBitmap(NULL);
 
-		// CImage 초기화가 안되서 임시 방편.
-		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animation\\64 x 64\\Tile64x64_9.png");
-		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
-		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
-		if (iWidth <= 0) iWidth = StaticPictureRect.Width();
-		if (iHeight <= 0) iHeight = StaticPictureRect.Height();
+		//// CImage 초기화가 안되서 임시 방편.
+		//m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animation\\64 x 64\\Tile64x64_9.png");
+		//int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
+		//int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
+		//if (iWidth <= 0) iWidth = StaticPictureRect.Width();
+		//if (iHeight <= 0) iHeight = StaticPictureRect.Height();
 
-		m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
-			StaticPictureRect.TopLeft().x,
-			StaticPictureRect.TopLeft().y,
-			iWidth,
-			iHeight);
-		m_Img.Destroy();
+		//m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
+		//	StaticPictureRect.TopLeft().x,
+		//	StaticPictureRect.TopLeft().y,
+		//	iWidth,
+		//	iHeight);
+		//m_Img.Destroy();
 	}
 
 	CString strCheckDDS = m_wstrFilePath.c_str();
@@ -295,32 +295,11 @@ void CMyFormView::InitData()
 	UpdateData(FALSE);
 }
 
-
-void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
+void CMyFormView::Update()
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
-	CFormView::OnLButtonDown(nFlags, point);
-
-	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-	NULL_CHECK(pMainFrm);
-
-	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
-	NULL_CHECK(pView);
-	pView->ChangeValueAfter();
-}
-
-
-
-void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
-	CFormView::OnMouseMove(nFlags, point);
-
 	UpdateData(TRUE);
 
-	UpdatePicture(m_wstrFileName, m_wstrFilePath);
+	m_bIsOnDlg = m_ObjSelect_Map.IsWindowVisible();
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -346,7 +325,31 @@ void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	UpdateData(FALSE);
+}
 
+
+void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CFormView::OnLButtonDown(nFlags, point);
+
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+	pView->ChangeValueAfter();
+}
+
+
+
+void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CFormView::OnMouseMove(nFlags, point);
+	UpdatePicture(m_wstrFileName, m_wstrFilePath);
 }
 
 void CMyFormView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)

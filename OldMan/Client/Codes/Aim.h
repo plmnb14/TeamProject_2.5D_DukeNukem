@@ -30,6 +30,10 @@ protected:
 	void CheckWeaponAim();
 	void CheckMoveRifleAim();
 	void CheckMoveShotgunAim();
+
+	void CreateAim();
+	void InitAim();
+
 	void InitRifleAim();
 	void InitShotgunAim();
 

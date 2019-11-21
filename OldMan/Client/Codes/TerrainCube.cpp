@@ -17,6 +17,7 @@ int CTerrainCube::Update()
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
+	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 
 	return NO_EVENT;
@@ -66,8 +67,17 @@ HRESULT CTerrainCube::Initialize()
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 	m_eTerrainType = ENGINE::TERRAIN_CUBE;
 
+	
+
+	return S_OK;
+}
+
+HRESULT CTerrainCube::LateInit()
+{
+	D3DXVECTOR3 vSize = m_pTransform->GetSize();
+
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 1.0f * vSize.x , 1.0f * vSize.y, 1.0f * vSize.z });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표

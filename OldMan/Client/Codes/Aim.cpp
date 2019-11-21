@@ -87,8 +87,7 @@ HRESULT CAim::Initialize()
 
 	m_eWeaponType_Old = ENGINE::WEAPON_TAG::RIFLE;
 
-	InitRifleAim();
-	InitShotgunAim();
+	CreateAim();
 
 	return S_OK;
 }
@@ -118,6 +117,8 @@ void CAim::CheckWeaponAim()
 
 	if (m_eWeaponType_Old == m_eWeaponType)
 		return;
+
+	InitAim();
 
 	m_eWeaponType_Old = m_eWeaponType;
 	switch (m_eWeaponType)
@@ -205,13 +206,30 @@ void CAim::CheckMoveShotgunAim()
 	}
 }
 
+void CAim::CreateAim()
+{
+	m_RifleAimArr[AIM_LEFT] = CUI::Create(m_pGraphicDev, L"RifleAim_h.png");
+	m_RifleAimArr[AIM_RIGHT] = CUI::Create(m_pGraphicDev, L"RifleAim_h.png");
+	m_RifleAimArr[AIM_UP] = CUI::Create(m_pGraphicDev, L"RifleAim_v.png");
+	m_RifleAimArr[AIM_DOWM] = CUI::Create(m_pGraphicDev, L"RifleAim_v.png");
+	InitRifleAim();
+
+	m_ShotgunAimArr[AIM_LEFT] = CUI::Create(m_pGraphicDev, L"ShotgunAim_Left.png");
+	m_ShotgunAimArr[AIM_RIGHT] = CUI::Create(m_pGraphicDev, L"ShotgunAim_Right.png");
+	m_ShotgunAimArr[AIM_UP] = CUI::Create(m_pGraphicDev, L"ShotgunAim_Bottom.png");
+	m_ShotgunAimArr[AIM_DOWM] = CUI::Create(m_pGraphicDev, L"Aim_dot.png"); // center Dot
+	InitShotgunAim();
+}
+
+void CAim::InitAim()
+{
+	InitRifleAim();
+	InitShotgunAim();
+	m_fMoveAim = 0.f;
+}
+
 void CAim::InitRifleAim()
 {
-	m_RifleAimArr[AIM_LEFT]		= CUI::Create(m_pGraphicDev, L"RifleAim_h.png");
-	m_RifleAimArr[AIM_RIGHT]	= CUI::Create(m_pGraphicDev, L"RifleAim_h.png");
-	m_RifleAimArr[AIM_UP]		= CUI::Create(m_pGraphicDev, L"RifleAim_v.png");
-	m_RifleAimArr[AIM_DOWM]		= CUI::Create(m_pGraphicDev, L"RifleAim_v.png");
-
 	float fPadding = 10.f;
 	m_RifleAimArr[AIM_LEFT]	->SetPos(D3DXVECTOR3(-fPadding, 0.f, 0.f));
 	m_RifleAimArr[AIM_RIGHT]->SetPos(D3DXVECTOR3(fPadding, 0.f, 0.f));
@@ -226,12 +244,6 @@ void CAim::InitRifleAim()
 
 void CAim::InitShotgunAim()
 {
-	m_ShotgunAimArr[AIM_LEFT]	= CUI::Create(m_pGraphicDev, L"ShotgunAim_Left.png");
-	m_ShotgunAimArr[AIM_RIGHT]	= CUI::Create(m_pGraphicDev, L"ShotgunAim_Right.png");
-	m_ShotgunAimArr[AIM_UP] = CUI::Create(m_pGraphicDev, L"ShotgunAim_Bottom.png");
-	// Center Dot
-	m_ShotgunAimArr[AIM_DOWM] = CUI::Create(m_pGraphicDev, L"Aim_dot.png");
-
 	m_ShotgunAimArr[AIM_LEFT]	->SetSize(200.f, 200.f);
 	m_ShotgunAimArr[AIM_RIGHT]	->SetSize(200.f, 200.f);
 	m_ShotgunAimArr[AIM_UP]		->SetSize(200.f, 200.f);

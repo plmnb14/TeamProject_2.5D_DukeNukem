@@ -20,6 +20,7 @@ public:
 
 protected:
 	virtual HRESULT Initialize() override;
+	virtual HRESULT LateInit() override;
 	virtual void Release() override;
 
 protected:

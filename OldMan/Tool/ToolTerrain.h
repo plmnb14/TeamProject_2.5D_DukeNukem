@@ -50,6 +50,7 @@ protected:
 	ENGINE::CTransform*		m_pTransform;
 
 	ENGINE::VTX_TEX*		m_myVtxTex;
+	ENGINE::VTX_CUBE*		m_myVtxCube;
 	ENGINE::VTX_COL*		m_myVtxCol;
 
 	CRay*					m_pRay;

@@ -4,6 +4,7 @@
 #include "Trasform.h"
 
 #include "ToolView.h"
+#include "MyFormView.h"
 #include "MainFrm.h"
 
 CToolTerrain::CToolTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -15,7 +16,7 @@ CToolTerrain::CToolTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_bIsPicked(false),
-	m_myVtxCol(nullptr), m_myVtxTex(nullptr), m_pRay(new CRay)
+	m_myVtxCol(nullptr), m_myVtxTex(nullptr), m_myVtxCube(nullptr), m_pRay(new CRay)
 {
 }
 
@@ -23,8 +24,9 @@ CToolTerrain::CToolTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
 CToolTerrain::~CToolTerrain()
 {
 	ENGINE::Safe_Delete(m_pRay);
-	// error
-	//ENGINE::Safe_Delete(m_myVtxTex);
+	ENGINE::Safe_Delete(m_myVtxTex);
+	ENGINE::Safe_Delete(m_myVtxCol);
+	ENGINE::Safe_Delete(m_myVtxCube);
 }
 
 void CToolTerrain::SetClicked()
@@ -49,17 +51,20 @@ void CToolTerrain::SetTexName(wstring _wstrTex)
 
 void CToolTerrain::MouseInput()
 {
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
 	if (!m_bSetted)
 	{
 		//if (m_bIsFitGrid)
 		//	return;
-
-		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-		NULL_CHECK(pMainFrm);
-
-		CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
-		NULL_CHECK(pView);
-
+		
 		D3DXMATRIX matView, matProj;
 		matView = pView->m_ViewMatrix;
 		matProj = pView->m_ProjMatrix;
@@ -88,28 +93,32 @@ void CToolTerrain::MouseInput()
 	}
 	else if (m_bSetted)
 	{
+		//if (pFormView->m_bIsOnDlg)
+		//	return;
+
+		if (!(GetAsyncKeyState(VK_MENU) & 0x8000))
+			return;
+
 		// 마우스 호버 시, 알 수 있도록 함.
 		D3DXVECTOR3 vPos;
 		m_pRay->GetDirection(); // Update Ray Dir
-
 		
-
 		switch (m_eTerrainType)
 		{
 		case ENGINE::TERRAIN_CUBE:
 		{
-			if (!m_myVtxTex)
+			if (!m_myVtxCube)
 			{
-				m_myVtxTex = new ENGINE::VTX_TEX[4];
+				m_myVtxCube = new ENGINE::VTX_CUBE[8];
 
 				m_pResourceMgr->GetVertexInfo(
 					ENGINE::RESOURCE_STATIC,
 					L"Buffer_CubeTex",
-					m_myVtxTex);
+					m_myVtxCube);
 			}
 
-			if (m_pRay->IsPicked(m_myVtxTex[0].vPos, m_myVtxTex[1].vPos, m_myVtxTex[2].vPos, vPos, m_pTransform->GetWorldMatrix())
-				|| m_pRay->IsPicked(m_myVtxTex[0].vPos, m_myVtxTex[2].vPos, m_myVtxTex[3].vPos, vPos, m_pTransform->GetWorldMatrix()))
+			if (m_pRay->IsPicked(m_myVtxCube[0].vPos, m_myVtxCube[1].vPos, m_myVtxCube[2].vPos, vPos, m_pTransform->GetWorldMatrix())
+				|| m_pRay->IsPicked(m_myVtxCube[0].vPos, m_myVtxCube[2].vPos, m_myVtxCube[3].vPos, vPos, m_pTransform->GetWorldMatrix()))
 				m_bIsPicked = true;
 			else
 				m_bIsPicked = false;

@@ -196,6 +196,8 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnLButtonDown(nFlags, point);
 
+	GetCursorPos(&m_ptFitCursorPos);
+
 	if (m_pSelectCube)
 	{
 		m_pSelectCube->SetClicked();
@@ -460,6 +462,15 @@ void CToolView::AddCubeForLoad(CToolTerrain* _pTerrain)
 
 void CToolView::Update()
 {
+	// Form View Update
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	pFormView->Update();
+
 	//// Update =========================================================================
 	MAP_LAYER::iterator iter_begin = m_mapLayer.begin();
 	MAP_LAYER::iterator iter_end = m_mapLayer.end();
@@ -514,6 +525,20 @@ void CToolView::CubeMoveToMouse()
 {
 	if (!m_pSelectCube)
 		return;
+
+	if ((GetAsyncKeyState('1') & 0x8000))
+	{
+		POINT ptNowCursor;
+		GetCursorPos(&ptNowCursor);
+		SetCursorPos(m_ptFitCursorPos.x, ptNowCursor.y);
+	}
+
+	if ((GetAsyncKeyState('2') & 0x8000))
+	{
+		POINT ptNowCursor;
+		GetCursorPos(&ptNowCursor);
+		SetCursorPos(ptNowCursor.x, m_ptFitCursorPos.y);
+	}
 
 	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
 	NULL_CHECK(pMainFrm);
@@ -594,12 +619,21 @@ void CToolView::CreateCube(bool _bIsChange)
 void CToolView::DragPicking(float _fPointX, float _fPointY)
 {
 	// Drag Picking
-	// 임시 (Ray로 옆면 벗어났는지 체크하는 것으로 수정하기)
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) && m_pSelectCube)
 	{
 		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
+
 		if (m_vLastPickedCubePos.x >= pTransform->GetPos().x + 2
 			|| m_vLastPickedCubePos.x <= pTransform->GetPos().x - 2)
+		{
+			m_vLastPickedCubePos = pTransform->GetPos();
+
+			m_pSelectCube->SetClicked();
+			CreateCube(false);
+		}
+
+		if (m_vLastPickedCubePos.y >= pTransform->GetPos().y + 2
+			|| m_vLastPickedCubePos.y <= pTransform->GetPos().y - 2)
 		{
 			m_vLastPickedCubePos = pTransform->GetPos();
 
