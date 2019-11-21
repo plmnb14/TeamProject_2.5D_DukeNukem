@@ -38,6 +38,16 @@ namespace ENGINE
 		DWORD _1, _2, _3;
 	}INDEX32;
 
+	typedef struct tagFrame
+	{
+		float fCurrentFrame = 0.f;
+		float fMaxFrameCnt = 0.f;
+
+		bool bStopFrame;
+		bool bStopPlay;
+
+	}FRAME;
+
 	typedef struct tagInfo
 	{
 		D3DXVECTOR3 vPos;

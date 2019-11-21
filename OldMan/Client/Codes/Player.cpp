@@ -40,7 +40,7 @@ int CPlayer::Update()
 
 	Check_Slide();
 	Check_Run();
-//	Check_Physic();
+	Check_Physic();
 	
 	UpdateObserverData();
 
