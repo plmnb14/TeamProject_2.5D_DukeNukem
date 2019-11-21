@@ -15,6 +15,7 @@ namespace ENGINE
 	class CCameraSubject;
 	class CPlayerSubject;
 	class CRigidBody;
+	class CCondition;
 }
 
 class CCameraObserver;
@@ -45,7 +46,6 @@ private:
 private:
 	HRESULT AddComponent();
 	void KeyInput();
-	void Physic();
 	void UpdateObserverData();
 
 private:
@@ -54,7 +54,11 @@ private:
 	void ShootDelay();
 	void ShootType();
 	void Reload();
-	void Swap_Weapon();
+
+private:
+	void Check_Physic();
+	void Check_Slide();
+	void Check_Run();
 
 public:
 	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
@@ -84,11 +88,14 @@ private:
 	ENGINE::W_INFO			m_pWInfo;
 
 	// 현재 플레이어의 정보 ( 체력 등 수치 값 & 각종 bool 값 )
-	ENGINE::CONDITION		m_pCondition;
+	ENGINE::CCondition*		m_pCondition;
 
 	// 현재 장착중인 무기 정보
 	ENGINE::WEAPON_TAG		m_eWeaponState;
 	map<ENGINE::WEAPON_TAG, ENGINE::W_INFO*>	m_mWeaponInfo;
+
+private:
+	float m_fSlideUp;
 	
 
 };

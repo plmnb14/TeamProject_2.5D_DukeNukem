@@ -70,7 +70,11 @@ public:
 
 public:
 	void KeyInput();
-	void CamShake();
+	void CamShakeAngle();
+	void CamShakePos();
+	void Set_CamShakePos(D3DXVECTOR3 _MovePos) { m_vCamShakePos = _MovePos; m_vMaxCamShakePos = _MovePos; }
+	D3DXVECTOR3 Get_CamShakePos() { return m_vMaxCamShakePos; };
+	void Set_CamYPos(float _y) { m_fCam_PosY = _y; };
 
 
 
@@ -97,6 +101,8 @@ private:
 	CameraMode			m_eCameraMode;
 	CameraViewPoint		m_eCameraViewPoint;
 	D3DXMATRIX			m_MatView;
+	D3DXVECTOR3			m_vCamShakePos;
+	D3DXVECTOR3			m_vMaxCamShakePos;
 
 private:
 	ENGINE::CCamera_Component*	m_pCCamera_Component;
@@ -115,6 +121,12 @@ private:
 
 private:
 	bool m_bLeft;
+	bool m_bCamPosUp;
+	bool m_bCamPosDown;
+	bool m_bCamPosRight;
+	bool m_bCamPosLeft;
+	bool m_bCamPosFront;
+	bool m_bCamPosBack;
 
 private:
 	float m_fEyeHeight;
@@ -135,6 +147,7 @@ private:
 	float m_fMax_PlayerRoll_Angle;
 	float m_fCamShake_Y;
 	float m_fCamShake_X;
+	float m_fCam_PosY;
 };
 
 #define __CAMERA_H__

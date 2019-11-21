@@ -39,6 +39,9 @@ public:
 
 public:
 	D3DXVECTOR3 Get_Accel() { return m_tRigid.vAccel; }
+	D3DXVECTOR3 Get_MaxAccel() { return m_tRigid.vMaxAccel; }
+	D3DXVECTOR3 Get_Speed() { return m_tRigid.vSpeed; }
+	D3DXVECTOR3 Get_MaxSpeed() { return m_tRigid.vMaxSpeed; }
 	bool Get_IsJump() { return m_tRigid.bIsJump; }
 	bool Get_IsGround() { return m_tRigid.bIsGround; }
 	bool Get_IsFall() { return m_tRigid.bIsFall; }
@@ -46,6 +49,10 @@ public:
 	bool Get_IsHit() { return m_tRigid.bIsHit; }
 public:
 	float Get_Force() { return m_tRigid.fForce; }
+
+public:
+	float Get_Force() { return m_tRigid.fForce; }
+	
 
 public:
 	float Set_Jump(D3DXVECTOR3 _TransForm, float _Time);

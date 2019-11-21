@@ -49,7 +49,11 @@ void CManagement::LateUpdate()
 
 	CCollisionMgr::CollisionTarget_To_Monstr(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET));
 	CCollisionMgr::CollisionPlayer_To_Item(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::WEAPON));
+<<<<<<< HEAD
 
+=======
+	CCollisionMgr::CollisionBullet_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+>>>>>>> origin/_1120
 }
 
 void CManagement::Render()

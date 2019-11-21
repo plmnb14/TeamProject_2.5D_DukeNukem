@@ -30,6 +30,8 @@ public:
 	inline void Set_Shield(float _Shield) { m_tCondition.fArmor = _Shield; };
 	inline void Set_Fuel(float _Fuel) { m_tCondition.fFuel = _Fuel; };
 	inline void Set_Stamina(float _Stamina) { m_tCondition.fStamina = _Stamina; };
+	inline void Set_MoveSpeed(float _MoveSpeed) { m_tCondition.fMoveSpeed = _MoveSpeed; };
+	inline void Set_MoveAccel(float _MoveAccel) { m_tCondition.fMoveAccel = _MoveAccel; };
 
 public:
 	inline void Set_Cinematic(bool _Cinematic) { m_tCondition.bIsCinematic = _Cinematic; };
@@ -41,24 +43,30 @@ public:
 	inline void Set_MeleeAttack(bool _MeleeAttack) { m_tCondition.bMeleeAttack = _MeleeAttack; };
 	inline void Set_RangeAttack(bool _RangeAttack) { m_tCondition.bRangeAttack = _RangeAttack; };
 	inline void Set_SpecialAttack(bool _SpecialAttack) { m_tCondition.bSpecialAttack = _SpecialAttack; };
+	inline void Set_Slide(bool _Slide) { m_tCondition.bSlide = _Slide; }
+	inline void Set_Run(bool _Run) { m_tCondition.bRun = _Run; }
 
 public:
-	inline float Get_Hp(float _Hp) { return m_tCondition.fHp; };
-	inline float Get_Armor(float _Armor) { return m_tCondition.fShield; };
-	inline float Get_Shield(float _Shield) { return m_tCondition.fArmor; };
-	inline float Get_Fuel(float _Fuel) { return m_tCondition.fFuel; };
-	inline float Get_Stamina(float _Stamina) { return m_tCondition.fStamina; };
+	inline float Get_Hp() { return m_tCondition.fHp; };
+	inline float Get_Armor() { return m_tCondition.fShield; };
+	inline float Get_Shield() { return m_tCondition.fArmor; };
+	inline float Get_Fuel() { return m_tCondition.fFuel; };
+	inline float Get_Stamina() { return m_tCondition.fStamina; };
+	inline float Get_MoveSpeed() { return m_tCondition.fMoveSpeed; };
+	inline float Get_MoveAccel() { return m_tCondition.fMoveAccel; };
 		 
 public:	 
-	inline bool Get_Cinematic(bool _Cinematic) { return m_tCondition.bIsCinematic; };
-	inline bool Get_Dodge(bool _Dodge) { return m_tCondition.bIsDodge; };
+	inline bool Get_Cinematic() { return m_tCondition.bIsCinematic; };
+	inline bool Get_Dodge() { return m_tCondition.bIsDodge; };
 	inline bool Get_Hit() { return m_tCondition.bIsHit; };
-	inline bool Get_Attack(bool _Attack) { return m_tCondition.bIsAttck; };
-	inline bool Get_JetPack(bool _Jetpack) { return m_tCondition.bIsJetPak; };
-	inline bool Get_Invincible(bool _Invincible) { return m_tCondition.bInvincible; };
-	inline bool Get_MeleeAttack(bool _MeleeAttack) { return m_tCondition.bMeleeAttack; };
-	inline bool Get_RangeAttack(bool _RangeAttack) { return m_tCondition.bRangeAttack; };
-	inline bool Get_SpecialAttack(bool _SpecialAttack) { return m_tCondition.bSpecialAttack; };
+	inline bool Get_Attack() { return m_tCondition.bIsAttck; };
+	inline bool Get_JetPack() { return m_tCondition.bIsJetPak; };
+	inline bool Get_Invincible() { return m_tCondition.bInvincible; };
+	inline bool Get_MeleeAttack() { return m_tCondition.bMeleeAttack; };
+	inline bool Get_RangeAttack() { return m_tCondition.bRangeAttack; };
+	inline bool Get_SpecialAttack() { return m_tCondition.bSpecialAttack; };
+	inline bool Get_Slide() { return m_tCondition.bSlide; }
+	inline bool Get_Run() { return m_tCondition.bRun; }
 
 
 public:

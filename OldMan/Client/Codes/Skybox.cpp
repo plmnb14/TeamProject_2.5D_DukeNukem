@@ -36,6 +36,8 @@ void CSkybox::LateUpdate()
 
 void CSkybox::Render()
 {
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
 	if (m_pTexture) m_pTexture->Render(0);
@@ -44,6 +46,8 @@ void CSkybox::Render()
 	m_pBuffer->Render();
 
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
 
 HRESULT CSkybox::Initialize()
