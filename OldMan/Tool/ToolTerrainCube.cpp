@@ -36,8 +36,10 @@ void CToolTerrainCube::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
-	if (m_pTexture) m_pTexture->Render(0);
-	else ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	if (m_pTexture && !m_bIsPicked) m_pTexture->Render(0);
+	else if (m_pTexture && m_bIsPicked) ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	else if (!m_pTexture && !m_bIsPicked) ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	else if (!m_pTexture && m_bIsPicked) ENGINE::GetGraphicDev()->GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 
 	m_pBuffer->Render();
 
@@ -75,7 +77,7 @@ HRESULT CToolTerrainCube::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 	m_eTerrainType = ENGINE::TERRAIN_CUBE;
-
+		
 	return S_OK;
 }
 

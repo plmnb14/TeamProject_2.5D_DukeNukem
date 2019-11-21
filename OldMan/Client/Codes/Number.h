@@ -19,7 +19,7 @@ class CPlayerObserver;
 class CNumber : public CUI
 {
 public:
-	enum NUMBER_TYPE { NUMBER_HP, NUMBER_BULLET, NUMBER_END };
+	enum NUMBER_TYPE { NUMBER_HP, NUMBER_SHIELD, NUMBER_BULLET, NUMBER_END };
 
 protected:
 	explicit CNumber(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -39,7 +39,7 @@ protected:
 
 protected:
 	HRESULT AddComponent();
-	void GetNumberArr(int _iNumber, int*& _iArr, int& _iCount);
+	void GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber2 = -1);
 
 public:
 	static CNumber* Create(LPDIRECT3DDEVICE9 pGraphicDev, NUMBER_TYPE _eType);
@@ -48,7 +48,14 @@ private:
 	vector<CUI*>			m_vecNumberUI;
 	int*					m_iNumArr;
 	int						m_iArrCount;
+
 	NUMBER_TYPE				m_eNumberType;
+
+
+	int m_iTestMaxHP;
+	int m_iTestHP;
+	int m_iTestMaxShield;
+	int m_iTestShield;
 };
 
 #define __NUMBER_H__

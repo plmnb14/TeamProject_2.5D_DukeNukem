@@ -21,9 +21,11 @@ public:
 public:
 	static CRay RayAtViewSpace(int _iScreecX, int _iScreecY);
 	static CRay RayAtWorldSpace(int _iScreecX, int _iScreecY);
+
 	static D3DXVECTOR3 GetDirection();
+	static D3DXVECTOR3 GetMousePos();
 	bool IsPicked(CToolTerrain* _pTerrainCube);
-	bool IsPicked(D3DXVECTOR3& _v0, D3DXVECTOR3& _v1, D3DXVECTOR3& _v2, D3DXVECTOR3& _vPickedPos);
+	bool IsPicked(D3DXVECTOR3& _v0, D3DXVECTOR3& _v1, D3DXVECTOR3& _v2, D3DXVECTOR3& _vPickedPos, D3DXMATRIX _matWorld);
 
 public:
 	D3DXVECTOR3 m_vOrigin;

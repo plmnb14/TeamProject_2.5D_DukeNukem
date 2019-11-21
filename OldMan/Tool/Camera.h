@@ -108,6 +108,7 @@ private:
 	float m_fZoom_Max;
 	float m_fZoom_Min;
 	float m_fZoom_Speed;
+	float m_fFov;
 
 private:
 	float m_fX_Angle;

@@ -24,7 +24,7 @@ IMPLEMENT_DYNCREATE(CMyFormView, CFormView)
 CMyFormView::CMyFormView()
 	: CFormView(IDD_MYFORMVIEW),
 	m_strObjectName(_T("")),
-	m_wstrFileName(L"Tile64x64_9"), m_wstrFilePath(L""),
+	m_wstrFileName(L"Tile64x64_9.png"), m_wstrFilePath(L""),
 	m_eTerrainType(ENGINE::TERRAIN_END)
 	, m_strPositionX(_T("0"))
 	, m_strPositionY(_T("0"))
@@ -173,21 +173,21 @@ void CMyFormView::UpdatePicture(wstring _wstrName, wstring _wstrPath)
 	if (!m_Img.IsNull())
 	{
 		m_Img.Destroy();
-		m_PictureControl.SetBitmap(NULL);
+		//m_PictureControl.SetBitmap(NULL);
 
-		// CImage 초기화가 안되서 임시 방편.
-		m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animation\\64 x 64\\Tile64x64_9.png");
-		int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
-		int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
-		if (iWidth <= 0) iWidth = StaticPictureRect.Width();
-		if (iHeight <= 0) iHeight = StaticPictureRect.Height();
+		//// CImage 초기화가 안되서 임시 방편.
+		//m_Img.Load(L"..\\Client\\Texture\\Tiles\\No_Animation\\64 x 64\\Tile64x64_9.png");
+		//int iWidth = (m_Img.GetWidth() / StaticPictureRect.Width()) *  StaticPictureRect.Width();
+		//int iHeight = (m_Img.GetHeight() / StaticPictureRect.Height() *  StaticPictureRect.Height());
+		//if (iWidth <= 0) iWidth = StaticPictureRect.Width();
+		//if (iHeight <= 0) iHeight = StaticPictureRect.Height();
 
-		m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
-			StaticPictureRect.TopLeft().x,
-			StaticPictureRect.TopLeft().y,
-			iWidth,
-			iHeight);
-		m_Img.Destroy();
+		//m_Img.Draw(m_PictureControl.GetWindowDC()->m_hDC,
+		//	StaticPictureRect.TopLeft().x,
+		//	StaticPictureRect.TopLeft().y,
+		//	iWidth,
+		//	iHeight);
+		//m_Img.Destroy();
 	}
 
 	CString strCheckDDS = m_wstrFilePath.c_str();
@@ -230,18 +230,54 @@ void CMyFormView::UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXV
 
 D3DXVECTOR3 CMyFormView::GetPositionVec()
 {
-	return D3DXVECTOR3(stof((wstring)m_strPositionX), stof((wstring)m_strPositionY), stof((wstring)m_strPositionZ));
+	float fPos[3];
+	CheckNumber(m_strPositionX, fPos[0]);
+	CheckNumber(m_strPositionY, fPos[1]);
+	CheckNumber(m_strPositionZ, fPos[2]);
+
+	return D3DXVECTOR3(fPos[0], fPos[1], fPos[2]);
 }
 
 D3DXVECTOR3 CMyFormView::GetRotationVec()
 {
-	return D3DXVECTOR3(stof((wstring)m_strRotationX), stof((wstring)m_strRotationY), stof((wstring)m_strRotationZ));
+	float fRot[3];
+	CheckNumber(m_strRotationX, fRot[0]);
+	CheckNumber(m_strRotationY, fRot[1]);
+	CheckNumber(m_strRotationZ, fRot[2]);
+
+	return D3DXVECTOR3(fRot[0], fRot[1], fRot[2]);
 }
 
 D3DXVECTOR3 CMyFormView::GetScaleVec()
 {
-	return D3DXVECTOR3(stof((wstring)m_strScaleX), stof((wstring)m_strScaleY), stof((wstring)m_strScaleZ));
+	float fSize[3];
+	CheckNumber(m_strScaleX, fSize[0]);
+	CheckNumber(m_strScaleY, fSize[1]);
+	CheckNumber(m_strScaleZ, fSize[2]);
+
+	return D3DXVECTOR3(fSize[0], fSize[1], fSize[2]);
 }
+
+bool CMyFormView::CheckNumber(CString _str, float& _fValue)
+{
+	bool bCheck = true;
+	for (int i = 0; i < _str.GetLength(); i++)
+	{
+		// 0 ~ 9, '.' , '-'
+		if ((_str[i] >= 48) && (_str[i] <= 57) || (_str[i] == 46) || (_str[i] == 45))
+		{}
+		else
+			bCheck = false;
+	}
+
+	if (bCheck)
+		_fValue = stof((wstring)_str);
+	else
+		_fValue = 0.f;
+
+	return bCheck;
+}
+
 
 void CMyFormView::EditDataExchange()
 {
@@ -295,32 +331,11 @@ void CMyFormView::InitData()
 	UpdateData(FALSE);
 }
 
-
-void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
+void CMyFormView::Update()
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
-	CFormView::OnLButtonDown(nFlags, point);
-
-	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-	NULL_CHECK(pMainFrm);
-
-	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
-	NULL_CHECK(pView);
-	pView->ChangeValueAfter();
-}
-
-
-
-void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
-	CFormView::OnMouseMove(nFlags, point);
-
 	UpdateData(TRUE);
 
-	UpdatePicture(m_wstrFileName, m_wstrFilePath);
+	//m_bIsOnDlg = m_ObjSelect_Map.IsWindowVisible();
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -346,7 +361,31 @@ void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	UpdateData(FALSE);
+}
 
+
+void CMyFormView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CFormView::OnLButtonDown(nFlags, point);
+
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+	pView->ChangeValueAfter();
+}
+
+
+
+void CMyFormView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CFormView::OnMouseMove(nFlags, point);
+	UpdatePicture(m_wstrFileName, m_wstrFilePath);
 }
 
 void CMyFormView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)

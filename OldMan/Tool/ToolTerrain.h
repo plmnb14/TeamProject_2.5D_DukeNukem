@@ -11,6 +11,7 @@ namespace ENGINE
 }
 
 #include "GameObject.h"
+class CRay;
 class CToolTerrain : public ENGINE::CGameObject
 {
 protected:
@@ -26,6 +27,7 @@ public:
 public:
 	 wstring GetTexName();
 	 ENGINE::TERRAIN_TYPE GetTerrainType();
+	 bool GetPicked();
 
 public:
 	void SetClicked();
@@ -46,6 +48,12 @@ protected:
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
+
+	ENGINE::VTX_TEX*		m_myVtxTex;
+	ENGINE::VTX_CUBE*		m_myVtxCube;
+	ENGINE::VTX_COL*		m_myVtxCol;
+
+	CRay*					m_pRay;
 
 	bool					m_bIsPicked;
 	bool					m_bSetted;

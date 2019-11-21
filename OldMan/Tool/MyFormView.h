@@ -57,9 +57,13 @@ public:
 	void UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXVECTOR3 _vSize);
 	void EditDataExchange();
 	void InitData();
+	void Update();
 	D3DXVECTOR3 GetPositionVec();
 	D3DXVECTOR3 GetRotationVec();
 	D3DXVECTOR3 GetScaleVec();
+
+private:
+	bool CheckNumber(CString _str, float& _fValue);
 
 public:
 	CStatic m_PictureControl;
@@ -92,5 +96,6 @@ public:
 
 	ENGINE::TERRAIN_TYPE m_eTerrainType;
 
+	bool m_bIsOnDlg;
 };
 

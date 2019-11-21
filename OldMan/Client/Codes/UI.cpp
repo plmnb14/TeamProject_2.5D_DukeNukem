@@ -41,6 +41,9 @@ void CUI::LateUpdate()
 
 void CUI::Render()
 {
+	if (!m_bVisible)
+		return;
+
 	// Set Proj BeforRender ==========================================================
 	D3DXMATRIX matWorld, matView, matProj, matTempView, matTempProj;
 	D3DXMatrixIdentity(&matWorld);
@@ -117,6 +120,11 @@ void CUI::SetPos(D3DXVECTOR3 _vPos)
 	m_vPos = _vPos;
 }
 
+void CUI::SetVisible(bool _bIsVisible)
+{
+	m_bVisible = _bIsVisible;
+}
+
 HRESULT CUI::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
@@ -126,6 +134,8 @@ HRESULT CUI::Initialize()
 
 	m_fSizeX = 50.f;
 	m_fSizeY = 50.f;
+
+	m_bVisible = true;
 
 	return S_OK;
 }

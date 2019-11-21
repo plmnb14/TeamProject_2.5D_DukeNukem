@@ -41,6 +41,7 @@ public:
 	void ChangeTex(wstring _wstrTex);
 	void SetSize(float _fSizeX, float _fSizeY);
 	void SetPos(D3DXVECTOR3 _vPos);
+	void SetVisible(bool _bIsVisible);
 
 protected:
 	HRESULT AddComponent();
@@ -67,6 +68,7 @@ protected:
 	float					m_fSizeX;
 	float					m_fSizeY;
 	D3DXVECTOR3				m_vPos;
+	bool					m_bVisible;
 };
 
 #define __TERRAIN_H__

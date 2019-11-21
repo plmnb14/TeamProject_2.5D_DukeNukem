@@ -65,6 +65,15 @@ D3DXVECTOR3 CRay::GetDirection()
 	return _Ray.m_vDirection;
 }
 
+D3DXVECTOR3 CRay::GetMousePos()
+{
+	POINT pt = {};
+	GetCursorPos(&pt);
+	::ScreenToClient(g_hWnd, &pt);
+
+	return D3DXVECTOR3((float)pt.x, (float)pt.y, 0.f);
+}
+
 bool CRay::IsPicked(CToolTerrain* _pTerrainCube)
 {
 	CRay r = (*this);
@@ -86,11 +95,22 @@ bool CRay::IsPicked(CToolTerrain* _pTerrainCube)
 	return qv * qv - vv * (qq - rr) >= 0;
 }
 
-bool CRay::IsPicked(D3DXVECTOR3& _v0, D3DXVECTOR3& _v1, D3DXVECTOR3& _v2, D3DXVECTOR3& _vPickedPos)
+bool CRay::IsPicked(D3DXVECTOR3& _v0, D3DXVECTOR3& _v1, D3DXVECTOR3& _v2, D3DXVECTOR3& _vPickedPos, D3DXMATRIX _matWorld)
 {
-	float u, v, t;
+	POINT pt = {};
+	GetCursorPos(&pt);
+	::ScreenToClient(g_hWnd, &pt);
+	D3DXVECTOR3 v3 = D3DXVECTOR3((float)pt.x, (float)pt.y, 1.f);
+	*this = RayAtWorldSpace((int)v3.x, (int)v3.y);
+
+	D3DXVECTOR3 v0, v1, v2;
+	D3DXVec3TransformCoord(&v0, &_v0, &_matWorld);
+	D3DXVec3TransformCoord(&v1, &_v1, &_matWorld);
+	D3DXVec3TransformCoord(&v2, &_v2, &_matWorld);
+
+	float u = 0.f, v = 0.f, t = 0.f;
 	BOOL b;
-	b = D3DXIntersectTri(&_v0, &_v1, &_v2, &m_vOrigin, &m_vDirection, &u, &v, &t);
+	b = D3DXIntersectTri(&v0, &v1, &v2, &m_vOrigin, &m_vDirection, &u, &v, &t);
 	_vPickedPos = m_vOrigin + (t * m_vDirection);
 
 	// warning C4800: 'BOOL': 'true' 또는 'false'로 bool 값을 강제하고 있습니다(성능 경고).

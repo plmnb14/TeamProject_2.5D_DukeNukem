@@ -66,8 +66,6 @@ bool CToolTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
 	D3DXMatrixInverse(&matWorld, 0, &matWorld);
 	D3DXVec3TransformCoord(&vRayPos, &vRayPos, &matWorld);
 
-	//cout << vRayPos.x <<", "<< vRayPos.y<<", "<< vRayPos.z << endl;
-
 	int iVtxCount = 4;
 	ENGINE::VTX_TEX* pVtx = new ENGINE::VTX_TEX[iVtxCount];;
 	m_pResourceMgr->GetVertexInfo(ENGINE::RESOURCE_STATIC, L"Buffer_RcTex", pVtx);
@@ -77,7 +75,6 @@ bool CToolTerrainRect::CheckGrid(D3DXVECTOR3& _vVtx)
 	{
 		D3DXVECTOR3 vVtxPos = pVtx[i].vPos;
 		D3DXVECTOR3 vVtxWorldPos;
-		//D3DXVec3Cross(&vVtxWorldPos, &vVtxPos, &m_pTransform->GetPos());
 		vVtxWorldPos = m_pTransform->GetPos();
 		if ((vVtxWorldPos.x + fGridRange > vRayPos.x && vVtxWorldPos.x - fGridRange < vRayPos.x)
 			&& (vVtxWorldPos.y + fGridRange > vRayPos.y && vVtxWorldPos.y - fGridRange < vRayPos.y))
