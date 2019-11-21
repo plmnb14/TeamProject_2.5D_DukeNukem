@@ -21,21 +21,32 @@ int CNumber::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 
+	// 임시 코드
+	if (ENGINE::CKeyMgr::GetInstance()->KeyPressing(ENGINE::KEY_Q))
+		if(m_iTestHP > 0) m_iTestHP -= 1;
+	if (ENGINE::CKeyMgr::GetInstance()->KeyPressing(ENGINE::KEY_E))
+		if (m_iTestShield > 0) m_iTestShield -= 1;
+
 	switch (m_eNumberType)
 	{
 	case CNumber::NUMBER_HP:
 	{
-		GetNumberArr((int)m_pPlayerObserver->GetPlayerInfo().fHitPoint, m_iNumArr, m_iArrCount);
+		//GetNumberArr((int)m_pPlayerObserver->GetPlayerInfo().fHitPoint, m_iNumArr, m_iArrCount);
+		GetNumberArr(m_iTestHP, m_iNumArr, m_iArrCount);
+		break;
+	}
+	case CNumber::NUMBER_SHIELD:
+	{
+		//GetNumberArr((int)m_pPlayerObserver->GetPlayerInfo().fShieldPoint, m_iNumArr, m_iArrCount);
+		GetNumberArr(m_iTestShield, m_iNumArr, m_iArrCount);
 		break;
 	}
 	case CNumber::NUMBER_BULLET:
 	{
-		GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wMagazineBullet, m_iNumArr, m_iArrCount);
+		GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wCurBullet, m_iNumArr, m_iArrCount, m_pPlayerObserver->GetWeaponInfo().wMagazineBullet);
+		break;
 	}
-		break;
 	case CNumber::NUMBER_END:
-		break;
-	default:
 		break;
 	}
 
@@ -78,6 +89,12 @@ HRESULT CNumber::Initialize()
 
 	m_fSizeX = 50.f;
 	m_fSizeY = 50.f;
+
+	// 임시
+	m_iTestMaxHP = 100;
+	m_iTestHP = m_iTestMaxHP;
+	m_iTestMaxShield = 100;
+	m_iTestShield = m_iTestMaxShield;
 
 	return S_OK;
 }
@@ -140,7 +157,7 @@ CNumber* CNumber::Create(LPDIRECT3DDEVICE9 pGraphicDev, NUMBER_TYPE _eType)
 	return pInstance;
 }
 
-void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount)
+void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber2)
 {
 	int iNum = _iNumber;
 	for (int i = 0; i < MAXINT; i++)
@@ -154,7 +171,25 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount)
 		}
 	}
 
-	_iArr = new int[_iCount];
+	int iTemp = 0;
+	if (_iNumber2 >= 0)
+	{
+		iNum = _iNumber2;
+		for (int i = 0; i < MAXINT; i++)
+		{
+			iNum /= 10;
+
+			if (iNum <= 0)
+			{
+				iTemp = i + 1;
+				break;
+			}
+		}
+		_iArr = new int[_iCount + iTemp];
+	}
+	else
+		_iArr = new int[_iCount];
+
 	for (auto& iter : m_vecNumberUI)
 		ENGINE::Safe_Delete(iter);
 	m_vecNumberUI.clear();
@@ -165,7 +200,26 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount)
 		_iNumber /= 10;
 
 		TCHAR _szNum[MIN_STR];
-		swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
+		/*if(m_eNumberType == NUMBER_SHIELD)
+			swprintf_s(_szNum, L"Number_Blue_%d.png", _iArr[i]);
+		else*/
+			swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
 		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
+	}
+
+	if (_iNumber2 >= 0)
+	{
+		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, L"Slash.png"));
+		for (int i = _iCount + 1; i < _iCount + iTemp + 1; i++)
+		{
+			_iArr[i] = _iNumber2 % 10;
+			_iNumber2 /= 10;
+
+			TCHAR _szNum[MIN_STR];
+			swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
+			m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
+		}
+
+		_iCount += iTemp + 1;
 	}
 }

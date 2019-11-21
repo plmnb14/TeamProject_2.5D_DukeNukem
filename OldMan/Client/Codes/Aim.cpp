@@ -181,7 +181,7 @@ void CAim::CheckMoveShotgunAim()
 		return;
 
 	// юс╫ц
-	float fMoveAmount = 20.f * m_pTimeMgr->GetDelta();
+	float fMoveAmount = 20.f * m_pTimeMgr->GetDelta() * 8.f;
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 	{
 		if (m_fMaxMoveAim > m_fMoveAim)

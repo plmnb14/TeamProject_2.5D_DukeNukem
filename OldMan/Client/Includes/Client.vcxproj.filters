@@ -97,6 +97,12 @@
     <Filter Include="02.GameObject\06.Weapon\03. Rocket">
       <UniqueIdentifier>{9e8378cd-9723-49b1-905c-59881153d1c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\99.UI\02.GaugeBar">
+      <UniqueIdentifier>{ee77a21b-bfb1-413b-a65e-6a574697f4a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\99.UI\03.WeaponIcon">
+      <UniqueIdentifier>{b95507a5-ab33-48d9-97bd-398571f62a72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -205,6 +211,12 @@
     <ClInclude Include="..\Codes\Weapon_Rocket.h">
       <Filter>02.GameObject\06.Weapon\03. Rocket</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\GaugeBar.h">
+      <Filter>02.GameObject\99.UI\02.GaugeBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\WeaponIcon.h">
+      <Filter>02.GameObject\99.UI\03.WeaponIcon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -288,6 +300,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Weapon_Rocket.cpp">
       <Filter>02.GameObject\06.Weapon\03. Rocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GaugeBar.cpp">
+      <Filter>02.GameObject\99.UI\02.GaugeBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\WeaponIcon.cpp">
+      <Filter>02.GameObject\99.UI\03.WeaponIcon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

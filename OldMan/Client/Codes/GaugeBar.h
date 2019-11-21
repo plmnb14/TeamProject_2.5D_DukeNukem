@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __NUMBER_H__
+#ifndef __GAUGEBAR_H__
 
 #include "UI.h"
 
@@ -16,16 +16,16 @@ namespace ENGINE
 }
 
 class CPlayerObserver;
-class CNumber : public CUI
+class CGaugeBar : public CUI
 {
 public:
-	enum NUMBER_TYPE { NUMBER_HP, NUMBER_SHIELD, NUMBER_BULLET, NUMBER_END };
+	enum GAUGEBAR_TYPE { BAR_HP, BAR_SHIELD, BAR_END };
 
 protected:
-	explicit CNumber(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CGaugeBar(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
-	virtual ~CNumber();
+	virtual ~CGaugeBar();
 
 public:
 	virtual int Update() override;
@@ -39,18 +39,21 @@ protected:
 
 protected:
 	HRESULT AddComponent();
-	void GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber2 = -1);
+	void InitBar();
+	void UpdateBar();
 
 public:
-	static CNumber* Create(LPDIRECT3DDEVICE9 pGraphicDev, NUMBER_TYPE _eType);
+	static CGaugeBar* Create(LPDIRECT3DDEVICE9 pGraphicDev, GAUGEBAR_TYPE _eType);
 
 private:
-	vector<CUI*>			m_vecNumberUI;
-	int*					m_iNumArr;
-	int						m_iArrCount;
+	vector<CUI*>			m_vecBarUI;
+	int						m_iBarMaxCount;
+	int						m_iBarCurCount;
 
-	NUMBER_TYPE				m_eNumberType;
+	float					m_fHP;
+	float					m_fShield;
 
+	GAUGEBAR_TYPE			m_eBarType;
 
 	int m_iTestMaxHP;
 	int m_iTestHP;
@@ -58,5 +61,5 @@ private:
 	int m_iTestShield;
 };
 
-#define __NUMBER_H__
+#define __GAUGEBAR_H__
 #endif
