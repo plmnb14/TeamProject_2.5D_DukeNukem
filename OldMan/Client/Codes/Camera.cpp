@@ -19,7 +19,7 @@ CCamera::CCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_fReverse_Vertical(0) , m_fReverse_Horizontal(0),
 	m_bLeft(false), m_bCamPosUp(false), m_bCamPosDown(true),
 	m_vMaxCamShakePos({0,0,0}), m_bCamPosRight(true) , m_bCamPosLeft(false),
-	m_bCamPosFront(true), m_bCamPosBack(false), m_fCam_PosY(0),
+	m_bCamPosFront(true), m_bCamPosBack(false), m_fCam_PosY(0), m_fFov(0),
 	m_pTimeMgr(ENGINE::GetTimeMgr()), m_pKeyMgr(ENGINE::GetKeyMgr())
 {
 	D3DXMatrixIdentity(&m_MatView);
@@ -520,6 +520,16 @@ void CCamera::Set_Vertical(float _Vertical)
 	}
 }
 
+void CCamera::AimZoom()
+{
+
+}
+
+void CCamera::Set_AimZoom(float _ZoomValue)
+{
+	m_fFov = _ZoomValue;
+}
+
 void CCamera::KeyInput()
 {
 	if (m_eCameraMode != FLY_MODE)
@@ -757,7 +767,7 @@ int CCamera::Update()
 
 	D3DXMATRIX matProj;
 
-	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(70.f), WINCX / (float)WINCY, 1.f, 1000.f);
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(m_fFov), WINCX / (float)WINCY, 1.f, 1000.f);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
 
@@ -799,13 +809,14 @@ HRESULT CCamera::Initialize()
 	m_fZoom_Min = 0.5f;
 	m_fZoom_Max = 10.f;
 
+	m_fFov = 70.f;
 
 	D3DXMATRIX matProj;
 
 	SetUp_ViewMatrix(&m_MatView);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
 
-	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(70.f), WINCX / (float)WINCY, 1.f, 1000.f);
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(m_fFov), WINCX / (float)WINCY, 1.f, 1000.f);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 
 	ShowCursor(false);

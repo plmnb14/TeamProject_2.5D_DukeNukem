@@ -27,6 +27,11 @@ public:
 		MELLE, REVOLVER, RIFLE, SHOTGUN, LUNCHER
 	};
 
+	enum ACT_STATE
+	{
+		NONE, WALK, RUN, FIRST, DRAW, FIRE, RELOAD, ZOOM, ZOOMFIRE
+	};
+
 private:
 	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
 
@@ -53,6 +58,7 @@ private:
 	void Shoot_Shotgun();
 	void ShootDelay();
 	void ShootType();
+	void Zoom();
 	void Reload();
 
 private:
@@ -95,7 +101,15 @@ private:
 	map<ENGINE::WEAPON_TAG, ENGINE::W_INFO*>	m_mWeaponInfo;
 
 private:
+	ACT_STATE		m_eActState;
+
+private:
 	float m_fSlideUp;
+	bool  m_bZoom;
+	float m_fZoomSpeed;
+	float m_fZoomAccel;
+	float m_fMaxZoom;
+	float m_fMinZoom;
 	
 
 };

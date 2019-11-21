@@ -25,6 +25,7 @@ public:
 	void Set_IsAttack(bool _Attack);
 	void Set_IsFall(bool _Fall);
 	void Set_IsJump(bool _Jump);
+	void Set_IsLanding(bool _Land);
 
 public:
 	void Set_fMass(float _Mass);
@@ -47,6 +48,7 @@ public:
 	bool Get_IsFall() { return m_tRigid.bIsFall; }
 	bool Get_IsAir() { return m_tRigid.bIsAir; }
 	bool Get_IsHit() { return m_tRigid.bIsHit; }
+	bool Get_IsLanding() { return m_tRigid.bIsLanding; }
 public:
 	float Get_Force() { return m_tRigid.fForce; }
 	

@@ -97,6 +97,9 @@
     <Filter Include="02.GameObject\06.Weapon\03. Rocket">
       <UniqueIdentifier>{9e8378cd-9723-49b1-905c-59881153d1c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\00.Player\00. Player_Motion">
+      <UniqueIdentifier>{f4fb53b5-a811-44f4-a19b-c83fede0fff8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
