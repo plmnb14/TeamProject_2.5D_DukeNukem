@@ -122,6 +122,7 @@ namespace ENGINE
 		D3DXVECTOR3 vAccel;
 		D3DXVECTOR3 vMaxAccel;
 		D3DXVECTOR3 vSpeed;
+		D3DXVECTOR3 vMaxSpeed;
 
 		bool bIsGravity; // 중력 영향력을 체크합니다.
 
@@ -135,6 +136,7 @@ namespace ENGINE
 
 		float fPower;	// 힘
 		float fMass;	// 질량
+		float fForce;	// 넉백할 량
 
 	}RIGID;
 
@@ -162,6 +164,8 @@ namespace ENGINE
 		float fShield;		// 보호막 수치
 		float fArmor;		// 방어력 수치 ( 방어력만큼 공격력이 감소 됩니다. )
 		float fStamina;		// 스태미너 ( 달리기, 슬라이드 등 행동관련 )
+
+		float fMoveSpeed;
 
 		float fFuel;		// 연료 게이지 ( 제트팩이나, 특수 무기 장착시 활성화 )
 

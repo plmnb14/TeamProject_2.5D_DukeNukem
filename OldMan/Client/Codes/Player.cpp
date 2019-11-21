@@ -21,6 +21,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE),
 	m_pObserver(nullptr)
 {	
+	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
 
 CPlayer::~CPlayer()

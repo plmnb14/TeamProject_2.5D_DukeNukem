@@ -43,7 +43,9 @@ int CNumber::Update()
 	}
 	case CNumber::NUMBER_BULLET:
 	{
-		GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wCurBullet, m_iNumArr, m_iArrCount, m_pPlayerObserver->GetWeaponInfo().wMagazineBullet);
+		GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wCurBullet, m_iNumArr, m_iArrCount);
+		//GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wCurBullet, m_iNumArr, m_iArrCount, m_pPlayerObserver->GetWeaponInfo().wMagazineBullet);
+		// Release 했을 때 이 부분에서 자꾸터져서, 임시방편으로 저렇게 해둠
 		break;
 	}
 	case CNumber::NUMBER_END:
@@ -207,19 +209,20 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber
 		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
 	}
 
-	if (_iNumber2 >= 0)
+	if (_iNumber2 > 0)
 	{
 		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, L"Slash.png"));
+
 		for (int i = _iCount + 1; i < _iCount + iTemp + 1; i++)
 		{
 			_iArr[i] = _iNumber2 % 10;
 			_iNumber2 /= 10;
-
+		
 			TCHAR _szNum[MIN_STR];
 			swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
 			m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
 		}
 
-		_iCount += iTemp + 1;
+		_iCount += iTemp;
 	}
 }
