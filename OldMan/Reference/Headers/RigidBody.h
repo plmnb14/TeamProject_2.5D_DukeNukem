@@ -25,6 +25,7 @@ public:
 	void Set_IsAttack(bool _Attack);
 	void Set_IsFall(bool _Fall);
 	void Set_IsJump(bool _Jump);
+	void Set_IsLanding(bool _Land);
 
 public:
 	void Set_fMass(float _Mass);
@@ -39,10 +40,18 @@ public:
 
 public:
 	D3DXVECTOR3 Get_Accel() { return m_tRigid.vAccel; }
+	D3DXVECTOR3 Get_MaxAccel() { return m_tRigid.vMaxAccel; }
+	D3DXVECTOR3 Get_Speed() { return m_tRigid.vSpeed; }
+	D3DXVECTOR3 Get_MaxSpeed() { return m_tRigid.vMaxSpeed; }
 	bool Get_IsJump() { return m_tRigid.bIsJump; }
 	bool Get_IsGround() { return m_tRigid.bIsGround; }
 	bool Get_IsFall() { return m_tRigid.bIsFall; }
 	bool Get_IsAir() { return m_tRigid.bIsAir; }
+	bool Get_IsHit() { return m_tRigid.bIsHit; }
+	bool Get_IsLanding() { return m_tRigid.bIsLanding; }
+public:
+	float Get_Force() { return m_tRigid.fForce; }
+	
 
 public:
 	float Get_Force() { return m_tRigid.fForce; }

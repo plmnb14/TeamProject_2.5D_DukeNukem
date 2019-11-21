@@ -54,7 +54,7 @@ private:
 
 public:
 	static CBullet* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir , float* _Angle, float _Speed, ENGINE::WEAPON_TAG _WeaponTag);
-
+	
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
@@ -63,6 +63,7 @@ private:
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
+	D3DXVECTOR3				m_dir;
 
 private:
 	CGameObject*	m_pTarget;
@@ -70,6 +71,9 @@ private:
 	ENGINE::WEAPON_TAG	m_eWeaponTag;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCollider*		m_pCollider;
+
+	float m_fLifetime;
+
 };
 
 #define __BULLET_H__

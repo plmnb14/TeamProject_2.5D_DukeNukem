@@ -64,6 +64,9 @@
     <Filter Include="02.SuperClass\02.Component\04. Condition">
       <UniqueIdentifier>{6d21007d-a4fa-412e-8263-390ad7042345}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.SuperClass\02.Component\05. Animator">
+      <UniqueIdentifier>{a84fdc89-5189-4459-990c-7fdba78aeca7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -105,9 +108,6 @@
     <ClInclude Include="..\Codes\Subject.h">
       <Filter>03.Design\00.Observer\00.Subject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\CollisionMgr.h">
-      <Filter>03.Design\00. Collision</Filter>
-    </ClInclude>
     <ClInclude Include="..\Codes\Billborad.h">
       <Filter>02.SuperClass\02.Component\02. Billborad</Filter>
     </ClInclude>
@@ -119,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="..\Codes\Condition.h">
       <Filter>02.SuperClass\02.Component\04. Condition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\CollisionMgr.h">
+      <Filter>03.Design\00. Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

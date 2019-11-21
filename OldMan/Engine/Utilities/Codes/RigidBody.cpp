@@ -50,6 +50,11 @@ void CRigidBody::Set_IsJump(bool _Jump)
 	m_tRigid.bIsJump = _Jump;
 }
 
+void CRigidBody::Set_IsLanding(bool _Land)
+{
+	m_tRigid.bIsLanding = _Land;
+}
+
 void CRigidBody::Set_fMass(float _Mass)
 {
 	m_tRigid.fMass = _Mass;

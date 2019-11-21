@@ -10,9 +10,6 @@
     <Filter Include="99.Default">
       <UniqueIdentifier>{56eb6385-21df-4d39-8fa4-0556b71d37d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Document">
-      <UniqueIdentifier>{c63fa270-c0d2-4497-89d3-58ea1eddd4b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.WinApp">
       <UniqueIdentifier>{2f0621c4-ea59-4dee-85c2-751b33bf5b58}</UniqueIdentifier>
     </Filter>
@@ -58,6 +55,9 @@
     <Filter Include="07.Mouse">
       <UniqueIdentifier>{fb7085ad-0803-4036-ae27-9a612d6b1bc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.WinApp\01.Document">
+      <UniqueIdentifier>{c63fa270-c0d2-4497-89d3-58ea1eddd4b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -73,7 +73,7 @@
       <Filter>00.WinApp</Filter>
     </ClInclude>
     <ClInclude Include="ToolDoc.h">
-      <Filter>01.Document</Filter>
+      <Filter>00.WinApp\01.Document</Filter>
     </ClInclude>
     <ClInclude Include="ToolView.h">
       <Filter>03.View</Filter>
@@ -138,7 +138,7 @@
       <Filter>00.WinApp</Filter>
     </ClCompile>
     <ClCompile Include="ToolDoc.cpp">
-      <Filter>01.Document</Filter>
+      <Filter>00.WinApp\01.Document</Filter>
     </ClCompile>
     <ClCompile Include="ToolView.cpp">
       <Filter>03.View</Filter>

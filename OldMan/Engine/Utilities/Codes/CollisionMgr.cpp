@@ -5,7 +5,7 @@
 #include "Collider.h"
 #include "Trasform.h"
 #include "RigidBody.h"
-
+#include "Condition.h"
 USING(ENGINE)
 
 CCollisionMgr::CCollisionMgr()
@@ -46,11 +46,11 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 	{
 		for (auto& rSrc : rSrcList)
 		{
-			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
-			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
-			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
 			if(Check_AABB_to_PLANE(rDst, rSrc , rDstCol , rSrcCol))
 			{
@@ -69,12 +69,17 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 	{
 		for (auto& rSrc : rSrcList)
 		{
-			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
-			ENGINE::CCollider* rDstGCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
-			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
-			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+			if (a > 3)
+				continue;
+
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rDstGCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
@@ -102,11 +107,16 @@ void CCollisionMgr::CollisionPlayer_To_Item(list<CGameObject*>& rDstList, list<C
 	{
 		for (auto& rSrc : rSrcList)
 		{
-			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
-			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
-			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+			if (a > 3)
+				continue;
+
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
@@ -122,28 +132,107 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 	{
 		for (auto& rSrc : rSrcList)
 		{
-			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
-			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+			if (a > 3)
+				continue;
+
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				if (dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Get_IsJump())
+				if (static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Get_IsJump())
 					return;
 
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_Accel({ 0,0,0 });
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsJump(false);
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(false);
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsAir(false);
-				dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
+				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_Accel({ 0,0,0 });
+				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsJump(false);
+				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(false);
+				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsAir(false);
+				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
+
+				//cout << "응! 닿음!" << endl;
 
 				return;
 			}
 		}
 
+
+	//	cout << "땅에 닿지 않음" << endl;
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
+
+		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
+		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 	}
 }
+
+void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			if (rDst->GetDead())
+				continue;
+
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+			if (a > 3)
+				continue;
+
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+			if (Check_AABB_Bullet(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				rDst->SetDead();
+				cout << "충돌" << endl;
+				continue;
+			}
+		}
+
+	}
+}
+
+void CCollisionMgr::CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			ENGINE::CCollider* rDstCol = dynamic_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = dynamic_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+			ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				//cout << "충돌체크 됩니다" << endl;
+
+				dynamic_cast<CCondition*>(rDst->Get_Component(L"Condition"))->Set_Hit(true);
+				return;
+			}
+			else
+			{
+			//cout << "충돌 안함" << endl;
+				dynamic_cast<CCondition*>(rDst->Get_Component(L"Condition"))->Set_Hit(false);
+
+			}
+		}
+
+
+	}
+
+}
+
 
 bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* rSrc, CCollider* _rDstCol , CCollider* _rSrcCol)
 {
@@ -218,13 +307,59 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 	return false;
 }
 
+bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameObject * rSrc, CCollider * _rDstCol, CCollider * _rSrcCol)
+{
+	if (_rSrcCol->Get_CollisionType() != ENGINE::COLLISION_AABB)
+		return false;
+
+	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
+	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
+
+	if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
+		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
+		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
+	{
+		return true;
+	}
+
+	else 
+	{
+		D3DXVECTOR3 vTemPos[9] = {};
+		vTemPos[0] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.9f);
+		vTemPos[1] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.8f);
+		vTemPos[2] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.7f);
+		vTemPos[3] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.6f);
+		vTemPos[4] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.5f);
+		vTemPos[5] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.4f);
+		vTemPos[6] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.3f);
+		vTemPos[7] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.2f);
+		vTemPos[8] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.1f);
+
+		for (int i = 0; i < 9; ++i)
+		{
+			_rDstCol->Set_CenterPos(vTemPos[i]);
+			_rDstCol->SetUp_Box();
+
+			if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
+				rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
+				rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	return false;
+}
+
 bool CCollisionMgr::Check_AABB_to_PLANE(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc, CCollider* _rDstCol, CCollider* _rSrcCol)
 {
 	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
 	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
 
-	ENGINE::CTransform* rDstTrans = dynamic_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-	ENGINE::CTransform* rSrcTrans = dynamic_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+	ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+	ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
 
 	D3DXVECTOR3* tmpVtx =  _rSrcCol->Get_PlaneVtx();

@@ -80,8 +80,8 @@ HRESULT CWeapon_Pump::Initialize()
 	m_pWInfo.wMagazineSize = 12;			// 한 탄창 최대 보관 수
 	m_pWInfo.wMagazineBullet = 12;			// 현재 탄창의 총알 개수
 
-	m_pWInfo.fVertical_Rebound = 0.5f;		// 수직 반동
-	m_pWInfo.fHorizontal_Rebound = 8.0f;		// 수평 반동
+	m_pWInfo.fVertical_Rebound = 0.5f;		// 수평 반동
+	m_pWInfo.fHorizontal_Rebound = 8.0f;		// 수직 반동
 
 	m_pWInfo.fSpread_X = 1000;
 	m_pWInfo.fSpread_Y = 1000;
