@@ -98,6 +98,11 @@ private:
 	STATE m_eNextState2;
 
 	bool m_bShot;
+	wstring					m_wstrTex;
+	float					m_fSizeX;
+	float					m_fSizeY;
+	float m_fFrame;
+	D3DXVECTOR3				m_vPos;
 
 };
 

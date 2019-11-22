@@ -90,7 +90,7 @@ void CMonster::Render()
 {
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
-	//m_pTexture->Render(0);
+	m_pTexture->Render((int)m_fFrame);
 	m_pBuffer->Render();
 }
 
@@ -99,7 +99,7 @@ HRESULT CMonster::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(5.f, 10.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	m_pTransform->SetSize(D3DXVECTOR3(2.f, 2.f, 2.f));
 
 	m_fMaxRange = 15.0f;//최대사거리
 	m_MonsterDir = { 0.f,0.f,0.f };
@@ -107,7 +107,7 @@ HRESULT CMonster::Initialize()
 	m_fMinRange = 3.0f;
 
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 2.f , 2.f, 2.f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
@@ -194,14 +194,13 @@ void CMonster::Release()
 HRESULT CMonster::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
+	//texture
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"PIG");
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Texture", pComponent });
 
-	// Texture
-	//pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Texture_Player");
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent.insert({ L"Texture", pComponent });
-
-	//m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
-	//NULL_CHECK_RETURN(m_pTexture, E_FAIL);
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
 	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_Player");

@@ -258,6 +258,13 @@ HRESULT CStage::Initialize()
 		L"SMG_Zoom1",
 		L"../Texture/Weapon/SMG/SMG_Zoom/SMG_Zoom_%d.png", 4);
 
+	m_pResourceMgr->AddTexture(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::TEX_NORMAL,
+		L"PIG",
+		L"../Texture/Monster/No_Animation/PigMan/Walk_Front/%d.png", 4);
+	
 	// Player Buffer
 	m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
