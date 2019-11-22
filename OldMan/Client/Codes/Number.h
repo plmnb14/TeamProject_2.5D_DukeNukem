@@ -51,6 +51,9 @@ private:
 
 	NUMBER_TYPE				m_eNumberType;
 
+	int m_iCurBullet;
+	int m_iMaxBullet;
+
 
 	int m_iTestMaxHP;
 	int m_iTestHP;

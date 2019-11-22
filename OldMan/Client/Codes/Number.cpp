@@ -43,8 +43,15 @@ int CNumber::Update()
 	}
 	case CNumber::NUMBER_BULLET:
 	{
-		GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wCurBullet, m_iNumArr, m_iArrCount);
-		//GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wCurBullet, m_iNumArr, m_iArrCount, m_pPlayerObserver->GetWeaponInfo().wMagazineBullet);
+		if (m_iCurBullet != m_pPlayerObserver->GetWeaponInfo().wCurBullet
+			|| m_iMaxBullet != m_pPlayerObserver->GetWeaponInfo().wMagazineBullet)
+		{
+			m_iCurBullet = m_pPlayerObserver->GetWeaponInfo().wCurBullet;
+			m_iMaxBullet = m_pPlayerObserver->GetWeaponInfo().wMagazineBullet;
+			GetNumberArr(m_iCurBullet, m_iNumArr, m_iArrCount, m_iMaxBullet);
+		}
+
+		//GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wMagazineBullet, m_iNumArr, m_iArrCount);
 		// Release 했을 때 이 부분에서 자꾸터져서, 임시방편으로 저렇게 해둠
 		break;
 	}
@@ -161,6 +168,13 @@ CNumber* CNumber::Create(LPDIRECT3DDEVICE9 pGraphicDev, NUMBER_TYPE _eType)
 
 void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber2)
 {
+	for (auto& iter : m_vecNumberUI)
+	{
+		iter->SetDead();
+		//ENGINE::Safe_Delete(iter);
+	}
+	m_vecNumberUI.clear();
+
 	int iNum = _iNumber;
 	for (int i = 0; i < MAXINT; i++)
 	{
@@ -192,24 +206,17 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber
 	else
 		_iArr = new int[_iCount];
 
-	for (auto& iter : m_vecNumberUI)
-		ENGINE::Safe_Delete(iter);
-	m_vecNumberUI.clear();
-
 	for (int i = 0; i < _iCount; i++)
 	{
 		_iArr[i] = _iNumber % 10;
 		_iNumber /= 10;
 
 		TCHAR _szNum[MIN_STR];
-		/*if(m_eNumberType == NUMBER_SHIELD)
-			swprintf_s(_szNum, L"Number_Blue_%d.png", _iArr[i]);
-		else*/
-			swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
+		swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
 		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
 	}
 
-	if (_iNumber2 > 0)
+	if (_iNumber2 >= 0)
 	{
 		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, L"Slash.png"));
 
@@ -223,6 +230,6 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber
 			m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
 		}
 
-		_iCount += iTemp;
+		_iCount += iTemp + 1;
 	}
 }

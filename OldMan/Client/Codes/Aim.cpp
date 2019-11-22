@@ -223,9 +223,9 @@ void CAim::CreateAim()
 
 void CAim::InitAim()
 {
+	m_fMoveAim = 0.f;
 	InitRifleAim();
 	InitShotgunAim();
-	m_fMoveAim = 0.f;
 }
 
 void CAim::InitRifleAim()
@@ -248,6 +248,11 @@ void CAim::InitShotgunAim()
 	m_ShotgunAimArr[AIM_RIGHT]	->SetSize(200.f, 200.f);
 	m_ShotgunAimArr[AIM_UP]		->SetSize(200.f, 200.f);
 	m_ShotgunAimArr[AIM_DOWM]	->SetSize(200.f, 200.f);
+
+	m_ShotgunAimArr[AIM_LEFT]	->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
+	m_ShotgunAimArr[AIM_RIGHT]	->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
+	m_ShotgunAimArr[AIM_UP]		->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
+	m_ShotgunAimArr[AIM_DOWM]	->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 
 	m_ShotgunAimOriPos[AIM_LEFT]	= D3DXVECTOR3(0.f, 0.f, 0.f);
 	m_ShotgunAimOriPos[AIM_RIGHT]	= D3DXVECTOR3(0.f, 0.f, 0.f);
