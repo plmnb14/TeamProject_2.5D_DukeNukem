@@ -54,6 +54,7 @@ private:
 	void Monster_Bogan();
 private:											//¹°¸® 
 	void Check_Physic();
+	void Object_Collison();
 
 
 	
@@ -103,6 +104,7 @@ private:
 	float					m_fSizeY;
 	float m_fFrame;
 	D3DXVECTOR3				m_vPos;
+	bool					m_bObject;
 
 };
 

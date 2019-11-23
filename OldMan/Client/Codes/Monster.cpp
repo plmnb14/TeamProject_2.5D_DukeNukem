@@ -467,6 +467,16 @@ void CMonster::Check_Physic()
 
 }
 
+void CMonster::Object_Collison()
+{
+	// 전부다 받아온다. 
+	// 그래서 그 각도에 겹치는게 없는지 판단하는게 맞다. 
+
+	m_pTarget
+
+
+}
+
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CMonster::Monster_State_Set()
 {
