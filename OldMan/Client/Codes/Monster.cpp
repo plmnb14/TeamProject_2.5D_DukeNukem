@@ -31,15 +31,22 @@ int CMonster::Update()
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
+
+	if (m_fTime > 1)
+	{
+		Monster_Fire();
+		m_fTime = 0;
+	}
+
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	//Player_Pursue();
 	Check_Physic();
-	m_fTime += m_pTimeMgr->GetDelta();
 // 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	m_bShot = m_pCondition->Get_Hit();
 	Monster_Foward();
-	
+	m_fTime += m_pTimeMgr->GetDelta();
+
 
 	return NO_EVENT;
 }
@@ -55,7 +62,7 @@ void CMonster::LateUpdate()
 	Cameramatrix = m_pObserver->GetViewMatrix();
 	vSize = m_pTransform->GetSize();
 
-	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix,vSize);                          // 빌보드 설정
+	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix,vSize);                          // 빌보드 설정
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();                                    // 빌보드에서 설정된 행렬을 받아온다. 
 	//m_matView = Localmatrix;
 
@@ -74,12 +81,7 @@ void CMonster::LateUpdate()
 		Monster_Range();
 
 	}
-	if (m_fTime > 1)
-	{
-		Monster_Fire();
-		m_fTime = 0;
-	}
-
+	
 	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
@@ -286,7 +288,7 @@ void CMonster::Player_Pursue()
 	D3DXVECTOR3 vMonster2 = {vMonster.x,m_pTransform->GetDir().y,vMonster.z };
 	//좌우 방향벡터로 내적을 구하고  그것으로 도는 방향을 결정하는 값을 구해서 그쪽으로 돌게만드는게 핵심 
 	
-	//D3DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };     통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
+	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
 	m_MoveSpeed = 0.5f * m_pTimeMgr->GetDelta();   // 속도
 	
 	m_pTransform->Move_AdvancedPos(vMonster2, m_MoveSpeed);
@@ -360,18 +362,55 @@ void CMonster::Monster_Shot()
 }
 void CMonster::Monster_Fire()
 {
+	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();
 	D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
-	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();					// 몬스터 위치
-	D3DXVECTOR3 vMonster =  vTempPos - vMonsterPos;						 // 방향 
+	D3DXVECTOR3 vTempPos_Top = { vTempPos.x, vTempPos.y + 1,vTempPos.z };
+					
+	D3DXVECTOR3 vMonster_Dir = vTempPos_Top - vMonsterPos;
+	//m_pTransform->SetDir(vMonster_Dir);
+
+	D3DXVECTOR3 vMonsterDir_Fowrd2 =m_pTransform->GetDir();                // 몬스터의 룩 벡터 X축 기준 룩 벡터 
+
+	D3DXVECTOR3 Mon_RIght_Dir, Mon_Left_Dir, cross;
+	D3DXVec3Normalize(&vMonsterDir_Fowrd2, &vMonsterDir_Fowrd2);
+	D3DXVec3Normalize(&vMonster_Dir, &vMonster_Dir);
+
+	D3DXVec3Cross(&Mon_RIght_Dir, &vMonster_Dir, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	
+
+	float fma = D3DXVec3Dot(&Mon_RIght_Dir, &vMonster_Dir);
+
+	//D3DXVec3Normalize(&Mon_RIght_Dir, &Mon_RIght_Dir);
+
+	//D3DXVec3Cross(&Mon_RIght_Dir, &vMonsterDir_Fowrd2, &vMonster_Dir);
+	//D3DXVec3Normalize(&Mon_RIght_Dir, &Mon_RIght_Dir);
+	//D3DXVECTOR3 vTempPos3 = { vMonsterPos.x - 2 * m_pTransform->GetDir().x + 2 * m_pTransform->GetDir().z, vMonsterPos.y ,vMonsterPos.z + 2 * m_pTransform->GetDir().x - 2 * m_pTransform->GetDir().z };
+	
+	D3DXVECTOR3 vMonsterPos_ShotPoint = { vMonsterPos.x-Mon_RIght_Dir.x, vMonsterPos.y- Mon_RIght_Dir.y  ,vMonsterPos.z-Mon_RIght_Dir.z};
+	
+	
+	D3DXVECTOR3 vMonster = vTempPos_Top - vMonsterPos_ShotPoint;
+
+
 	//정면이 되야 쏜다. 
 	// 각도에 따른 렌더와 정면 사격 하게 만든다. 
-	m_MoveSpeed = 300.f * m_pTimeMgr->GetDelta();   // 속도
-	float fAngle[1] = { 0.f };
+	m_MoveSpeed = 100.f * m_pTimeMgr->GetDelta();   // 속도
+	float fAngle[3] = { 0.f };                      //각도 0도로 줘야함 안주면 총알 빌보드 문제 있음 
 
-	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos, vMonster, fAngle, m_MoveSpeed,ENGINE::MONSTER_REVOLVER);
+	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, m_MoveSpeed,ENGINE::MONSTER_REVOLVER);
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-	
+	cout << Mon_RIght_Dir.x << "x" << endl;
+	cout << Mon_RIght_Dir.y << "y" << endl;
+	cout << Mon_RIght_Dir.z <<"z"<< endl;
+	//cout << vMonsterDir_Fowrd2.x<<"몬" << endl;
+//	cout << vMonsterDir_Fowrd2.y << "몬" << endl;
+	//cout << vMonsterDir_Fowrd2.z << "몬" << endl;
+//	cout << <<"y"<< endl;
+	//cout << Mon_RIght_Dir.z	<<"z"<< endl;
+	cout << vMonsterPos.x<<"x2" << endl;
+	//cout << vMonsterPos.y<<"y2" << endl;
+
+
 	
 }
 void CMonster::Monster_Bogan()
@@ -472,7 +511,7 @@ void CMonster::Object_Collison()
 	// 전부다 받아온다. 
 	// 그래서 그 각도에 겹치는게 없는지 판단하는게 맞다. 
 
-	m_pTarget
+	
 
 
 }

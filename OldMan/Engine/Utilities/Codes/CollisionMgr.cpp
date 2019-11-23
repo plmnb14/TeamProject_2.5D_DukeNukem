@@ -74,7 +74,7 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 3)
+			if (a > 5)
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
@@ -112,7 +112,7 @@ void CCollisionMgr::CollisionPlayer_To_Item(list<CGameObject*>& rDstList, list<C
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 3)
+			if (a > 5)
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
@@ -137,7 +137,7 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 3)
+			if (a > 5)
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
@@ -184,7 +184,7 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 3)
+			if (a > 5)
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
