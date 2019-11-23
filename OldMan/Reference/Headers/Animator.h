@@ -23,11 +23,11 @@ public:
 	};
 
 public:
-	virtual void RenderSet(float _DeltaTime);
+	int RenderSet(float _DeltaTime);
 
 public:
 	void Stop_Animation(bool _Stop);
-	void Play_Animation();
+	int Play_Animation();
 
 public:
 	//void Change_Animation(CResourceMgr* _Mgr, map<wstring, CComponent*> _mapComponet, CTexture* _pTexture, wstring _StateKey);
@@ -39,6 +39,8 @@ public:
 
 public:
 	int  Get_Frame();
+	int  Get_MaxFrame();
+	bool Get_Reverse() { return m_tFrame.bIsReverse; };
 
 
 public:

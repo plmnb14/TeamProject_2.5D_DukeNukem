@@ -14,10 +14,10 @@ CAnimator::~CAnimator()
 {
 }
 
-void CAnimator::RenderSet(float _DeltaTime)
+int CAnimator::RenderSet(float _DeltaTime)
 {
 	m_fDeltaTime = _DeltaTime;
-	Play_Animation();
+	return Play_Animation();
 }
 
 void CAnimator::Stop_Animation(bool _Stop)
@@ -25,7 +25,7 @@ void CAnimator::Stop_Animation(bool _Stop)
 	m_tFrame.bStopPlay = _Stop;
 }
 
-void CAnimator::Play_Animation()
+int CAnimator::Play_Animation()
 {
 	if (m_tFrame.bIsReverse == false)
 	{
@@ -33,13 +33,13 @@ void CAnimator::Play_Animation()
 		{
 		case RESET_ZERO:
 		{
-			if (m_tFrame.fCurrentFrame > m_tFrame.fMaxFrameCnt)
-				m_tFrame.fCurrentFrame = 0.f;
+			if (m_tFrame.fCurrentFrame >= m_tFrame.fMaxFrameCnt - 1.f)
+					m_tFrame.fCurrentFrame = 0.f;
 			break;
 		}
 		case RESET_STOP:
 		{
-			if (m_tFrame.fCurrentFrame > m_tFrame.fMaxFrameCnt)
+			if (m_tFrame.fCurrentFrame >= m_tFrame.fMaxFrameCnt - 1.f)
 				m_tFrame.bStopPlay = true;
 			break;
 		}
@@ -47,6 +47,8 @@ void CAnimator::Play_Animation()
 
 		if (m_tFrame.bStopPlay == false)
 			m_tFrame.fCurrentFrame += m_tFrame.fFrameAmp * m_fDeltaTime;
+
+		return (int)m_tFrame.fCurrentFrame;
 	}
 
 	if (m_tFrame.bIsReverse == true)
@@ -69,7 +71,11 @@ void CAnimator::Play_Animation()
 
 		if (m_tFrame.bStopPlay == false)
 			m_tFrame.fCurrentFrame -= m_tFrame.fFrameAmp * m_fDeltaTime;
+
+		return (int)m_tFrame.fCurrentFrame;
 	}
+
+	return 0;
 }
 
 void CAnimator::Set_Frame(int _Frame)
@@ -79,7 +85,15 @@ void CAnimator::Set_Frame(int _Frame)
 
 int CAnimator::Get_Frame()
 {
+	//if (m_tFrame.fCurrentFrame >= m_tFrame.fMaxFrameCnt)
+	//	m_tFrame.fCurrentFrame = m_tFrame.fMaxFrameCnt - 1.f;
+
 	return (int)m_tFrame.fCurrentFrame;
+}
+
+int CAnimator::Get_MaxFrame()
+{
+	return (int)m_tFrame.fMaxFrameCnt;;
 }
 
 //void CAnimator::Change_Animation(CResourceMgr* _Mgr, map<wstring, CComponent*> _mapComponet, CTexture* _pTexture , wstring _StateKey )

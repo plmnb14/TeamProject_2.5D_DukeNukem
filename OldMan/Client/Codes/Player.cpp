@@ -21,7 +21,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE), m_fZoomAccel(0),
 	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0),
-	m_eActState(W_NONE)
+	m_eActState(W_DRAW)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -236,6 +236,7 @@ void CPlayer::KeyInput()
 {
 	float fMoveSpeed = m_pCondition->Get_MoveSpeed() * m_pCondition->Get_MoveAccel() * m_pCondition->Get_MoveAccel() * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
+
 	ShootType();
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LSHIFT))
@@ -272,7 +273,17 @@ void CPlayer::KeyInput()
 	// 재장전
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_R))
 	{
-		Reload();
+		if (m_eWeaponState == ENGINE::MELLE)
+			return;
+
+		if (m_pWInfo.wCurBullet <= 0)
+			return;
+
+		if (m_pWInfo.wMagazineBullet == m_pWInfo.wMagazineSize)
+			return;
+
+		if(m_eActState == W_NONE || m_eActState == W_ZOOMOUT)
+			Reload();
 	}
 
 
@@ -487,6 +498,14 @@ void CPlayer::Shoot()
 
 	if (m_pWInfo.wMagazineBullet > 0)
 	{
+		if(m_bZoom == false)
+			m_eActState = W_FIRE;
+
+		if (m_bZoom == true)
+			m_eActState = W_ZOOMFIRE;
+
+		m_pCondition->Set_RangeAttack(true);
+
 		int xSpread = m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2);
 		int ySpread = m_pWInfo.fSpread_Y - (m_pWInfo.fSpread_Y * 2);
 
@@ -505,9 +524,9 @@ void CPlayer::Shoot()
 
 		if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 		{
-			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
-				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
-				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
+			//D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
+			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
+			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
 
 			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x - 0.5f * tmpUp.x,
 				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 0.5f * tmpUp.y,
@@ -543,12 +562,29 @@ void CPlayer::Shoot()
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 		}
 	}
+
+	if (m_pWInfo.wMagazineBullet <= 0)
+	{
+		m_pCondition->Set_RangeAttack(false);
+
+		if (m_bZoom == false)
+			m_eActState = W_NONE;
+
+		if (m_bZoom == true)
+			m_eActState = W_ZOOMOUT;
+	}
 }
 
 void CPlayer::Shoot_Shotgun()
 {
 	if (m_pWInfo.wMagazineBullet > 0)
 	{
+		if (m_bZoom == false)
+			m_eActState = W_FIRE;
+
+		if (m_bZoom == true)
+			m_eActState = W_ZOOMFIRE;
+
 		for (int i = 0; i < 30; ++i)
 		{
 			float a = 0.f;
@@ -620,6 +656,17 @@ void CPlayer::Shoot_Shotgun()
 
 		cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
 	}
+
+	if (m_pWInfo.wMagazineBullet <= 0)
+	{
+		m_pCondition->Set_RangeAttack(false);
+
+		if (m_bZoom == false)
+			m_eActState = W_NONE;
+
+		if (m_bZoom == true)
+			m_eActState = W_ZOOMOUT;
+	}
 }
 
 void CPlayer::ShootDelay()
@@ -630,13 +677,17 @@ void CPlayer::ShootDelay()
 	}
 
 	if (m_pWInfo.fDelayTimer < 0)
+	{
 		m_pWInfo.fDelayTimer = 0.f;
+	}
 }
 
 void CPlayer::Reload()
 {
 	// 재장전
 	cout << "Reloading" << endl;
+
+	m_eActState = W_RELOAD;
 
 	if (m_pWInfo.wCurBullet < m_pWInfo.wMagazineSize)
 	{
@@ -687,7 +738,12 @@ void CPlayer::WeaponActState()
 		break;
 	}
 
-	case W_ZOOM:
+	case W_ZOOMIN:
+	{
+		break;
+	}
+
+	case W_ZOOMOUT:
 	{
 		break;
 	}
@@ -763,18 +819,23 @@ void CPlayer::Check_Run()
 
 void CPlayer::ShootType()
 {
+	if (m_eActState == W_RELOAD)
+		return;
+
 	switch (m_eWeaponState)
 	{
 	case ENGINE::MELLE:
 	case ENGINE::REVOLVER:
 	case ENGINE::LUNCHER:
 	{
+		Zoom();
+
 		if (m_pKeyMgr->KeyDown(ENGINE::KEY_LBUTTON))
 		{
 			Shoot();
 		}
 
-		Zoom();
+		//Zoom();
 
 		break;
 	}
@@ -782,12 +843,25 @@ void CPlayer::ShootType()
 	case ENGINE::RIFLE:
 	case ENGINE::SMG:
 	{
+		Zoom();
+
 		if (m_pKeyMgr->KeyPressing(ENGINE::KEY_LBUTTON))
 		{
 			Shoot();
 		}
 
-		Zoom();
+		if (m_pKeyMgr->KeyUp(ENGINE::KEY_LBUTTON))
+		{
+			if (m_eActState == W_ZOOMFIRE)
+				m_eActState = W_ZOOMIN;
+
+			else
+				m_eActState = W_NONE;
+
+			m_pCondition->Set_RangeAttack(false);
+		}
+
+		//Zoom();
 
 		break;
 	}
@@ -812,6 +886,12 @@ void CPlayer::Zoom()
 
 	if (m_bZoom == true)
 	{
+		if (m_pCondition->Get_RangeAttack())
+			m_eActState = W_ZOOMFIRE;
+
+		else if (!m_pCondition->Get_RangeAttack())
+			m_eActState = W_ZOOMIN;
+
 		if(velocity < 20)
 			m_fZoomAccel -= 100.f * m_pTimeMgr->GetDelta();
 
@@ -821,6 +901,9 @@ void CPlayer::Zoom()
 
 	if (m_bZoom == false)
 	{
+		if(m_eActState == W_ZOOMIN)
+			m_eActState = W_ZOOMOUT;
+
 		if (velocity > 20)
 			velocity = 20.f;
 
@@ -854,6 +937,7 @@ void CPlayer::Zoom()
 	if (m_pKeyMgr->KeyUp(ENGINE::KEY_RBUTTON))
 	{
 		m_bZoom = false;
+		cout << "줌 풀림" << endl;
 	}
 
 

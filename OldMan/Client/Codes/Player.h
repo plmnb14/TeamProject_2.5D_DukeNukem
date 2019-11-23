@@ -29,7 +29,9 @@ public:
 
 	enum WEAPONACT
 	{
-		W_NONE, W_WALK, W_RUN, W_FIRST, W_DRAW, W_FIRE, W_RELOAD, W_ZOOM, W_ZOOMFIRE
+		W_NONE, W_WALK, W_RUN,
+		W_FIRST, W_DRAW, W_FIRE, W_RELOAD,
+		W_ZOOMIN, W_ZOOMOUT, W_ZOOMFIRE
 	};
 
 private:
@@ -73,6 +75,7 @@ public:
 	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
 	bool Get_Zoom() { return m_bZoom; }
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
+	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
 	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
 
 public:

@@ -19,7 +19,7 @@ CPlayer_Hand::CPlayer_Hand(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTarget(nullptr),
 	m_pCameraSubject(ENGINE::GetCameraSubject()),
 	m_fSizeY(0), m_fSizeX(0), m_fFrame(0),
-	m_eActState(CPlayer::W_NONE)
+	m_eActState(CPlayer::W_DRAW), m_eOldAcState(CPlayer::W_WALK)
 {
 
 }
@@ -40,34 +40,7 @@ int CPlayer_Hand::Update()
 
 void CPlayer_Hand::LateUpdate()
 {
-	ENGINE::CGameObject::LateUpdate();	
-
-	//if (static_cast<CPlayer*>(m_pTarget)->Get_Zoom() == true)
-	//{
-	//	ChangeTex(L"SMG_Zoom", 1);
-	//
-	//	if ((int)m_fFrame < 3)
-	//		m_fFrame += 20 * m_pTimeMgr->GetDelta();
-	//}
-	//
-	//else if(static_cast<CPlayer*>(m_pTarget)->Get_Zoom() == false)
-	//{
-	//	if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->fDelayTimer > 0)
-	//	{
-	//		if ((int)m_fFrame > 2)
-	//			m_fFrame = 0;
-	//
-	//		if((int)m_fFrame < 2)
-	//			m_fFrame += 40 * m_pTimeMgr->GetDelta();
-	//	}
-	//
-	//	else if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->fDelayTimer <= 0)
-	//	{
-	//		m_fFrame = 0;
-	//	}
-	//
-	//	ChangeTex(L"SMG_Fire", 1);
-	//}
+	ENGINE::CGameObject::LateUpdate();
 }
 
 void CPlayer_Hand::Render()
@@ -119,8 +92,11 @@ void CPlayer_Hand::Render()
 
 	// ===============================================================================
 	// Render
-	m_pTexture->Render((int)m_fFrame);
+	m_pAnimator->RenderSet(m_pTimeMgr->GetDelta());
+	m_pTexture->Render(m_pAnimator->Get_Frame());
 	m_pBuffer->Render();
+
+	cout << m_pAnimator->Get_Frame() << endl;
 
 	// Set Proj AfterRender ==========================================================
 	// Set Device Original Transform
@@ -139,7 +115,11 @@ HRESULT CPlayer_Hand::Initialize()
 	m_fSizeX = 50.f;
 	m_fSizeY = 50.f;
 
-	//ChangeTex(L"Zoom" , 1);
+	m_pAnimator->Set_FrameAmp(1.f);
+	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+	m_pAnimator->Set_Reverse(false);
+	m_pAnimator->Set_MaxFrame(0);
+	m_pAnimator->Stop_Animation(false);
 
 	return S_OK;
 }
@@ -193,8 +173,8 @@ HRESULT CPlayer_Hand::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Animator", pComponent });
 
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
-	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
+	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
 
 	return S_OK;
 }
@@ -206,7 +186,10 @@ void CPlayer_Hand::Set_Pos(D3DXVECTOR3 _Pos)
 
 void CPlayer_Hand::Set_WeaponAct()
 {
+
+	m_eOldAcState = m_eActState;
 	m_eActState = static_cast<CPlayer*>(m_pTarget)->Get_WeaponAct();
+	WeaponActState();
 }
 
 void CPlayer_Hand::WeaponActState()
@@ -215,39 +198,105 @@ void CPlayer_Hand::WeaponActState()
 	{
 	case CPlayer::W_NONE:
 	{
-		ChangeTex(L"SMG_Fire");
+		cout << "아무 상태도 아닙니다." << endl;
+
+		ChangeTex(L"SMG_Idle");
+		m_pAnimator->Set_Frame(0.f);
+		m_pAnimator->Set_FrameAmp(1.f);
+		//m_pAnimator->Stop_Animation(true);
 		break;
 	}
 
 	case CPlayer::W_FIRST:
 	{
-		ChangeTex(L"SMG_Fire");
+		ChangeTex(L"SMG_First");
 		break;
 	}
 
 	case CPlayer::W_FIRE:
 	{
+		m_pAnimator->Stop_Animation(false);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(50.f);
 		ChangeTex(L"SMG_Fire");
 		break;
 	}
 
 	case CPlayer::W_RELOAD:
 	{
+		if(m_eOldAcState == CPlayer::W_ZOOMFIRE ||
+			m_eOldAcState == CPlayer::W_ZOOMOUT ||
+			m_eOldAcState == CPlayer::W_NONE ||
+			m_eOldAcState == CPlayer::W_ZOOMIN)
+		{
+			m_pAnimator->Stop_Animation(false);
+			m_pAnimator->Set_Frame(0);
+		}
+
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+		m_pAnimator->Set_FrameAmp(30.f);
+		ChangeTex(L"SMG_Reload");
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_NONE);
+		}
+
 		break;
 	}
 
 	case CPlayer::W_DRAW:
 	{
+		ChangeTex(L"SMG_Draw");
+		m_pAnimator->Set_FrameAmp(10.f);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 		break;
 	}
 
-	case CPlayer::W_ZOOM:
+	case CPlayer::W_ZOOMIN:
 	{
+		if (m_eOldAcState == CPlayer::W_NONE)
+		{
+			m_pAnimator->Stop_Animation(false);
+			m_pAnimator->Set_Frame(0);
+		}
+
+		if (m_eOldAcState == CPlayer::W_ZOOMFIRE ||
+			m_eOldAcState == CPlayer::W_ZOOMOUT)
+			m_pAnimator->Set_Frame(3);
+
+		ChangeTex(L"SMG_Zoom");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+		m_pAnimator->Set_FrameAmp(20.f);
+		break;
+	}
+
+	case CPlayer::W_ZOOMOUT:
+	{
+		ChangeTex(L"SMG_ZoomOut");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+		m_pAnimator->Set_FrameAmp(20.f);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_NONE);
+		}
+
 		break;
 	}
 
 	case CPlayer::W_ZOOMFIRE:
 	{
+		if (m_eOldAcState == CPlayer::W_ZOOMIN)
+		{
+			m_pAnimator->Set_Frame(0);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		m_pAnimator->Stop_Animation(false);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(50.f);
+		ChangeTex(L"SMG_ZoomFire");
 		break;
 	}
 	}
@@ -255,7 +304,9 @@ void CPlayer_Hand::WeaponActState()
 
 void CPlayer_Hand::ChangeTex(wstring _wstrTex)
 {
-	if (m_wstrTex == _wstrTex)
+	m_OldwstrTex = _wstrTex;
+
+	if (m_wstrTex.compare(_wstrTex) == 0)
 		return;
 
 	m_wstrTex = _wstrTex;
@@ -266,6 +317,8 @@ void CPlayer_Hand::ChangeTex(wstring _wstrTex)
 	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pAnimator->Set_MaxFrame(dynamic_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
 
 	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK(m_pTexture);

@@ -21,7 +21,8 @@ public:
 	virtual CResources* CloneResource() PURE;
 
 public:
-	void Set_MaxFrame() { m_iFrameCount; }
+	void Set_MaxFrame(int _Count) { m_iFrameCount = _Count; }
+	int Get_MaxFrame() { return m_iFrameCount; }
 
 
 protected:

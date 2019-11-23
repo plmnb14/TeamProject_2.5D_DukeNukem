@@ -137,8 +137,8 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 5)
-				continue;
+			//if (a > 5)
+			//	continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
 			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
@@ -162,8 +162,8 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 
 	//	cout << "¶¥¿¡ ´êÁö ¾ÊÀ½" << endl;
-		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
-		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
+		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
+		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 
 		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);

@@ -3,6 +3,7 @@
 #ifndef __PLAYER_HAND__
 
 #include "GameObject.h"
+#include "Player.h"
 
 namespace ENGINE
 {
@@ -12,9 +13,9 @@ namespace ENGINE
 	class CTexture;
 	class CTransform;
 	class CCameraSubject;
+	class CAnimator;
 }
 
-class CPlayer;
 class CCameraObserver;
 class CPlayer_Hand : public ENGINE::CGameObject
 {
@@ -60,12 +61,14 @@ private:
 	CCameraObserver*		m_pCameraObserver;
 
 	CGameObject*			m_pTarget;
+	wstring					m_OldwstrTex;
 	wstring					m_wstrTex;
 	float					m_fSizeX;
 	float					m_fSizeY;
 	D3DXVECTOR3				m_vPos;
 	float m_fFrame;
 
+	CPlayer::WEAPONACT		m_eOldAcState;
 	CPlayer::WEAPONACT		m_eActState;
 };
 

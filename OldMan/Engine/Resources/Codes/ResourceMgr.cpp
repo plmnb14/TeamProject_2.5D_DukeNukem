@@ -109,7 +109,8 @@ HRESULT CResourceMgr::AddTexture(
 		pGraphicDev, eTextureType, wstrFilePath, dwCnt);
 
 	NULL_CHECK_RETURN(pResource, E_FAIL);
-	//pResource->
+
+	pResource->Set_MaxFrame(int(dwCnt));
 	m_mapResource[eResourceType][wstrResourceKey] = pResource;
 
 	return S_OK;
