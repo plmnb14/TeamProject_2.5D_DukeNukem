@@ -20,7 +20,8 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pRigid(nullptr), m_fSlideUp(0),
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE), m_fZoomAccel(0),
-	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0)
+	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0),
+	m_eActState(W_NONE)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -504,9 +505,9 @@ void CPlayer::Shoot()
 
 		if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 		{
-			//D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
-			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
-			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
+			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
+				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
+				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
 
 			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x - 0.5f * tmpUp.x,
 				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 0.5f * tmpUp.y,
@@ -550,9 +551,9 @@ void CPlayer::Shoot_Shotgun()
 	{
 		for (int i = 0; i < 30; ++i)
 		{
-			float a = 0;
-			float c = 0;
-			float b = rand() % 2;
+			float a = 0.f;
+			float c = 0.f;
+			float b = (float)(rand() % 2);
 
 			if (b == 1)
 			{
@@ -566,8 +567,8 @@ void CPlayer::Shoot_Shotgun()
 			}
 
 
-			int xSpread = m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2) + (i * a * 2);
-			int ySpread = m_pWInfo.fSpread_Y - (m_pWInfo.fSpread_Y * 2) + (i * c * 2);
+			int xSpread = (int)(m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2) + (i * a * 2));
+			int ySpread = (int)(m_pWInfo.fSpread_Y - (m_pWInfo.fSpread_Y * 2) + (i * c * 2));
 
 			float xRand = rand() % xSpread * 0.01f;
 			float yRand = rand() % ySpread * 0.01f;
@@ -655,6 +656,47 @@ void CPlayer::Reload()
 	}
 
 	cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;
+}
+
+void CPlayer::WeaponActState()
+{
+	switch (m_eActState)
+	{
+	case W_NONE:
+	{
+		break;
+	}
+
+	case W_FIRST:
+	{
+		break;
+	}
+
+	case W_FIRE:
+	{
+		break;
+	}
+
+	case W_RELOAD:
+	{
+		break;
+	}
+
+	case W_DRAW:
+	{
+		break;
+	}
+
+	case W_ZOOM:
+	{
+		break;
+	}
+
+	case W_ZOOMFIRE:
+	{
+		break;
+	}
+	}
 }
 
 void CPlayer::Check_Slide()

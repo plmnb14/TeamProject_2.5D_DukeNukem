@@ -8,16 +8,18 @@
 #include "Billborad.h"
 #include "Player.h"
 #include "Condition.h"
+#include "Animator.h"
 
 CPlayer_Hand::CPlayer_Hand(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTransform(nullptr),
+	m_pTransform(nullptr), m_pAnimator(nullptr),
 	m_pTexture(nullptr), m_pCameraObserver(nullptr), m_pBuffer(nullptr),
 	m_pTarget(nullptr),
 	m_pCameraSubject(ENGINE::GetCameraSubject()),
-	m_fSizeY(0), m_fSizeX(0), m_fFrame(0)
+	m_fSizeY(0), m_fSizeX(0), m_fFrame(0),
+	m_eActState(CPlayer::W_NONE)
 {
 
 }
@@ -28,6 +30,8 @@ CPlayer_Hand::~CPlayer_Hand()
 
 int CPlayer_Hand::Update()
 {
+	Set_WeaponAct();
+
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 
@@ -38,32 +42,32 @@ void CPlayer_Hand::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();	
 
-	if (static_cast<CPlayer*>(m_pTarget)->Get_Zoom() == true)
-	{
-		ChangeTex(L"SMG_Zoom", 1);
-
-		if ((int)m_fFrame < 3)
-			m_fFrame += 20 * m_pTimeMgr->GetDelta();
-	}
-
-	else if(static_cast<CPlayer*>(m_pTarget)->Get_Zoom() == false)
-	{
-		if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->fDelayTimer > 0)
-		{
-			if ((int)m_fFrame > 2)
-				m_fFrame = 0;
-
-			if((int)m_fFrame < 2)
-				m_fFrame += 40 * m_pTimeMgr->GetDelta();
-		}
-
-		else if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->fDelayTimer <= 0)
-		{
-			m_fFrame = 0;
-		}
-
-		ChangeTex(L"SMG_Fire", 1);
-	}
+	//if (static_cast<CPlayer*>(m_pTarget)->Get_Zoom() == true)
+	//{
+	//	ChangeTex(L"SMG_Zoom", 1);
+	//
+	//	if ((int)m_fFrame < 3)
+	//		m_fFrame += 20 * m_pTimeMgr->GetDelta();
+	//}
+	//
+	//else if(static_cast<CPlayer*>(m_pTarget)->Get_Zoom() == false)
+	//{
+	//	if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->fDelayTimer > 0)
+	//	{
+	//		if ((int)m_fFrame > 2)
+	//			m_fFrame = 0;
+	//
+	//		if((int)m_fFrame < 2)
+	//			m_fFrame += 40 * m_pTimeMgr->GetDelta();
+	//	}
+	//
+	//	else if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->fDelayTimer <= 0)
+	//	{
+	//		m_fFrame = 0;
+	//	}
+	//
+	//	ChangeTex(L"SMG_Fire", 1);
+	//}
 }
 
 void CPlayer_Hand::Render()
@@ -184,6 +188,14 @@ HRESULT CPlayer_Hand::AddComponent()
 	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
+	// Animator
+	pComponent = ENGINE::CAnimator::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Animator", pComponent });
+
+	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
+	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
+
 	return S_OK;
 }
 
@@ -192,13 +204,62 @@ void CPlayer_Hand::Set_Pos(D3DXVECTOR3 _Pos)
 	m_pTransform->SetPos(_Pos);
 }
 
-void CPlayer_Hand::ChangeTex(wstring _wstrTex , int _CurFrame)
+void CPlayer_Hand::Set_WeaponAct()
 {
-	//m_wstrTex = _wstrTex + to_wstring(_CurFrame) + L".png";
-	//
-	//m_wstrTex;
+	m_eActState = static_cast<CPlayer*>(m_pTarget)->Get_WeaponAct();
+}
 
-	// Change Texture component
+void CPlayer_Hand::WeaponActState()
+{
+	switch (m_eActState)
+	{
+	case CPlayer::W_NONE:
+	{
+		ChangeTex(L"SMG_Fire");
+		break;
+	}
+
+	case CPlayer::W_FIRST:
+	{
+		ChangeTex(L"SMG_Fire");
+		break;
+	}
+
+	case CPlayer::W_FIRE:
+	{
+		ChangeTex(L"SMG_Fire");
+		break;
+	}
+
+	case CPlayer::W_RELOAD:
+	{
+		break;
+	}
+
+	case CPlayer::W_DRAW:
+	{
+		break;
+	}
+
+	case CPlayer::W_ZOOM:
+	{
+		break;
+	}
+
+	case CPlayer::W_ZOOMFIRE:
+	{
+		break;
+	}
+	}
+}
+
+void CPlayer_Hand::ChangeTex(wstring _wstrTex)
+{
+	if (m_wstrTex == _wstrTex)
+		return;
+
+	m_wstrTex = _wstrTex;
+
 	m_mapComponent.erase(L"Texture");
 
 	ENGINE::CComponent* pComponent = nullptr;

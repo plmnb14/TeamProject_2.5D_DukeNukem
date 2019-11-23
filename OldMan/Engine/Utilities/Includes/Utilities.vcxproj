@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Exports\Export_Utilities.h" />
+    <ClInclude Include="..\Codes\Animator.h" />
     <ClInclude Include="..\Codes\Billborad.h" />
     <ClInclude Include="..\Codes\CameraSubject.h" />
     <ClInclude Include="..\Codes\Camera_Component.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="..\Codes\Trasform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\Animator.cpp" />
     <ClCompile Include="..\Codes\Billborad.cpp" />
     <ClCompile Include="..\Codes\CameraSubject.cpp" />
     <ClCompile Include="..\Codes\Camera_Component.cpp" />

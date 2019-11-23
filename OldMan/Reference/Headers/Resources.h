@@ -20,10 +20,14 @@ public:
 	// 프로토타입 패턴
 	virtual CResources* CloneResource() PURE;
 
+public:
+	void Set_MaxFrame() { m_iFrameCount; }
+
 
 protected:
 	LPDIRECT3DDEVICE9	m_pGraphicDev;
 	WORD*				m_pRefCnt;
+	int					m_iFrameCount;
 };
 
 END

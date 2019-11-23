@@ -14,6 +14,7 @@ namespace ENGINE
 	class CCameraSubject;
 }
 
+class CPlayer;
 class CCameraObserver;
 class CPlayer_Hand : public ENGINE::CGameObject
 {
@@ -37,8 +38,11 @@ private:
 	HRESULT AddComponent();
 
 public:
-	void ChangeTex(wstring _wstrTex, int _CurFrame);
+	void ChangeTex(wstring _wstrTex);
 	void Set_Pos(D3DXVECTOR3 _Pos);
+	void Set_WeaponAct();
+	void WeaponActState();
+	
 
 public:
 	static CPlayer_Hand* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
@@ -50,6 +54,7 @@ private:
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
+	ENGINE::CAnimator*		m_pAnimator;
 
 	ENGINE::CCameraSubject*	m_pCameraSubject;
 	CCameraObserver*		m_pCameraObserver;
@@ -60,6 +65,8 @@ private:
 	float					m_fSizeY;
 	D3DXVECTOR3				m_vPos;
 	float m_fFrame;
+
+	CPlayer::WEAPONACT		m_eActState;
 };
 
 #define __PLAYER_HAND__

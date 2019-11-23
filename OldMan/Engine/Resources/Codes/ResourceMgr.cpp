@@ -109,6 +109,7 @@ HRESULT CResourceMgr::AddTexture(
 		pGraphicDev, eTextureType, wstrFilePath, dwCnt);
 
 	NULL_CHECK_RETURN(pResource, E_FAIL);
+	//pResource->
 	m_mapResource[eResourceType][wstrResourceKey] = pResource;
 
 	return S_OK;

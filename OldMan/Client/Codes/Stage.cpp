@@ -152,7 +152,6 @@ HRESULT CStage::Add_Object_Layer()
 
 HRESULT CStage::Add_UI_Layer()
 {
-
 	// Object Layer
 	ENGINE::CLayer* pUILayer = ENGINE::CLayer::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pUILayer, L"UI Layer Create Failed", E_FAIL);

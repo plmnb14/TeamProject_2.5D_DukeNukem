@@ -123,6 +123,9 @@
     <ClInclude Include="..\Codes\CollisionMgr.h">
       <Filter>03.Design\00. Collision</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Animator.h">
+      <Filter>02.SuperClass\02.Component\05. Animator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -175,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Condition.cpp">
       <Filter>02.SuperClass\02.Component\04. Condition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Animator.cpp">
+      <Filter>02.SuperClass\02.Component\05. Animator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -27,9 +27,9 @@ public:
 		MELLE, REVOLVER, RIFLE, SHOTGUN, LUNCHER
 	};
 
-	enum ACT_STATE
+	enum WEAPONACT
 	{
-		NONE, WALK, RUN, FIRST, DRAW, FIRE, RELOAD, ZOOM, ZOOMFIRE
+		W_NONE, W_WALK, W_RUN, W_FIRST, W_DRAW, W_FIRE, W_RELOAD, W_ZOOM, W_ZOOMFIRE
 	};
 
 private:
@@ -62,6 +62,9 @@ private:
 	void Reload();
 
 private:
+	void WeaponActState();
+
+private:
 	void Check_Physic();
 	void Check_Slide();
 	void Check_Run();
@@ -69,6 +72,7 @@ private:
 public:
 	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
 	bool Get_Zoom() { return m_bZoom; }
+	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
 
 public:
@@ -103,7 +107,7 @@ private:
 	map<ENGINE::WEAPON_TAG, ENGINE::W_INFO*>	m_mWeaponInfo;
 
 private:
-	ACT_STATE		m_eActState;
+	WEAPONACT		m_eActState;
 
 private:
 	float m_fSlideUp;

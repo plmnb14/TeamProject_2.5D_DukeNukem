@@ -40,11 +40,14 @@ namespace ENGINE
 
 	typedef struct tagFrame
 	{
-		float fCurrentFrame = 0.f;
-		float fMaxFrameCnt = 0.f;
+		float fCurrentFrame = 0.f;	// 현재 프레임
+		float fMaxFrameCnt = 0.f;	// 최대 프레임
 
-		bool bStopFrame;
-		bool bStopPlay;
+		float fFrameAmp = 1.f;		// 프레임 속도 증폭
+
+		bool bStopFrame;			// 프레임 정지
+		bool bStopPlay;				// 애니메이션 정지
+		bool bIsReverse;
 
 	}FRAME;
 
@@ -199,13 +202,13 @@ namespace ENGINE
 
 	typedef struct tagWeapon
 	{
-		WORD wWeaponDamage;		// 무기 데미지 입니다.
-
 		WORD wMaxBullet;		// 최대 총알 개수
 		WORD wCurBullet;		// 현재 총알 개수
 		WORD wUseBullet;		// 한번 사용 당 총알 개수
 		WORD wMagazineSize;		// 한 탄창의 크기
 		WORD wMagazineBullet;	// 한 탄창 속 총알의 개수
+
+		float wWeaponDamage;		// 무기 데미지 입니다.
 
 		float fRebound_Value;	// 반동 수치
 		float fInterval;		// 발사 간격
