@@ -40,7 +40,7 @@ void CPlayer_Hand::LateUpdate()
 
 	if (static_cast<CPlayer*>(m_pTarget)->Get_Zoom() == true)
 	{
-		ChangeTex(L"SMG_Zoom1", 1);
+		ChangeTex(L"SMG_Zoom", 1);
 
 		if ((int)m_fFrame < 3)
 			m_fFrame += 20 * m_pTimeMgr->GetDelta();
@@ -62,7 +62,7 @@ void CPlayer_Hand::LateUpdate()
 			m_fFrame = 0;
 		}
 
-		ChangeTex(L"SMG_Fire1", 1);
+		ChangeTex(L"SMG_Fire", 1);
 	}
 }
 
@@ -161,7 +161,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"SMG_Fire1");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"SMG_Fire");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	

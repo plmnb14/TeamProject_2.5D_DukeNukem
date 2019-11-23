@@ -84,7 +84,19 @@ void CFileInfo::ExtractPathInfo(
 			*/
 			CString strRelative = ConvertRelativePath(strFullPath);
 
+			///////////////////////////////////////////////////////////////////////////
 			ENGINE::PATH_INFO* pPathInfo = new ENGINE::PATH_INFO;
+
+			TCHAR szBuf[MAX_STR] = L"";
+			lstrcpy(szBuf, strRelative);
+
+			// ..\Texture\Stage\Effect\BossMultiAttack
+			::PathRemoveFileSpec(szBuf);
+
+			pPathInfo->iImgCount = CountImageFile(szBuf);
+
+			////////////////////////////////////////////////////////////////////////////
+
 			if (bForClientPath)
 				strRelative.Replace(L"..\\Client\\Texture", L"..\\Texture");
 			pPathInfo->wstrImgPath = strRelative;
@@ -95,15 +107,7 @@ void CFileInfo::ExtractPathInfo(
 			lstrcpy(szFileName, strFileName);
 			//::PathRemoveExtension(szFileName);
 			pPathInfo->wstrFileName = szFileName;
-			///////////////////////////////////////////////////////////////////////////
 
-			TCHAR szBuf[MAX_STR] = L"";
-			lstrcpy(szBuf, strRelative);
-
-			// ..\Texture\Stage\Effect\BossMultiAttack
-			::PathRemoveFileSpec(szBuf);
-
-			pPathInfo->iImgCount = CountImageFile(szBuf);
 
 			///////////////////////////////////////////////////////////////////////
 

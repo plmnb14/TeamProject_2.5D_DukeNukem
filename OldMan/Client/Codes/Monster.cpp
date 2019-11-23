@@ -195,7 +195,7 @@ HRESULT CMonster::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"PIG");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"PigMan_Walk_Front");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

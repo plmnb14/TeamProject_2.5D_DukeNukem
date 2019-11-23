@@ -244,29 +244,29 @@ HRESULT CStage::Initialize()
 {
 	PipeLineSetUp();
 
-	HRESULT hr = m_pResourceMgr->AddTexture(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::TEX_NORMAL,
-		L"SMG_Fire1",
-		L"../Texture/Weapon/SMG/SMG_Fire/SMG_Fire_%d.png", 3);
+	//HRESULT hr = m_pResourceMgr->AddTexture(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::TEX_NORMAL,
+	//	L"SMG_Fire1",
+	//	L"../Texture/Weapon/SMG/SMG_Fire/SMG_Fire_%d.png", 3);
 
-	m_pResourceMgr->AddTexture(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::TEX_NORMAL,
-		L"SMG_Zoom1",
-		L"../Texture/Weapon/SMG/SMG_Zoom/SMG_Zoom_%d.png", 4);
+	//m_pResourceMgr->AddTexture(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::TEX_NORMAL,
+	//	L"SMG_Zoom1",
+	//	L"../Texture/Weapon/SMG/SMG_Zoom/SMG_Zoom_%d.png", 4);
 
-	m_pResourceMgr->AddTexture(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::TEX_NORMAL,
-		L"PIG",
-		L"../Texture/Monster/No_Animation/PigMan/Walk_Front/%d.png", 4);
+	//m_pResourceMgr->AddTexture(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::TEX_NORMAL,
+	//	L"PIG",
+	//	L"../Texture/Monster/No_Animation/PigMan/Walk_Front/%d.png", 4);
 	
 	// Player Buffer
-	m_pResourceMgr->AddBuffer(
+	HRESULT hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_STATIC,
 		ENGINE::CVIBuffer::BUFFER_RCTEX,
