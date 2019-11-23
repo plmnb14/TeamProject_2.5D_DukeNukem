@@ -13,8 +13,12 @@ namespace ENGINE
 	class CTransform;
 	class CRigidBody;
 	class CCollider;
-}
+	class CBillborad;
+	class CCameraSubject;
 
+
+}
+class CCameraObserver;
 class CBullet : public ENGINE::CGameObject
 {
 private:
@@ -36,6 +40,7 @@ public:
 
 private:
 	virtual HRESULT Initialize() override;
+	virtual HRESULT LateInit();
 	virtual void Release() override;
 
 private:
@@ -59,18 +64,23 @@ private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
 	ENGINE::CKeyMgr*		m_pKeyMgr;
+	ENGINE::CBillborad*		m_pBillborad;
+	ENGINE::CCameraSubject*	m_pSubject;
 
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	D3DXVECTOR3				m_dir;
-
+	CCameraObserver*		m_pObserver;
 private:
 	CGameObject*	m_pTarget;
 	float			m_fSpeed;
 	ENGINE::WEAPON_TAG	m_eWeaponTag;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCollider*		m_pCollider;
+	D3DXMATRIX              m_matView;
+
+
 
 	float m_fLifetime;
 
