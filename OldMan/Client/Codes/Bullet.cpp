@@ -107,7 +107,7 @@ HRESULT CBullet::Initialize()
 	m_pRigid->Set_Accel({ 0.f, -1.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 1.f , 1.f , 1.f });			// 각 축에 해당하는 MaxAccel 값
 
-	m_fLifetime = 2.f +;
+	m_fLifetime = 2.f;
 
 	return S_OK;
 }
