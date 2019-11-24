@@ -73,7 +73,7 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 5)
+			if (a > 20)
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
@@ -111,7 +111,7 @@ void CCollisionMgr::CollisionPlayer_To_Item(list<CGameObject*>& rDstList, list<C
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 5)
+			if (a > 20)
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
@@ -136,7 +136,7 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 5)
+			if (a > 20)
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
@@ -161,8 +161,8 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 
 	//	cout << "땅에 닿지 않음" << endl;
-		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
-		dynamic_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
+		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
+		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 
 		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
@@ -183,7 +183,7 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 
 			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
 
-			if (a > 5)
+			if (a > 20)
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
@@ -191,6 +191,7 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 
 			if (Check_AABB_Bullet(rDst, rSrc, rDstCol, rSrcCol))
 			{
+				rDstCol->Set_IsCollision(true);
 				rDst->SetDead();
 				continue;
 			}
@@ -216,6 +217,7 @@ void CCollisionMgr::CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list
 				//cout << "충돌체크 됩니다" << endl;
 
 				dynamic_cast<CCondition*>(rDst->Get_Component(L"Condition"))->Set_Hit(true);
+				rSrcCol->Set_IsCollision(true);
 				return;
 			}
 			else
@@ -244,7 +246,7 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
 		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 	{
-		// 콜리전 하는 물체끼리 체크
+		// 콜리전 하는 물체끼리 체크 
 		if (!rDstBox->bIsTrigger && !rSrtBox->bIsTrigger)
 		{
 			_rDstCol->Set_IsCollision(true);
@@ -317,6 +319,15 @@ bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameO
 		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
 		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 	{
+
+		D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
+
+		(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength.x *= -1.f : tmpLength.x *= 1.f);
+		(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength.y *= -1.f : tmpLength.y *= 1.f);
+		(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength.z *= -1.f : tmpLength.z *= 1.f);
+
+		_rDstCol->Set_Length(tmpLength);
+
 		return true;
 	}
 
@@ -397,6 +408,14 @@ bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameO
 				rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
 				rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 			{
+				D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
+
+				(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength.x *= -1.f : tmpLength.x *= 1.f);
+				(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength.y *= -1.f : tmpLength.y *= 1.f);
+				(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength.z *= -1.f : tmpLength.z *= 1.f);
+
+				_rDstCol->Set_Length(tmpLength);
+
 				return true;
 			}
 		}
@@ -643,6 +662,98 @@ bool CCollisionMgr::Check_Collision(ENGINE::CGameObject* rDst, ENGINE::CGameObje
 	return false;
 }
 
+D3DXVECTOR3 CCollisionMgr::Get_Length_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameObject * rSrc,  bool _Dynamic)
+{
+	ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+	ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+	ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+	ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+	ENGINE::BOXCOL* rDstBox = rDstCol->Get_BoxCollider();
+	ENGINE::BOXCOL* rSrtBox = rSrcCol->Get_BoxCollider();
+
+	D3DXVECTOR3 vMin = {};
+	D3DXVECTOR3 vMax = {};
+	D3DXVECTOR3 vCross = {};
+
+	vMax.x = min(rDstBox->vMaxPos.x, rSrtBox->vMaxPos.x);
+	vMax.y = min(rDstBox->vMaxPos.y, rSrtBox->vMaxPos.y);
+	vMax.z = min(rDstBox->vMaxPos.z, rSrtBox->vMaxPos.z);
+
+	vMin.x = max(rDstBox->vMinPos.x, rSrtBox->vMinPos.x);
+	vMin.y = max(rDstBox->vMinPos.y, rSrtBox->vMinPos.y);
+	vMin.z = max(rDstBox->vMinPos.z, rSrtBox->vMinPos.z);
+
+	vCross.x = vMax.x - vMin.x;
+	vCross.y = vMax.y - vMin.y;
+	vCross.z = vMax.z - vMin.z;
+
+	if (vCross.x == vCross.y && vCross.y == vCross.z)
+	{
+		return{ 0,0,0 };
+	}
+
+	//(vCross.x < vCross.y ? vCross.x < vCross.z ? 
+	//	vCross.y = 0 : vCross.z = 0 : 
+	//	vCross.y < vCross.z ? vCross.z = 0 : vCross.y = 0);
+
+	if (vCross.x < vCross.y)
+	{
+		if (vCross.x < vCross.z)
+		{
+			vCross.z = 0;
+
+			// x가 가장 작을 때,
+		}
+
+		else
+		{
+			vCross.x = 0;
+
+
+		}
+
+		vCross.y = 0;
+	}
+
+	else
+	{
+		if (vCross.y < vCross.z)
+		{
+			vCross.z = 0;
+		}
+
+		else
+		{
+			vCross.y = 0;
+		}
+
+		vCross.x = 0;
+	}
+
+	if (rDstTrans->GetDir().x < 0)
+	{
+		if (rDstTrans->GetPos().x <= rSrcTrans->GetPos().x)
+			vCross.x += fabs(rDstTrans->GetPos().x - rSrcTrans->GetPos().x);
+
+		else if (rDstTrans->GetPos().x > rSrcTrans->GetPos().x)
+			vCross.x *= 1.1f;
+	}
+
+	else if (rDstTrans->GetDir().x >= 0)
+	{
+		if (rDstTrans->GetPos().x >= rSrcTrans->GetPos().x)
+			vCross.x -= rSrcCol->Get_Radius().x * 2;
+	}
+
+	if (_Dynamic)
+		return vCross * 0.5f;
+
+	else
+		return vCross;
+}
+
 D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BOXCOL * _TargetCollider, bool _Dynamic)
 {
 	D3DXVECTOR3 vMin = {};
@@ -699,6 +810,7 @@ D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BO
 	
 		vCross.x = 0;
 	}
+
 
 	if (_Dynamic)
 		return vCross * 0.5f;

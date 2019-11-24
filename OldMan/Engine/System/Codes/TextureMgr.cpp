@@ -144,12 +144,15 @@ HRESULT CTextureMgr::LoadTexture(
 void CTextureMgr::Release()
 {
 	for (auto& Mypair : m_mapTexture)
+	{
 		Safe_Delete(Mypair.second);
+	}
 
 	m_mapTexture.clear();
 
 	for (auto& iter : m_PathInfoLst_Multi)
 		Safe_Delete(iter);
+
 	for (auto& iter : m_PathInfoLst_Single)
 		Safe_Delete(iter);
 

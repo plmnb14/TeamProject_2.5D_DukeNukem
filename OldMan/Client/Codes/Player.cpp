@@ -71,20 +71,20 @@ void CPlayer::Render()
 HRESULT CPlayer::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
-
+	
 	// 트랜스폼 세팅
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
-
-
+	m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
+	
+	
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 1.0f , 2.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
-
+	
 	// 트리거 콜라이더
 	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.2f, 0.3f });
 	m_pGroundChekCollider->Set_Dynamic(true);
@@ -94,23 +94,23 @@ HRESULT CPlayer::Initialize()
 										   m_pTransform->GetPos().z });
 	m_pGroundChekCollider->Set_UnderPos();
 	m_pGroundChekCollider->SetUp_Box();
-
-
+	
+	
 	// 리지드 바디 세팅
 	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
-
+	
 	m_pRigid->Set_IsGround(false);							// 지상인지 체크
 	m_pRigid->Set_IsAir(true);								// 공중인지 체크
 	m_pRigid->Set_IsFall(true);								// 낙하중인지 체크
 	m_pRigid->Set_IsJump(false);
-
+	
 	m_pRigid->Set_fMass(1.f);								// 물체의 무게
 	m_pRigid->Set_fPower(10.f);								// 점프 파워
-
+	
 	m_pRigid->Set_Speed({ 10.f , 10.f , 10.f });				// 각 축에 해당하는 속도
 	m_pRigid->Set_Accel({ 1.f, 0.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 2.f , 4.f , 2.f });			// 각 축에 해당하는 MaxAccel 값
-
+	
 	
 	// 컨디션
 	m_pCondition->Set_Hp(100.f);
@@ -118,7 +118,7 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_Shield(0.f);
 	m_pCondition->Set_Fuel(0.f);
 	m_pCondition->Set_Stamina(100.f);
-
+	
 	m_pCondition->Set_Dodge(false);
 	m_pCondition->Set_Cinematic(false);
 	m_pCondition->Set_Hit(false);
@@ -132,15 +132,12 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_Run(false);
 	m_pCondition->Set_MoveSpeed(10.f);
 	m_pCondition->Set_MoveAccel(1.f);
-
-
+	
+	
 	m_fZoomAccel	= 0.f;
 	m_fZoomSpeed	= 5;
 	m_fMaxZoom		= 70;
 	m_fMinZoom		= 20;
-
-	// 임시
-	// Player Info
 	
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &m_pCondition);
 	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
@@ -217,7 +214,7 @@ HRESULT CPlayer::AddComponent()
 	pComponent = ENGINE::CRigidBody::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"RigidBody", pComponent });
-	
+
 	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
 	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
 
@@ -329,9 +326,6 @@ void CPlayer::KeyInput()
 	// 점프
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_SPACE))
 	{
-		//D3DXVECTOR3 vTemp = { 0.f , 0.f , 0.f };
-		//dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
-
 		m_pRigid->Set_Accel({ 1, 1.5f, 1 });
 		m_pRigid->Set_IsJump(true);
 		m_pRigid->Set_IsGround(false);
@@ -459,13 +453,6 @@ void CPlayer::Check_Physic()
 	{
 		if (m_pRigid->Get_IsGround() == true && m_pRigid->Get_IsFall() == false)
 		{
-			//if (m_pCondition->Get_Run())
-			//{
-			//	m_pCondition->Set_MoveSpeed(16.f);
-			//	D3DXVECTOR3 vTemp = { 0.3f , 0.2f , 0.3f };
-			//	dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
-			//}
-
 			return;
 		}
 
@@ -532,6 +519,7 @@ void CPlayer::Shoot()
 
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
 
 			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_pWInfo.fHorizontal_Rebound);
 			dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_pWInfo.fVertical_Rebound);

@@ -61,10 +61,7 @@ private:
 	CCameraObserver*		m_pCameraObserver;
 
 	CGameObject*			m_pTarget;
-	wstring					m_OldwstrTex;
-
 	wstring					m_wstrTex;
-
 	float					m_fSizeX;
 	float					m_fSizeY;
 	D3DXVECTOR3				m_vPos;
