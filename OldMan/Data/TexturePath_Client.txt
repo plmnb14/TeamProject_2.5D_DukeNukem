@@ -750,6 +750,11 @@ No_Animation|ETC|weaponIcon.png|1|..\Texture\UI\No_Animation\ETC\weaponIcon.png
 No_Animation|ETC|WeaponRightLine.png|1|..\Texture\UI\No_Animation\ETC\WeaponRightLine.png
 No_Animation|GaugeBar|HpGauge.png|1|..\Texture\UI\No_Animation\GaugeBar\HpGauge.png
 No_Animation|GaugeBar|ShieldGauge.png|1|..\Texture\UI\No_Animation\GaugeBar\ShieldGauge.png
+No_Animation|HittedCircle|Hitted_UI_L.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_L.png
+No_Animation|HittedCircle|Hitted_UI_M.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_M.png
+No_Animation|HittedCircle|Hitted_UI_S.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_S.png
+No_Animation|HittedCircle|Hitted_UI_XL.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_XL.png
+No_Animation|HittedCircle|Hitted_UI_XS.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_XS.png
 No_Animation|Number|InfinityMark.png|1|..\Texture\UI\No_Animation\Number\InfinityMark.png
 No_Animation|Number|Number_0.png|1|..\Texture\UI\No_Animation\Number\Number_0.png
 No_Animation|Number|Number_1.png|1|..\Texture\UI\No_Animation\Number\Number_1.png

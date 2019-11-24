@@ -67,8 +67,6 @@ HRESULT CTerrainCube::Initialize()
 	//m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 	m_eTerrainType = ENGINE::TERRAIN_CUBE;
 
-	
-
 	return S_OK;
 }
 

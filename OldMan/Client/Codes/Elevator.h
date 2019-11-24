@@ -35,9 +35,13 @@ protected:
 public:
 	virtual void ChangeTex(wstring _wstrTex);
 
+public:
+	void SetMoveDist(float _fDist);
+
 protected:
 	HRESULT AddComponent();
 	void Move();
+	void CheckMove();
 
 public:
 	static CElevator* Create(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -56,8 +60,11 @@ protected:
 
 	wstring					m_wstrTex;
 	float					m_fMoveSpeed;
+	float					m_fMoveDistY;
+	float					m_fActiveDist;
 	bool					m_bIsUp;
 	D3DXVECTOR3				m_vOriPos;
+	CGameObject*			m_pPlayer;
 
 };
 

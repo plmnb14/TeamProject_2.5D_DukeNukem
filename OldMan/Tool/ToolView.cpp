@@ -610,6 +610,7 @@ void CToolView::CreateCube(bool _bIsChange)
 
 	m_pSelectCube->SetTexName(pFormView->m_wstrFileName);
 	m_pSelectCube->ChangeTex();
+	m_pSelectCube->SetObjType(pFormView->m_wstrObjType);
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 
 	pFormView->EditDataExchange();

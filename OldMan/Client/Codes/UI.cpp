@@ -14,7 +14,8 @@ CUI::CUI(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pCameraSubject(ENGINE::GetCameraSubject()),
 	m_pCameraObserver(nullptr),
 	m_pPlayerSubject(ENGINE::GetPlayerSubject()),
-	m_pPlayerObserver(nullptr)
+	m_pPlayerObserver(nullptr),
+	m_fAngle(0.f), m_vPos(0, 0, 0), m_bVisible(true)
 {
 }
 
@@ -44,6 +45,18 @@ void CUI::Render()
 	if (!m_bVisible)
 		return;
 
+	// ===============================================================================
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE); // 알파블렌딩 on
+	m_pGraphicDev->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+
+	// D3DBLEND_SRCALPHA:  (As, As, As, As)
+	// As: Source픽셀의 알파 값을 0 ~ 1 범위로 치환.
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
+	// D3DBLEND_INVSRCALPHA: (1-As, 1-As, 1-As, 1-As)
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
 	// Set Proj BeforRender ==========================================================
 	D3DXMATRIX matWorld, matView, matProj, matTempView, matTempProj;
 	D3DXMatrixIdentity(&matWorld);
@@ -72,6 +85,11 @@ void CUI::Render()
 			matView(i, j) *= fScale[i];
 	}
 
+	// Set UI Angle
+	D3DXMATRIX matRot;
+	D3DXMatrixRotationZ(&matRot, D3DXToRadian(m_fAngle));
+	matView *= matRot;
+
 	// Set UI Pos
 	matView._41 = m_vPos.x;
 	matView._42 = m_vPos.y;
@@ -91,6 +109,12 @@ void CUI::Render()
 	// Set Device Original Transform
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matTempView);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matTempProj);
+
+	// ===============================================================================
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE); // 알파블렌딩 off
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00000088); // 88 ~ 77 ... 등의 값 아래의 알파값은 제외시킴
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 }
 
 void CUI::ChangeTex(wstring _wstrTex)
@@ -118,6 +142,11 @@ void CUI::SetSize(float _fSizeX, float _fSizeY)
 void CUI::SetPos(D3DXVECTOR3 _vPos)
 {
 	m_vPos = _vPos;
+}
+
+void CUI::SetAngle(float _fAngleDegree)
+{
+	m_fAngle = _fAngleDegree;
 }
 
 void CUI::SetVisible(bool _bIsVisible)

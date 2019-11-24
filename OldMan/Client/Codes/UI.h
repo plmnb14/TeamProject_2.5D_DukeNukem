@@ -41,6 +41,7 @@ public:
 	void ChangeTex(wstring _wstrTex);
 	void SetSize(float _fSizeX, float _fSizeY);
 	void SetPos(D3DXVECTOR3 _vPos);
+	void SetAngle(float _fAngleDegree);
 	void SetVisible(bool _bIsVisible);
 
 protected:
@@ -68,6 +69,7 @@ protected:
 	float					m_fSizeX;
 	float					m_fSizeY;
 	D3DXVECTOR3				m_vPos;
+	float					m_fAngle;
 	bool					m_bVisible;
 };
 

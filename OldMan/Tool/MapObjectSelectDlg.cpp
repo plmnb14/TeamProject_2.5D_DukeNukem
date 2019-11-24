@@ -46,7 +46,7 @@ void CMapObjectSelectDlg::SetData()
 
 	switch (m_eType)
 	{
-	case CMapObjectSelectDlg::OBJ_MAP:
+	case CMapObjectSelectDlg::OBJ_TILE:
 	{
 		strRelativePath = L"..\\Client\\Texture\\Tiles\\No_Animation";
 		break;
@@ -59,13 +59,26 @@ void CMapObjectSelectDlg::SetData()
 
 		for (auto& iter : m_listFileInfo)
 		{
-			m_ListBox.AddString(iter->wstrFileName.c_str());
+			m_ListBox.AddString((iter->wstrObjectKey + L"|" + iter->wstrFileName).c_str());
 		}
 
 		return;
 	}
 	case CMapObjectSelectDlg::OBJ_TRIGGER:
 		break;
+	case CMapObjectSelectDlg::OBJ_MAPOBJ:
+	{
+		CFileInfo::GetMonsterInfoFromTextFile(L"../Data/MapObjInfo.txt", m_listFileInfo);
+
+		m_ListBox.ResetContent();
+
+		for (auto& iter : m_listFileInfo)
+		{
+			m_ListBox.AddString((iter->wstrObjectKey + L"|" + iter->wstrFileName).c_str());
+		}
+
+		return;
+	}
 	case CMapObjectSelectDlg::OBJ_END:
 		break;
 	default:
@@ -116,13 +129,52 @@ void CMapObjectSelectDlg::OnLbnSelchangeListBox()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	UpdateData(TRUE);
 
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	// GetPane(row, col): row, col 위치에 배치된 CWnd* 를 반환하는 CSplitterWnd의 멤버 함수.
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	NULL_CHECK(pView);
+
 	int iIndex = m_ListBox.GetCurSel();
 
 	if (-1 == iIndex)
 		return;
 
 	CString strFileName = L"";
+	TCHAR szObjectKey[MAX_STR] = L"";
+	TCHAR szFileName[MAX_STR] = L"";
+
 	m_ListBox.GetText(iIndex, strFileName);
+
+	switch (m_eType)
+	{
+	case CMapObjectSelectDlg::OBJ_TILE:
+	{
+		pFormView->m_wstrObjType = L"Terrain";
+		break;
+	}
+	case CMapObjectSelectDlg::OBJ_MONSTER:
+	case CMapObjectSelectDlg::OBJ_MAPOBJ:
+	{
+		lstrcpy(szObjectKey, strFileName.Left(strFileName.Find('|')));
+		lstrcpy(szFileName, strFileName.Mid(strFileName.Find('|') + 1, strFileName.GetLength()));
+
+		pFormView->m_wstrObjType = szObjectKey;
+		strFileName = szFileName;
+		break;
+	}
+	case CMapObjectSelectDlg::OBJ_TRIGGER:
+		break;
+	case CMapObjectSelectDlg::OBJ_END:
+		break;
+	default:
+		break;
+	}
+
 	m_wstrTex = strFileName;
 	auto& iter_begin = m_listFileInfo.begin();
 
@@ -167,18 +219,9 @@ void CMapObjectSelectDlg::OnLbnSelchangeListBox()
 		StaticPictureRect.TopLeft().y,
 		iWidth,
 		iHeeght);
+	
 
-
-	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
-	NULL_CHECK(pMainFrm);
-
-	// GetPane(row, col): row, col 위치에 배치된 CWnd* 를 반환하는 CSplitterWnd의 멤버 함수.
-	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
-	NULL_CHECK(pFormView);
 	pFormView->UpdatePicture(m_wstrTex, (*iter_begin)->wstrImgPath);
-
-	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
-	NULL_CHECK(pView);
 	pView->SelectObjAfter();
 
 	UpdateData(FALSE);

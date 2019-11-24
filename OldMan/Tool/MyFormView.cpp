@@ -35,6 +35,7 @@ CMyFormView::CMyFormView()
 	, m_strScaleX(_T("1"))
 	, m_strScaleY(_T("1"))
 	, m_strScaleZ(_T("1"))
+	, m_wstrObjType(L"Terrain")
 {
 
 }
@@ -64,7 +65,7 @@ void CMyFormView::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
-	ON_BN_CLICKED(IDC_BUTTON1, &CMyFormView::OnBnClickedButtonMapObj)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMyFormView::OnBnClickedButtonTile)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMyFormView::OnBnClickedButtonMonster)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMyFormView::OnBnClickedButtonTrigger)
 	ON_WM_LBUTTONDOWN()
@@ -83,6 +84,7 @@ BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMyFormView::OnBnClickedButton_Save)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMyFormView::OnBnClickedButton_Load)
 	ON_BN_CLICKED(IDC_BUTTON6, &CMyFormView::OnBnClickedButton_PathUpdate)
+	ON_BN_CLICKED(IDC_BUTTON7, &CMyFormView::OnBnClickedButtonMapObj)
 END_MESSAGE_MAP()
 
 
@@ -106,10 +108,10 @@ void CMyFormView::Dump(CDumpContext& dc) const
 // CMyFormView 메시지 처리기입니다.
 
 
-void CMyFormView::OnBnClickedButtonMapObj()
+void CMyFormView::OnBnClickedButtonTile()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드 추가합니다.
-	m_ObjSelect_Map.ShowWindow(SW_SHOW);
+	m_ObjSelect_Tile.ShowWindow(SW_SHOW);
 }
 
 
@@ -126,6 +128,12 @@ void CMyFormView::OnBnClickedButtonTrigger()
 	m_ObjSelect_Trigger.ShowWindow(SW_SHOW);
 }
 
+void CMyFormView::OnBnClickedButtonMapObj()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_ObjSelect_MapObj.ShowWindow(SW_SHOW);
+}
+
 
 void CMyFormView::OnInitialUpdate()
 {
@@ -133,10 +141,10 @@ void CMyFormView::OnInitialUpdate()
 
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 
-	if (nullptr == m_ObjSelect_Map.GetSafeHwnd())
+	if (nullptr == m_ObjSelect_Tile.GetSafeHwnd())
 	{
-		m_ObjSelect_Map.Create(IDD_OBJECTSELECTDLG);
-		m_ObjSelect_Map.SetType(CMapObjectSelectDlg::OBJ_MAP);
+		m_ObjSelect_Tile.Create(IDD_OBJECTSELECTDLG);
+		m_ObjSelect_Tile.SetType(CMapObjectSelectDlg::OBJ_TILE);
 	}
 
 	if (nullptr == m_ObjSelect_Monster.GetSafeHwnd())
@@ -149,6 +157,12 @@ void CMyFormView::OnInitialUpdate()
 	{
 		m_ObjSelect_Trigger.Create(IDD_OBJECTSELECTDLG);
 		m_ObjSelect_Trigger.SetType(CMapObjectSelectDlg::OBJ_TRIGGER);
+	}
+
+	if (nullptr == m_ObjSelect_MapObj.GetSafeHwnd())
+	{
+		m_ObjSelect_MapObj.Create(IDD_OBJECTSELECTDLG);
+		m_ObjSelect_MapObj.SetType(CMapObjectSelectDlg::OBJ_MAPOBJ);
 	}
 
 	m_TerrainTypeRadioBtn[0].SetCheck(true);
@@ -486,6 +500,8 @@ void CMyFormView::OnBnClickedButton_Save()
 		{
 			TCHAR szName[MAX_STR] = L"";
 			lstrcpy(szName, iter->GetTexName().c_str());
+			TCHAR szType[MAX_STR] = L"";
+			lstrcpy(szType, iter->GetObjType().c_str());
 
 			ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(iter->Get_Component(L"Transform"));
 			vPos = pTransform->GetPos();
@@ -494,6 +510,7 @@ void CMyFormView::OnBnClickedButton_Save()
 			eTerrainType = iter->GetTerrainType();
 
 			::WriteFile(hFile, &szName, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
+			::WriteFile(hFile, &szType, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
 			::WriteFile(hFile, &vPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			::WriteFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			::WriteFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
@@ -554,12 +571,14 @@ void CMyFormView::OnBnClickedButton_Load()
 
 		DWORD dwByte = 0;
 		TCHAR szName[MAX_STR] = L"";
+		TCHAR szType[MAX_STR] = L"";
 		D3DXVECTOR3 vPos, vSize, vAngle;
 		ENGINE::TERRAIN_TYPE eTerrainType;
 
 		while (true)
 		{
 			::ReadFile(hFile, &szName, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
+			::ReadFile(hFile, &szType, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
 			::ReadFile(hFile, &vPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			::ReadFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			::ReadFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
@@ -601,6 +620,7 @@ void CMyFormView::OnBnClickedButton_Load()
 			pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
 
 			pTerrain->SetTexName(szName);
+			pTerrain->SetObjType(szType);
 
 			pView->AddCubeForLoad(pTerrain);
 		}
@@ -622,3 +642,4 @@ void CMyFormView::OnBnClickedButton_PathUpdate()
 	pPath->Release();
 	ENGINE::Safe_Delete(pPath);
 }
+

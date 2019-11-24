@@ -1,0 +1,6 @@
+Elevator|Elevator_0|Tile128x128_90.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_90.png
+Elevator|Elevator_1|Tile128x128_89.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_89.png
+Elevator|Elevator_2|Tile128x128_132.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_132.png
+Door|Door_0|Tile128x128_127.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_127.png
+Door|Door_1|Tile128x128_71.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_71.png
+Door|Door_2|Tile256x256_56.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile256x256_56.png
