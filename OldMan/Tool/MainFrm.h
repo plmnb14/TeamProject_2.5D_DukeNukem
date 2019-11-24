@@ -27,8 +27,8 @@ public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
-	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext * pContext);
 #endif
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext * pContext);
 
 protected:  // 컨트롤 모음이 포함된 멤버입니다.
 	CToolBar          m_wndToolBar;
