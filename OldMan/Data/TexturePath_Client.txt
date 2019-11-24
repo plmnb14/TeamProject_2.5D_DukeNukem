@@ -26,6 +26,10 @@ Animation|Lava|Lava_%d.png|6|..\Texture\Tiles\Animation\Lava\Lava_%d.png
 Animation|Screen_Broke|ScreenBroke_%d.png|3|..\Texture\Tiles\Animation\Screen_Broke\ScreenBroke_%d.png
 Animation|Screen_Noise|ScreenNoise_%d.png|4|..\Texture\Tiles\Animation\Screen_Noise\ScreenNoise_%d.png
 Animation|Water|Water_%d.png|3|..\Texture\Tiles\Animation\Water\Water_%d.png
+Bullet_Hit|Bullet_Hit_YellowB|Bullet_Hit_YellowB_%d.png|14|..\Texture\VFX\Bullet_Hit\Bullet_Hit_YellowB\Bullet_Hit_YellowB_%d.png
+Bullet_Hit|Bullet_Hit_YellowS|Bullet_Hit_YellowS_%d.png|14|..\Texture\VFX\Bullet_Hit\Bullet_Hit_YellowS\Bullet_Hit_YellowS_%d.png
+VFX|Bullet_Hole|Bullet_Hole_%d.png|3|..\Texture\VFX\Bullet_Hole\Bullet_Hole_%d.png
+Bullets|Bullet_Yellow|Bullet_Yellow_%d.png|7|..\Texture\Weapon\Bullets\Bullet_Yellow\Bullet_Yellow_%d.png
 SMG|SMG_Draw|SMG_Draw_%d.png|5|..\Texture\Weapon\SMG\SMG_Draw\SMG_Draw_%d.png
 SMG|SMG_Fire|SMG_Fire_%d.png|4|..\Texture\Weapon\SMG\SMG_Fire\SMG_Fire_%d.png
 SMG|SMG_First|SMG_First_%d.png|54|..\Texture\Weapon\SMG\SMG_First\SMG_First_%d.png

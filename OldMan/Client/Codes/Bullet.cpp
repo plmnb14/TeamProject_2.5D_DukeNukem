@@ -7,6 +7,8 @@
 #include "Collider.h"
 #include "Billborad.h"
 #include "CameraObserver.h"
+#include "Effect_BulletHit.h"
+#include "Effect_BulletHole.h"
 
 
 CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -28,8 +30,24 @@ CBullet::~CBullet()
 
 int CBullet::Update()
 {
+	cout << m_pTransform->GetDir().x << endl;
+
 	if (m_bIsDead)
+	{
+		if (m_pCollider->Get_IsCollision())
+		{
+			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+			D3DXVECTOR3 tmpLength = m_pCollider->Get_Length();
+
+			CGameObject* pInstance = CEffect_BulletHit::Create(m_pGraphicDev, m_pTransform->GetPos() + m_pCollider->Get_Length());
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+
+			pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pTransform->GetPos() + m_pCollider->Get_Length());
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+		}
+
 		return DEAD_OBJ;
+	}
 
 	m_pSubject = ENGINE::GetCameraSubject();
 
@@ -57,7 +75,7 @@ void CBullet::LateUpdate()
 	vSize = m_pTransform->GetSize();
 
 
-	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
+	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();
 
 
@@ -71,8 +89,7 @@ void CBullet::LateUpdate()
 void CBullet::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
-	//m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_pTransform->GetWorldMatrix());
-	//m_pTexture->Render(0);
+	m_pTexture->Render(0);
 	m_pBuffer->Render();
 }
 
@@ -81,7 +98,7 @@ HRESULT CBullet::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(0.5f, 0.5f, 0.5f));
+	m_pTransform->SetSize(D3DXVECTOR3(0.25f, 0.25f, 0.25f));
 
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 0.5f , 0.5f, 0.5f });			// 각 축에 해당하는 반지름을 설정
@@ -133,15 +150,15 @@ HRESULT CBullet::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	//pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Texture_Player");
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent.insert({ L"Texture", pComponent });
-	//
-	//m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
-	//NULL_CHECK_RETURN(m_pTexture, E_FAIL);
+		pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Bullet_Yellow");
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_Player");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Buffer_RcTex");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 

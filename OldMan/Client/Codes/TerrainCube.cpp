@@ -25,7 +25,7 @@ int CTerrainCube::Update()
 
 void CTerrainCube::LateUpdate()
 {
-	ENGINE::CGameObject::LateUpdate();
+	ENGINE::CGameObject::LateUpdate(); 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 }
 
@@ -63,8 +63,8 @@ HRESULT CTerrainCube::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	//m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
+	//m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 	m_eTerrainType = ENGINE::TERRAIN_CUBE;
 
 	
@@ -90,6 +90,7 @@ HRESULT CTerrainCube::LateInit()
 
 void CTerrainCube::Release()
 {
+
 }
 
 HRESULT CTerrainCube::AddComponent()

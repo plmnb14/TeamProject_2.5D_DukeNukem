@@ -87,43 +87,48 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->Get_Player()->Set_MainCamera(pObject_Layer->Get_MainCamera());
 
 	// Player_Hand
-	pObject = CPlayer_Hand::Create(m_pGraphicDev , pObject_Layer->Get_Player());
+	pObject = CPlayer_Hand::Create(m_pGraphicDev, pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Player Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
 	// Revolver
-	pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{-7,2,8});
+	pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{ -7,2,8 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-
+	
 	// SMG
 	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -5,2,8 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-
+	
 	// PumpShotgun
 	pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,8 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-
+	
 	// RocketLuncher
 	pObject = CWeapon_Rocket::Create(m_pGraphicDev, D3DXVECTOR3{ -1,2,8 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
+	
+	////// Monster
+	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 
-	//// Monster
-	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
+	// Skybox
+	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_sky.dds", pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Skybox Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
 
-	// Door Test
-	//pObject = CDoor::Create(m_pGraphicDev);
+	//Door Test
+	//	pObject = CDoor::Create(m_pGraphicDev);
 	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
 	//pObject = CDoor::Create(m_pGraphicDev);
@@ -135,11 +140,6 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject = CElevator::Create(m_pGraphicDev);
 	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
-
-	// Skybox
-	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_sky.dds", pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Skybox Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
 
 	//// Camera
 	//pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -156,13 +156,13 @@ HRESULT CStage::Add_UI_Layer()
 	ENGINE::CLayer* pUILayer = ENGINE::CLayer::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pUILayer, L"UI Layer Create Failed", E_FAIL);
 	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
-
+	
 	// Aim
 	ENGINE::CGameObject* pObject = CAim::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-
+	
 	// HP Number
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
 	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_HP Create Failed", E_FAIL);
@@ -194,8 +194,8 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 13.f);
 	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -295.f, 0.f));
-
-
+	
+	
 	// Bullet
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
 	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
@@ -203,7 +203,7 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
 	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -280.f, 0.f));
-
+	
 	// Buller Line
 	pObject = CUI::Create(m_pGraphicDev, L"WeaponRightLine.png");
 	NULL_CHECK_MSG_RETURN(pObject, L"WeaponRightLine Create Failed", E_FAIL);
@@ -227,7 +227,7 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	dynamic_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
 	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -295.f, 0.f));
-
+	
 	// Weapon Icon
 	pObject = CWeaponIcon::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Icon Create Failed", E_FAIL);
@@ -242,27 +242,6 @@ HRESULT CStage::Add_UI_Layer()
 HRESULT CStage::Initialize()
 {
 	PipeLineSetUp();
-
-	//HRESULT hr = m_pResourceMgr->AddTexture(
-	//	m_pGraphicDev,
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"SMG_Fire1",
-	//	L"../Texture/Weapon/SMG/SMG_Fire/SMG_Fire_%d.png", 3);
-
-	//m_pResourceMgr->AddTexture(
-	//	m_pGraphicDev,
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"SMG_Zoom1",
-	//	L"../Texture/Weapon/SMG/SMG_Zoom/SMG_Zoom_%d.png", 4);
-
-	//m_pResourceMgr->AddTexture(
-	//	m_pGraphicDev,
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"PIG",
-	//	L"../Texture/Monster/No_Animation/PigMan/Walk_Front/%d.png", 4);
 	
 	// Player Buffer
 	HRESULT hr = m_pResourceMgr->AddBuffer(
@@ -271,14 +250,6 @@ HRESULT CStage::Initialize()
 		ENGINE::CVIBuffer::BUFFER_RCTEX,
 		L"Buffer_Player");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
-
-	// Player Motion Buffer
-	//HRESULT hr = m_pResourceMgr->AddBuffer(
-	//	m_pGraphicDev,
-	//	ENGINE::RESOURCE_STATIC,
-	//	ENGINE::CVIBuffer::BUFFER_RCTEX,
-	//	L"Buffer_Player_Motion");
-	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player_Motion Add Failed", E_FAIL);
 
 	// Terrain Buffer
 	hr = m_pResourceMgr->AddBuffer(
@@ -431,19 +402,12 @@ void CStage::LoadTexture()
 		}
 	}
 
-	//HRESULT hr = m_pResourceMgr->AddTexture(
-	//	m_pGraphicDev,
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"Texture_LogoBack",
-	//	L"../Texture/LogoBack/LogoBack_%d.png", 38);
-
 	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/MapObject_Test.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/MapObject_Training.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");

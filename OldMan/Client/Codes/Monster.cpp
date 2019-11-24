@@ -100,8 +100,8 @@ HRESULT CMonster::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(5.f, 10.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(2.f, 2.f, 2.f));
+	m_pTransform->SetPos(D3DXVECTOR3(5.f, 12.f, 0.f));
+	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
 	m_fMaxRange = 15.0f;//최대사거리
 	m_MonsterDir = { 0.f,0.f,0.f };
@@ -109,7 +109,7 @@ HRESULT CMonster::Initialize()
 	m_fMinRange = 3.0f;
 
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 2.f , 2.f, 2.f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
@@ -362,7 +362,7 @@ void CMonster::Monster_Shot()
 }
 void CMonster::Monster_Fire()
 {
-	D3DXVECTOR3 vMonsterPos = m_pTransform->GetPos();
+	D3DXVECTOR3 vMonsterPos = { m_pTransform->GetPos().x , m_pTransform->GetPos().y - 0.5f , m_pTransform->GetPos().z };
 	D3DXVECTOR3 vTempPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vTempPos_Top = { vTempPos.x, vTempPos.y + 1,vTempPos.z };
 					
@@ -386,8 +386,8 @@ void CMonster::Monster_Fire()
 	//D3DXVec3Normalize(&Mon_RIght_Dir, &Mon_RIght_Dir);
 	//D3DXVECTOR3 vTempPos3 = { vMonsterPos.x - 2 * m_pTransform->GetDir().x + 2 * m_pTransform->GetDir().z, vMonsterPos.y ,vMonsterPos.z + 2 * m_pTransform->GetDir().x - 2 * m_pTransform->GetDir().z };
 	
-	D3DXVECTOR3 vMonsterPos_ShotPoint = { vMonsterPos.x-Mon_RIght_Dir.x, vMonsterPos.y- Mon_RIght_Dir.y  ,vMonsterPos.z-Mon_RIght_Dir.z};
-	
+	D3DXVECTOR3 vMonsterPos_ShotPoint = { vMonsterPos.x - 1.5f * Mon_RIght_Dir.x, vMonsterPos.y  ,vMonsterPos.z- 1.5f * Mon_RIght_Dir.z};
+
 	
 	D3DXVECTOR3 vMonster = vTempPos_Top - vMonsterPos_ShotPoint;
 

@@ -106,6 +106,21 @@
     <Filter Include="02.GameObject\00.Player\00. Player_Hand">
       <UniqueIdentifier>{ac776010-fcd6-4a05-98d0-543420771881}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.VFX">
+      <UniqueIdentifier>{174ab000-7fb5-44c8-8e23-0180c941338e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect">
+      <UniqueIdentifier>{8556c109-1b6a-4d96-ba19-ef1782172971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\01. Particle">
+      <UniqueIdentifier>{9d0d20fd-9152-4305-b4fe-ca14f799c083}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\00. BulletHole">
+      <UniqueIdentifier>{8b7e5a5a-676e-4a1c-807d-fc432e414006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\01. BulletHit">
+      <UniqueIdentifier>{c6c73576-c3f4-4565-b370-443dbe00a20a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -223,6 +238,15 @@
     <ClInclude Include="..\Codes\Player_Hand.h">
       <Filter>02.GameObject\00.Player\00. Player_Hand</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Effect_BulletHole.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\00. BulletHole</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Effect_BulletHit.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\01. BulletHit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Vfx.h">
+      <Filter>02.GameObject\07.VFX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -315,6 +339,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Player_Hand.cpp">
       <Filter>02.GameObject\00.Player\00. Player_Hand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_BulletHole.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\00. BulletHole</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_BulletHit.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\01. BulletHit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Vfx.cpp">
+      <Filter>02.GameObject\07.VFX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

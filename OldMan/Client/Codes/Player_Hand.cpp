@@ -45,12 +45,18 @@ void CPlayer_Hand::LateUpdate()
 
 void CPlayer_Hand::Render()
 {
-	//m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
-	////m_pTexture->Render(0);
-	//m_pBuffer->Render();
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
-	//if (!m_bVisible)
-	//	return;
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE); // 알파블렌딩 on
+	m_pGraphicDev->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+
+	// D3DBLEND_SRCALPHA:  (As, As, As, As)
+	// As: Source픽셀의 알파 값을 0 ~ 1 범위로 치환.
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
+	// D3DBLEND_INVSRCALPHA: (1-As, 1-As, 1-As, 1-As)
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
 
 	// Set Proj BeforRender ==========================================================
 	D3DXMATRIX matWorld, matView, matProj, matTempView, matTempProj;
@@ -102,6 +108,12 @@ void CPlayer_Hand::Render()
 	// Set Device Original Transform
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matTempView);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matTempProj);
+
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE); // 알파블렌딩 off
+
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00000088); // 88 ~ 77 ... 등의 값 아래의 알파값은 제외시킴
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 }
 
 HRESULT CPlayer_Hand::Initialize()
@@ -145,7 +157,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"SMG_Fire");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"SMG_Idle");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	
@@ -186,7 +198,6 @@ void CPlayer_Hand::Set_Pos(D3DXVECTOR3 _Pos)
 
 void CPlayer_Hand::Set_WeaponAct()
 {
-
 	m_eOldAcState = m_eActState;
 	m_eActState = static_cast<CPlayer*>(m_pTarget)->Get_WeaponAct();
 	WeaponActState();
@@ -198,12 +209,9 @@ void CPlayer_Hand::WeaponActState()
 	{
 	case CPlayer::W_NONE:
 	{
-		cout << "아무 상태도 아닙니다." << endl;
-
 		ChangeTex(L"SMG_Idle");
 		m_pAnimator->Set_Frame(0.f);
 		m_pAnimator->Set_FrameAmp(1.f);
-		//m_pAnimator->Stop_Animation(true);
 		break;
 	}
 
@@ -304,22 +312,20 @@ void CPlayer_Hand::WeaponActState()
 
 void CPlayer_Hand::ChangeTex(wstring _wstrTex)
 {
-	m_OldwstrTex = _wstrTex;
-
 	if (m_wstrTex.compare(_wstrTex) == 0)
 		return;
-
+	
 	m_wstrTex = _wstrTex;
-
+	
 	m_mapComponent.erase(L"Texture");
-
+	
 	ENGINE::CComponent* pComponent = nullptr;
 	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
-
+	
 	m_pAnimator->Set_MaxFrame(dynamic_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
-
+	
 	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK(m_pTexture);
 }
