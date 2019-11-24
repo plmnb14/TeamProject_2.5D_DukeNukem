@@ -7,6 +7,7 @@
 #include "RigidBody.h"
 #include "Bullet.h"
 #include "Condition.h"
+#include "Animator.h"
 
 
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -16,11 +17,10 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pCollider(nullptr),
 	m_pSubject(ENGINE::GetCameraSubject()),
 	m_pObserver(nullptr), m_pBillborad(nullptr), m_bShot(false),m_pRigid(nullptr),
-	m_pMelleCollider(nullptr),m_pCondition(nullptr), m_pGroundChekCollider(nullptr)
-	{
-	}
-
-
+	m_pMelleCollider(nullptr),m_pCondition(nullptr), m_pGroundChekCollider(nullptr), m_pAnimator(nullptr)
+	, m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_bIdle(false),m_bShot2(false), m_bFire(false), m_bPurps(false),m_bMelle(false)
+{
+}
 CMonster::~CMonster()
 {
 	Release();
@@ -28,25 +28,21 @@ CMonster::~CMonster()
 
 int CMonster::Update()
 {
+	cout << m_eNextState << endl;
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
-
-	if (m_fTime > 1)
-	{
-		Monster_Fire();
-		m_fTime = 0;
-	}
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	//Player_Pursue();
 	Check_Physic();
 // 근접공격 만들기 1. 때리기 2. 물어뜯기 
-	m_bShot = m_pCondition->Get_Hit();
 	Monster_Foward();
-	m_fTime += m_pTimeMgr->GetDelta();
-
+	
+	Monster_State_Set();
+	Monster_State_Play();
 
 	return NO_EVENT;
 }
@@ -65,22 +61,37 @@ void CMonster::LateUpdate()
 	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix,vSize);                          // 빌보드 설정
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();                                    // 빌보드에서 설정된 행렬을 받아온다. 
 	//m_matView = Localmatrix;
+	m_bShot = m_pCondition->Get_Hit();
 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
-
-	Monster_State_Set();
-
-	if (m_pCondition->Get_Hit())
+	
+	if (m_bShot)
 	{
 		m_eNextState = MONSTER_SHOT;
-		m_pCondition->Set_Hit(false);
-
+	
 	}
 	else
 	{
 		Monster_Range();
 
 	}
+	
+	if (m_bShot2)
+	{
+		m_fHitTime += m_pTimeMgr->GetDelta();
+
+		if (m_fHitTime > 0.3)
+		{
+			
+			m_fHitTime = 0;
+			m_pAnimator->Stop_Animation(false);
+			m_pCondition->Set_Hit(false);
+			m_eNextState = MONSTER_PURSUE;
+			m_bShot = false;
+		}
+	}
+
+	
 	
 	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
@@ -90,9 +101,10 @@ void CMonster::LateUpdate()
 
 void CMonster::Render()
 {
-
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
-	m_pTexture->Render((int)m_fFrame);
+	m_pAnimator->RenderSet(m_pTimeMgr->GetDelta());
+	m_pTexture->Render(m_pAnimator->Get_Frame());
+
 	m_pBuffer->Render();
 }
 
@@ -100,10 +112,10 @@ HRESULT CMonster::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(5.f, 10.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(5.f, 8.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(2.f, 2.f, 2.f));
 
-	m_fMaxRange = 15.0f;//최대사거리
+	m_fMaxRange = 14.0f;//최대사거리
 	m_MonsterDir = { 0.f,0.f,0.f };
 	m_fRange = 0.f;
 	m_fMinRange = 3.0f;
@@ -174,6 +186,19 @@ HRESULT CMonster::Initialize()
 	m_pCondition->Set_RangeAttack(true);
 	m_pCondition->Set_MoveSpeed(10.f);
 	m_pCondition->Set_MoveAccel(1.f);
+
+
+	m_pAnimator->Set_FrameAmp(1.f);									// 배속재생
+	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+	m_pAnimator->Set_Reverse(false);
+	m_pAnimator->Set_MaxFrame(0);
+	m_pAnimator->Stop_Animation(false);
+
+	m_fSizeX = 50.f;
+	m_fSizeY = 50.f;
+	
+	m_fHitTime = 0;
+
 	return S_OK;
 }
 
@@ -197,7 +222,7 @@ HRESULT CMonster::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"PigMan_Walk_Front");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"PigMan_WalkFront");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -205,7 +230,7 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_Player");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Buffer_RcTex");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
@@ -265,6 +290,13 @@ HRESULT CMonster::AddComponent()
 
 	m_pGroundChekCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+	//ANIMATER
+	pComponent = ENGINE::CAnimator::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Animator", pComponent });
+
+	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
 		
 
 	return S_OK;
@@ -292,7 +324,8 @@ void CMonster::Player_Pursue()
 	m_MoveSpeed = 0.5f * m_pTimeMgr->GetDelta();   // 속도
 	
 	m_pTransform->Move_AdvancedPos(vMonster2, m_MoveSpeed);
-	
+	ChangeTex(L"PigMan_WalkFront");
+	m_pAnimator->Set_FrameAmp(5.f);     // 걷는데 문제 있음 
 		
 }
 
@@ -334,7 +367,8 @@ void CMonster::Monster_Range()
 
 	m_MonsterDir = vTempPos - vMonsterPos;
 	m_fRange = D3DXVec3Length(&(vMonsterPos - vTempPos));				 // 사정거리
-	
+	cout << m_fRange << endl;
+
 	if (m_fRange < m_fMaxRange && m_fRange >m_fMinRange)
 	{
 		m_eNextState =MONSTER_PURSUE;
@@ -355,9 +389,14 @@ void CMonster::Monster_Idle()
 }
 void CMonster::Monster_Shot()
 {
-
+	//딜레이 만들기 
 	m_pTransform->MovePos(0.f);
-	m_eNextState = MONSTER_PURSUE;
+	ChangeTex(L"PigMan_Dead");
+	m_pAnimator->Set_Frame(0.f);
+	m_pAnimator->Stop_Animation(true);
+	//m_pAnimator->Set_MaxFrame(2);
+
+	//m_eNextState = MONSTER_PURSUE;
 
 }
 void CMonster::Monster_Fire()
@@ -396,20 +435,16 @@ void CMonster::Monster_Fire()
 	// 각도에 따른 렌더와 정면 사격 하게 만든다. 
 	m_MoveSpeed = 100.f * m_pTimeMgr->GetDelta();   // 속도
 	float fAngle[3] = { 0.f };                      //각도 0도로 줘야함 안주면 총알 빌보드 문제 있음 
+	m_fTime += m_pTimeMgr->GetDelta();
 
-	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, m_MoveSpeed,ENGINE::MONSTER_REVOLVER);
-	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-	cout << Mon_RIght_Dir.x << "x" << endl;
-	cout << Mon_RIght_Dir.y << "y" << endl;
-	cout << Mon_RIght_Dir.z <<"z"<< endl;
-	//cout << vMonsterDir_Fowrd2.x<<"몬" << endl;
-//	cout << vMonsterDir_Fowrd2.y << "몬" << endl;
-	//cout << vMonsterDir_Fowrd2.z << "몬" << endl;
-//	cout << <<"y"<< endl;
-	//cout << Mon_RIght_Dir.z	<<"z"<< endl;
-	cout << vMonsterPos.x<<"x2" << endl;
-	//cout << vMonsterPos.y<<"y2" << endl;
 
+	if (m_fTime > 1)
+	{
+		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, m_MoveSpeed, ENGINE::MONSTER_REVOLVER);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+		m_fTime = 0;
+	}
+	
 
 	
 }
@@ -516,25 +551,67 @@ void CMonster::Object_Collison()
 
 }
 
+void CMonster::ChangeTex(wstring _wstrTex)
+{
+	if (m_wstrTex.compare(_wstrTex) == 0)
+		return;
+
+	m_wstrTex = _wstrTex;
+
+	m_mapComponent.erase(L"Texture");
+
+	ENGINE::CComponent* pComponent = nullptr;
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
+	NULL_CHECK(pComponent);
+	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pAnimator->Set_MaxFrame(dynamic_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK(m_pTexture);
+
+
+
+
+}
+
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CMonster::Monster_State_Set()
-{
-	if (m_eCurState != m_eNextState || m_eNextState == MONSTER_SHOT || m_eNextState == MONSTER_PURSUE)
+{	
+	// 신호등 처럼 써야겠는데? 
+	//여기서 신호를 보내고-> 실행시켜주는 기계를 하나 만드는거 어떨까? 
+	// 계층형 상태기계 
+	// +신호등 처럼쓰기 -> 온 -> 끝나면 오프 -> 다른 상태가 들어오기전까지 그 상태를 수행하게 한다.      
+	
+
+	if (m_eCurState != m_eNextState )
 	{
-		switch (m_eCurState)
+		switch (m_eNextState)
 		{
 		case MONSTER_IDLE:
-			//cout << "쉽" << endl;
+			m_bShot2 = false;
+			m_bFire = false;
+			m_bPurps = false;
 			Monster_Idle();
 			break;
 		case MONSTER_PURSUE:
 		//	cout << "추" << endl;
-			Player_Pursue();
+			m_bShot2 = false;
+			m_bFire = false;
+			m_bPurps = true;
 			break;
 		case MONSTER_SHOT:
-			//cout << "피" << endl;
-			Monster_Shot();
+			cout << "피" << endl;
+			m_bShot2 = true;
+			m_bFire = false;
+			m_bPurps = false;
 			break;
+		case MONSTER_FIRE:
+			m_bShot2 = false;
+			m_bFire = true;
+			m_bPurps = false;
+			break;
+
 		}
 		m_eCurState = m_eNextState;
 	}
@@ -542,6 +619,28 @@ void CMonster::Monster_State_Set()
 	// 맞았을 경우 탐색이 켜진다. 
 	
 }
+
+void CMonster::Monster_State_Play()
+{
+	Monster_Idle();
+	if (m_bShot2)
+	{
+		Monster_Shot();
+	}
+	if (m_bFire)
+	{
+		Monster_Fire();
+	}
+	if (m_bPurps)
+	{
+		Player_Pursue();
+	}
+}
+
+
+
+
+
 
 
 CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)

@@ -354,14 +354,12 @@ void CPlayer::KeyInput()
 		{
 			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				cout << "Revolver already selected" << endl;
 
 				return;
 			}
 
 			else
 			{
-				cout << "Select Revolver" << endl;
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
@@ -380,14 +378,12 @@ void CPlayer::KeyInput()
 		{
 			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				cout << "SMG already selected" << endl;
 
 				return;
 			}
 
 			else
 			{
-				cout << "Select SMG" << endl;
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
@@ -406,14 +402,12 @@ void CPlayer::KeyInput()
 		{
 			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				cout << "Pump_Shotgun already selected" << endl;
 
 				return;
 			}
 
 			else
 			{
-				cout << "Select Pump_Shotgun" << endl;
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
@@ -432,14 +426,12 @@ void CPlayer::KeyInput()
 		{
 			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				cout << "Rocket_Luncher already selected" << endl;
 
 				return;
 			}
 
 			else
 			{
-				cout << "Select Rocket_Luncher" << endl;
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
@@ -515,7 +507,6 @@ void CPlayer::Shoot()
 		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
 		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;
 
-		cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
 
 		D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
 		D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
@@ -654,7 +645,6 @@ void CPlayer::Shoot_Shotgun()
 		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
 		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;
 
-		cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
 	}
 
 	if (m_pWInfo.wMagazineBullet <= 0)
@@ -685,7 +675,6 @@ void CPlayer::ShootDelay()
 void CPlayer::Reload()
 {
 	// 재장전
-	cout << "Reloading" << endl;
 
 	m_eActState = W_RELOAD;
 
@@ -706,7 +695,6 @@ void CPlayer::Reload()
 		m_pWInfo.wCurBullet -= m_pWInfo.wMagazineSize;
 	}
 
-	cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;
 }
 
 void CPlayer::WeaponActState()
@@ -937,7 +925,6 @@ void CPlayer::Zoom()
 	if (m_pKeyMgr->KeyUp(ENGINE::KEY_RBUTTON))
 	{
 		m_bZoom = false;
-		cout << "줌 풀림" << endl;
 	}
 
 

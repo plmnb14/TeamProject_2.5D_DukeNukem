@@ -54,7 +54,6 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 
 			if(Check_AABB_to_PLANE(rDst, rSrc , rDstCol , rSrcCol))
 			{
-				cout << "진짜 겹친다고!" << endl;
 				rSrcCol->Set_IsCollision(true);
  				//rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				//rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
@@ -193,7 +192,6 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 			if (Check_AABB_Bullet(rDst, rSrc, rDstCol, rSrcCol))
 			{
 				rDst->SetDead();
-				cout << "충돌" << endl;
 				continue;
 			}
 		}
@@ -464,19 +462,16 @@ bool CCollisionMgr::Check_AABB_to_PLANE(ENGINE::CGameObject* rDst, ENGINE::CGame
 	
 	if (D3DXPlaneDotCoord(&tmpPlane, &tmpMin) < 0)
 	{
-		cout << " 뒤에 있어" << endl;
 		return false;
 	}
 	
 	else if (D3DXPlaneDotCoord(&tmpPlane, &tmpMax) > 0)
 	{
-		cout << " 앞에 있어" << endl;
 		return false;
 	}
 
 	else
 	{
-		cout << "겹 친다" << endl;
 		return true;
 	}
 

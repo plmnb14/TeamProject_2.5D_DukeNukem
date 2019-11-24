@@ -16,6 +16,8 @@ namespace ENGINE
 	class CBillborad;
 	class CRigidBody;
 	class CCondition;
+	class CAnimator;
+
 
 }
 class CCameraObserver;
@@ -45,6 +47,7 @@ private:
 	void Player_Pursue();  //추격하다 
 	void Monster_Foward();
 	void Monster_State_Set();   //상태
+	void Monster_State_Play();
 //	void Monster_State_Set2();   //상태
 	void Monster_Range();                           // 범위
 	void Monster_Idle();
@@ -55,6 +58,7 @@ private:
 private:											//물리 
 	void Check_Physic();
 	void Object_Collison();
+	void ChangeTex(wstring _wstrTex);
 
 
 	
@@ -81,6 +85,7 @@ private:
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCondition*		m_pCondition;
 	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CAnimator*		m_pAnimator;
 
 
 	float				m_fRange;                   // 범위
@@ -88,6 +93,7 @@ private:
 	float				m_fMaxRange;                // 최대범위
 	float				m_fMinRange;                // 최소범위
 	float				m_fTime;
+	float				m_fHitTime;
 	D3DXVECTOR3				m_MonsterDir;			// 방향 
 	D3DXVECTOR3				m_MonsterCroos;		    //외적 받을값
 	
@@ -97,15 +103,27 @@ private:
 
 	STATE m_eCurState2;
 	STATE m_eNextState2;
+	wstring					m_OldwstrTex;
 
 	bool m_bShot;
 	wstring					m_wstrTex;
 	float					m_fSizeX;
 	float					m_fSizeY;
-	float m_fFrame;
+	float					m_fFrame;
 	D3DXVECTOR3				m_vPos;
 	bool					m_bObject;
 
+
+	bool					m_bIdle;
+	bool					m_bShot2;
+	bool					m_bFire;
+	bool					m_bPurps;
+	bool					m_bMelle;
+
+
+
+
+	
 };
 
 #define __MONSTER_H__

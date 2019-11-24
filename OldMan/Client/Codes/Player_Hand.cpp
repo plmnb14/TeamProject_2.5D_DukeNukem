@@ -96,7 +96,6 @@ void CPlayer_Hand::Render()
 	m_pTexture->Render(m_pAnimator->Get_Frame());
 	m_pBuffer->Render();
 
-	cout << m_pAnimator->Get_Frame() << endl;
 
 	// Set Proj AfterRender ==========================================================
 	// Set Device Original Transform
@@ -115,8 +114,8 @@ HRESULT CPlayer_Hand::Initialize()
 	m_fSizeX = 50.f;
 	m_fSizeY = 50.f;
 
-	m_pAnimator->Set_FrameAmp(1.f);
-	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+	m_pAnimator->Set_FrameAmp(1.f);									// 배속재생
+	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);   
 	m_pAnimator->Set_Reverse(false);
 	m_pAnimator->Set_MaxFrame(0);
 	m_pAnimator->Stop_Animation(false);
@@ -198,7 +197,6 @@ void CPlayer_Hand::WeaponActState()
 	{
 	case CPlayer::W_NONE:
 	{
-		cout << "아무 상태도 아닙니다." << endl;
 
 		ChangeTex(L"SMG_Idle");
 		m_pAnimator->Set_Frame(0.f);
@@ -304,7 +302,6 @@ void CPlayer_Hand::WeaponActState()
 
 void CPlayer_Hand::ChangeTex(wstring _wstrTex)
 {
-	m_OldwstrTex = _wstrTex;
 
 	if (m_wstrTex.compare(_wstrTex) == 0)
 		return;
