@@ -28,6 +28,7 @@ public:
 	list<ENGINE::PATH_INFO*> GetMapTexture_Single();
 
 public:
+	HRESULT InitTextureMgr(LPDIRECT3DDEVICE9 pGraphicDev);
 	HRESULT LoadTextureFromImgPath(const wstring & wstrImgPath);
 	HRESULT LoadTexture(
 		TEXTURE_TYPE eTexType,
@@ -43,6 +44,8 @@ private:
 	map<wstring, CAPITexture*>	m_mapTexture;
 	list<ENGINE::PATH_INFO*>	m_PathInfoLst_Multi;
 	list<ENGINE::PATH_INFO*>	m_PathInfoLst_Single;
+
+	LPDIRECT3DDEVICE9			m_pGraphicDev;
 };
 
 END

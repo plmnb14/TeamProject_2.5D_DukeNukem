@@ -72,6 +72,7 @@ namespace ENGINE
 		BULLET_MONSTER,
 		PROPS,
 		WEAPON,
+		TRIGGER,
 		VFX,
 		CAMERA,
 		UI

@@ -61,7 +61,6 @@ HRESULT CHittedCircle::LateInit()
 
 void CHittedCircle::Release()
 {
-	CUI::Release();
 }
 
 CHittedCircle* CHittedCircle::Create(LPDIRECT3DDEVICE9 pGraphicDev, HITTED_SIZE _eSize)

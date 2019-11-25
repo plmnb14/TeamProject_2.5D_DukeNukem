@@ -4,7 +4,7 @@
 #include "Collider.h"
 
 CDoor::CDoor(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CGameObject(pGraphicDev),
+	:ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
@@ -16,6 +16,7 @@ CDoor::CDoor(LPDIRECT3DDEVICE9 pGraphicDev)
 
 CDoor::~CDoor()
 {
+	Release();
 }
 
 int CDoor::Update()
@@ -111,7 +112,8 @@ HRESULT CDoor::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Tile256x256_15.png");
+	m_wstrTex = L"Tile256x256_0.dds";
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, m_wstrTex);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

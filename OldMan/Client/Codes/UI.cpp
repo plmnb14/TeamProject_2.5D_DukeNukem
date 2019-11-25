@@ -2,6 +2,7 @@
 #include "UI.h"
 #include "Trasform.h"
 #include "Billborad.h"
+#include "Animator.h"
 #include "Camera_Component.h"
 #include "CameraObserver.h"
 #include "PlayerObserver.h"
@@ -15,13 +16,13 @@ CUI::CUI(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pCameraObserver(nullptr),
 	m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_pPlayerObserver(nullptr),
-	m_fAngle(0.f), m_vPos(0, 0, 0), m_bVisible(true)
+	m_fAngle(0.f), m_vPos(0, 0, 0), m_bVisible(true), m_bIsAnim(false)
 {
 }
 
 CUI::~CUI()
 {
-	Release();
+	CUI::Release();
 }
 
 int CUI::Update()
@@ -102,7 +103,14 @@ void CUI::Render()
 
 	// ===============================================================================
 	// Render
-	m_pTexture->Render(0);
+	if (m_bIsAnim)
+	{
+		m_pAnimator->RenderSet(m_pTimeMgr->GetDelta());
+		m_pTexture->Render(m_pAnimator->Get_Frame());
+	}
+	else
+		m_pTexture->Render(0);
+
 	m_pBuffer ->Render();
 
 	// Set Proj AfterRender ==========================================================
@@ -154,6 +162,11 @@ void CUI::SetVisible(bool _bIsVisible)
 	m_bVisible = _bIsVisible;
 }
 
+void CUI::SetIsAnim(bool _bIsAnim)
+{
+	m_bIsAnim = _bIsAnim;
+}
+
 HRESULT CUI::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
@@ -165,6 +178,13 @@ HRESULT CUI::Initialize()
 	m_fSizeY = 50.f;
 
 	m_bVisible = true;
+
+	m_pAnimator->Set_FrameAmp(0.f);
+	m_pAnimator->Set_Frame(0);
+	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+	m_pAnimator->Set_Reverse(false);
+	m_pAnimator->Set_MaxFrame(0);
+	m_pAnimator->Stop_Animation(true);
 
 	return S_OK;
 }
@@ -230,6 +250,15 @@ HRESULT CUI::AddComponent()
 
 	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
+
+	// Animator
+	pComponent = ENGINE::CAnimator::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Animator", pComponent });
+
+	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
+
 	return S_OK;
 }
 

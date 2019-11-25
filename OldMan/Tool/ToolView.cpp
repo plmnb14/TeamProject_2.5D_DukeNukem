@@ -321,6 +321,7 @@ void CToolView::PipeLineSetup()
 void CToolView::LoadTexture()
 {
 	cout << "- Make PathInfo from text File" << endl;
+	ENGINE::GetTextureMgr()->InitTextureMgr(m_pDeviceMgr->GetDevice());
 	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
 	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
 

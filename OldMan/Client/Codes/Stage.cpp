@@ -11,6 +11,7 @@
 #include "Door.h"
 #include "Elevator.h"
 #include "Skybox.h"
+#include "Trigger.h"
 
 #include "Camera.h"
 #include "Monster.h"
@@ -47,7 +48,7 @@ void CStage::Update()
 {
 	if (ENGINE::CKeyMgr::GetInstance()->KeyDown(ENGINE::KEY_Q))
 	{
-		ENGINE::CGameObject* pObj = CHittedCircle::Create(m_pGraphicDev, CHittedCircle::SIZE_XL);
+		ENGINE::CGameObject* pObj = CHittedCircle::Create(ENGINE::GetGraphicDev()->GetDevice(), CHittedCircle::SIZE_XL);
 		dynamic_cast<CHittedCircle*>(pObj)->SetAngle(rand() % 360);
 		m_mapLayer[ENGINE::CLayer::UI]->AddObject(ENGINE::OBJECT_TYPE::UI, pObj);
 	}
@@ -307,7 +308,7 @@ HRESULT CStage::Initialize()
 
 void CStage::Release()
 {
-
+	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 void CStage::PipeLineSetUp()
@@ -352,7 +353,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadTexture()
 {
-	// юс╫ц.
+	ENGINE::GetTextureMgr()->InitTextureMgr(ENGINE::GetGraphicDev()->GetDevice());
 	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../../Data/TexturePath_Client.txt");
 	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
 
@@ -395,8 +396,6 @@ void CStage::LoadTexture()
 			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
 		}
 	}
-
-	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 void CStage::LoadMapObj()
@@ -425,6 +424,7 @@ void CStage::LoadMapObj()
 			break;
 
 		ENGINE::CGameObject* pObject = nullptr;
+		ENGINE::OBJECT_TYPE eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 
 		if (!lstrcmp(szType, L"Terrain"))
 		{
@@ -445,32 +445,56 @@ void CStage::LoadMapObj()
 				break;
 			}
 
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 			pObject = pTerrain;
 			pTerrain = nullptr;
 		}
 		else if (!lstrcmp(szType, L"Elevator"))
 		{
-			CElevator* pElevator = CElevator::Create(m_pGraphicDev);
+			CElevator* pElevator = CElevator::Create(ENGINE::GetGraphicDev()->GetDevice());
 			pElevator->ChangeTex(szName);
 			pObject = pElevator;
 			pElevator = nullptr;
 		}
 		else if (!lstrcmp(szType, L"Door"))
 		{
-			CDoor* pDoor = CDoor::Create(m_pGraphicDev);
+			CDoor* pDoor = CDoor::Create(ENGINE::GetGraphicDev()->GetDevice());
 			pDoor->ChangeTex(szName);
 			pObject = pDoor;
 			pDoor = nullptr;
 		}
+		// Monster
+		else if (!lstrcmp(szType, L"Pigman"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
+		//Trigger
+		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
+		{
+			CTrigger* pTrigger = nullptr;
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_NEXTSTAGE);
+			pTrigger->SetEvent([]()
+			{
+				cout << "Next Stage Trigger ON!!!!!" << endl;
+			});
+			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			pObject = pTrigger;
+			pTrigger = nullptr;
+		}
 
 		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
 		pTransform->SetPos(vPos);
-		pTransform->SetSize(vSize);
-		pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
-		pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
-		pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN ||
+			eObjType == ENGINE::OBJECT_TYPE::PROPS)
+		{
+			pTransform->SetSize(vSize);
+			pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
+			pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
+			pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+		}
 
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::TERRAIN, pObject);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
 		pObject->Set_MapLayer(m_mapLayer);
 	}
 

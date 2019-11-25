@@ -49,7 +49,30 @@ void CMapObjectSelectDlg::SetData()
 	case CMapObjectSelectDlg::OBJ_TILE:
 	{
 		strRelativePath = L"..\\Client\\Texture\\Tiles\\No_Animation";
-		break;
+
+		if (!lstrcmp(strRelativePath, L""))
+			return;
+
+		m_ListBox.ResetContent();
+
+		CFileInfo::GetMapToolFiles(strRelativePath, m_listFileInfo);
+
+		auto& iter_begin = m_listFileInfo.begin();
+		auto& iter_end = m_listFileInfo.end();
+		for (; iter_begin != iter_end; )
+		{
+			CString strCheckDDS = (*iter_begin)->wstrFileName.c_str();
+			if (strCheckDDS.Find(L".dds") > 0)
+			{
+				iter_begin = m_listFileInfo.erase(iter_begin);
+				continue;
+			}
+
+			m_ListBox.AddString((*iter_begin)->wstrFileName.c_str());
+			iter_begin++;
+		}
+
+		return;
 	}
 	case CMapObjectSelectDlg::OBJ_MONSTER:
 	{
@@ -65,7 +88,18 @@ void CMapObjectSelectDlg::SetData()
 		return;
 	}
 	case CMapObjectSelectDlg::OBJ_TRIGGER:
-		break;
+	{
+		CFileInfo::GetMonsterInfoFromTextFile(L"../Data/TriggerInfo.txt", m_listFileInfo);
+
+		m_ListBox.ResetContent();
+
+		for (auto& iter : m_listFileInfo)
+		{
+			m_ListBox.AddString((iter->wstrObjectKey + L"|" + iter->wstrFileName).c_str());
+		}
+
+		return;
+	}
 	case CMapObjectSelectDlg::OBJ_MAPOBJ:
 	{
 		CFileInfo::GetMonsterInfoFromTextFile(L"../Data/MapObjInfo.txt", m_listFileInfo);
@@ -79,34 +113,7 @@ void CMapObjectSelectDlg::SetData()
 
 		return;
 	}
-	case CMapObjectSelectDlg::OBJ_END:
-		break;
-	default:
-		break;
 	}
-
-	if (!lstrcmp(strRelativePath, L""))
-		return;
-
-	m_ListBox.ResetContent();
-
-	CFileInfo::GetMapToolFiles(strRelativePath, m_listFileInfo);
-
-	auto& iter_begin = m_listFileInfo.begin();
-	auto& iter_end = m_listFileInfo.end();
-	for ( ; iter_begin != iter_end; )
-	{
-		CString strCheckDDS = (*iter_begin)->wstrFileName.c_str();
-		if (strCheckDDS.Find(L".dds") > 0)
-		{
-			iter_begin = m_listFileInfo.erase(iter_begin);
-			continue;
-		}
-
-		m_ListBox.AddString((*iter_begin)->wstrFileName.c_str());
-		iter_begin++;
-	}
-
 }
 
 void CMapObjectSelectDlg::Release()
@@ -159,6 +166,7 @@ void CMapObjectSelectDlg::OnLbnSelchangeListBox()
 	}
 	case CMapObjectSelectDlg::OBJ_MONSTER:
 	case CMapObjectSelectDlg::OBJ_MAPOBJ:
+	case CMapObjectSelectDlg::OBJ_TRIGGER:
 	{
 		lstrcpy(szObjectKey, strFileName.Left(strFileName.Find('|')));
 		lstrcpy(szFileName, strFileName.Mid(strFileName.Find('|') + 1, strFileName.GetLength()));
@@ -167,12 +175,6 @@ void CMapObjectSelectDlg::OnLbnSelchangeListBox()
 		strFileName = szFileName;
 		break;
 	}
-	case CMapObjectSelectDlg::OBJ_TRIGGER:
-		break;
-	case CMapObjectSelectDlg::OBJ_END:
-		break;
-	default:
-		break;
 	}
 
 	m_wstrTex = strFileName;

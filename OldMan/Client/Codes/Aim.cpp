@@ -101,14 +101,13 @@ HRESULT CAim::Initialize()
 HRESULT CAim::LateInit()
 {
 	CUI::LateInit();
+	CheckWeaponAim();
 
 	return S_OK;
 }
 
 void CAim::Release()
 {
-	CUI::Release();
-
 	for (auto& iter : m_RifleAimArr)
 		ENGINE::Safe_Delete(iter);
 

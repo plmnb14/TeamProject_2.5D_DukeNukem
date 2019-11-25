@@ -41,7 +41,15 @@ list<ENGINE::PATH_INFO*> CTextureMgr::GetMapTexture_Single()
 	return m_PathInfoLst_Single;
 }
 
-HRESULT CTextureMgr::LoadTextureFromImgPath(const wstring& wstrImgPath)
+HRESULT CTextureMgr::InitTextureMgr(LPDIRECT3DDEVICE9 pGraphicDev)
+{
+	m_pGraphicDev = pGraphicDev;
+	m_pGraphicDev->AddRef();
+
+	return S_OK;
+}
+
+HRESULT CTextureMgr::LoadTextureFromImgPath( const wstring& wstrImgPath)
 {
 	wifstream fin;
 
@@ -69,7 +77,8 @@ HRESULT CTextureMgr::LoadTextureFromImgPath(const wstring& wstrImgPath)
 
 		if (!lstrcmp(szObjectKey, L"No_Animation"))
 		{
-			HRESULT hr = LoadTexture(SINGLE_TEXTURE, szImgPath,
+			HRESULT hr = LoadTexture(
+				SINGLE_TEXTURE, szImgPath,
 				szFileName);
 			FAILED_CHECK_MSG_RETURN(hr, szImgPath, E_FAIL);
 
@@ -83,7 +92,8 @@ HRESULT CTextureMgr::LoadTextureFromImgPath(const wstring& wstrImgPath)
 		}
 		else
 		{
-			HRESULT hr = LoadTexture(MULTI_TEXTURE, szImgPath,
+			HRESULT hr = LoadTexture(
+				MULTI_TEXTURE, szImgPath,
 				szObjectKey, szStateKey, _ttoi(szImgCount));
 			FAILED_CHECK_MSG_RETURN(hr, szImgPath, E_FAIL);
 
@@ -119,10 +129,10 @@ HRESULT CTextureMgr::LoadTexture(
 		switch (eTexType)
 		{
 		case SINGLE_TEXTURE:
-			pTexture = CSingleTexture::Create(wstrFilePath);
+			pTexture = CSingleTexture::Create(m_pGraphicDev, wstrFilePath);
 			break;
 		case MULTI_TEXTURE:
-			pTexture = CMultiTexture::Create(wstrFilePath, wstrStateKey, iImgCount);
+			pTexture = CMultiTexture::Create(m_pGraphicDev, wstrFilePath, wstrStateKey, iImgCount);
 			break;
 		}
 
@@ -133,7 +143,7 @@ HRESULT CTextureMgr::LoadTexture(
 	else if (MULTI_TEXTURE == eTexType)
 	{
 		HRESULT hr = m_mapTexture[wstrObjectKey]->LoadTexture(
-			wstrFilePath, wstrStateKey, iImgCount);
+			m_pGraphicDev, wstrFilePath, wstrStateKey, iImgCount);
 		FAILED_CHECK_RETURN(hr, E_FAIL);
 	}
 
@@ -158,4 +168,5 @@ void CTextureMgr::Release()
 
 	m_PathInfoLst_Multi.clear();
 	m_PathInfoLst_Single.clear();
+	Safe_Release(m_pGraphicDev);
 }

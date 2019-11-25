@@ -60,7 +60,6 @@ HRESULT CWeaponIcon::LateInit()
 
 void CWeaponIcon::Release()
 {
-	CUI::Release();
 }
 
 void CWeaponIcon::CheckWeapon()

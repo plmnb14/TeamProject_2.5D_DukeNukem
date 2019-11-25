@@ -864,6 +864,28 @@ No_Animation|64 x 64|Tile64x64_6.png|1|..\Client\Texture\Tiles\No_Animation\64 x
 No_Animation|64 x 64|Tile64x64_7.png|1|..\Client\Texture\Tiles\No_Animation\64 x 64\Tile64x64_7.png
 No_Animation|64 x 64|Tile64x64_8.png|1|..\Client\Texture\Tiles\No_Animation\64 x 64\Tile64x64_8.png
 No_Animation|64 x 64|Tile64x64_9.png|1|..\Client\Texture\Tiles\No_Animation\64 x 64\Tile64x64_9.png
+Number_0.png|Number_0.png|Number_0.png|1|..\Client\Texture\UI\Animation\Number\Number_0.png
+Number_1.png|Number_1.png|Number_1.png|1|..\Client\Texture\UI\Animation\Number\Number_1.png
+Number_10.png|Number_10.png|Number_10.png|1|..\Client\Texture\UI\Animation\Number\Number_10.png
+Number_11.png|Number_11.png|Number_11.png|1|..\Client\Texture\UI\Animation\Number\Number_11.png
+Number_2.png|Number_2.png|Number_2.png|1|..\Client\Texture\UI\Animation\Number\Number_2.png
+Number_3.png|Number_3.png|Number_3.png|1|..\Client\Texture\UI\Animation\Number\Number_3.png
+Number_4.png|Number_4.png|Number_4.png|1|..\Client\Texture\UI\Animation\Number\Number_4.png
+Number_5.png|Number_5.png|Number_5.png|1|..\Client\Texture\UI\Animation\Number\Number_5.png
+Number_6.png|Number_6.png|Number_6.png|1|..\Client\Texture\UI\Animation\Number\Number_6.png
+Number_7.png|Number_7.png|Number_7.png|1|..\Client\Texture\UI\Animation\Number\Number_7.png
+Number_8.png|Number_8.png|Number_8.png|1|..\Client\Texture\UI\Animation\Number\Number_8.png
+Number_9.png|Number_9.png|Number_9.png|1|..\Client\Texture\UI\Animation\Number\Number_9.png
+Number_Blue_0.png|Number_Blue_0.png|Number_Blue_0.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_0.png
+Number_Blue_1.png|Number_Blue_1.png|Number_Blue_1.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_1.png
+Number_Blue_2.png|Number_Blue_2.png|Number_Blue_2.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_2.png
+Number_Blue_3.png|Number_Blue_3.png|Number_Blue_3.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_3.png
+Number_Blue_4.png|Number_Blue_4.png|Number_Blue_4.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_4.png
+Number_Blue_5.png|Number_Blue_5.png|Number_Blue_5.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_5.png
+Number_Blue_6.png|Number_Blue_6.png|Number_Blue_6.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_6.png
+Number_Blue_7.png|Number_Blue_7.png|Number_Blue_7.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_7.png
+Number_Blue_8.png|Number_Blue_8.png|Number_Blue_8.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_8.png
+Number_Blue_9.png|Number_Blue_9.png|Number_Blue_9.png|1|..\Client\Texture\UI\Animation\Number_Blue\Number_Blue_9.png
 No_Animation|Aim|AimHitMark_L.png|1|..\Client\Texture\UI\No_Animation\Aim\AimHitMark_L.png
 No_Animation|Aim|AimHitMark_S.png|1|..\Client\Texture\UI\No_Animation\Aim\AimHitMark_S.png
 No_Animation|Aim|Aim_1.png|1|..\Client\Texture\UI\No_Animation\Aim\Aim_1.png
@@ -889,28 +911,6 @@ No_Animation|HittedCircle|Hitted_UI_M.png|1|..\Client\Texture\UI\No_Animation\Hi
 No_Animation|HittedCircle|Hitted_UI_S.png|1|..\Client\Texture\UI\No_Animation\HittedCircle\Hitted_UI_S.png
 No_Animation|HittedCircle|Hitted_UI_XL.png|1|..\Client\Texture\UI\No_Animation\HittedCircle\Hitted_UI_XL.png
 No_Animation|HittedCircle|Hitted_UI_XS.png|1|..\Client\Texture\UI\No_Animation\HittedCircle\Hitted_UI_XS.png
-No_Animation|Number|InfinityMark.png|1|..\Client\Texture\UI\No_Animation\Number\InfinityMark.png
-No_Animation|Number|Number_0.png|1|..\Client\Texture\UI\No_Animation\Number\Number_0.png
-No_Animation|Number|Number_1.png|1|..\Client\Texture\UI\No_Animation\Number\Number_1.png
-No_Animation|Number|Number_2.png|1|..\Client\Texture\UI\No_Animation\Number\Number_2.png
-No_Animation|Number|Number_3.png|1|..\Client\Texture\UI\No_Animation\Number\Number_3.png
-No_Animation|Number|Number_4.png|1|..\Client\Texture\UI\No_Animation\Number\Number_4.png
-No_Animation|Number|Number_5.png|1|..\Client\Texture\UI\No_Animation\Number\Number_5.png
-No_Animation|Number|Number_6.png|1|..\Client\Texture\UI\No_Animation\Number\Number_6.png
-No_Animation|Number|Number_7.png|1|..\Client\Texture\UI\No_Animation\Number\Number_7.png
-No_Animation|Number|Number_8.png|1|..\Client\Texture\UI\No_Animation\Number\Number_8.png
-No_Animation|Number|Number_9.png|1|..\Client\Texture\UI\No_Animation\Number\Number_9.png
-No_Animation|Number|Number_Blue_0.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_0.png
-No_Animation|Number|Number_Blue_1.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_1.png
-No_Animation|Number|Number_Blue_2.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_2.png
-No_Animation|Number|Number_Blue_3.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_3.png
-No_Animation|Number|Number_Blue_4.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_4.png
-No_Animation|Number|Number_Blue_5.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_5.png
-No_Animation|Number|Number_Blue_6.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_6.png
-No_Animation|Number|Number_Blue_7.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_7.png
-No_Animation|Number|Number_Blue_8.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_8.png
-No_Animation|Number|Number_Blue_9.png|1|..\Client\Texture\UI\No_Animation\Number\Number_Blue_9.png
-No_Animation|Number|Slash.png|1|..\Client\Texture\UI\No_Animation\Number\Slash.png
 Bullet_Hit_YellowB_0.png|Bullet_Hit_YellowB_0.png|Bullet_Hit_YellowB_0.png|1|..\Client\Texture\VFX\Bullet_Hit\Bullet_Hit_YellowB\Bullet_Hit_YellowB_0.png
 Bullet_Hit_YellowB_1.png|Bullet_Hit_YellowB_1.png|Bullet_Hit_YellowB_1.png|1|..\Client\Texture\VFX\Bullet_Hit\Bullet_Hit_YellowB\Bullet_Hit_YellowB_1.png
 Bullet_Hit_YellowB_10.png|Bullet_Hit_YellowB_10.png|Bullet_Hit_YellowB_10.png|1|..\Client\Texture\VFX\Bullet_Hit\Bullet_Hit_YellowB\Bullet_Hit_YellowB_10.png

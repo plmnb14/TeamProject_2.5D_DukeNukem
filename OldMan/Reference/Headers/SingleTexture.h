@@ -21,6 +21,7 @@ public:
 public:
 	// CTexture을(를) 통해 상속됨
 	virtual HRESULT LoadTexture(
+		LPDIRECT3DDEVICE9 pGraphicDev,
 		const wstring & wstrFilePath,
 		const wstring & wstrStateKey = L"",
 		int iImgCount = 0) override;
@@ -29,7 +30,7 @@ private:
 	virtual void Release() override;
 
 public:
-	static CSingleTexture* Create(const wstring & wstrFilePath);
+	static CSingleTexture* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring & wstrFilePath);
 
 private:
 	TEX_INFO*	m_pTexInfo;
