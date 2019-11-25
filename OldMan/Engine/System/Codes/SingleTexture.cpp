@@ -3,7 +3,7 @@
 USING(ENGINE)
 
 CSingleTexture::CSingleTexture()
-	: m_pTexInfo(nullptr)
+	:  m_pTexInfo(nullptr)
 {
 }
 
@@ -20,13 +20,11 @@ const TEX_INFO* CSingleTexture::GetTexInfo(
 }
 
 HRESULT CSingleTexture::LoadTexture(
+	LPDIRECT3DDEVICE9 pGraphicDev,
 	const wstring& wstrFilePath,
 	const wstring& wstrStateKey/* = L""*/,
 	int iImgCount/* = 0*/)
 {
-	LPDIRECT3DDEVICE9 pDevice = m_pGraphicDev->GetDevice();
-	NULL_CHECK_MSG_RETURN(pDevice, L"pDevice is null", E_FAIL);
-
 	HRESULT hr = 0;
 
 	D3DXIMAGE_INFO tImgInfo;
@@ -40,7 +38,7 @@ HRESULT CSingleTexture::LoadTexture(
 
 	// 파일로부터 이미지를 불러와 IDirect3DTexture9 객체를 생성하는 함수.
 	hr = D3DXCreateTextureFromFileEx(
-		pDevice, /* 장치 */
+		pGraphicDev, /* 장치 */
 		wstrFilePath.c_str(), /* 이미지 경로 */
 		tImgInfo.Width, /* 이미지 가로 너비 */
 		tImgInfo.Height, /* 이미지 세로 너비 */
@@ -69,11 +67,11 @@ void CSingleTexture::Release()
 	Safe_Delete(m_pTexInfo);
 }
 
-CSingleTexture* CSingleTexture::Create(const wstring & wstrFilePath)
+CSingleTexture* CSingleTexture::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring & wstrFilePath)
 {
-	CSingleTexture* pInstance = new CSingleTexture;
+	CSingleTexture* pInstance = new CSingleTexture();
 
-	if (FAILED(pInstance->LoadTexture(wstrFilePath)))
+	if (FAILED(pInstance->LoadTexture(pGraphicDev, wstrFilePath)))
 	{
 		Safe_Delete(pInstance);
 		return nullptr;

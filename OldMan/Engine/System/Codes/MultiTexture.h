@@ -20,6 +20,7 @@ public:
 
 public:
 	virtual HRESULT LoadTexture(
+		LPDIRECT3DDEVICE9 pGraphicDev,
 		const wstring& wstrFilePath,
 		const wstring& wstrStateKey = L"",
 		int iImgCount = 0) override;
@@ -29,6 +30,7 @@ private:
 
 public:
 	static CMultiTexture* Create(
+		LPDIRECT3DDEVICE9 pGraphicDev,
 		const wstring& wstrFilePath,
 		const wstring& wstrStateKey,
 		int iImgCount);

@@ -321,6 +321,7 @@ void CToolView::PipeLineSetup()
 void CToolView::LoadTexture()
 {
 	cout << "- Make PathInfo from text File" << endl;
+	ENGINE::GetTextureMgr()->InitTextureMgr(m_pDeviceMgr->GetDevice());
 	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../Data/TexturePath.txt");
 	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
 
@@ -610,6 +611,7 @@ void CToolView::CreateCube(bool _bIsChange)
 
 	m_pSelectCube->SetTexName(pFormView->m_wstrFileName);
 	m_pSelectCube->ChangeTex();
+	m_pSelectCube->SetObjType(pFormView->m_wstrObjType);
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 
 	pFormView->EditDataExchange();

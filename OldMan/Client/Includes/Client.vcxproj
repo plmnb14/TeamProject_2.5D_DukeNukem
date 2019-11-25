@@ -168,6 +168,7 @@
     <ClInclude Include="..\Codes\Effect_BulletHole.h" />
     <ClInclude Include="..\Codes\Elevator.h" />
     <ClInclude Include="..\Codes\GaugeBar.h" />
+    <ClInclude Include="..\Codes\HittedCircle.h" />
     <ClInclude Include="..\Codes\Logo.h" />
     <ClInclude Include="..\Codes\LogoBack.h" />
     <ClInclude Include="..\Codes\MainApp.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="..\Codes\TerrainCube.h" />
     <ClInclude Include="..\Codes\TerrainRect.h" />
     <ClInclude Include="..\Codes\TerrainWallCube.h" />
+    <ClInclude Include="..\Codes\Trigger.h" />
     <ClInclude Include="..\Codes\UI.h" />
     <ClInclude Include="..\Codes\Vfx.h" />
     <ClInclude Include="..\Codes\Weapon.h">
@@ -217,6 +219,7 @@
     <ClCompile Include="..\Codes\Effect_BulletHole.cpp" />
     <ClCompile Include="..\Codes\Elevator.cpp" />
     <ClCompile Include="..\Codes\GaugeBar.cpp" />
+    <ClCompile Include="..\Codes\HittedCircle.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\LogoBack.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
@@ -232,6 +235,7 @@
     <ClCompile Include="..\Codes\TerrainCube.cpp" />
     <ClCompile Include="..\Codes\TerrainRect.cpp" />
     <ClCompile Include="..\Codes\TerrainWallCube.cpp" />
+    <ClCompile Include="..\Codes\Trigger.cpp" />
     <ClCompile Include="..\Codes\UI.cpp" />
     <ClCompile Include="..\Codes\Vfx.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp">

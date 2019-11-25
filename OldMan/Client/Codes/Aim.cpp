@@ -45,11 +45,15 @@ void CAim::Render()
 	switch (m_eWeaponType)
 	{
 	case ENGINE::WEAPON_TAG::MELLE:
+	{
 		CUI::Render();
 		break;
+	}
 	case ENGINE::WEAPON_TAG::REVOLVER:
+	{
 		CUI::Render();
 		break;
+	}
 	case ENGINE::WEAPON_TAG::RIFLE:
 	case ENGINE::WEAPON_TAG::SMG:
 	{
@@ -66,8 +70,10 @@ void CAim::Render()
 		break;
 	}
 	case ENGINE::WEAPON_TAG::LUNCHER:
+	{
 		CUI::Render();
 		break;
+	}
 	}
 
 }
@@ -95,14 +101,13 @@ HRESULT CAim::Initialize()
 HRESULT CAim::LateInit()
 {
 	CUI::LateInit();
+	CheckWeaponAim();
 
 	return S_OK;
 }
 
 void CAim::Release()
 {
-	CUI::Release();
-
 	for (auto& iter : m_RifleAimArr)
 		ENGINE::Safe_Delete(iter);
 

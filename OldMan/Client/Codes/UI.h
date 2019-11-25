@@ -12,6 +12,7 @@ namespace ENGINE
 	class CTexture;
 	class CTransform;
 	class CCollider;
+	class CAnimator;
 }
 
 class CCameraObserver;
@@ -41,7 +42,9 @@ public:
 	void ChangeTex(wstring _wstrTex);
 	void SetSize(float _fSizeX, float _fSizeY);
 	void SetPos(D3DXVECTOR3 _vPos);
+	void SetAngle(float _fAngleDegree);
 	void SetVisible(bool _bIsVisible);
+	void SetIsAnim(bool _bIsAnim);
 
 protected:
 	HRESULT AddComponent();
@@ -57,6 +60,7 @@ protected:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
+	ENGINE::CAnimator*		m_pAnimator;
 
 	ENGINE::CCameraSubject*	m_pCameraSubject;
 	CCameraObserver*		m_pCameraObserver;
@@ -68,7 +72,9 @@ protected:
 	float					m_fSizeX;
 	float					m_fSizeY;
 	D3DXVECTOR3				m_vPos;
+	float					m_fAngle;
 	bool					m_bVisible;
+	bool					m_bIsAnim;
 };
 
 #define __TERRAIN_H__

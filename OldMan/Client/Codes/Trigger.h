@@ -1,6 +1,5 @@
 #pragma once
-
-#ifndef __TERRAIN_H__
+#ifndef __TRIGGER_H__
 
 #include "GameObject.h"
 
@@ -14,13 +13,20 @@ namespace ENGINE
 	class CCollider;
 }
 
-class CTerrain : public ENGINE::CGameObject
+class CTrigger : public ENGINE::CGameObject
 {
+public:
+	enum TRIGGER_TYPE
+	{ 
+		TRIGGER_NEXTSTAGE,
+		TRIGGER_END
+	};
+
 protected:
-	explicit CTerrain(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CTrigger(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
-	virtual ~CTerrain();
+	virtual ~CTrigger();
 
 public:
 	virtual int Update() override;
@@ -33,14 +39,14 @@ protected:
 	virtual void Release() override;
 
 public:
-	virtual void ChangeTex(wstring _wstrTex);
+	void SetEvent(void(*_fpClickEvent)());
 
 protected:
 	HRESULT AddComponent();
-	void KeyInput();
+	void CheckTriggerActive();
 
 public:
-	static CTerrain* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CTrigger* Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType);
 
 protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -51,12 +57,13 @@ protected:
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
 
-	ENGINE::TERRAIN_TYPE	m_eTerrainType;
 	ENGINE::VTX_TEX*		m_myVtx;
 
-	wstring					m_wstrTex;
-
+	TRIGGER_TYPE			m_eTriggerType;
+	
+	void(*m_fpTriggerEvent)();
 };
 
-#define __TERRAIN_H__
+
+#define __TRIGGER_H__
 #endif

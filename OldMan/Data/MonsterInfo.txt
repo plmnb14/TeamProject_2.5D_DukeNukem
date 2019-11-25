@@ -1,2 +1,1 @@
-Monster|MyMonsterTest|monster_0.png|1|..\Client\Texture\Monster\monster_0.png
-Monster|MyMonsterTest2|monster_1.png|1|..\Client\Texture\Monster\monster_1.png
+Pigman|Pigman|Walk_Front_0.png|1|..\Client\Texture\Monster\PigMan\PigMan_Walk_Front\Walk_Front_0.png

@@ -121,6 +121,12 @@
     <Filter Include="02.GameObject\07.VFX\00. Effect\01. BulletHit">
       <UniqueIdentifier>{c6c73576-c3f4-4565-b370-443dbe00a20a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\99.UI\04.HittedCircle">
+      <UniqueIdentifier>{4a6e2f09-0a84-46b1-8712-230d87b3e2e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\03.Trigger">
+      <UniqueIdentifier>{fa707b78-51d8-4e1e-93fd-810d7907a9bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -247,6 +253,12 @@
     <ClInclude Include="..\Codes\Vfx.h">
       <Filter>02.GameObject\07.VFX</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\HittedCircle.h">
+      <Filter>02.GameObject\99.UI\04.HittedCircle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Trigger.h">
+      <Filter>02.GameObject\01.MapObject\03.Trigger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -348,6 +360,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Vfx.cpp">
       <Filter>02.GameObject\07.VFX</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HittedCircle.cpp">
+      <Filter>02.GameObject\99.UI\04.HittedCircle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Trigger.cpp">
+      <Filter>02.GameObject\01.MapObject\03.Trigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

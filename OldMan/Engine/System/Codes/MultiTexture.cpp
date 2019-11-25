@@ -25,6 +25,7 @@ const TEX_INFO* CMultiTexture::GetTexInfo(
 }
 
 HRESULT CMultiTexture::LoadTexture(
+	LPDIRECT3DDEVICE9 pGraphicDev,
 	const wstring& wstrFilePath,
 	const wstring& wstrStateKey/* = L""*/,
 	int iImgCount/* = 0*/)
@@ -36,9 +37,6 @@ HRESULT CMultiTexture::LoadTexture(
 		MessageBox(0, wstrStateKey.c_str(), L"이미 존재하는 키값입니다", MB_OK);
 		return E_FAIL;
 	}
-
-	LPDIRECT3DDEVICE9 pDevice = m_pGraphicDev->GetDevice();
-	NULL_CHECK_MSG_RETURN(pDevice, L"pDevice is null", E_FAIL);
 
 	HRESULT hr = 0;
 
@@ -61,7 +59,7 @@ HRESULT CMultiTexture::LoadTexture(
 
 		// 파일로부터 이미지를 불러와 IDirect3DTexture9 객체를 생성하는 함수.
 		hr = D3DXCreateTextureFromFileEx(
-			pDevice, /* 장치 */
+			pGraphicDev, /* 장치 */
 			szFullPath, /* 이미지 경로 */
 			tImgInfo.Width, /* 이미지 가로 너비 */
 			tImgInfo.Height, /* 이미지 세로 너비 */
@@ -105,13 +103,14 @@ void CMultiTexture::Release()
 }
 
 CMultiTexture* CMultiTexture::Create(
+	LPDIRECT3DDEVICE9 pGraphicDev,
 	const wstring& wstrFilePath,
 	const wstring& wstrStateKey,
 	int iImgCount)
 {
-	CMultiTexture* pInstance = new CMultiTexture;
+	CMultiTexture* pInstance = new CMultiTexture();
 
-	if (FAILED(pInstance->LoadTexture(wstrFilePath, wstrStateKey, iImgCount)))
+	if (FAILED(pInstance->LoadTexture(pGraphicDev, wstrFilePath, wstrStateKey, iImgCount)))
 	{
 		Safe_Delete(pInstance);
 		return nullptr;

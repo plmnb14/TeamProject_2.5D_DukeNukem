@@ -21,6 +21,7 @@ public:
 
 public:
 	virtual HRESULT LoadTexture(
+		LPDIRECT3DDEVICE9 pGraphicDev,
 		const wstring& wstrFilePath,	/* 불러올 이미지 경로 */
 		const wstring& wstrStateKey = L"", /* 멀티 텍스처인 경우 */
 		int iImgCount = 0 /* 멀티 텍스처인 경우 */) PURE;
@@ -29,7 +30,6 @@ protected:
 	virtual void Release() PURE;
 
 protected:
-	CGraphicDev* m_pGraphicDev;
 };
 
 END

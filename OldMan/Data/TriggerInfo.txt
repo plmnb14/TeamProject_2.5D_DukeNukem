@@ -1,0 +1,1 @@
+Trigger_ToNextStage|Trigger_ToNextStage|Tile256x256_85.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_85.png

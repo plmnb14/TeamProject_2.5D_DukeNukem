@@ -32,9 +32,10 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedButtonMapObj();
+	afx_msg void OnBnClickedButtonTile();
 	afx_msg void OnBnClickedButtonMonster();
 	afx_msg void OnBnClickedButtonTrigger();
+	afx_msg void OnBnClickedButtonMapObj();
 	virtual void OnInitialUpdate();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
@@ -82,11 +83,13 @@ public:
 	CString m_strScaleZ;
 
 public:
-	CMapObjectSelectDlg m_ObjSelect_Map;
+	CMapObjectSelectDlg m_ObjSelect_Tile;
 	CMapObjectSelectDlg m_ObjSelect_Monster;
 	CMapObjectSelectDlg m_ObjSelect_Trigger;
+	CMapObjectSelectDlg m_ObjSelect_MapObj;
 
 	CImage m_Img;
+	wstring	m_wstrObjType;
 	wstring m_wstrFileName;
 	wstring m_wstrFilePath;
 

@@ -2,6 +2,7 @@
 #include "UI.h"
 #include "Trasform.h"
 #include "Billborad.h"
+#include "Animator.h"
 #include "Camera_Component.h"
 #include "CameraObserver.h"
 #include "PlayerObserver.h"
@@ -14,13 +15,14 @@ CUI::CUI(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pCameraSubject(ENGINE::GetCameraSubject()),
 	m_pCameraObserver(nullptr),
 	m_pPlayerSubject(ENGINE::GetPlayerSubject()),
-	m_pPlayerObserver(nullptr)
+	m_pPlayerObserver(nullptr),
+	m_fAngle(0.f), m_vPos(0, 0, 0), m_bVisible(true), m_bIsAnim(false)
 {
 }
 
 CUI::~CUI()
 {
-	Release();
+	CUI::Release();
 }
 
 int CUI::Update()
@@ -43,6 +45,18 @@ void CUI::Render()
 {
 	if (!m_bVisible)
 		return;
+
+	// ===============================================================================
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE); // 알파블렌딩 on
+	m_pGraphicDev->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+
+	// D3DBLEND_SRCALPHA:  (As, As, As, As)
+	// As: Source픽셀의 알파 값을 0 ~ 1 범위로 치환.
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
+	// D3DBLEND_INVSRCALPHA: (1-As, 1-As, 1-As, 1-As)
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 	// Set Proj BeforRender ==========================================================
 	D3DXMATRIX matWorld, matView, matProj, matTempView, matTempProj;
@@ -72,6 +86,11 @@ void CUI::Render()
 			matView(i, j) *= fScale[i];
 	}
 
+	// Set UI Angle
+	D3DXMATRIX matRot;
+	D3DXMatrixRotationZ(&matRot, D3DXToRadian(m_fAngle));
+	matView *= matRot;
+
 	// Set UI Pos
 	matView._41 = m_vPos.x;
 	matView._42 = m_vPos.y;
@@ -84,13 +103,26 @@ void CUI::Render()
 
 	// ===============================================================================
 	// Render
-	m_pTexture->Render(0);
+	if (m_bIsAnim)
+	{
+		m_pAnimator->RenderSet(m_pTimeMgr->GetDelta());
+		m_pTexture->Render(m_pAnimator->Get_Frame());
+	}
+	else
+		m_pTexture->Render(0);
+
 	m_pBuffer ->Render();
 
 	// Set Proj AfterRender ==========================================================
 	// Set Device Original Transform
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matTempView);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matTempProj);
+
+	// ===============================================================================
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE); // 알파블렌딩 off
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00000088); // 88 ~ 77 ... 등의 값 아래의 알파값은 제외시킴
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 }
 
 void CUI::ChangeTex(wstring _wstrTex)
@@ -120,9 +152,19 @@ void CUI::SetPos(D3DXVECTOR3 _vPos)
 	m_vPos = _vPos;
 }
 
+void CUI::SetAngle(float _fAngleDegree)
+{
+	m_fAngle = _fAngleDegree;
+}
+
 void CUI::SetVisible(bool _bIsVisible)
 {
 	m_bVisible = _bIsVisible;
+}
+
+void CUI::SetIsAnim(bool _bIsAnim)
+{
+	m_bIsAnim = _bIsAnim;
 }
 
 HRESULT CUI::Initialize()
@@ -136,6 +178,13 @@ HRESULT CUI::Initialize()
 	m_fSizeY = 50.f;
 
 	m_bVisible = true;
+
+	m_pAnimator->Set_FrameAmp(0.f);
+	m_pAnimator->Set_Frame(0);
+	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+	m_pAnimator->Set_Reverse(false);
+	m_pAnimator->Set_MaxFrame(0);
+	m_pAnimator->Stop_Animation(true);
 
 	return S_OK;
 }
@@ -201,6 +250,15 @@ HRESULT CUI::AddComponent()
 
 	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
+
+	// Animator
+	pComponent = ENGINE::CAnimator::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Animator", pComponent });
+
+	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
+
 	return S_OK;
 }
 

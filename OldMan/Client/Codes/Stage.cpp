@@ -11,6 +11,7 @@
 #include "Door.h"
 #include "Elevator.h"
 #include "Skybox.h"
+#include "Trigger.h"
 
 #include "Camera.h"
 #include "Monster.h"
@@ -20,6 +21,7 @@
 #include "Aim.h"
 #include "GaugeBar.h"
 #include "WeaponIcon.h"
+#include "HittedCircle.h"
 
 #include "Trasform.h"
 #include "Weapon_Revolver.h"
@@ -44,6 +46,13 @@ CStage::~CStage()
 
 void CStage::Update()
 {
+	if (ENGINE::CKeyMgr::GetInstance()->KeyDown(ENGINE::KEY_Q))
+	{
+		ENGINE::CGameObject* pObj = CHittedCircle::Create(ENGINE::GetGraphicDev()->GetDevice(), CHittedCircle::SIZE_XL);
+		dynamic_cast<CHittedCircle*>(pObj)->SetAngle(rand() % 360);
+		m_mapLayer[ENGINE::CLayer::UI]->AddObject(ENGINE::OBJECT_TYPE::UI, pObj);
+	}
+
 	ENGINE::CScene::Update();
 }
 
@@ -126,20 +135,6 @@ HRESULT CStage::Add_Object_Layer()
 	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_sky.dds", pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Skybox Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
-
-	//Door Test
-	//	pObject = CDoor::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
-	//pObject = CDoor::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
-	//dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"))->SetPos(D3DXVECTOR3(2.f, 2.f, -10.f));
-	//
-	//// Elevator Test
-	//pObject = CElevator::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Door Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pObject);
 
 	//// Camera
 	//pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -313,7 +308,7 @@ HRESULT CStage::Initialize()
 
 void CStage::Release()
 {
-
+	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 void CStage::PipeLineSetUp()
@@ -358,7 +353,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadTexture()
 {
-	// юс╫ц.
+	ENGINE::GetTextureMgr()->InitTextureMgr(ENGINE::GetGraphicDev()->GetDevice());
 	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../../Data/TexturePath_Client.txt");
 	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
 
@@ -401,25 +396,25 @@ void CStage::LoadTexture()
 			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
 		}
 	}
-
-	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/MapObject_Training.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/MapObject_Test.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
 
 	DWORD dwByte = 0;
 	TCHAR szName[MAX_STR] = L"";
+	TCHAR szType[MAX_STR] = L"";
 	D3DXVECTOR3 vPos, vSize, vAngle;
 	ENGINE::TERRAIN_TYPE eTerrainType;
 
 	while (true)
 	{
 		::ReadFile(hFile, &szName, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
+		::ReadFile(hFile, &szType, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
 		::ReadFile(hFile, &vPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 		::ReadFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 		::ReadFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
@@ -428,31 +423,79 @@ void CStage::LoadMapObj()
 		if (0 == dwByte)
 			break;
 
-		CTerrain* pTerrain = nullptr;
+		ENGINE::CGameObject* pObject = nullptr;
+		ENGINE::OBJECT_TYPE eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 
-		switch (eTerrainType)
+		if (!lstrcmp(szType, L"Terrain"))
 		{
-		case ENGINE::TERRAIN_CUBE:
-			pTerrain = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
-			pTerrain->ChangeTex(szName);
-			break;
-		case ENGINE::TERRAIN_WALL:
-			pTerrain = CTerrainWallCube::Create(ENGINE::GetGraphicDev()->GetDevice());
-			break;
-		case ENGINE::TERRAIN_RECT:
-			pTerrain = CTerrainRect::Create(ENGINE::GetGraphicDev()->GetDevice());
-			pTerrain->ChangeTex(szName);
-			break;
+			CTerrain* pTerrain = nullptr;
+
+			switch (eTerrainType)
+			{
+			case ENGINE::TERRAIN_CUBE:
+				pTerrain = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+				pTerrain->ChangeTex(szName);
+				break;
+			case ENGINE::TERRAIN_WALL:
+				pTerrain = CTerrainWallCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+				break;
+			case ENGINE::TERRAIN_RECT:
+				pTerrain = CTerrainRect::Create(ENGINE::GetGraphicDev()->GetDevice());
+				pTerrain->ChangeTex(szName);
+				break;
+			}
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			pObject = pTerrain;
+			pTerrain = nullptr;
+		}
+		else if (!lstrcmp(szType, L"Elevator"))
+		{
+			CElevator* pElevator = CElevator::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pElevator->ChangeTex(szName);
+			pObject = pElevator;
+			pElevator = nullptr;
+		}
+		else if (!lstrcmp(szType, L"Door"))
+		{
+			CDoor* pDoor = CDoor::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pDoor->ChangeTex(szName);
+			pObject = pDoor;
+			pDoor = nullptr;
+		}
+		// Monster
+		else if (!lstrcmp(szType, L"Pigman"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
+		//Trigger
+		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
+		{
+			CTrigger* pTrigger = nullptr;
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_NEXTSTAGE);
+			pTrigger->SetEvent([]()
+			{
+				cout << "Next Stage Trigger ON!!!!!" << endl;
+			});
+			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			pObject = pTrigger;
+			pTrigger = nullptr;
 		}
 
-		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(pTerrain->Get_Component(L"Transform"));
+		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
 		pTransform->SetPos(vPos);
-		pTransform->SetSize(vSize);
-		pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
-		pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
-		pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN ||
+			eObjType == ENGINE::OBJECT_TYPE::PROPS)
+		{
+			pTransform->SetSize(vSize);
+			pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
+			pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
+			pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+		}
 
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::TERRAIN, pTerrain);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
+		pObject->Set_MapLayer(m_mapLayer);
 	}
 
 	CloseHandle(hFile);

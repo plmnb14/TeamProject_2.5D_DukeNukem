@@ -36,5 +36,5 @@ protected:
 	ENGINE::WEAPON_TAG	m_eWeaponType_Old;
 };
 
-#define __AIM_H__
+#define __WEAPONICON_H__
 #endif

@@ -9,7 +9,7 @@ class CMapObjectSelectDlg : public CDialog
 	DECLARE_DYNAMIC(CMapObjectSelectDlg)
 
 public: 
-	enum OBJECT_TYPE { OBJ_MAP, OBJ_MONSTER, OBJ_TRIGGER, OBJ_END };
+	enum OBJECT_TYPE { OBJ_TILE, OBJ_MONSTER, OBJ_TRIGGER, OBJ_MAPOBJ, OBJ_END };
 
 public:
 	CMapObjectSelectDlg(CWnd* pParent = NULL);   // 표준 생성자입니다.

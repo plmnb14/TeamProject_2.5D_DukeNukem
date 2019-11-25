@@ -25,7 +25,8 @@ public:
 	virtual void ChangeTex();
 
 public:
-	 wstring GetTexName();
+	wstring GetTexName();
+	wstring GetObjType();
 	 ENGINE::TERRAIN_TYPE GetTerrainType();
 	 bool GetPicked();
 
@@ -34,6 +35,7 @@ public:
 	void SetFitGrid(bool _bIsFit);
 	void SetFitX(bool _bIsFit);
 	void SetTexName(wstring _wstrTex);
+	void SetObjType(wstring _wstrType);
 
 protected:
 	void MouseInput();
@@ -41,6 +43,7 @@ protected:
 protected:
 	ENGINE::TERRAIN_TYPE	m_eTerrainType;
 	wstring					m_wstrTex;
+	wstring					m_wstrObjType;
 
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;

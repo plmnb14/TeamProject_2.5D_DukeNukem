@@ -3,7 +3,6 @@
 USING(ENGINE)
 
 CAPITexture::CAPITexture()
-	: m_pGraphicDev(CGraphicDev::GetInstance())
 {
 }
 

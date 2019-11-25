@@ -45,7 +45,7 @@ public:
 	static CNumber* Create(LPDIRECT3DDEVICE9 pGraphicDev, NUMBER_TYPE _eType);
 
 private:
-	vector<CUI*>			m_vecNumberUI;
+	CUI*					m_NumberUI[10];
 	int*					m_iNumArr;
 	int						m_iArrCount;
 

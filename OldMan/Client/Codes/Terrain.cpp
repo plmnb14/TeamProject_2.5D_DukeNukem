@@ -5,7 +5,6 @@
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
-	m_pManagement(ENGINE::GetManagement()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_eTerrainType(ENGINE::TERRAIN_END)

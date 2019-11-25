@@ -1,83 +1,66 @@
 #include "stdafx.h"
-#include "TerrainCube.h"
+#include "Trigger.h"
 #include "Trasform.h"
 #include "Collider.h"
 
-CTerrainCube::CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CTerrain(pGraphicDev)
+CTrigger::CTrigger(LPDIRECT3DDEVICE9 pGraphicDev)
+	:ENGINE::CGameObject(pGraphicDev),
+	m_pResourceMgr(ENGINE::GetResourceMgr()),
+	m_pTimeMgr(ENGINE::GetTimeMgr()),
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
+	m_fpTriggerEvent(nullptr)
 {
 }
 
-CTerrainCube::~CTerrainCube()
+CTrigger::~CTrigger()
 {
 }
 
-int CTerrainCube::Update()
+int CTrigger::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
+	CheckTriggerActive();
 
 	return NO_EVENT;
 }
 
-void CTerrainCube::LateUpdate()
+void CTrigger::LateUpdate()
 {
-	ENGINE::CGameObject::LateUpdate(); 
+	ENGINE::CGameObject::LateUpdate();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 }
 
-void CTerrainCube::Render()
+void CTrigger::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
-	if(m_pTexture) m_pTexture->Render(0);
-	else m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-
-	m_pBuffer->Render();
+	//m_pBuffer->Render();
 
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
-void CTerrainCube::ChangeTex(wstring _wstrTex)
-{
-	m_wstrTex = _wstrTex;
-
-	// Change Texture component
-	m_mapComponent.erase(L"Texture");
-	m_pTexture = nullptr;
-
-	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
-	if (!pComponent)
-		return;
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK(m_pTexture);
-}
-
-HRESULT CTerrainCube::Initialize()
+HRESULT CTrigger::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	//m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	//m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
-	m_eTerrainType = ENGINE::TERRAIN_CUBE;
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
+	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 	return S_OK;
 }
 
-HRESULT CTerrainCube::LateInit()
+HRESULT CTrigger::LateInit()
 {
 	D3DXVECTOR3 vSize = m_pTransform->GetSize();
 
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 1.0f * vSize.x , 1.0f * vSize.y, 1.0f * vSize.z });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
-	m_pCollider->Set_Trigger(false);						// 트리거 유무
+	m_pCollider->Set_Trigger(true);							// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
@@ -86,23 +69,19 @@ HRESULT CTerrainCube::LateInit()
 	return S_OK;
 }
 
-void CTerrainCube::Release()
+void CTrigger::Release()
 {
 
 }
 
-HRESULT CTerrainCube::AddComponent()
+void CTrigger::SetEvent(void(*_fpClickEvent)())
+{
+	m_fpTriggerEvent = _fpClickEvent;
+}
+
+HRESULT CTrigger::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
-
-	//Texture
-	m_wstrTex = L"Tile256x256_0.dds";
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, m_wstrTex);
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent.insert({ L"Texture", pComponent });
-	
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
 	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Buffer_CubeTex");
@@ -131,17 +110,30 @@ HRESULT CTerrainCube::AddComponent()
 	return S_OK;
 }
 
-CTerrainCube* CTerrainCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+void CTrigger::CheckTriggerActive()
+{
+	if (m_pCollider->Get_IsCollision())
+	{
+		if (m_fpTriggerEvent)
+			m_fpTriggerEvent();
+
+		m_bIsDead = true;
+	}
+}
+
+CTrigger* CTrigger::Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CTerrainCube* pInstance = new CTerrainCube(pGraphicDev);
+	CTrigger* pInstance = new CTrigger(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{
 		ENGINE::Safe_Delete(pInstance);
 		return nullptr;
 	}
+
+	pInstance->m_eTriggerType = _eType;
 
 	return pInstance;
 }

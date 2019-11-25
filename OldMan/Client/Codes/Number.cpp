@@ -2,6 +2,7 @@
 #include "Number.h"
 #include "PlayerObserver.h"
 #include "Trasform.h"
+#include "Animator.h"
 
 CNumber::CNumber(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CUI(pGraphicDev)
@@ -59,7 +60,7 @@ int CNumber::Update()
 		break;
 	}
 
-	for (auto& iter : m_vecNumberUI)
+	for (auto& iter : m_NumberUI)
 	{
 		iter->Update();
 	}
@@ -79,11 +80,11 @@ void CNumber::Render()
 		float fPadding = m_fSizeX * 0.75f;
 		float fIdxPos = 0.f;
 		fIdxPos -= (i * m_fSizeX) + (fPadding * i);
-		m_vecNumberUI[i]->SetPos(D3DXVECTOR3(m_vPos.x + fIdxPos, m_vPos.y, m_vPos.z));
-		m_vecNumberUI[i]->SetSize(m_fSizeX, m_fSizeY);
+		m_NumberUI[i]->SetPos(D3DXVECTOR3(m_vPos.x + fIdxPos, m_vPos.y, m_vPos.z));
+		m_NumberUI[i]->SetSize(m_fSizeX, m_fSizeY);
 	}
 
-	for (auto& iter : m_vecNumberUI)
+	for (auto& iter : m_NumberUI)
 	{
 		iter->Render();
 	}
@@ -111,12 +112,21 @@ HRESULT CNumber::Initialize()
 HRESULT CNumber::LateInit()
 {
 	CUI::LateInit();
+
+	for (int i = 0; i < 10; i++)
+	{
+		m_NumberUI[i] = CUI::Create(m_pGraphicDev, L"Number");
+		dynamic_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_MaxFrame(12); // 0~9, Slash, Infinity
+		m_NumberUI[i]->SetIsAnim(true);
+		m_NumberUI[i]->SetVisible(false);
+	}
+
 	return S_OK;
 }
 
 void CNumber::Release()
 {
-	for (auto& iter : m_vecNumberUI)
+	for (auto& iter : m_NumberUI)
 	{
 		ENGINE::Safe_Delete(iter);
 	}
@@ -168,12 +178,10 @@ CNumber* CNumber::Create(LPDIRECT3DDEVICE9 pGraphicDev, NUMBER_TYPE _eType)
 
 void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber2)
 {
-	for (auto& iter : m_vecNumberUI)
+	for (auto& iter : m_NumberUI)
 	{
-		iter->SetDead();
-		//ENGINE::Safe_Delete(iter);
+		iter->SetVisible(false);
 	}
-	m_vecNumberUI.clear();
 
 	int iNum = _iNumber;
 	for (int i = 0; i < MAXINT; i++)
@@ -201,7 +209,7 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber
 				break;
 			}
 		}
-		_iArr = new int[_iCount + iTemp];
+		_iArr = new int[_iCount + iTemp + 1];
 	}
 	else
 		_iArr = new int[_iCount];
@@ -211,23 +219,22 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber
 		_iArr[i] = _iNumber % 10;
 		_iNumber /= 10;
 
-		TCHAR _szNum[MIN_STR];
-		swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
-		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
+		dynamic_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_Frame(_iArr[i]);
+		m_NumberUI[i]->SetVisible(true);
 	}
 
 	if (_iNumber2 >= 0)
 	{
-		m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, L"Slash.png"));
+		dynamic_cast<ENGINE::CAnimator*>(m_NumberUI[_iCount]->Get_Component(L"Animator"))->Set_Frame(10); // Slash
+		m_NumberUI[_iCount]->SetVisible(true);
 
 		for (int i = _iCount + 1; i < _iCount + iTemp + 1; i++)
 		{
 			_iArr[i] = _iNumber2 % 10;
 			_iNumber2 /= 10;
 		
-			TCHAR _szNum[MIN_STR];
-			swprintf_s(_szNum, L"Number_%d.png", _iArr[i]);
-			m_vecNumberUI.push_back(CUI::Create(m_pGraphicDev, _szNum));
+			dynamic_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_Frame(_iArr[i]);
+			m_NumberUI[i]->SetVisible(true);
 		}
 
 		_iCount += iTemp + 1;
