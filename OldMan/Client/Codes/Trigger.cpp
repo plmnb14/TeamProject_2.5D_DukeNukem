@@ -7,8 +7,7 @@ CTrigger::CTrigger(LPDIRECT3DDEVICE9 pGraphicDev)
 	:ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
-	m_fpTriggerEvent(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
 {
 }
 
@@ -74,10 +73,6 @@ void CTrigger::Release()
 
 }
 
-void CTrigger::SetEvent(void(*_fpClickEvent)())
-{
-	m_fpTriggerEvent = _fpClickEvent;
-}
 
 HRESULT CTrigger::AddComponent()
 {
@@ -114,8 +109,18 @@ void CTrigger::CheckTriggerActive()
 {
 	if (m_pCollider->Get_IsCollision())
 	{
-		if (m_fpTriggerEvent)
-			m_fpTriggerEvent();
+		switch (m_eTriggerType)
+		{
+		case CTrigger::TRIGGER_NEXTSTAGE:
+		{
+			cout << "Next Stage Trigger ON!!!!!" << endl;
+			break;
+		}
+		case CTrigger::TRIGGER_END:
+			break;
+		default:
+			break;
+		}
 
 		m_bIsDead = true;
 	}

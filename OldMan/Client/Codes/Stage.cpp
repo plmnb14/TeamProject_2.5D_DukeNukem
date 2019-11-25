@@ -474,10 +474,6 @@ void CStage::LoadMapObj()
 		{
 			CTrigger* pTrigger = nullptr;
 			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_NEXTSTAGE);
-			pTrigger->SetEvent([]()
-			{
-				cout << "Next Stage Trigger ON!!!!!" << endl;
-			});
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;

@@ -39,7 +39,7 @@ protected:
 	virtual void Release() override;
 
 public:
-	void SetEvent(void(*_fpClickEvent)());
+	//void SetEvent(void(*_fpClickEvent)());
 
 protected:
 	HRESULT AddComponent();
@@ -61,7 +61,7 @@ protected:
 
 	TRIGGER_TYPE			m_eTriggerType;
 	
-	void(*m_fpTriggerEvent)();
+	//void(*m_fpTriggerEvent)();
 };
 
 
