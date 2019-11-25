@@ -19,9 +19,9 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
 	m_pRigid(nullptr), m_fSlideUp(0),
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
-	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE), m_fZoomAccel(0),
-	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0),
-	m_eActState(W_DRAW)
+	m_eWeaponState(ENGINE::WEAPON_TAG::NO_WEAPON), m_fZoomAccel(0),
+	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0), m_bSpecial(0),
+	m_eActState(W_IDLE)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -234,6 +234,8 @@ void CPlayer::KeyInput()
 	float fMoveSpeed = m_pCondition->Get_MoveSpeed() * m_pCondition->Get_MoveAccel() * m_pCondition->Get_MoveAccel() * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
+	//cout << m_eActState << endl;
+
 	ShootType();
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LSHIFT))
@@ -355,7 +357,21 @@ void CPlayer::KeyInput()
 
 			else
 			{
+				if (m_eWeaponState != ENGINE::NO_WEAPON)
+				{
+					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+
+					if (m_mWeaponInfo.end() != iter_find_old)
+					{
+						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+					}
+				}
+
+				m_eActState = W_DRAW;
+
 				cout << "Select Revolver" << endl;
+
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
@@ -381,6 +397,19 @@ void CPlayer::KeyInput()
 
 			else
 			{
+				if (m_eWeaponState != ENGINE::NO_WEAPON)
+				{
+					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+
+					if (m_mWeaponInfo.end() != iter_find_old)
+					{
+						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+					}
+				}
+
+				m_eActState = W_DRAW;
+
 				cout << "Select SMG" << endl;
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
@@ -407,8 +436,20 @@ void CPlayer::KeyInput()
 
 			else
 			{
+				if (m_eWeaponState != ENGINE::NO_WEAPON)
+				{
+					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+
+					if (m_mWeaponInfo.end() != iter_find_old)
+					{
+						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+					}
+				}
+
 				cout << "Select Pump_Shotgun" << endl;
 
+				m_eActState = W_DRAW;
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
 			}
@@ -433,8 +474,20 @@ void CPlayer::KeyInput()
 
 			else
 			{
+				if (m_eWeaponState != ENGINE::NO_WEAPON)
+				{
+					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+
+					if (m_mWeaponInfo.end() != iter_find_old)
+					{
+						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+					}
+				}
+
 				cout << "Select Rocket_Luncher" << endl;
 
+				m_eActState = W_DRAW;
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
 			}
@@ -485,11 +538,14 @@ void CPlayer::Shoot()
 
 	if (m_pWInfo.wMagazineBullet > 0)
 	{
-		if(m_bZoom == false)
-			m_eActState = W_FIRE;
+		if (m_bSpecial == false)
+		{
+			if (m_bZoom == false)
+				m_eActState = W_FIRE;
 
-		if (m_bZoom == true)
-			m_eActState = W_ZOOMFIRE;
+			if (m_bZoom == true)
+				m_eActState = W_ZOOMFIRE;
+		}
 
 		m_pCondition->Set_RangeAttack(true);
 
@@ -555,11 +611,14 @@ void CPlayer::Shoot()
 	{
 		m_pCondition->Set_RangeAttack(false);
 
-		if (m_bZoom == false)
-			m_eActState = W_IDLE;
+		if (m_bSpecial == false)
+		{
+			if (m_bZoom == false)
+				m_eActState = W_IDLE;
 
-		if (m_bZoom == true)
-			m_eActState = W_ZOOMOUT;
+			if (m_bZoom == true)
+				m_eActState = W_ZOOMOUT;
+		}
 	}
 }
 
@@ -699,6 +758,30 @@ void CPlayer::Reload()
 	cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;
 }
 
+void CPlayer::SpecialShot()
+{
+	if (m_pWInfo.wMagazineBullet > 0)
+	{
+		if (m_eActState == W_SPECIAL_READY)
+			return;
+
+		if (m_bSpecial)
+		{
+			m_eActState = W_SPECIAL_SHOT;
+			Shoot();
+
+			m_bSpecial = false;
+			m_pWInfo.fDelayTimer *= 0.5f;
+		}
+	}
+
+	else if (m_pWInfo.wMagazineBullet <= 0)
+	{
+		m_eActState = W_SPECIAL_END;
+		m_bSpecial = false;
+	}
+}
+
 void CPlayer::WeaponActState()
 {
 	switch (m_eActState)
@@ -816,6 +899,26 @@ void CPlayer::ShootType()
 	{
 	case ENGINE::MELLE:
 	case ENGINE::REVOLVER:
+	{
+		if (m_pKeyMgr->KeyDown(ENGINE::KEY_LBUTTON))
+		{
+			Shoot();
+		}
+
+		if (m_pKeyMgr->KeyDown(ENGINE::KEY_RBUTTON))
+		{
+			m_bSpecial = true;
+			m_eActState = W_SPECIAL_READY;
+		}
+
+		if (m_bSpecial)
+		{
+			SpecialShot();
+		}
+
+		break;
+	}
+
 	case ENGINE::LUNCHER:
 	{
 		Zoom();
@@ -824,8 +927,6 @@ void CPlayer::ShootType()
 		{
 			Shoot();
 		}
-
-		//Zoom();
 
 		break;
 	}
@@ -850,8 +951,6 @@ void CPlayer::ShootType()
 
 			m_pCondition->Set_RangeAttack(false);
 		}
-
-		//Zoom();
 
 		break;
 	}

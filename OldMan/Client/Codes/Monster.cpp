@@ -399,15 +399,15 @@ void CMonster::Monster_Fire()
 
 	CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, m_MoveSpeed,ENGINE::MONSTER_REVOLVER);
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-	cout << Mon_RIght_Dir.x << "x" << endl;
-	cout << Mon_RIght_Dir.y << "y" << endl;
-	cout << Mon_RIght_Dir.z <<"z"<< endl;
+	//cout << Mon_RIght_Dir.x << "x" << endl;
+	//cout << Mon_RIght_Dir.y << "y" << endl;
+	//cout << Mon_RIght_Dir.z <<"z"<< endl;
 	//cout << vMonsterDir_Fowrd2.x<<"¸ó" << endl;
 //	cout << vMonsterDir_Fowrd2.y << "¸ó" << endl;
 	//cout << vMonsterDir_Fowrd2.z << "¸ó" << endl;
 //	cout << <<"y"<< endl;
 	//cout << Mon_RIght_Dir.z	<<"z"<< endl;
-	cout << vMonsterPos.x<<"x2" << endl;
+	//cout << vMonsterPos.x<<"x2" << endl;
 	//cout << vMonsterPos.y<<"y2" << endl;
 
 

@@ -61,7 +61,7 @@ void CWeapon_Rocket::LateUpdate()
 void CWeapon_Rocket::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
-	//m_pTexture->Render(0);
+	m_pTexture->Render(5);
 	m_pBuffer->Render();
 }
 
@@ -81,23 +81,23 @@ HRESULT CWeapon_Rocket::Initialize()
 	m_pWInfo.wMagazineBullet = 6;			// 현재 탄창의 총알 개수
 
 	m_pWInfo.fVertical_Rebound = 0.5f;		// 수직 반동
-	m_pWInfo.fHorizontal_Rebound = 8.0f;		// 수평 반동
+	m_pWInfo.fHorizontal_Rebound = 18.0f;		// 수평 반동
 
 	m_pWInfo.fSpread_X = 1;
 	m_pWInfo.fSpread_Y = 1;
 
-	m_pWInfo.fBullet_Speed = 30.f;
+	m_pWInfo.fBullet_Speed = 10.f;
 
 	m_pWInfo.wWeaponDamage = 10.f;				// 무기 데미지
 	m_pWInfo.eWeaponTag = ENGINE::LUNCHER;
 
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 1.f, 0.f));
+	m_pTransform->SetSize(D3DXVECTOR3(2.f, 2.f, 2.f));
 
 
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 1.0f , 1.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 1.0f , 2.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);					// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(true);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
@@ -142,15 +142,15 @@ HRESULT CWeapon_Rocket::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	//pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Texture_Player");
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent.insert({ L"Texture", pComponent });
-	//
-	//m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
-	//NULL_CHECK_RETURN(m_pTexture, E_FAIL);
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Equip");
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_Player");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Buffer_RcTex");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 

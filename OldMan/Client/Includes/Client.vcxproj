@@ -164,8 +164,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Codes\Door.h" />
+    <ClInclude Include="..\Codes\Effect_BloodSplit.h" />
     <ClInclude Include="..\Codes\Effect_BulletHit.h" />
     <ClInclude Include="..\Codes\Effect_BulletHole.h" />
+    <ClInclude Include="..\Codes\Effect_Explosion_Rocket.h" />
+    <ClInclude Include="..\Codes\Effect_RocketSmoke.h" />
     <ClInclude Include="..\Codes\Elevator.h" />
     <ClInclude Include="..\Codes\GaugeBar.h" />
     <ClInclude Include="..\Codes\HittedCircle.h" />
@@ -215,8 +218,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Codes\Door.cpp" />
+    <ClCompile Include="..\Codes\Effect_BloodSplit.cpp" />
     <ClCompile Include="..\Codes\Effect_BulletHit.cpp" />
     <ClCompile Include="..\Codes\Effect_BulletHole.cpp" />
+    <ClCompile Include="..\Codes\Effect_Explosion_Rocket.cpp" />
+    <ClCompile Include="..\Codes\Effect_RocketSmoke.cpp" />
     <ClCompile Include="..\Codes\Elevator.cpp" />
     <ClCompile Include="..\Codes\GaugeBar.cpp" />
     <ClCompile Include="..\Codes\HittedCircle.cpp" />

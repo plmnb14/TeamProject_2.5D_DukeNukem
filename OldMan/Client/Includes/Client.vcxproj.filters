@@ -127,6 +127,21 @@
     <Filter Include="02.GameObject\01.MapObject\03.Trigger">
       <UniqueIdentifier>{fa707b78-51d8-4e1e-93fd-810d7907a9bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\02. BloodSplit">
+      <UniqueIdentifier>{011aa31c-1d7a-44de-99e4-beda9535cbf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\02. BloodSplit\01.">
+      <UniqueIdentifier>{f8dc5eeb-0c23-487b-8250-41c0508f6873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\03. Smoke">
+      <UniqueIdentifier>{cd966e24-c829-4690-b059-ae7ac0a3334d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\04. Explosion">
+      <UniqueIdentifier>{4ca2e502-7083-4fc5-aa74-0189a92cfc69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket">
+      <UniqueIdentifier>{da2e04ad-d2eb-464f-a7ca-2b4a68b9b252}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -259,6 +274,15 @@
     <ClInclude Include="..\Codes\Trigger.h">
       <Filter>02.GameObject\01.MapObject\03.Trigger</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Effect_BloodSplit.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\02. BloodSplit\01.</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Effect_RocketSmoke.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\03. Smoke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Effect_Explosion_Rocket.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -366,6 +390,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Trigger.cpp">
       <Filter>02.GameObject\01.MapObject\03.Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_BloodSplit.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\02. BloodSplit\01.</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_RocketSmoke.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\03. Smoke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Explosion_Rocket.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

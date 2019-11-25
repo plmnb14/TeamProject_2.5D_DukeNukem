@@ -1,20 +1,21 @@
 #include "stdafx.h"
-#include "Effect_BulletHole.h"
+#include "Effect_BloodSplit.h"
 #include "Trasform.h"
+#include "Animator.h"
 #include "CameraObserver.h"
 #include "Billborad.h"
 
-CEffect_BulletHole::CEffect_BulletHole(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CVfx(pGraphicDev), m_wFrame(0) , m_fTimer(0), m_fLifetime(0)
+CEffect_BloodSplit::CEffect_BloodSplit(LPDIRECT3DDEVICE9 pGraphicDev)
+	:CVfx(pGraphicDev), m_wFrame(0)
 {
 }
 
-CEffect_BulletHole::~CEffect_BulletHole()
+CEffect_BloodSplit::~CEffect_BloodSplit()
 {
 	Release();
 }
 
-int CEffect_BulletHole::Update()
+int CEffect_BloodSplit::Update()
 {
 	if (m_bIsDead)
 		return DEAD_OBJ;
@@ -25,7 +26,7 @@ int CEffect_BulletHole::Update()
 	return NO_EVENT;
 }
 
-void CEffect_BulletHole::LateUpdate()
+void CEffect_BloodSplit::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 
@@ -42,33 +43,34 @@ void CEffect_BulletHole::LateUpdate()
 	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix, vSize);                          // ºôº¸µå ¼³Á¤
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();
 
-	m_fLifetime -= m_pTimeMgr->GetDelta();
-
-	if (m_fLifetime < 0)
+	if (m_pAnimator->Get_Frame() >= m_pAnimator->Get_MaxFrame() - 1)
 		m_bIsDead = true;
 }
 
-void CEffect_BulletHole::Render()
+void CEffect_BloodSplit::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
-	m_pTexture->Render(m_wFrame);
+	m_pTexture->Render(m_pAnimator->RenderSet(m_pTimeMgr->GetDelta()));
 	m_pBuffer->Render();
 }
 
-HRESULT CEffect_BulletHole::Initialize()
+HRESULT CEffect_BloodSplit::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(0.2f, 0.2f, 0.2f));
+	m_pTransform->SetSize(D3DXVECTOR3(3.f, 3.f, 3.f));
 
-	m_wFrame = rand() % 3;
-	m_fLifetime = 20.f;
+	int Frame = dynamic_cast<ENGINE::CResources*>(m_pTexture)->Get_MaxFrame();
+	m_pAnimator->Set_MaxFrame(Frame);
+	m_pAnimator->Set_FrameAmp(40.f);
+	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+	m_pAnimator->Stop_Animation(false);
 
 	return S_OK;
 }
 
-HRESULT CEffect_BulletHole::LateInit()
+HRESULT CEffect_BloodSplit::LateInit()
 {
 	m_pObserver = CCameraObserver::Create();
 	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
@@ -78,21 +80,33 @@ HRESULT CEffect_BulletHole::LateInit()
 	return S_OK;
 }
 
-void CEffect_BulletHole::Release()
+void CEffect_BloodSplit::Release()
 {
 }
 
-void CEffect_BulletHole::Set_Pos(D3DXVECTOR3 _Pos)
+void CEffect_BloodSplit::Set_Pos(D3DXVECTOR3 _Pos)
 {
 	m_pTransform->SetPos(_Pos);
 }
 
-HRESULT CEffect_BulletHole::AddComponent()
+HRESULT CEffect_BloodSplit::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
+	int tmp = rand() % 3;
+	wstring wTmp = {};
+
+	if (tmp == 0)
+		wTmp = (L"BloodSplit_01");
+
+	if (tmp == 1)
+		wTmp = (L"BloodSplit_02");
+
+	if (tmp == 2)
+		wTmp = (L"BloodSplit_03");
+
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Bullet_Hole");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, wTmp);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -115,6 +129,14 @@ HRESULT CEffect_BulletHole::AddComponent()
 	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
+	// Animator
+	pComponent = ENGINE::CAnimator::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Animator", pComponent });
+
+	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
+
 	//ºôº¸µå 
 	pComponent = ENGINE::CBillborad::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
@@ -126,11 +148,11 @@ HRESULT CEffect_BulletHole::AddComponent()
 	return S_OK;
 }
 
-CEffect_BulletHole* CEffect_BulletHole::Create(LPDIRECT3DDEVICE9 pGraphicDev , D3DXVECTOR3 _Pos)
+CEffect_BloodSplit* CEffect_BloodSplit::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CEffect_BulletHole* pInstance = new CEffect_BulletHole(pGraphicDev);
+	CEffect_BloodSplit* pInstance = new CEffect_BloodSplit(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

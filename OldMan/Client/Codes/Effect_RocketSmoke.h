@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __EFFECT_BULLETHOLE_H__
+#ifndef __EFFECT_ROCKETSMOKE_H__
 
 #include "Vfx.h"
 
@@ -14,13 +14,13 @@ namespace ENGINE
 	class CCollider;
 }
 
-class CEffect_BulletHole : public CVfx
+class CEffect_RocketSmoke : public CVfx
 {
 protected:
-	explicit CEffect_BulletHole(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CEffect_RocketSmoke(LPDIRECT3DDEVICE9 pGraphicDev);
 
 public:
-	virtual ~CEffect_BulletHole();
+	virtual ~CEffect_RocketSmoke();
 
 public:
 	virtual int Update() override;
@@ -39,13 +39,12 @@ protected:
 	HRESULT AddComponent();
 
 public:
-	static CEffect_BulletHole* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos);
+	static CEffect_RocketSmoke* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos);
 
 private:
 	WORD	m_wFrame;
-	float	m_fTimer;
 	float	m_fLifetime;
 };
 
-#define __EFFECT_BULLETHOLE_H__
+#define __EFFECT_ROCKETSMOKE_H__
 #endif

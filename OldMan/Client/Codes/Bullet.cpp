@@ -9,6 +9,9 @@
 #include "CameraObserver.h"
 #include "Effect_BulletHit.h"
 #include "Effect_BulletHole.h"
+#include "Effect_BloodSplit.h"
+#include "Effect_RocketSmoke.h"
+#include "Effect_Explosion_Rocket.h"
 
 
 CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -34,22 +37,36 @@ int CBullet::Update()
 	{
 		if (m_pCollider->Get_IsCollision())
 		{
-			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
-			D3DXVECTOR3 tmpLength = { m_pCollider->Get_Length().x * tmpDir.x , m_pCollider->Get_Length().y * tmpDir.y , m_pCollider->Get_Length().z * tmpDir.z};
+			CGameObject* pInstance = nullptr;
 
-			cout << tmpDir.x << endl;
-			cout << tmpDir.y << endl;
-			cout << tmpDir.z << endl;
+			if (m_eTag == ENGINE::TERRAIN)
+			{
+				pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+			}
 
-			//cout << "x รเ : " << m_pCollider->Get_Length().x << endl;
-			//cout << "y รเ : " << m_pCollider->Get_Length().y << endl;
-			//cout << "z รเ : " << m_pCollider->Get_Length().z << endl;
+			if (m_eTag == ENGINE::MONSTER)
+			{
+				pInstance = CEffect_BloodSplit::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+			}
 
-			CGameObject* pInstance = CEffect_BulletHit::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
-		
-			pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+			if (m_eWeaponTag == ENGINE::LUNCHER)
+			{
+				D3DXVECTOR3 vTempDir = -m_pTransform->GetDir();
+				D3DXVECTOR3 vTempPos = { m_pCollider->Get_CenterPos().x + vTempDir.x * 10 ,
+										m_pCollider->Get_CenterPos().y + vTempDir.y * 10 ,
+										m_pCollider->Get_CenterPos().z + vTempDir.z * 10 };
+
+				pInstance = CEffect_Explosion_Rocket::Create(m_pGraphicDev, vTempPos);
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+			}
+
+			else
+			{
+				pInstance = CEffect_BulletHit::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+			}
 		}
 
 		return DEAD_OBJ;
@@ -63,6 +80,14 @@ int CBullet::Update()
 	BulletType();
 	
 	KeyInput();
+
+	if (m_eWeaponTag == ENGINE::LUNCHER)
+	{
+		m_fSpeed += m_pTimeMgr->GetDelta() * 70 * m_pTimeMgr->GetDelta() * 70;
+
+		CGameObject* pInstance = CEffect_RocketSmoke::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+	}
 
 	return NO_EVENT;
 }
@@ -227,7 +252,7 @@ void CBullet::BulletType()
 	{
 		m_pTransform->MovePos(m_fSpeed * m_pTimeMgr->GetDelta());
 
-		D3DXVECTOR3 JumpLength = { 0, -m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()), 0 };
+		D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) * 5, 0 };
 		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
 
 		break;
