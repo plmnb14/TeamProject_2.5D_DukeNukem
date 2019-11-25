@@ -279,7 +279,7 @@ void CPlayer::KeyInput()
 		if (m_pWInfo.wMagazineBullet == m_pWInfo.wMagazineSize)
 			return;
 
-		if(m_eActState == W_NONE || m_eActState == W_ZOOMOUT)
+		if(m_eActState == W_IDLE || m_eActState == W_ZOOMOUT)
 			Reload();
 	}
 
@@ -556,7 +556,7 @@ void CPlayer::Shoot()
 		m_pCondition->Set_RangeAttack(false);
 
 		if (m_bZoom == false)
-			m_eActState = W_NONE;
+			m_eActState = W_IDLE;
 
 		if (m_bZoom == true)
 			m_eActState = W_ZOOMOUT;
@@ -617,6 +617,7 @@ void CPlayer::Shoot_Shotgun()
 
 				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
+				pInstance->Set_MapLayer(m_mapLayer);
 
 				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_pWInfo.fHorizontal_Rebound);
 				dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_pWInfo.fVertical_Rebound);
@@ -636,6 +637,7 @@ void CPlayer::Shoot_Shotgun()
 
 				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
+				pInstance->Set_MapLayer(m_mapLayer);
 			}
 		}
 
@@ -650,7 +652,7 @@ void CPlayer::Shoot_Shotgun()
 		m_pCondition->Set_RangeAttack(false);
 
 		if (m_bZoom == false)
-			m_eActState = W_NONE;
+			m_eActState = W_IDLE;
 
 		if (m_bZoom == true)
 			m_eActState = W_ZOOMOUT;
@@ -701,7 +703,7 @@ void CPlayer::WeaponActState()
 {
 	switch (m_eActState)
 	{
-	case W_NONE:
+	case W_IDLE:
 	{
 		break;
 	}
@@ -844,7 +846,7 @@ void CPlayer::ShootType()
 				m_eActState = W_ZOOMIN;
 
 			else
-				m_eActState = W_NONE;
+				m_eActState = W_IDLE;
 
 			m_pCondition->Set_RangeAttack(false);
 		}

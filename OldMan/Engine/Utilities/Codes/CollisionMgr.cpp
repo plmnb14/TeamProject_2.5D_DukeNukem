@@ -135,24 +135,26 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
 			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
-			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
-
-			if (a > 20)
-				continue;
+			//float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+			//
+			//if (a > 20)
+			//	continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
 			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
+			ENGINE::CRigidBody*	rDstRigid = static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"));
+
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				if (static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Get_IsJump())
+				if (rDstRigid->Get_IsJump())
 					return;
 
-				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_Accel({ 0,0,0 });
-				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsJump(false);
-				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(false);
-				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsAir(false);
-				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(true);
+				rDstRigid->Set_Accel({ 0,0,0 });
+				rDstRigid->Set_IsJump(false);
+				rDstRigid->Set_IsFall(false);
+				rDstRigid->Set_IsAir(false);
+				rDstRigid->Set_IsGround(true);
 
 				//cout << "응! 닿음!" << endl;
 
@@ -162,9 +164,6 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 
 	//	cout << "땅에 닿지 않음" << endl;
-		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
-		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
-
 		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
 		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
 	}
@@ -317,18 +316,295 @@ bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameO
 	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
 	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
 
+	ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+	ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
 	if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
 		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
 		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 	{
-
 		D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
 
-		(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength.x *= -1.f : tmpLength.x *= 1.f);
-		(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength.y *= -1.f : tmpLength.y *= 1.f);
-		(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength.z *= -1.f : tmpLength.z *= 1.f);
+		
+		if (tmpLength.x != 0)
+		{
+			// x가 음의 방향이라면
+			if (rDstTrans->GetDir().x < 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMaxPos.x < rDstBox->vCenterPos.x)
+				{
+					float fixed_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x * 1.05f , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
 
-		_rDstCol->Set_Length(tmpLength);
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				if (rSrtBox->vMaxPos.x > rDstBox->vCenterPos.x)
+				{
+					float fixed_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x  * 1.05f, rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+
+			// x가 양의 방향이라면
+			else if (rDstTrans->GetDir().x >= 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMinPos.x > rDstBox->vCenterPos.x)
+				{
+					float fixed_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x * 1.05f , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMinPos.x <= rDstBox->vCenterPos.x)
+				{
+					float fixed_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x * 1.05f, rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+		}
+
+		else if (tmpLength.y != 0)
+		{
+			// x가 음의 방향이라면
+			if (rDstTrans->GetDir().y < 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMaxPos.y < rDstBox->vCenterPos.y)
+				{
+					float fixed_x = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f, rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMaxPos.y > rDstBox->vCenterPos.y)
+				{
+					float fixed_x = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x* 1.05f , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+
+			// x가 양의 방향이라면
+			else if (rDstTrans->GetDir().y >= 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMinPos.y > rDstBox->vCenterPos.y)
+				{
+					float fixed_x = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMinPos.y <= rDstBox->vCenterPos.y)
+				{
+					float fixed_x = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x, rDstBox->vCenterPos.y + fixed_x * 1.05f, rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+		}
+
+		else if (tmpLength.z != 0)
+		{
+			// x가 음의 방향이라면
+			if (rDstTrans->GetDir().z < 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMaxPos.z < rDstBox->vCenterPos.z)
+				{
+					float fixed_x = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y, rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMaxPos.z > rDstBox->vCenterPos.z)
+				{
+					float fixed_x = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+
+			// x가 양의 방향이라면
+			else if (rDstTrans->GetDir().z >= 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMinPos.z > rDstBox->vCenterPos.z)
+				{
+					float fixed_x = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y  , rDstBox->vCenterPos.z + fixed_x* 1.05f };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMinPos.z <= rDstBox->vCenterPos.z)
+				{
+					float fixed_x = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x, rDstBox->vCenterPos.y , rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+		}
+		
+
+		return true;
+	}
+
+	else if (rDstBox->vMinPos.x > rSrtBox->vMinPos.x && rSrtBox->vMaxPos.x > rDstBox->vMaxPos.x &&
+		rDstBox->vMinPos.y > rSrtBox->vMinPos.y && rSrtBox->vMaxPos.y > rDstBox->vMaxPos.y &&
+		rDstBox->vMinPos.z > rSrtBox->vMinPos.z && rSrtBox->vMaxPos.z > rDstBox->vMaxPos.z)
+	{
+		D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
+
+		if (tmpLength.x != 0)
+		{
+			// x가 음의 방향이라면
+			if (rDstTrans->GetDir().x < 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMaxPos.x < rDstBox->vCenterPos.x)
+				{
+					float fixed_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x * 1.05f , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				if (rSrtBox->vMaxPos.x > rDstBox->vCenterPos.x)
+				{
+					float fixed_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+
+			// x가 양의 방향이라면
+			else if (rDstTrans->GetDir().x >= 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMinPos.x > rDstBox->vCenterPos.x)
+				{
+					float fixed_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMinPos.x <= rDstBox->vCenterPos.x)
+				{
+					float fixed_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+		}
+
+		else if (tmpLength.y != 0)
+		{
+			// x가 음의 방향이라면
+			if (rDstTrans->GetDir().y < 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMaxPos.y < rDstBox->vCenterPos.y)
+				{
+					float fixed_x = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMaxPos.y > rDstBox->vCenterPos.y)
+				{
+					float fixed_x = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f  , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+
+			// x가 양의 방향이라면
+			else if (rDstTrans->GetDir().y >= 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMinPos.y > rDstBox->vCenterPos.y)
+				{
+					float fixed_x = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMinPos.y <= rDstBox->vCenterPos.y)
+				{
+					float fixed_x = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x, rDstBox->vCenterPos.y + fixed_x* 1.05f  , rDstBox->vCenterPos.z };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+		}
+
+		else if (tmpLength.z != 0)
+		{
+			// x가 음의 방향이라면
+			if (rDstTrans->GetDir().z < 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMaxPos.z < rDstBox->vCenterPos.z)
+				{
+					float fixed_x = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y, rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMaxPos.z > rDstBox->vCenterPos.z)
+				{
+					float fixed_x = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z + fixed_x  * 1.05f };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+
+			// x가 양의 방향이라면
+			else if (rDstTrans->GetDir().z >= 0)
+			{
+				// rSrc 의 Max X 와 비교
+				if (rSrtBox->vMinPos.z > rDstBox->vCenterPos.z)
+				{
+					float fixed_x = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y  , rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+
+				else if (rSrtBox->vMinPos.z <= rDstBox->vCenterPos.z)
+				{
+					float fixed_x = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x, rDstBox->vCenterPos.y , rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+					_rDstCol->Set_CenterPos(vTmpPos);
+				}
+			}
+		}
 
 		return true;
 	}
@@ -339,88 +615,322 @@ bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameO
 
 		D3DXVECTOR3 vTempGap = _rDstCol->Get_OldPos() - rDstBox->vCenterPos;
 		D3DXVECTOR3 vTemPos[19] = {};
-		vTemPos[0] = rDstBox->vCenterPos + vTempGap * 0.95f;
-		vTemPos[1] = rDstBox->vCenterPos + vTempGap * 0.9f;
-		vTemPos[2] = rDstBox->vCenterPos + vTempGap * 0.85f;
-		vTemPos[3] = rDstBox->vCenterPos + vTempGap * 0.8f;
-		vTemPos[4] = rDstBox->vCenterPos + vTempGap * 0.75f;
-		vTemPos[5] = rDstBox->vCenterPos + vTempGap * 0.7f;
-		vTemPos[6] = rDstBox->vCenterPos + vTempGap * 0.65f;
-		vTemPos[7] = rDstBox->vCenterPos + vTempGap * 0.6f;
-		vTemPos[8] = rDstBox->vCenterPos + vTempGap * 0.55f;
+		vTemPos[18] = rDstBox->vCenterPos + vTempGap * 0.95f;
+		vTemPos[17] = rDstBox->vCenterPos + vTempGap * 0.9f;
+		vTemPos[16] = rDstBox->vCenterPos + vTempGap * 0.85f;
+		vTemPos[15] = rDstBox->vCenterPos + vTempGap * 0.8f;
+		vTemPos[14] = rDstBox->vCenterPos + vTempGap * 0.75f;
+		vTemPos[13] = rDstBox->vCenterPos + vTempGap * 0.7f;
+		vTemPos[12] = rDstBox->vCenterPos + vTempGap * 0.65f;
+		vTemPos[11] = rDstBox->vCenterPos + vTempGap * 0.6f;
+		vTemPos[10] = rDstBox->vCenterPos + vTempGap * 0.55f;
 		vTemPos[9] = rDstBox->vCenterPos + vTempGap * 0.5f;
-		vTemPos[10] = rDstBox->vCenterPos+ vTempGap  * 0.45f;
-		vTemPos[11] = rDstBox->vCenterPos+ vTempGap  * 0.4f;
-		vTemPos[12] = rDstBox->vCenterPos+ vTempGap  * 0.35f;
-		vTemPos[13] = rDstBox->vCenterPos+ vTempGap  * 0.3f;
-		vTemPos[14] = rDstBox->vCenterPos+ vTempGap  * 0.25f;
-		vTemPos[15] = rDstBox->vCenterPos+ vTempGap  * 0.2f;
-		vTemPos[16] = rDstBox->vCenterPos+ vTempGap  * 0.15f;
-		vTemPos[17] = rDstBox->vCenterPos+ vTempGap  * 0.1f;
-		vTemPos[18] = rDstBox->vCenterPos+ vTempGap  * 0.05f; 
-
-		//D3DXVECTOR3 vTemPos[19] = {};
-		//vTemPos[0] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.95f);
-		//vTemPos[1] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.9f);
-		//vTemPos[2] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.85f);
-		//vTemPos[3] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.8f);
-		//vTemPos[4] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.75f);
-		//vTemPos[5] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.7f);
-		//vTemPos[6] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.65f);
-		//vTemPos[7] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.6f);
-		//vTemPos[8] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.55f);
-		//vTemPos[9] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.5f);
-		//vTemPos[10] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.45f);
-		//vTemPos[11] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.4f);
-		//vTemPos[12] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.35f);
-		//vTemPos[13] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.3f);
-		//vTemPos[14] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.25f);
-		//vTemPos[15] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.2f);
-		//vTemPos[16] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.15f);
-		//vTemPos[17] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.1f);
-		//vTemPos[18] = rDstBox->vCenterPos - (_rDstCol->Get_OldPos() * 0.05f); 
-
-		//D3DXVECTOR3 vTemPos[19] = {};
-		//vTemPos[0] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.95f);
-		//vTemPos[1] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.9f);
-		//vTemPos[2] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.85f);
-		//vTemPos[3] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.8f);
-		//vTemPos[4] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.75f);
-		//vTemPos[5] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.7f);
-		//vTemPos[6] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.65f);
-		//vTemPos[7] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.6f);
-		//vTemPos[8] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.55f);
-		//vTemPos[9] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.5f);
-		//vTemPos[10] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.45f);
-		//vTemPos[11] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.4f);
-		//vTemPos[12] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.35f);
-		//vTemPos[13] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.3f);
-		//vTemPos[14] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.25f);
-		//vTemPos[15] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.2f);
-		//vTemPos[16] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.15f);
-		//vTemPos[17] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.1f);
-		//vTemPos[18] = (_rDstCol->Get_OldPos() - rDstBox->vCenterPos * 0.05f);
+		vTemPos[8] = rDstBox->vCenterPos+ vTempGap  * 0.45f;
+		vTemPos[7] = rDstBox->vCenterPos+ vTempGap  * 0.4f;
+		vTemPos[6] = rDstBox->vCenterPos+ vTempGap  * 0.35f;
+		vTemPos[5] = rDstBox->vCenterPos+ vTempGap  * 0.3f;
+		vTemPos[4] = rDstBox->vCenterPos+ vTempGap  * 0.25f;
+		vTemPos[3] = rDstBox->vCenterPos+ vTempGap  * 0.2f;
+		vTemPos[2] = rDstBox->vCenterPos+ vTempGap  * 0.15f;
+		vTemPos[1] = rDstBox->vCenterPos+ vTempGap  * 0.1f;
+		vTemPos[0] = rDstBox->vCenterPos+ vTempGap  * 0.05f; 
 
 		for (int i = 0; i < 19; ++i)
 		{
 			_rDstCol->Set_CenterPos(vTemPos[i]);
 			_rDstCol->SetUp_Box();
-
+			
 			if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
 				rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
 				rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 			{
 				D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
 
-				(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength.x *= -1.f : tmpLength.x *= 1.f);
-				(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength.y *= -1.f : tmpLength.y *= 1.f);
-				(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength.z *= -1.f : tmpLength.z *= 1.f);
+				if (tmpLength.x != 0)
+				{
+					// x가 음의 방향이라면
+					if (rDstTrans->GetDir().x < 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMaxPos.x < rDstBox->vCenterPos.x)
+						{
+							float fixed_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x * 1.05f , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
 
-				_rDstCol->Set_Length(tmpLength);
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						if (rSrtBox->vMaxPos.x > rDstBox->vCenterPos.x)
+						{
+							float fixed_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+
+					// x가 양의 방향이라면
+					else if (rDstTrans->GetDir().x >= 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMinPos.x > rDstBox->vCenterPos.x)
+						{
+							float fixed_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMinPos.x <= rDstBox->vCenterPos.x)
+						{
+							float fixed_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+				}
+
+				else if (tmpLength.y != 0)
+				{
+					// x가 음의 방향이라면
+					if (rDstTrans->GetDir().y < 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMaxPos.y < rDstBox->vCenterPos.y)
+						{
+							float fixed_x = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMaxPos.y > rDstBox->vCenterPos.y)
+						{
+							float fixed_x = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f  , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+
+					// x가 양의 방향이라면
+					else if (rDstTrans->GetDir().y >= 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMinPos.y > rDstBox->vCenterPos.y)
+						{
+							float fixed_x = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMinPos.y <= rDstBox->vCenterPos.y)
+						{
+							float fixed_x = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x, rDstBox->vCenterPos.y + fixed_x* 1.05f  , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+				}
+
+				else if (tmpLength.z != 0)
+				{
+					// x가 음의 방향이라면
+					if (rDstTrans->GetDir().z < 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMaxPos.z < rDstBox->vCenterPos.z)
+						{
+							float fixed_x = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y, rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMaxPos.z > rDstBox->vCenterPos.z)
+						{
+							float fixed_x = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z + fixed_x  * 1.05f };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+
+					// x가 양의 방향이라면
+					else if (rDstTrans->GetDir().z >= 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMinPos.z > rDstBox->vCenterPos.z)
+						{
+							float fixed_x = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y  , rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMinPos.z <= rDstBox->vCenterPos.z)
+						{
+							float fixed_x = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x, rDstBox->vCenterPos.y , rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+				}
+			
+				return true;
+			}
+
+			else if (rDstBox->vMinPos.x > rSrtBox->vMinPos.x && rSrtBox->vMaxPos.x > rDstBox->vMaxPos.x &&
+				rDstBox->vMinPos.y > rSrtBox->vMinPos.y && rSrtBox->vMaxPos.y > rDstBox->vMaxPos.y &&
+				rDstBox->vMinPos.z > rSrtBox->vMinPos.z && rSrtBox->vMaxPos.z > rDstBox->vMaxPos.z)
+			{
+				D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
+
+				if (tmpLength.x != 0)
+				{
+					// x가 음의 방향이라면
+					if (rDstTrans->GetDir().x < 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMaxPos.x < rDstBox->vCenterPos.x)
+						{
+							float fixed_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x * 1.05f , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						if (rSrtBox->vMaxPos.x > rDstBox->vCenterPos.x)
+						{
+							float fixed_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+
+					// x가 양의 방향이라면
+					else if (rDstTrans->GetDir().x >= 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMinPos.x > rDstBox->vCenterPos.x)
+						{
+							float fixed_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMinPos.x <= rDstBox->vCenterPos.x)
+						{
+							float fixed_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fixed_x* 1.05f  , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+				}
+
+				else if (tmpLength.y != 0)
+				{
+					// x가 음의 방향이라면
+					if (rDstTrans->GetDir().y < 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMaxPos.y < rDstBox->vCenterPos.y)
+						{
+							float fixed_x = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMaxPos.y > rDstBox->vCenterPos.y)
+						{
+							float fixed_x = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f  , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+
+					// x가 양의 방향이라면
+					else if (rDstTrans->GetDir().y >= 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMinPos.y > rDstBox->vCenterPos.y)
+						{
+							float fixed_x = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fixed_x * 1.05f , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMinPos.y <= rDstBox->vCenterPos.y)
+						{
+							float fixed_x = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x, rDstBox->vCenterPos.y + fixed_x* 1.05f  , rDstBox->vCenterPos.z };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+				}
+
+				else if (tmpLength.z != 0)
+				{
+					// x가 음의 방향이라면
+					if (rDstTrans->GetDir().z < 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMaxPos.z < rDstBox->vCenterPos.z)
+						{
+							float fixed_x = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y, rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMaxPos.z > rDstBox->vCenterPos.z)
+						{
+							float fixed_x = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z + fixed_x  * 1.05f };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+
+					// x가 양의 방향이라면
+					else if (rDstTrans->GetDir().z >= 0)
+					{
+						// rSrc 의 Max X 와 비교
+						if (rSrtBox->vMinPos.z > rDstBox->vCenterPos.z)
+						{
+							float fixed_x = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y  , rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+
+						else if (rSrtBox->vMinPos.z <= rDstBox->vCenterPos.z)
+						{
+							float fixed_x = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+							D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x, rDstBox->vCenterPos.y , rDstBox->vCenterPos.z + fixed_x * 1.05f };
+
+							_rDstCol->Set_CenterPos(vTmpPos);
+						}
+					}
+				}
 
 				return true;
 			}
 		}
+
+
+
 		return false;
 	}
 
@@ -694,18 +1204,80 @@ D3DXVECTOR3 CCollisionMgr::Get_Length_Bullet(ENGINE::CGameObject * rDst, ENGINE:
 	vCross.y = vMax.y - vMin.y;
 	vCross.z = vMax.z - vMin.z;
 
-	if (vCross.x == vCross.y && vCross.y == vCross.z)
+	if (fabs(vCross.x) == 1 &&
+		fabs(vCross.y) == 1 &&
+		fabs(vCross.z) == 1)
 	{
-		return{ 0,0,0 };
+		// x 축 방향이 0보다 작았을 경우 ( 음수 일 경우)
+		if (rDstTrans->GetDir().x < 0)
+		{
+			D3DXVECTOR3 vTempDir = -rDstTrans->GetDir();
+			D3DXVECTOR3 vTempPos = rDstCol->Get_CenterPos();
+			float       fGap = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
+
+			rDstCol->Set_CenterPos({ vTempPos.x + fGap * vTempDir.x * 1.05f , vTempPos.y, vTempPos.z });
+		}
+
+		// x 축 방향이 0보다 컷을 경우 ( 양수 일 경우)
+		else if (rDstTrans->GetDir().x < 0)
+		{
+			D3DXVECTOR3 vTempDir = -rDstTrans->GetDir();
+			D3DXVECTOR3 vTempPos = rDstCol->Get_CenterPos();
+			float       fGap = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
+
+			rDstCol->Set_CenterPos({ vTempPos.x + fGap * vTempDir.x * 1.05f , vTempPos.y, vTempPos.z });
+		}
+
+		if (rDstTrans->GetDir().y < 0)
+		{
+			D3DXVECTOR3 vTempDir = -rDstTrans->GetDir();
+			D3DXVECTOR3 vTempPos = rDstCol->Get_CenterPos();
+			float       fGap = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
+
+			rDstCol->Set_CenterPos({ vTempPos.x , vTempPos.y + fGap * vTempDir.y * 1.05f, vTempPos.z });
+		}
+
+		// y 축 방향이 0보다 컷을 경우 ( 양수 일 경우)
+		else if (rDstTrans->GetDir().y < 0)
+		{
+			D3DXVECTOR3 vTempDir = -rDstTrans->GetDir();
+			D3DXVECTOR3 vTempPos = rDstCol->Get_CenterPos();
+			float       fGap = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
+
+			rDstCol->Set_CenterPos({ vTempPos.x , vTempPos.y + fGap * vTempDir.y * 1.05f, vTempPos.z });
+		}
+
+
+		// z축
+		if (rDstTrans->GetDir().z < 0)
+		{
+			D3DXVECTOR3 vTempDir = -rDstTrans->GetDir();
+			D3DXVECTOR3 vTempPos = rDstCol->Get_CenterPos();
+			float       fGap = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
+
+			rDstCol->Set_CenterPos({ vTempPos.x , vTempPos.z, vTempPos.z + fGap * 1.05f * vTempDir.z });
+		}
+
+		// y 축 방향이 0보다 컷을 경우 ( 양수 일 경우)
+		else if (rDstTrans->GetDir().z < 0)
+		{
+			D3DXVECTOR3 vTempDir = -rDstTrans->GetDir();
+			D3DXVECTOR3 vTempPos = rDstCol->Get_CenterPos();
+			float       fGap = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
+
+			rDstCol->Set_CenterPos({ vTempPos.x , vTempPos.z, vTempPos.z + fGap * 1.05f * vTempDir.z });
+		}
+
+		vCross.x = 0;
+		vCross.y = 0;
+		vCross.z = 0;
+
+		return vCross;
 	}
 
-	//(vCross.x < vCross.y ? vCross.x < vCross.z ? 
-	//	vCross.y = 0 : vCross.z = 0 : 
-	//	vCross.y < vCross.z ? vCross.z = 0 : vCross.y = 0);
-
-	if (vCross.x < vCross.y)
+	if (fabs(vCross.x) < fabs(vCross.y))
 	{
-		if (vCross.x < vCross.z)
+		if (fabs(vCross.x) < fabs(vCross.z))
 		{
 			vCross.z = 0;
 
@@ -724,7 +1296,7 @@ D3DXVECTOR3 CCollisionMgr::Get_Length_Bullet(ENGINE::CGameObject * rDst, ENGINE:
 
 	else
 	{
-		if (vCross.y < vCross.z)
+		if (fabs(vCross.y) < fabs(vCross.z))
 		{
 			vCross.z = 0;
 		}
@@ -735,21 +1307,6 @@ D3DXVECTOR3 CCollisionMgr::Get_Length_Bullet(ENGINE::CGameObject * rDst, ENGINE:
 		}
 
 		vCross.x = 0;
-	}
-
-	if (rDstTrans->GetDir().x < 0)
-	{
-		if (rDstTrans->GetPos().x <= rSrcTrans->GetPos().x)
-			vCross.x += fabs(rDstTrans->GetPos().x - rSrcTrans->GetPos().x);
-
-		else if (rDstTrans->GetPos().x > rSrcTrans->GetPos().x)
-			vCross.x *= 1.1f;
-	}
-
-	else if (rDstTrans->GetDir().x >= 0)
-	{
-		if (rDstTrans->GetPos().x >= rSrcTrans->GetPos().x)
-			vCross.x -= rSrcCol->Get_Radius().x * 2;
 	}
 
 	if (_Dynamic)

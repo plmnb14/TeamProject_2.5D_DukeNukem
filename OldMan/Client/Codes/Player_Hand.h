@@ -43,6 +43,14 @@ public:
 	void Set_Pos(D3DXVECTOR3 _Pos);
 	void Set_WeaponAct();
 	void WeaponActState();
+
+public:
+	void Weapon_Revolver();
+	void Weapon_Melee();
+	void Weapon_Rifle();
+	void Weapon_SMG();
+	void Weapon_Shotgun();
+	void Weapon_Luncher();
 	
 
 public:
@@ -69,6 +77,7 @@ private:
 
 	CPlayer::WEAPONACT		m_eOldAcState;
 	CPlayer::WEAPONACT		m_eActState;
+	ENGINE::WEAPON_TAG		m_eWeapon;
 };
 
 #define __PLAYER_HAND__

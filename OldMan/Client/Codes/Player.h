@@ -29,8 +29,9 @@ public:
 
 	enum WEAPONACT
 	{
-		W_NONE, W_WALK, W_RUN,
+		W_NONE, W_IDLE, W_WALK, W_RUN,
 		W_FIRST, W_DRAW, W_FIRE, W_RELOAD,
+		W_SPECIAL_READY, W_SPECIAL_SHOT,
 		W_ZOOMIN, W_ZOOMOUT, W_ZOOMFIRE
 	};
 
@@ -77,6 +78,7 @@ public:
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
 	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
+	ENGINE::WEAPON_TAG	Get_WState() { return m_eWeaponState; }
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev);

@@ -26,11 +26,13 @@ public:
 	void Set_IsFall(bool _Fall);
 	void Set_IsJump(bool _Jump);
 	void Set_IsLanding(bool _Land);
-
+	void Set_IsBound(bool _Bound);
+		;
 public:
 	void Set_fMass(float _Mass);
 	void Set_fPower(float _Power);
 	void Set_fForce(float _Force);
+	void Set_BoundReduce(float _Value);
 
 public:
 	void Set_Speed(D3DXVECTOR3 _Speed = { 1.f, 1.f, 1.f });

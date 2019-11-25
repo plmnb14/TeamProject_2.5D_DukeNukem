@@ -147,10 +147,12 @@ namespace ENGINE
 		bool bIsAttck;	 // 공격 가능체크
 		bool bIsFall;    // 낙하 체크
 		bool bIsJump;	 // 점프 체크
+		bool bIsBoundable;//	지형 충돌 시 튕기는 물체인지
 
 		float fPower;	// 힘
 		float fMass;	// 질량
 		float fForce;	// 넉백할 량
+		float fBoundReduce;	// 반동 시 줄어들 양
 
 	}RIGID;
 

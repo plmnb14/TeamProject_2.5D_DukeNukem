@@ -30,19 +30,25 @@ CBullet::~CBullet()
 
 int CBullet::Update()
 {
-	cout << m_pTransform->GetDir().x << endl;
-
 	if (m_bIsDead)
 	{
 		if (m_pCollider->Get_IsCollision())
 		{
 			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
-			D3DXVECTOR3 tmpLength = m_pCollider->Get_Length();
+			D3DXVECTOR3 tmpLength = { m_pCollider->Get_Length().x * tmpDir.x , m_pCollider->Get_Length().y * tmpDir.y , m_pCollider->Get_Length().z * tmpDir.z};
 
-			CGameObject* pInstance = CEffect_BulletHit::Create(m_pGraphicDev, m_pTransform->GetPos() + m_pCollider->Get_Length());
+			cout << tmpDir.x << endl;
+			cout << tmpDir.y << endl;
+			cout << tmpDir.z << endl;
+
+			//cout << "x รเ : " << m_pCollider->Get_Length().x << endl;
+			//cout << "y รเ : " << m_pCollider->Get_Length().y << endl;
+			//cout << "z รเ : " << m_pCollider->Get_Length().z << endl;
+
+			CGameObject* pInstance = CEffect_BulletHit::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
-
-			pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pTransform->GetPos() + m_pCollider->Get_Length());
+		
+			pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
 		}
 
@@ -141,8 +147,8 @@ HRESULT CBullet::LateInit()
 
 void CBullet::Release()
 {
-	//m_pSubject->UnSubscribe(m_pObserver);
-//	ENGINE::Safe_Delete(m_pObserver);
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 HRESULT CBullet::AddComponent()

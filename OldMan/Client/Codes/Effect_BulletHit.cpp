@@ -59,11 +59,11 @@ HRESULT CEffect_BulletHit::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(2.f, 2.f, 2.f));
+	m_pTransform->SetSize(D3DXVECTOR3(3.f, 3.f, 3.f));
 
 	int Frame = dynamic_cast<ENGINE::CResources*>(m_pTexture)->Get_MaxFrame();
 	m_pAnimator->Set_MaxFrame(Frame);
-	m_pAnimator->Set_FrameAmp(20.f);
+	m_pAnimator->Set_FrameAmp(40.f);
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	m_pAnimator->Stop_Animation(false);
 

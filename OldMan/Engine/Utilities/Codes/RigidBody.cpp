@@ -55,6 +55,11 @@ void CRigidBody::Set_IsLanding(bool _Land)
 	m_tRigid.bIsLanding = _Land;
 }
 
+void CRigidBody::Set_IsBound(bool _Bound)
+{
+	m_tRigid.bIsBoundable = _Bound;
+}
+
 void CRigidBody::Set_fMass(float _Mass)
 {
 	m_tRigid.fMass = _Mass;
@@ -68,6 +73,11 @@ void CRigidBody::Set_fPower(float _Power)
 void CRigidBody::Set_fForce(float _Force)
 {
 	m_tRigid.fForce = _Force;
+}
+
+void CRigidBody::Set_BoundReduce(float _Value)
+{
+	m_tRigid.fBoundReduce = _Value;
 }
 
 void CRigidBody::Set_Speed(D3DXVECTOR3 _Speed)
