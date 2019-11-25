@@ -9,13 +9,6 @@ PigMan|PigMan_Walk_Front|Walk_Front_%d.png|4|..\Texture\Monster\PigMan\PigMan_Wa
 PigMan|PigMan_Walk_Side|Walk_Side_%d.png|4|..\Texture\Monster\PigMan\PigMan_Walk_Side\Walk_Side_%d.png
 PigMan|PigMan_Walk_SideBack|Walk_SideBack_%d.png|4|..\Texture\Monster\PigMan\PigMan_Walk_SideBack\Walk_SideBack_%d.png
 PigMan|PigMan_Walk_SideFront|Walk_SideFront_%d.png|4|..\Texture\Monster\PigMan\PigMan_Walk_SideFront\Walk_SideFront_%d.png
-Object|Blood_Grounded|BloodGrounded_%d.png|6|..\Texture\Object\Blood_Grounded\BloodGrounded_%d.png
-Object|Explosion_Fire_Long|ExplosionFireLong_%d.png|19|..\Texture\Object\Explosion_Fire_Long\ExplosionFireLong_%d.png
-Object|Explosion_Fire_Short_01|ExplosionFireShort_%d.png|1|..\Texture\Object\Explosion_Fire_Short_01\ExplosionFireShort_%d.png
-Object|Explosion_Fire_Short_02|ExplosionFireShort2_%d.png|1|..\Texture\Object\Explosion_Fire_Short_02\ExplosionFireShort2_%d.png
-Object|Explosion_Purple|ExplosionPurple_%d.png|9|..\Texture\Object\Explosion_Purple\ExplosionPurple_%d.png
-Object|Siren|Siren_%d.png|4|..\Texture\Object\Siren\Siren_%d.png
-Object|Water_Errupt|WaterErrupt_%d.png|4|..\Texture\Object\Water_Errupt\WaterErrupt_%d.png
 PickUp|AmmoBox|AmmoBox_%d.png|4|..\Texture\PickUp\AmmoBox\AmmoBox_%d.png
 PickUp|Equip|Equip_%d.png|6|..\Texture\PickUp\Equip\Equip_%d.png
 PickUp|JetPack|JetPack_%d.png|1|..\Texture\PickUp\JetPack\JetPack_%d.png
@@ -39,8 +32,6 @@ Explosion|Explosion_Rocket|Explosion_Rocket_%d.png|18|..\Texture\VFX\Explosion\E
 Explosion|Explosion_Smoke|Explosion_Smoke_%d.png|26|..\Texture\VFX\Explosion\Explosion_Smoke\Explosion_Smoke_%d.png
 Fire|Fire_Big|Fire_Big_%d.png|16|..\Texture\VFX\Fire\Fire_Big\Fire_Big_%d.png
 Fire|Fire_Small|Fire_Small_%d.png|12|..\Texture\VFX\Fire\Fire_Small\Fire_Small_%d.png
-VFX|Fire_Wall_Big|FireWallBig_%d.png|14|..\Texture\VFX\Fire_Wall_Big\FireWallBig_%d.png
-VFX|Fire_Wall_Small|FireWallSmall%d.png|14|..\Texture\VFX\Fire_Wall_Small\FireWallSmall%d.png
 VFX|Flare|Flare_%d.png|1|..\Texture\VFX\Flare\Flare_%d.png
 VFX|Smoke_Big|SmokeBig_%d.png|4|..\Texture\VFX\Smoke_Big\SmokeBig_%d.png
 VFX|Smoke_Gun|Smoke_Gun_%d.png|1|..\Texture\VFX\Smoke_Gun\Smoke_Gun_%d.png
@@ -50,6 +41,7 @@ Bullets|Bullet_Yellow|Bullet_Yellow_%d.png|7|..\Texture\Weapon\Bullets\Bullet_Ye
 Revolver|Revolver_Draw|Revolver_Draw_%d.png|5|..\Texture\Weapon\Revolver\Revolver_Draw\Revolver_Draw_%d.png
 Revolver|Revolver_FaseReady|Revolver_FastReady_%d.png|6|..\Texture\Weapon\Revolver\Revolver_FaseReady\Revolver_FastReady_%d.png
 Revolver|Revolver_Fast|Revolver_Fast_%d.png|8|..\Texture\Weapon\Revolver\Revolver_Fast\Revolver_Fast_%d.png
+Revolver|Revolver_FastEnd|Revolver_FastEnd_%d.png|7|..\Texture\Weapon\Revolver\Revolver_FastEnd\Revolver_FastEnd_%d.png
 Revolver|Revolver_Fire|Revolver_Fire_%d.png|8|..\Texture\Weapon\Revolver\Revolver_Fire\Revolver_Fire_%d.png
 Revolver|Revolver_Idle|Revolver_Idle_%d.png|2|..\Texture\Weapon\Revolver\Revolver_Idle\Revolver_Idle_%d.png
 Revolver|Revolver_Reload|Revolver_Reload_%d.png|43|..\Texture\Weapon\Revolver\Revolver_Reload\Revolver_Reload_%d.png
@@ -67,7 +59,6 @@ SMG|SMG_ZoomFire|SMG_ZoomFire_%d.png|4|..\Texture\Weapon\SMG\SMG_ZoomFire\SMG_Zo
 SMG|SMG_ZoomOut|SMG_ZoomOut_%d.png|5|..\Texture\Weapon\SMG\SMG_ZoomOut\SMG_ZoomOut_%d.png
 No_Animation|dds|skybox_hell.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_hell.dds
 No_Animation|dds|skybox_redSpace.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_redSpace.dds
-No_Animation|dds|skybox_sky.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_sky.dds
 No_Animation|dds|skybox_space.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_space.dds
 No_Animation|dds|skybox_ufo.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_ufo.dds
 No_Animation|1080 x 1080|Tile_HQ_0.dds|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.dds
@@ -783,13 +774,3 @@ No_Animation|HittedCircle|Hitted_UI_M.png|1|..\Texture\UI\No_Animation\HittedCir
 No_Animation|HittedCircle|Hitted_UI_S.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_S.png
 No_Animation|HittedCircle|Hitted_UI_XL.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_XL.png
 No_Animation|HittedCircle|Hitted_UI_XS.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_XS.png
-No_Animation|Number_Blue|Number_Blue_0.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_0.png
-No_Animation|Number_Blue|Number_Blue_1.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_1.png
-No_Animation|Number_Blue|Number_Blue_2.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_2.png
-No_Animation|Number_Blue|Number_Blue_3.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_3.png
-No_Animation|Number_Blue|Number_Blue_4.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_4.png
-No_Animation|Number_Blue|Number_Blue_5.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_5.png
-No_Animation|Number_Blue|Number_Blue_6.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_6.png
-No_Animation|Number_Blue|Number_Blue_7.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_7.png
-No_Animation|Number_Blue|Number_Blue_8.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_8.png
-No_Animation|Number_Blue|Number_Blue_9.png|1|..\Texture\UI\No_Animation\Number_Blue\Number_Blue_9.png
