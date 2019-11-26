@@ -536,6 +536,16 @@ void CCamera::KeyInput()
 		m_pCCamera_Component->Add_EyePos({ 0 , -fMoveSpeed * 0.7f, 0 });
 		m_pCCamera_Component->Add_LookAt({ 0 , -fMoveSpeed * 0.7f, 0 });
 	}
+
+	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+	{
+		m_pCCamera_Component->Set_Right({ 1,0,0 });
+		m_pCCamera_Component->Set_Up({ 0,1,0 });
+		m_pCCamera_Component->Set_Look({ 0,0,1 });
+		m_pCCamera_Component->Set_LookAt({ 0,3,1 });
+
+		m_pCCamera_Component->Set_Distance(5.f);
+	}
 }
 
 int CCamera::Update()

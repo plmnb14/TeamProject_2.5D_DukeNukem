@@ -247,6 +247,57 @@ void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnRButtonDown(nFlags, point);
 
+	if ((GetAsyncKeyState(VK_MENU) & 0x8000) && m_pDeleteCube)
+	{
+		if (m_pSelectCube)
+		{
+			//Safe_Delete(m_pSelectCube);
+			m_pSelectCube->SetDead();
+			m_pSelectCube = nullptr;
+		}
+
+		switch (m_pDeleteCube->GetTerrainType())
+		{
+		case ENGINE::TERRAIN_CUBE:
+			m_pSelectCube = CToolTerrainCube::Create(m_pDeviceMgr->GetDevice());
+			break;
+		case ENGINE::TERRAIN_WALL:
+			m_pSelectCube = CToolTerrainWallCube::Create(m_pDeviceMgr->GetDevice());
+			break;
+		case ENGINE::TERRAIN_RECT:
+			m_pSelectCube = CToolTerrainRect::Create(m_pDeviceMgr->GetDevice());
+			break;
+		}
+
+		ENGINE::CTransform* pTrans = dynamic_cast<ENGINE::CTransform*>(m_pSelectCube->Get_Component(L"Transform"));
+		ENGINE::CTransform* pDelTrans = dynamic_cast<ENGINE::CTransform*>(m_pDeleteCube->Get_Component(L"Transform"));
+		pTrans->SetPos(pDelTrans->GetPos());
+		pTrans->SetAngle(pDelTrans->GetAngle(ENGINE::ANGLE_X), ENGINE::ANGLE_X);
+		pTrans->SetAngle(pDelTrans->GetAngle(ENGINE::ANGLE_Y), ENGINE::ANGLE_Y);
+		pTrans->SetAngle(pDelTrans->GetAngle(ENGINE::ANGLE_Z), ENGINE::ANGLE_Z);
+		pTrans->SetSize(pDelTrans->GetSize());
+		m_pSelectCube->SetClicked(false);
+
+		m_pCubeList.push_back(m_pSelectCube);
+		m_pSelectCube->SetTexName(m_pDeleteCube->GetTexName());
+		m_pSelectCube->ChangeTex();
+		m_pSelectCube->SetObjType(m_pDeleteCube->GetObjType());
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
+		m_pDeleteCube = nullptr;
+
+		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+		NULL_CHECK(pMainFrm);
+
+		CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+		NULL_CHECK(pFormView);
+
+		pFormView->m_strObjectName = m_pSelectCube->GetTexName().c_str();
+		pFormView->m_wstrFileName = m_pSelectCube->GetTexName();
+		pFormView->UpdateData(FALSE);
+
+		return;
+	}
+
 	if (m_pSelectCube)
 	{
 		m_pSelectCube->SetDead();
@@ -481,6 +532,7 @@ void CToolView::Update()
 
 	//if (!CheckGrid())
 	CubeMoveToMouse();
+	CheckDeleteCube();
 
 	CCamera* pCamera = dynamic_cast<CCamera*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_List(ENGINE::CAMERA).front());
 	m_ViewMatrix = pCamera->GetViewMatrix();
@@ -577,6 +629,7 @@ void CToolView::CreateCube(bool _bIsChange)
 {
 	if (_bIsChange && m_pSelectCube)
 	{
+		//Safe_Delete(m_pSelectCube);
 		m_pSelectCube->SetDead();
 		m_pSelectCube = nullptr;
 	}
@@ -646,6 +699,31 @@ void CToolView::DragPicking(float _fPointX, float _fPointY)
 	}
 
 	CView::Invalidate(FALSE); // 화면 갱신
+}
+
+void CToolView::CheckDeleteCube()
+{
+	if (GetAsyncKeyState(VK_MENU) & 0x8000)
+	{
+		bool bCheck = false;
+		// Delete Data
+		auto& iter_DataBegin = m_pCubeList.begin();
+		auto& iter_DataEnd = m_pCubeList.end();
+		for (; iter_DataBegin != iter_DataEnd; iter_DataBegin++)
+		{
+			if ((*iter_DataBegin)->GetPicked())
+			{
+				m_pDeleteCube = *iter_DataBegin;
+				bCheck = true;
+			}
+		}
+
+		if (!bCheck)
+			m_pDeleteCube = nullptr;
+
+	}
+	else
+		m_pDeleteCube = nullptr;
 }
 
 bool CToolView::CheckGrid()

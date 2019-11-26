@@ -30,9 +30,9 @@ CToolTerrain::~CToolTerrain()
 	ENGINE::Safe_Delete(m_myVtxCube);
 }
 
-void CToolTerrain::SetClicked()
+void CToolTerrain::SetClicked(bool _bIsSet)
 {
-	m_bSetted = true;
+	m_bSetted = _bIsSet;
 }
 
 void CToolTerrain::SetFitGrid(bool _bIsFit)
@@ -104,6 +104,12 @@ void CToolTerrain::MouseInput()
 
 		if (!(GetAsyncKeyState(VK_MENU) & 0x8000))
 			return;
+
+		if (pView->m_pDeleteCube)
+		{
+			if (pView->m_pDeleteCube != this)
+				return;
+		}
 
 		// 마우스 호버 시, 알 수 있도록 함.
 		D3DXVECTOR3 vPos;
