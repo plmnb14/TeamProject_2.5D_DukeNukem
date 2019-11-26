@@ -130,7 +130,7 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_SpecialAttack(true);
 	m_pCondition->Set_Slide(false);
 	m_pCondition->Set_Run(false);
-	m_pCondition->Set_MoveSpeed(10.f);
+	m_pCondition->Set_MoveSpeed(15.f);
 	m_pCondition->Set_MoveAccel(1.f);
 	
 	
@@ -350,7 +350,7 @@ void CPlayer::KeyInput()
 		{
 			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				cout << "Revolver already selected" << endl;
+				//cout << "Revolver already selected" << endl;
 
 				return;
 			}
