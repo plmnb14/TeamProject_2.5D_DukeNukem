@@ -7,6 +7,7 @@
 class CSoundMgr
 {
 	DECLARE_SINGLETON(CSoundMgr)
+
 public:
 	enum CHANNELID{BGM, PLAYER, MONSTER, WEAPON, EFFECT, UI, MAXCHANNEL};
 private:

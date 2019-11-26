@@ -8,6 +8,7 @@
 #include "CameraObserver.h"
 #include "RigidBody.h"
 #include "Condition.h"
+#include "SoundMgr.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -34,8 +35,6 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
-	cout << m_eActState << endl;
-
 	if (m_bIsDead)
 		return DEAD_OBJ;
 	
@@ -76,7 +75,7 @@ HRESULT CPlayer::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 	
 	// Æ®·£½ºÆû ¼¼ÆÃ
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 35.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 35.f, 5.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
 	
 	
@@ -133,7 +132,7 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_SpecialAttack(true);
 	m_pCondition->Set_Slide(false);
 	m_pCondition->Set_Run(false);
-	m_pCondition->Set_MoveSpeed(10.f);
+	m_pCondition->Set_MoveSpeed(15.f);
 	m_pCondition->Set_MoveAccel(1.f);
 	
 	
@@ -242,14 +241,14 @@ void CPlayer::KeyInput()
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LSHIFT))
 	{
 		m_pCondition->Set_Run(true);
-		m_pCondition->Set_MoveSpeed(16.f);
+		m_pCondition->Set_MoveSpeed(20.f);
 	}
 
 	else if (m_pKeyMgr->KeyUp(ENGINE::KEY_LSHIFT))
 	{
 		m_pCondition->Set_Run(false);
 	
-		m_pCondition->Set_MoveSpeed(10.f);
+		m_pCondition->Set_MoveSpeed(15.f);
 		D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
 		dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 	}
@@ -555,6 +554,30 @@ void CPlayer::Shoot()
 				m_eActState = W_ZOOMFIRE;
 		}
 
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 0.5f);
+
+		int iSound = rand() % 4;
+
+		switch (iSound)
+		{
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+
+		case 0:
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR1.wav", CSoundMgr::WEAPON);
+			break;
+		case 1:
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR2.wav", CSoundMgr::WEAPON);
+			break;
+		case 2:
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR3.wav", CSoundMgr::WEAPON);
+			break;
+		case 4:
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR4.wav", CSoundMgr::WEAPON);
+			break;
+		}
+
+
 		m_pCondition->Set_RangeAttack(true);
 
 		int xSpread = m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2);
@@ -615,8 +638,12 @@ void CPlayer::Shoot()
 		}
 	}
 
-	if (m_pWInfo.wMagazineBullet <= 0)
+	else if (m_pWInfo.wMagazineBullet <= 0)
 	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"REVCLK1.wav", CSoundMgr::PLAYER);
+
 		m_pCondition->Set_RangeAttack(false);
 
 		if (m_bSpecial == false)
@@ -1051,7 +1078,6 @@ void CPlayer::Zoom()
 	if (m_pKeyMgr->KeyUp(ENGINE::KEY_RBUTTON))
 	{
 		m_bZoom = false;
-		cout << "ÁÜ Ç®¸²" << endl;
 	}
 
 

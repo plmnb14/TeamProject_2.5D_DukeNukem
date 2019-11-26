@@ -148,6 +148,12 @@
     <Filter Include="97.SoundMgr">
       <UniqueIdentifier>{039d59e9-8395-49cd-9264-d9c4925c6b2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\05. Fireball">
+      <UniqueIdentifier>{3d51311d-2a62-4005-8f4f-7b47ea1dfd01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\06. Firewall">
+      <UniqueIdentifier>{8291c120-fef1-4a43-a37d-3bea1db6c87a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -295,6 +301,12 @@
     <ClInclude Include="..\Codes\SoundMgr.h">
       <Filter>97.SoundMgr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Effect_Firewall.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\06. Firewall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Effect_Fireball.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\05. Fireball</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -417,6 +429,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\SoundMgr.cpp">
       <Filter>97.SoundMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Firewall.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\06. Firewall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Fireball.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\05. Fireball</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -54,7 +54,6 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 
 			if(Check_AABB_to_PLANE(rDst, rSrc , rDstCol , rSrcCol))
 			{
-				cout << "진짜 겹친다고!" << endl;
 				rSrcCol->Set_IsCollision(true);
  				//rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				//rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
@@ -230,8 +229,6 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 				rDstCol->Set_IsCollision(true);
 				rDst->Set_Tag(rSrc->Get_Tag());
 				rDst->SetDead();
-
-				cout << "충돌" << endl;
 				continue;
 			}
 		}
@@ -744,19 +741,19 @@ bool CCollisionMgr::Check_AABB_to_PLANE(ENGINE::CGameObject* rDst, ENGINE::CGame
 	
 	if (D3DXPlaneDotCoord(&tmpPlane, &tmpMin) < 0)
 	{
-		cout << " 뒤에 있어" << endl;
+		//cout << " 뒤에 있어" << endl;
 		return false;
 	}
 	
 	else if (D3DXPlaneDotCoord(&tmpPlane, &tmpMax) > 0)
 	{
-		cout << " 앞에 있어" << endl;
+		//cout << " 앞에 있어" << endl;
 		return false;
 	}
 
 	else
 	{
-		cout << "겹 친다" << endl;
+		//cout << "겹 친다" << endl;
 		return true;
 	}
 
@@ -954,10 +951,6 @@ D3DXVECTOR3 CCollisionMgr::Get_Length_Bullet(ENGINE::CGameObject * rDst, ENGINE:
 	vCross.x = vMax.x - vMin.x;
 	vCross.y = vMax.y - vMin.y;
 	vCross.z = vMax.z - vMin.z;
-
-	cout << vCross.x << endl;
-	cout << vCross.y << endl;
-	cout << vCross.z << endl;
 
 	if (fabs(vCross.x) == fabs(vCross.y) &&
 		fabs(vCross.y) == fabs(vCross.z) &&

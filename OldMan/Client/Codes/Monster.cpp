@@ -549,7 +549,7 @@ void CMonster::Monster_State_Set()
 }
 
 
-CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev,D3DXVECTOR3 _Pos ,CGameObject* _Target)
+CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev ,CGameObject* _Target)
 {
 
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);

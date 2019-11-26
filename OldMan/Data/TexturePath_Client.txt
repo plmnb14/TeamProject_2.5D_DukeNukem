@@ -35,6 +35,17 @@ VFX|Smoke_Gun|Smoke_Gun_%d.png|1|..\Texture\VFX\Smoke_Gun\Smoke_Gun_%d.png
 VFX|Smoke_Small|SmokeSmall_%d.png|4|..\Texture\VFX\Smoke_Small\SmokeSmall_%d.png
 Bullets|Bullet_Rocket|Bullet_Rocket_%d.png|8|..\Texture\Weapon\Bullets\Bullet_Rocket\Bullet_Rocket_%d.png
 Bullets|Bullet_Yellow|Bullet_Yellow_%d.png|7|..\Texture\Weapon\Bullets\Bullet_Yellow\Bullet_Yellow_%d.png
+PumpShot|PumpShot_Draw|PumpShot_Draw_%d.png|6|..\Texture\Weapon\PumpShot\PumpShot_Draw\PumpShot_Draw_%d.png
+PumpShot|PumpShot_Fire|PumpShot_Fire_%d.png|7|..\Texture\Weapon\PumpShot\PumpShot_Fire\PumpShot_Fire_%d.png
+PumpShot|PumpShot_Idle|PumpShot_Idle_%d.png|2|..\Texture\Weapon\PumpShot\PumpShot_Idle\PumpShot_Idle_%d.png
+PumpShot|PumpShot_PumpIn|PumpShot_PumpIn_%d.png|13|..\Texture\Weapon\PumpShot\PumpShot_PumpIn\PumpShot_PumpIn_%d.png
+PumpShot|PumpShot_PumpOut|PumpShot_PumpOut_%d.png|12|..\Texture\Weapon\PumpShot\PumpShot_PumpOut\PumpShot_PumpOut_%d.png
+PumpShot|PumpShot_Reload|PumpShot_Reload_%d.png|7|..\Texture\Weapon\PumpShot\PumpShot_Reload\PumpShot_Reload_%d.png
+PumpShot|PumpShot_ZoomFire|PumpShot_ZoomFire_%d.png|5|..\Texture\Weapon\PumpShot\PumpShot_ZoomFire\PumpShot_ZoomFire_%d.png
+PumpShot|PumpShot_ZoomIn|PumpShot_ZoomIn_%d.png|5|..\Texture\Weapon\PumpShot\PumpShot_ZoomIn\PumpShot_ZoomIn_%d.png
+PumpShot|PumpShot_ZoomOut|PumpShot_ZoomOut_%d.png|5|..\Texture\Weapon\PumpShot\PumpShot_ZoomOut\PumpShot_ZoomOut_%d.png
+PumpShot|PumpShot_ZoomPumpIn|PumpShot_ZoomPumpIn_%d.png|11|..\Texture\Weapon\PumpShot\PumpShot_ZoomPumpIn\PumpShot_ZoomPumpIn_%d.png
+PumpShot|PumpShot_ZoomPumpOut|PumpShot_ZoomPumpOut_%d.png|11|..\Texture\Weapon\PumpShot\PumpShot_ZoomPumpOut\PumpShot_ZoomPumpOut_%d.png
 Revolver|Revolver_Draw|Revolver_Draw_%d.png|5|..\Texture\Weapon\Revolver\Revolver_Draw\Revolver_Draw_%d.png
 Revolver|Revolver_FaseReady|Revolver_FastReady_%d.png|6|..\Texture\Weapon\Revolver\Revolver_FaseReady\Revolver_FastReady_%d.png
 Revolver|Revolver_Fast|Revolver_Fast_%d.png|8|..\Texture\Weapon\Revolver\Revolver_Fast\Revolver_Fast_%d.png
@@ -44,7 +55,10 @@ Revolver|Revolver_Idle|Revolver_Idle_%d.png|2|..\Texture\Weapon\Revolver\Revolve
 Revolver|Revolver_Reload|Revolver_Reload_%d.png|43|..\Texture\Weapon\Revolver\Revolver_Reload\Revolver_Reload_%d.png
 Weapon|Rocket|Rocket_%d.png|7|..\Texture\Weapon\Rocket\Rocket_%d.png
 RocketLuncher|RocketLuncher_Draw|RocketLuncher_Draw_%d.png|13|..\Texture\Weapon\RocketLuncher\RocketLuncher_Draw\RocketLuncher_Draw_%d.png
-RocketLuncher|RocketLuncher_Fire|RocketLuncher_Fire_%d.png|10|..\Texture\Weapon\RocketLuncher\RocketLuncher_Fire\RocketLuncher_Fire_%d.png
+RocketLuncher|RocketLuncher_Fire|RocketLuncher_Fire_%d.png|9|..\Texture\Weapon\RocketLuncher\RocketLuncher_Fire\RocketLuncher_Fire_%d.png
+RocketLuncher|RocketLuncher_Idle|RocketLuncher_Idle_%d.png|2|..\Texture\Weapon\RocketLuncher\RocketLuncher_Idle\RocketLuncher_Idle_%d.png
+RocketLuncher|RocketLuncher_Idle_Delay|RocketLuncher_Idle_Delay_%d.png|2|..\Texture\Weapon\RocketLuncher\RocketLuncher_Idle_Delay\RocketLuncher_Idle_Delay_%d.png
+RocketLuncher|RocketLuncher_NoAmmo|RocketLuncher_NoAmmo_%d.png|2|..\Texture\Weapon\RocketLuncher\RocketLuncher_NoAmmo\RocketLuncher_NoAmmo_%d.png
 RocketLuncher|RocketLuncher_Reload|RocketLuncher_Reload_%d.png|30|..\Texture\Weapon\RocketLuncher\RocketLuncher_Reload\RocketLuncher_Reload_%d.png
 SMG|SMG_Draw|SMG_Draw_%d.png|5|..\Texture\Weapon\SMG\SMG_Draw\SMG_Draw_%d.png
 SMG|SMG_Fire|SMG_Fire_%d.png|4|..\Texture\Weapon\SMG\SMG_Fire\SMG_Fire_%d.png
@@ -63,7 +77,6 @@ No_Animation|Pack|Pack_1.png|1|..\Texture\PickUp\No_Animation\Pack\Pack_1.png
 No_Animation|Pack|Pack_2.png|1|..\Texture\PickUp\No_Animation\Pack\Pack_2.png
 No_Animation|dds|skybox_hell.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_hell.dds
 No_Animation|dds|skybox_redSpace.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_redSpace.dds
-No_Animation|dds|skybox_sky.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_sky.dds
 No_Animation|dds|skybox_space.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_space.dds
 No_Animation|dds|skybox_ufo.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_ufo.dds
 No_Animation|1080 x 1080|Tile_HQ_0.dds|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.dds
@@ -753,20 +766,6 @@ No_Animation|64 x 64|Tile64x64_6.png|1|..\Texture\Tiles\No_Animation\64 x 64\Til
 No_Animation|64 x 64|Tile64x64_7.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_7.png
 No_Animation|64 x 64|Tile64x64_8.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_8.png
 No_Animation|64 x 64|Tile64x64_9.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_9.png
-No_Animation|Aim|AimHitMark_L.png|1|..\Texture\UI\No_Animation\Aim\AimHitMark_L.png
-No_Animation|Aim|AimHitMark_S.png|1|..\Texture\UI\No_Animation\Aim\AimHitMark_S.png
-No_Animation|Aim|Aim_1.png|1|..\Texture\UI\No_Animation\Aim\Aim_1.png
-No_Animation|Aim|Aim_2.png|1|..\Texture\UI\No_Animation\Aim\Aim_2.png
-No_Animation|Aim|Aim_3.png|1|..\Texture\UI\No_Animation\Aim\Aim_3.png
-No_Animation|Aim|Aim_dot.png|1|..\Texture\UI\No_Animation\Aim\Aim_dot.png
-No_Animation|Aim|LuncherAim.png|1|..\Texture\UI\No_Animation\Aim\LuncherAim.png
-No_Animation|Aim|RifleAim_h.png|1|..\Texture\UI\No_Animation\Aim\RifleAim_h.png
-No_Animation|Aim|RifleAim_v.png|1|..\Texture\UI\No_Animation\Aim\RifleAim_v.png
-No_Animation|Aim|ScopeAim.png|1|..\Texture\UI\No_Animation\Aim\ScopeAim.png
-No_Animation|Aim|ShotgunAim.png|1|..\Texture\UI\No_Animation\Aim\ShotgunAim.png
-No_Animation|Aim|ShotgunAim_Bottom.png|1|..\Texture\UI\No_Animation\Aim\ShotgunAim_Bottom.png
-No_Animation|Aim|ShotgunAim_Left.png|1|..\Texture\UI\No_Animation\Aim\ShotgunAim_Left.png
-No_Animation|Aim|ShotgunAim_Right.png|1|..\Texture\UI\No_Animation\Aim\ShotgunAim_Right.png
 No_Animation|Arrow|Arrow_0.png|1|..\Texture\UI\No_Animation\Arrow\Arrow_0.png
 No_Animation|ETC|ArmorIcon.png|1|..\Texture\UI\No_Animation\ETC\ArmorIcon.png
 No_Animation|ETC|HpIcon.png|1|..\Texture\UI\No_Animation\ETC\HpIcon.png

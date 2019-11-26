@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Condition.h"
 #include "Animator.h"
+#include "SoundMgr.h"
 
 CPlayer_Hand::CPlayer_Hand(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
@@ -282,6 +283,31 @@ void CPlayer_Hand::Weapon_Revolver()
 			m_pAnimator->Set_Frame(0);
 		}
 
+		if (m_pAnimator->Get_Frame() == 4)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOOPEN.wav", CSoundMgr::EFFECT);
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::EFFECT, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::EFFECT);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CYLNSPIN.wav", CSoundMgr::EFFECT);
+		}
+
+		if (m_pAnimator->Get_Frame() == 25)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::EFFECT, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::EFFECT);
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOLOAD.wav", CSoundMgr::EFFECT);
+		}
+
+		if (m_pAnimator->Get_Frame() == 32)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOUP.wav", CSoundMgr::MONSTER);
+		}
+
 		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 		m_pAnimator->Set_FrameAmp(30.f);
 		ChangeTex(L"Revolver_Reload");
@@ -526,8 +552,6 @@ void CPlayer_Hand::Weapon_Shotgun()
 
 	case CPlayer::W_FIRE:
 	{
-		cout << "АјАн Сп" << endl;
-
 		m_pAnimator->Stop_Animation(false);
 		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
 		m_pAnimator->Set_FrameAmp(30.f);

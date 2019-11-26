@@ -73,6 +73,8 @@ namespace ENGINE
 		VFX_HIT,
 		PROPS,
 		WEAPON,
+		PICKUP,
+		EQUIPMENT,
 		TRIGGER,
 		VFX,
 		CAMERA,
