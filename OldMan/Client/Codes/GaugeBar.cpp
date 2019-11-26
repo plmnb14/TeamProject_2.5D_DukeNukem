@@ -24,10 +24,10 @@ int CGaugeBar::Update()
 	switch (m_eBarType)
 	{
 	case CGaugeBar::BAR_HP:
-		m_fHP = m_pPlayerObserver->GetPlayerInfo().fHitPoint;
+		m_fHP = m_pPlayerObserver->GetPlayerInfo().fHp;
 		break;
 	case CGaugeBar::BAR_SHIELD:
-		m_fShield = m_pPlayerObserver->GetPlayerInfo().fShieldPoint;
+		m_fShield = m_pPlayerObserver->GetPlayerInfo().fArmor;
 		break;
 	case CGaugeBar::BAR_END:
 		break;
@@ -77,12 +77,6 @@ HRESULT CGaugeBar::Initialize()
 
 	m_iBarMaxCount = 10;
 	m_iBarCurCount = m_iBarMaxCount;
-
-	// 임시
-	m_iTestMaxHP = 100;
-	m_iTestHP = m_iTestMaxHP;
-	m_iTestMaxShield = 100;
-	m_iTestShield = m_iTestMaxShield;
 
 	return S_OK;
 }
@@ -156,12 +150,6 @@ void CGaugeBar::InitBar()
 
 void CGaugeBar::UpdateBar()
 {
-	// 임시 코드
-	if (ENGINE::CKeyMgr::GetInstance()->KeyPressing(ENGINE::KEY_Q))
-		m_iTestHP -= 1;
-	if (ENGINE::CKeyMgr::GetInstance()->KeyPressing(ENGINE::KEY_E))
-		m_iTestShield -= 1;
-
 	// Init Bar Visible
 	for (int i = 0; i < m_iBarMaxCount; i++)
 		m_vecBarUI[i]->SetVisible(true);
@@ -170,18 +158,20 @@ void CGaugeBar::UpdateBar()
 	{
 	case CGaugeBar::BAR_HP:
 	{
-		int iIdx = m_iTestHP / m_iBarMaxCount;
-		if (m_iTestHP < 0) iIdx = 0;
-		if (m_iTestHP > 0 && m_iTestHP < 10) iIdx = 1;
+		int iIdx = (int)m_fHP / m_iBarMaxCount;
+		if (m_fHP < 0) iIdx = 0;
+		if (iIdx > 10) iIdx = 10;
+		if (m_fHP > 0 && m_fHP < 10) iIdx = 1;
 		for (int i = 0; i < m_iBarMaxCount - iIdx; i++)
 			m_vecBarUI[m_iBarMaxCount - 1- i]->SetVisible(false);
 		break;
 	}
 	case CGaugeBar::BAR_SHIELD:
 	{
-		int iIdx = m_iTestShield / m_iBarMaxCount;
-		if (m_iTestShield < 0) iIdx = 0;
-		if (m_iTestShield > 0 && m_iTestShield < 10) iIdx = 1;
+		int iIdx = (int)m_fShield / m_iBarMaxCount;
+		if (m_fShield < 0) iIdx = 0;
+		if (iIdx > 10) iIdx = 10;
+		if (m_fShield > 0 && m_fShield < 10) iIdx = 1;
 		for (int i = 0; i < m_iBarMaxCount - iIdx; i++)
 			m_vecBarUI[m_iBarMaxCount - 1 - i]->SetVisible(false);
 		break;

@@ -102,7 +102,7 @@ void CToolTerrain::MouseInput()
 		//if (pFormView->m_bIsOnDlg)
 		//	return;
 
-		if (!(GetAsyncKeyState(VK_MENU) & 0x8000))
+		if (!pView->m_bIsEraseMode)
 			return;
 
 		if (pView->m_pDeleteCube)

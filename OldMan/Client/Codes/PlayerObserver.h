@@ -18,7 +18,7 @@ public:
 	virtual ~CPlayerObserver();
 
 public:
-	const ENGINE::ABILITY GetPlayerInfo() const;
+	const ENGINE::CONDITION GetPlayerInfo() const;
 	const ENGINE::W_INFO  GetWeaponInfo() const;
 
 public:
@@ -29,7 +29,7 @@ public:
 
 private:
 	ENGINE::CPlayerSubject*	m_pSubject;
-	ENGINE::ABILITY			m_tInfo;
+	ENGINE::CONDITION		m_tInfo;
 	ENGINE::W_INFO			m_tWeaponInfo;
 };
 

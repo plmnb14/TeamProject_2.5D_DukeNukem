@@ -139,7 +139,7 @@ HRESULT CPlayer::Initialize()
 	m_fMaxZoom		= 70;
 	m_fMinZoom		= 20;
 	
-	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &m_pCondition);
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(*m_pCondition));
 	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
 	m_pWInfo.wCurBullet = 0;
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
@@ -524,7 +524,8 @@ void CPlayer::Check_Physic()
 
 void CPlayer::UpdateObserverData()
 {
-	// Update Observer Data
+	// Update Observer 
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(*m_pCondition));
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
 }
 

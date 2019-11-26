@@ -145,6 +145,9 @@
     <Filter Include="02.GameObject\08.PickupItem">
       <UniqueIdentifier>{da40d98d-34ca-4122-a276-276eff6341cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97.SoundMgr">
+      <UniqueIdentifier>{039d59e9-8395-49cd-9264-d9c4925c6b2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -289,6 +292,9 @@
     <ClInclude Include="..\Codes\PickupItem.h">
       <Filter>02.GameObject\08.PickupItem</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\SoundMgr.h">
+      <Filter>97.SoundMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -408,6 +414,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\PickupItem.cpp">
       <Filter>02.GameObject\08.PickupItem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SoundMgr.cpp">
+      <Filter>97.SoundMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

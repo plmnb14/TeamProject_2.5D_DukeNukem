@@ -22,24 +22,16 @@ int CNumber::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 
-	// 임시 코드
-	if (ENGINE::CKeyMgr::GetInstance()->KeyPressing(ENGINE::KEY_Q))
-		if(m_iTestHP > 0) m_iTestHP -= 1;
-	if (ENGINE::CKeyMgr::GetInstance()->KeyPressing(ENGINE::KEY_E))
-		if (m_iTestShield > 0) m_iTestShield -= 1;
-
 	switch (m_eNumberType)
 	{
 	case CNumber::NUMBER_HP:
 	{
-		//GetNumberArr((int)m_pPlayerObserver->GetPlayerInfo().fHitPoint, m_iNumArr, m_iArrCount);
-		GetNumberArr(m_iTestHP, m_iNumArr, m_iArrCount);
+		GetNumberArr((int)m_pPlayerObserver->GetPlayerInfo().fHp, m_iNumArr, m_iArrCount);
 		break;
 	}
 	case CNumber::NUMBER_SHIELD:
 	{
-		//GetNumberArr((int)m_pPlayerObserver->GetPlayerInfo().fShieldPoint, m_iNumArr, m_iArrCount);
-		GetNumberArr(m_iTestShield, m_iNumArr, m_iArrCount);
+		GetNumberArr((int)m_pPlayerObserver->GetPlayerInfo().fArmor, m_iNumArr, m_iArrCount);
 		break;
 	}
 	case CNumber::NUMBER_BULLET:
@@ -51,9 +43,6 @@ int CNumber::Update()
 			m_iMaxBullet = m_pPlayerObserver->GetWeaponInfo().wMagazineBullet;
 			GetNumberArr(m_iCurBullet, m_iNumArr, m_iArrCount, m_iMaxBullet);
 		}
-
-		//GetNumberArr(m_pPlayerObserver->GetWeaponInfo().wMagazineBullet, m_iNumArr, m_iArrCount);
-		// Release 했을 때 이 부분에서 자꾸터져서, 임시방편으로 저렇게 해둠
 		break;
 	}
 	case CNumber::NUMBER_END:
@@ -99,12 +88,6 @@ HRESULT CNumber::Initialize()
 
 	m_fSizeX = 50.f;
 	m_fSizeY = 50.f;
-
-	// 임시
-	m_iTestMaxHP = 100;
-	m_iTestHP = m_iTestMaxHP;
-	m_iTestMaxShield = 100;
-	m_iTestShield = m_iTestMaxShield;
 
 	return S_OK;
 }

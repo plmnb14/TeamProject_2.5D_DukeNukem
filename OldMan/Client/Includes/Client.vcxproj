@@ -184,6 +184,7 @@
     <ClInclude Include="..\Codes\Raycast.h" />
     <ClInclude Include="..\Codes\SceneSelector.h" />
     <ClInclude Include="..\Codes\Skybox.h" />
+    <ClInclude Include="..\Codes\SoundMgr.h" />
     <ClInclude Include="..\Codes\Stage.h" />
     <ClInclude Include="..\Codes\Terrain.h" />
     <ClInclude Include="..\Codes\TerrainCube.h" />
@@ -238,6 +239,7 @@
     <ClCompile Include="..\Codes\Player_Hand.cpp" />
     <ClCompile Include="..\Codes\Raycast.cpp" />
     <ClCompile Include="..\Codes\Skybox.cpp" />
+    <ClCompile Include="..\Codes\SoundMgr.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainCube.cpp" />

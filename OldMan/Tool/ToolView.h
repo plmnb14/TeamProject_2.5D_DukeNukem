@@ -88,6 +88,8 @@ public:
 	D3DXMATRIX m_ViewMatrix;
 	D3DXMATRIX m_ProjMatrix;
 
+	bool m_bIsEraseMode;
+
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전
