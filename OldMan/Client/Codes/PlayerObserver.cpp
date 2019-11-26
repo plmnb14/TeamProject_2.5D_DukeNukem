@@ -10,7 +10,7 @@ CPlayerObserver::~CPlayerObserver()
 {
 }
 
-const ENGINE::ABILITY CPlayerObserver::GetPlayerInfo() const
+const ENGINE::CONDITION CPlayerObserver::GetPlayerInfo() const
 {
 	// TODO: 여기에 반환 구문을 삽입합니다.
 	return m_tInfo;
@@ -30,7 +30,7 @@ void CPlayerObserver::Update(int iMessage)
 	switch (iMessage)
 	{
 	case ENGINE::CPlayerSubject::PLAYER_INFO:
-		m_tInfo = *reinterpret_cast<ENGINE::ABILITY*>(pData);
+		m_tInfo = *reinterpret_cast<ENGINE::CONDITION*>(pData);
 		break;
 	case ENGINE::CPlayerSubject::WEAPON_INFO:
 		m_tWeaponInfo = *reinterpret_cast<ENGINE::W_INFO*>(pData);

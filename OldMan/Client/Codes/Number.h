@@ -53,12 +53,6 @@ private:
 
 	int m_iCurBullet;
 	int m_iMaxBullet;
-
-
-	int m_iTestMaxHP;
-	int m_iTestHP;
-	int m_iTestMaxShield;
-	int m_iTestShield;
 };
 
 #define __NUMBER_H__

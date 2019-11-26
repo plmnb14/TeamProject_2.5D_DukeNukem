@@ -31,7 +31,7 @@ public:
 	 bool GetPicked();
 
 public:
-	void SetClicked();
+	void SetClicked(bool _bIsSet = true);
 	void SetFitGrid(bool _bIsFit);
 	void SetFitX(bool _bIsFit);
 	void SetTexName(wstring _wstrTex);

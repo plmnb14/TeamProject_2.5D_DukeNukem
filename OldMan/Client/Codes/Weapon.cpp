@@ -62,6 +62,8 @@ HRESULT CWeapon::LateInit()
 
 void CWeapon::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 CWeapon* CWeapon::Create(LPDIRECT3DDEVICE9 pGraphicDev)

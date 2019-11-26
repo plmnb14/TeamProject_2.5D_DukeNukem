@@ -142,7 +142,7 @@ HRESULT CPlayer::Initialize()
 	m_fMaxZoom		= 70;
 	m_fMinZoom		= 20;
 	
-	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &m_pCondition);
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(*m_pCondition));
 	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
 	m_pWInfo.wCurBullet = 0;
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
@@ -531,7 +531,8 @@ void CPlayer::Check_Physic()
 
 void CPlayer::UpdateObserverData()
 {
-	// Update Observer Data
+	// Update Observer 
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(*m_pCondition));
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
 }
 
@@ -1072,6 +1073,11 @@ void CPlayer::Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo)
 
 	else
 		m_mWeaponInfo[_WeaponInfo->eWeaponTag]->wCurBullet += _WeaponInfo->wCurBullet;
+}
+
+void CPlayer::Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO * _WeaponInfo)
+{
+	m_mWeaponInfo[_eTag] = _WeaponInfo;
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)

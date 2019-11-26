@@ -9,10 +9,7 @@ PigMan|PigMan_Walk_Front|Walk_Front_%d.png|4|..\Texture\Monster\PigMan\PigMan_Wa
 PigMan|PigMan_Walk_Side|Walk_Side_%d.png|4|..\Texture\Monster\PigMan\PigMan_Walk_Side\Walk_Side_%d.png
 PigMan|PigMan_Walk_SideBack|Walk_SideBack_%d.png|4|..\Texture\Monster\PigMan\PigMan_Walk_SideBack\Walk_SideBack_%d.png
 PigMan|PigMan_Walk_SideFront|Walk_SideFront_%d.png|4|..\Texture\Monster\PigMan\PigMan_Walk_SideFront\Walk_SideFront_%d.png
-PickUp|AmmoBox|AmmoBox_%d.png|4|..\Texture\PickUp\AmmoBox\AmmoBox_%d.png
 PickUp|Equip|Equip_%d.png|6|..\Texture\PickUp\Equip\Equip_%d.png
-PickUp|JetPack|JetPack_%d.png|1|..\Texture\PickUp\JetPack\JetPack_%d.png
-PickUp|Pack|Pack_1.png|2|..\Texture\PickUp\Pack\Pack_1.png
 Texture|Terrain|Height.bmp|2|..\Texture\Terrain\Height.bmp
 Animation|Lava|Lava_%d.png|6|..\Texture\Tiles\Animation\Lava\Lava_%d.png
 Animation|Screen_Broke|ScreenBroke_%d.png|3|..\Texture\Tiles\Animation\Screen_Broke\ScreenBroke_%d.png
@@ -57,8 +54,16 @@ SMG|SMG_Reload|SMG_Reload_%d.png|40|..\Texture\Weapon\SMG\SMG_Reload\SMG_Reload_
 SMG|SMG_Zoom|SMG_Zoom_%d.png|5|..\Texture\Weapon\SMG\SMG_Zoom\SMG_Zoom_%d.png
 SMG|SMG_ZoomFire|SMG_ZoomFire_%d.png|4|..\Texture\Weapon\SMG\SMG_ZoomFire\SMG_ZoomFire_%d.png
 SMG|SMG_ZoomOut|SMG_ZoomOut_%d.png|5|..\Texture\Weapon\SMG\SMG_ZoomOut\SMG_ZoomOut_%d.png
+No_Animation|AmmoBox|AmmoBox_0.png|1|..\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_0.png
+No_Animation|AmmoBox|AmmoBox_1.png|1|..\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_1.png
+No_Animation|AmmoBox|AmmoBox_2.png|1|..\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_2.png
+No_Animation|AmmoBox|AmmoBox_3.png|1|..\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_3.png
+No_Animation|JetPack|JetPack_0.png|1|..\Texture\PickUp\No_Animation\JetPack\JetPack_0.png
+No_Animation|Pack|Pack_1.png|1|..\Texture\PickUp\No_Animation\Pack\Pack_1.png
+No_Animation|Pack|Pack_2.png|1|..\Texture\PickUp\No_Animation\Pack\Pack_2.png
 No_Animation|dds|skybox_hell.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_hell.dds
 No_Animation|dds|skybox_redSpace.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_redSpace.dds
+No_Animation|dds|skybox_sky.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_sky.dds
 No_Animation|dds|skybox_space.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_space.dds
 No_Animation|dds|skybox_ufo.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_ufo.dds
 No_Animation|1080 x 1080|Tile_HQ_0.dds|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.dds
