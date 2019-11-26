@@ -75,6 +75,7 @@ private:
 
 public:
 	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
+	void Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO* _WeaponInfo);
 	void Set_SpecialShot(bool _Special) { m_bSpecial = _Special; }
 
 public:
@@ -82,6 +83,7 @@ public:
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
 	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
+	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { return m_mWeaponInfo[_eTag]; }
 	ENGINE::WEAPON_TAG	Get_WState() { return m_eWeaponState; }
 
 public:

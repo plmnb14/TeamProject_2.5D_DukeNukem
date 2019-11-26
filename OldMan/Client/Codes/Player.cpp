@@ -1050,6 +1050,11 @@ void CPlayer::Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo)
 		m_mWeaponInfo[_WeaponInfo->eWeaponTag]->wCurBullet += _WeaponInfo->wCurBullet;
 }
 
+void CPlayer::Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO * _WeaponInfo)
+{
+	m_mWeaponInfo[_eTag] = _WeaponInfo;
+}
+
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);

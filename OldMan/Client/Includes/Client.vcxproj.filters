@@ -142,6 +142,9 @@
     <Filter Include="02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket">
       <UniqueIdentifier>{da2e04ad-d2eb-464f-a7ca-2b4a68b9b252}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\08.PickupItem">
+      <UniqueIdentifier>{da40d98d-34ca-4122-a276-276eff6341cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -283,6 +286,9 @@
     <ClInclude Include="..\Codes\Effect_Explosion_Rocket.h">
       <Filter>02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\PickupItem.h">
+      <Filter>02.GameObject\08.PickupItem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -399,6 +405,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Explosion_Rocket.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PickupItem.cpp">
+      <Filter>02.GameObject\08.PickupItem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

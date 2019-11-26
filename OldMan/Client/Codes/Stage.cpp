@@ -12,6 +12,7 @@
 #include "Elevator.h"
 #include "Skybox.h"
 #include "Trigger.h"
+#include "PickupItem.h"
 
 #include "Camera.h"
 #include "Monster.h"
@@ -101,29 +102,29 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
-	// Revolver
-	pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{ -7,2,8 });
-	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
-	
-	// SMG
-	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -5,2,8 });
-	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
-	
-	// PumpShotgun
-	pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,8 });
-	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
-	
-	// RocketLuncher
-	pObject = CWeapon_Rocket::Create(m_pGraphicDev, D3DXVECTOR3{ -1,2,8 });
-	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
+	//// Revolver
+	//pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{ -7,2,8 });
+	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
+	//
+	//// SMG
+	//pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -5,2,8 });
+	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
+	//
+	//// PumpShotgun
+	//pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,8 });
+	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
+	//
+	//// RocketLuncher
+	//pObject = CWeapon_Rocket::Create(m_pGraphicDev, D3DXVECTOR3{ -1,2,8 });
+	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 	
 	////// Monster
 	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -453,6 +454,8 @@ void CStage::LoadMapObj()
 		{
 			CElevator* pElevator = CElevator::Create(ENGINE::GetGraphicDev()->GetDevice());
 			pElevator->ChangeTex(szName);
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 			pObject = pElevator;
 			pElevator = nullptr;
 		}
@@ -460,6 +463,8 @@ void CStage::LoadMapObj()
 		{
 			CDoor* pDoor = CDoor::Create(ENGINE::GetGraphicDev()->GetDevice());
 			pDoor->ChangeTex(szName);
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 			pObject = pDoor;
 			pDoor = nullptr;
 		}
@@ -469,7 +474,7 @@ void CStage::LoadMapObj()
 			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
-		//Trigger
+		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{
 			CTrigger* pTrigger = nullptr;
@@ -478,11 +483,64 @@ void CStage::LoadMapObj()
 			pObject = pTrigger;
 			pTrigger = nullptr;
 		}
+		// Weapon
+		else if (!lstrcmp(szType, L"Waepon_0"))
+		{
+			pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{0, 0, 0});
+			eObjType = ENGINE::OBJECT_TYPE::EQUIPMENT;
+		}
+		else if (!lstrcmp(szType, L"Waepon_1"))
+		{
+			pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ 0, 0, 0 });
+			eObjType = ENGINE::OBJECT_TYPE::EQUIPMENT;
+		}
+		else if (!lstrcmp(szType, L"Waepon_2"))
+		{
+			pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ 0, 0, 0 });
+			eObjType = ENGINE::OBJECT_TYPE::EQUIPMENT;
+		}
+		else if (!lstrcmp(szType, L"Waepon_5"))
+		{
+			pObject = CWeapon_Rocket::Create(m_pGraphicDev, D3DXVECTOR3{ 0, 0, 0 });
+			eObjType = ENGINE::OBJECT_TYPE::EQUIPMENT;
+		}
+		// Item
+		else if (!lstrcmp(szType, L"HealPack"))
+		{
+			pObject = CPickupItem::Create(m_pGraphicDev, CPickupItem::ITEM_HEALPACK);
+			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
+		}
+		else if (!lstrcmp(szType, L"ArmorPack"))
+		{
+			pObject = CPickupItem::Create(m_pGraphicDev, CPickupItem::ITEM_ARMORPACK);
+			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
+		}
+		else if (!lstrcmp(szType, L"AmmoBox_0"))
+		{
+			pObject = CPickupItem::Create(m_pGraphicDev, CPickupItem::ITEM_AMMOBOX_LONG);
+			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
+		}
+		else if (!lstrcmp(szType, L"AmmoBox_1"))
+		{
+			pObject = CPickupItem::Create(m_pGraphicDev, CPickupItem::ITEM_AMMOBOX_SHORT);
+			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
+		}
+		else if (!lstrcmp(szType, L"AmmoBox_2"))
+		{
+			pObject = CPickupItem::Create(m_pGraphicDev, CPickupItem::ITEM_AMMOBOX_SHOTGUN);
+			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
+		}
+		else if (!lstrcmp(szType, L"AmmoBox_3"))
+		{
+			pObject = CPickupItem::Create(m_pGraphicDev, CPickupItem::ITEM_AMMOBOX_ROCKET);
+			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
+		}
+
 
 		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
 		pTransform->SetPos(vPos);
-		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN ||
-			eObjType == ENGINE::OBJECT_TYPE::PROPS)
+		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN
+			/*|| eObjType == ENGINE::OBJECT_TYPE::PROPS*/)
 		{
 			pTransform->SetSize(vSize);
 			pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
