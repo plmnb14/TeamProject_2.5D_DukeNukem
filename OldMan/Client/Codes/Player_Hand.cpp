@@ -19,7 +19,8 @@ CPlayer_Hand::CPlayer_Hand(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTarget(nullptr),
 	m_pCameraSubject(ENGINE::GetCameraSubject()),
 	m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_eWeapon(ENGINE::MELLE),
-	m_eActState(CPlayer::W_DRAW), m_eOldAcState(CPlayer::W_WALK)
+	m_eActState(CPlayer::W_DRAW), m_eOldAcState(CPlayer::W_WALK),
+	m_bPump(false), m_bPumpIn(false), m_bPumpOut(false)
 {
 
 }
@@ -513,6 +514,186 @@ void CPlayer_Hand::Weapon_SMG()
 
 void CPlayer_Hand::Weapon_Shotgun()
 {
+	switch (m_eActState)
+	{
+	case CPlayer::W_IDLE:
+	{
+		ChangeTex(L"PumpShot_Idle");
+		m_pAnimator->Set_Frame(0.f);
+		m_pAnimator->Set_FrameAmp(1.f);
+		break;
+	}
+
+	case CPlayer::W_FIRE:
+	{
+		cout << "АјАн Сп" << endl;
+
+		m_pAnimator->Stop_Animation(false);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(30.f);
+
+		if (!m_bPump)
+		{
+			ChangeTex(L"PumpShot_Fire");
+
+			if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+			{
+				m_bPump = true;
+				m_bPumpIn = true;
+				m_pAnimator->Set_Frame(0);
+			}
+		}
+
+		if(m_bPump)
+		{
+			if (m_bPumpOut)
+			{
+				if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+				{
+					ChangeTex(L"PumpShot_Idle");
+					static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+					static_cast<CPlayer*>(m_pTarget)->Set_CanAttack(true);
+					m_pAnimator->Stop_Animation(false);
+		
+					m_bPump = false;
+					m_bPumpIn = false;
+					m_bPumpOut = false;
+					m_pAnimator->Set_Frame(0);
+					m_pAnimator->Set_FrameAmp(0);
+
+				}
+			}
+		
+			if (m_bPumpIn)
+			{
+				m_pAnimator->Set_FrameAmp(50.f);
+				ChangeTex(L"PumpShot_PumpIn");
+				//m_pAnimator->Stop_Animation(false);
+
+				if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+				{
+					ChangeTex(L"PumpShot_PumpOut");
+					m_pAnimator->Stop_Animation(false);
+					m_bPumpOut = true;
+					m_bPumpIn = false;
+					m_pAnimator->Set_Frame(0);
+				}
+			}
+		}
+
+		break;
+	}
+
+	case CPlayer::W_RELOAD:
+	{
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+
+		if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->wCurBullet > 0 &&
+			static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->wMagazineBullet < static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->wMagazineSize)
+		{
+			ChangeTex(L"PumpShot_Reload");
+			m_pAnimator->Set_FrameAmp(30.f);
+
+			if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+			{
+				static_cast<CPlayer*>(m_pTarget)->Reload();
+				m_bPump = false;
+			}
+		}
+
+		else if(!m_bPump)
+		{
+			ChangeTex(L"PumpShot_PumpIn");
+			m_pAnimator->Set_FrameAmp(50.f);
+
+			if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+			{
+				ChangeTex(L"PumpShot_PumpOut");
+				m_pAnimator->Set_Frame(0);
+				m_bPump = true;
+			}
+		}
+
+		else if (m_bPump)
+		{
+			ChangeTex(L"PumpShot_PumpOut");
+
+			if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+			{
+				ChangeTex(L"PumpShot_Idle");
+				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+				static_cast<CPlayer*>(m_pTarget)->Set_CanAttack(true);
+				m_bPump = false;
+
+			}
+		}
+
+		break;
+	}
+
+	case CPlayer::W_DRAW:
+	{
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"PumpShot_Draw");
+		m_pAnimator->Set_FrameAmp(10.f);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		break;
+	}
+
+	case CPlayer::W_ZOOMIN:
+	{
+		if (m_eOldAcState == CPlayer::W_IDLE)
+		{
+			m_pAnimator->Stop_Animation(false);
+			m_pAnimator->Set_Frame(0);
+		}
+
+		if (m_eOldAcState == CPlayer::W_ZOOMFIRE ||
+			m_eOldAcState == CPlayer::W_ZOOMOUT)
+			m_pAnimator->Set_Frame(3);
+
+		ChangeTex(L"SMG_Zoom");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+		m_pAnimator->Set_FrameAmp(20.f);
+		break;
+	}
+
+	case CPlayer::W_ZOOMOUT:
+	{
+		ChangeTex(L"SMG_ZoomOut");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+		m_pAnimator->Set_FrameAmp(20.f);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+		}
+
+		break;
+	}
+
+	case CPlayer::W_ZOOMFIRE:
+	{
+		if (m_eOldAcState == CPlayer::W_ZOOMIN)
+		{
+			m_pAnimator->Set_Frame(0);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		m_pAnimator->Stop_Animation(false);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(50.f);
+		ChangeTex(L"SMG_ZoomFire");
+		break;
+	}
+	}
 }
 
 void CPlayer_Hand::Weapon_Luncher()

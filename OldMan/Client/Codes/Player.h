@@ -62,7 +62,6 @@ private:
 	void ShootDelay();
 	void ShootType();
 	void Zoom();
-	void Reload();
 	void SpecialShot();
 
 private:
@@ -74,8 +73,12 @@ private:
 	void Check_Run();
 
 public:
+	void Reload();
+
+public:
 	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
 	void Set_SpecialShot(bool _Special) { m_bSpecial = _Special; }
+	void Set_CanAttack(bool _Attack) { m_bCanAttack = _Attack; }
 
 public:
 	bool Get_Zoom() { return m_bZoom; }
@@ -122,6 +125,7 @@ private:
 	float m_fSlideUp;
 	bool  m_bZoom;
 	bool  m_bSpecial;
+	bool  m_bCanAttack;
 
 	float m_fZoomSpeed;
 	float m_fZoomAccel;

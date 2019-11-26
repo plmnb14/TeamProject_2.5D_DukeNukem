@@ -78,6 +78,10 @@ private:
 	CPlayer::WEAPONACT		m_eOldAcState;
 	CPlayer::WEAPONACT		m_eActState;
 	ENGINE::WEAPON_TAG		m_eWeapon;
+
+	bool					m_bPumpIn;
+	bool					m_bPumpOut;
+	bool					m_bPump;
 };
 
 #define __PLAYER_HAND__

@@ -21,6 +21,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::NO_WEAPON), m_fZoomAccel(0),
 	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0), m_bSpecial(0),
+	m_bCanAttack(true),
 	m_eActState(W_IDLE)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
@@ -33,6 +34,8 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
+	cout << m_eActState << endl;
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 	
@@ -73,7 +76,7 @@ HRESULT CPlayer::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 	
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 35.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
 	
 	
@@ -234,8 +237,6 @@ void CPlayer::KeyInput()
 	float fMoveSpeed = m_pCondition->Get_MoveSpeed() * m_pCondition->Get_MoveAccel() * m_pCondition->Get_MoveAccel() * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
-	//cout << m_eActState << endl;
-
 	ShootType();
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LSHIFT))
@@ -272,6 +273,12 @@ void CPlayer::KeyInput()
 	// 재장전
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_R))
 	{
+		if (m_eWeaponState == ENGINE::SHOTGUN)
+		{
+			m_eActState = W_RELOAD;
+			return;
+		}
+
 		if (m_eWeaponState == ENGINE::MELLE)
 			return;
 
@@ -626,6 +633,11 @@ void CPlayer::Shoot_Shotgun()
 {
 	if (m_pWInfo.wMagazineBullet > 0)
 	{
+		if (m_bCanAttack == false)
+			return;
+
+		m_bCanAttack = false;
+
 		if (m_bZoom == false)
 			m_eActState = W_FIRE;
 
@@ -710,8 +722,8 @@ void CPlayer::Shoot_Shotgun()
 	{
 		m_pCondition->Set_RangeAttack(false);
 
-		if (m_bZoom == false)
-			m_eActState = W_IDLE;
+		//if (m_bZoom == false)
+		//	m_eActState = W_IDLE;
 
 		if (m_bZoom == true)
 			m_eActState = W_ZOOMOUT;
@@ -738,21 +750,33 @@ void CPlayer::Reload()
 
 	m_eActState = W_RELOAD;
 
-	if (m_pWInfo.wCurBullet < m_pWInfo.wMagazineSize)
+	if (m_eWeaponState != ENGINE::SHOTGUN)
 	{
-		m_pWInfo.wMagazineBullet = m_pWInfo.wCurBullet;
-		m_pWInfo.wCurBullet = 0;
-	}
-
-	else
-	{
-		if (m_pWInfo.wMagazineBullet != 0 && m_pWInfo.wMagazineBullet > 0)
+		if (m_pWInfo.wCurBullet < m_pWInfo.wMagazineSize)
 		{
-			m_pWInfo.wCurBullet += m_pWInfo.wMagazineBullet;
+			m_pWInfo.wMagazineBullet = m_pWInfo.wCurBullet;
+			m_pWInfo.wCurBullet = 0;
 		}
 
-		m_pWInfo.wMagazineBullet = m_pWInfo.wMagazineSize;
-		m_pWInfo.wCurBullet -= m_pWInfo.wMagazineSize;
+		else
+		{
+			if (m_pWInfo.wMagazineBullet != 0 && m_pWInfo.wMagazineBullet > 0)
+			{
+				m_pWInfo.wCurBullet += m_pWInfo.wMagazineBullet;
+			}
+
+			m_pWInfo.wMagazineBullet = m_pWInfo.wMagazineSize;
+			m_pWInfo.wCurBullet -= m_pWInfo.wMagazineSize;
+		}
+	}
+
+	else if(m_eWeaponState == ENGINE::SHOTGUN)
+	{
+		if (m_pWInfo.wCurBullet > 0 && m_pWInfo.wMagazineBullet < m_pWInfo.wMagazineSize)
+		{
+			m_pWInfo.wCurBullet -= 1;
+			m_pWInfo.wMagazineBullet += 1;
+		}
 	}
 
 	cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;

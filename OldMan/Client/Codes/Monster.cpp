@@ -562,7 +562,7 @@ CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev,D3DXVECTOR3 _Pos ,CGam
 		return nullptr;
 	}
 	pInstance->Set_Target(_Target);
-	pInstance->Set_Pos(_Pos);
+	//pInstance->Set_Pos(_Pos);
 
 	return pInstance;
 }
