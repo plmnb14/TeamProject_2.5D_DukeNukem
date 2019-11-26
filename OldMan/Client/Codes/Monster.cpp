@@ -18,7 +18,7 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pSubject(ENGINE::GetCameraSubject()),
 	m_pObserver(nullptr), m_pBillborad(nullptr), m_bShot(false), m_pRigid(nullptr),
 	m_pMelleCollider(nullptr), m_pCondition(nullptr), m_pGroundChekCollider(nullptr), m_pAnimator(nullptr)
-	, m_fSizeY(0), m_fSizeX(0), m_fFrame(0)
+	, m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_bAttack(false)
 {
 }
 CMonster::~CMonster()
@@ -64,6 +64,7 @@ void CMonster::LateUpdate()
 	m_bShot = m_pCondition->Get_Hit();
 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
+	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
 	cout << m_pCondition->Get_Hp() << endl;
 
@@ -92,6 +93,9 @@ void CMonster::LateUpdate()
 		}
 	}
 
+	m_bAttack = m_pMelleCollider->Get_IsCollision();
+
+
 	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
@@ -116,10 +120,10 @@ HRESULT CMonster::Initialize()
 	m_fMaxRange = 19.0f;//최대사거리
 	m_fRange = 0.f;
 	m_fMinRange = 9.0f;
-
+	m_fAttack = 5.0f;
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
-	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
+	m_pCollider->Set_Dynamic(true);						// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
@@ -152,7 +156,7 @@ HRESULT CMonster::Initialize()
 	m_pGroundChekCollider->SetUp_Box();
 
 	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
-	m_pMelleCollider->Set_Radius({ 1.3f , 1.2f, 1.3f });
+	m_pMelleCollider->Set_Radius({ 1.6f , 1.6f, 1.6f });
 	m_pMelleCollider->Set_Dynamic(true);
 	m_pMelleCollider->Set_Trigger(true);
 	m_pMelleCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
@@ -160,6 +164,9 @@ HRESULT CMonster::Initialize()
 		m_pTransform->GetPos().z });
 	m_pMelleCollider->Set_UnderPos();
 	m_pMelleCollider->SetUp_Box();
+	m_pMelleCollider->Set_Enabled(false);
+	m_pMelleCollider->Set_Type(ENGINE::COLLISION_AABB);
+
 	//일단 트리거 설정은 되었지만 -> 의문점 충돌을 판정하지만 
 	// 밀리 공격 상태는 어떤식으로 설정해야 하지? 
 	// 1. 물리 공격의 사거리가 되었을때까지 이동한후 플레이어를 공격한다. 
@@ -351,16 +358,15 @@ void CMonster::Monster_Foward()
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
 
 	if (m_fFowardDealy > 0.1) {
-		if (acos(fDot_Player_Monster_Forward) * 90 < 190)
+		if (acos(fDot_Player_Monster_Forward) * 90 < 210)
 		{
 			m_pAnimator->Stop_Animation(false);
 			ChangeTex(L"PigMan_WalkFront");
 			m_pAnimator->Set_FrameAmp(5.f);
 			m_fFowardDealy = 0;
-			//m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 2.f);
 			Player_Pursue(1.f);
 		}
-		else if (acos(fDot_Player_Monster_Forward) * 90 > 190)
+		else if (acos(fDot_Player_Monster_Forward) * 90 > 210)
 		{
 			m_pAnimator->Stop_Animation(false);
 			ChangeTex(L"PigMan_WalkBack");
@@ -370,11 +376,7 @@ void CMonster::Monster_Foward()
 			m_fFowardDealy = 0;
 		}
 	}
-
-
-
-
-	////	cout<<m_pTransform->GetAngle(ENGINE::ANGLE_X)*180 <<"X"<<endl;
+	//	cout<<m_pTransform->GetAngle(ENGINE::ANGLE_X)*180 <<"X"<<endl;
 //	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
 	//cout << acos(fDot_Monster_Right)*90 << endl;
@@ -385,9 +387,7 @@ void CMonster::Monster_Foward()
 	//m_pTransform->SetDir(vMonster_Player_Dir);
 	//cout << test <<"좌우"<< endl;  
 	//cout << Dot2 <<"앞뒤"<< endl;
-
-
-	// 현재 아무것도 안쓰이는 함수인데 그냥 값구하려고 만든거라 문제 놉
+	
 }
 
 void CMonster::Monster_Range()
@@ -403,9 +403,14 @@ void CMonster::Monster_Range()
 	{
 		m_eNextState = MONSTER_PURSUE;
 	}
-	else
+	else if (fRange >m_fMinRange && fRange>m_fAttack)
 	{
 		m_eNextState = MONSTER_FIRE;
+	}
+	else if (fRange<m_fAttack)
+	{
+		m_eNextState = MONSTER_MILL;
+
 	}
 }
 void CMonster::Monster_Idle()
@@ -438,7 +443,7 @@ void CMonster::Monster_Shot()
 	ChangeTex(L"PigMan_Dead");
 	m_pAnimator->Set_Frame(0.f);
 	m_pAnimator->Stop_Animation(true);
-	m_pCondition->Add_Hp(-1);
+	//m_pCondition->Add_Hp(-1);
 
 
 	D3DXVECTOR3 vMonsterPos_ShotPoint = { vMonster_Pos.x - vMonster_RIght_Dir.x, vMonster_Pos.y - vMonster_RIght_Dir.y  ,vMonster_Pos.z - vMonster_RIght_Dir.z };
@@ -461,7 +466,7 @@ void CMonster::Monster_Shot()
 			m_pAnimator->Stop_Animation(false);
 			m_pCondition->Set_Hit(false);
 			m_eNextState = MONSTER_PURSUE;
-			if (fRange > 5)                                       //5 사거리 안에서 피격당할경우 위로 사격을 하게 만들어 논것이다. 착각하지마라
+			if (fRange > 7)                                       //5 사거리 안에서 피격당할경우 위로 사격을 하게 만들어 논것이다. 착각하지마라
 			{
 				if (m_fDelayTime > 0.2)
 				{
@@ -548,6 +553,30 @@ void CMonster::Monster_Dead()
 		m_pAnimator->Set_Frame(5.f);
 
 	
+
+}
+
+void CMonster::Monster_Attack()
+{
+
+	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
+	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
+	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
+	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
+	float fMove;
+	fMove = 100.f * m_pTimeMgr->GetDelta();
+	m_pMelleCollider->Set_Enabled(true);
+
+	
+		//m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, fMove);
+	if (m_pMelleCollider->Get_IsCollision())
+	{
+		m_pCondition->Add_Hp(+1);
+	}
+
+
+	//cout << "거림" << endl;
+
 
 }
 
@@ -639,6 +668,9 @@ void CMonster::Monster_State_Set()
 			break;
 		case MONSTER_DEAD:
 			Monster_Dead();
+			break;
+		case MONSTER_MILL:
+			Monster_Attack();
 			break;
 		}
 		m_eCurState = m_eNextState;

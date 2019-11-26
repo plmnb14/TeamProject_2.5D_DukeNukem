@@ -55,6 +55,7 @@ private:
 	//	void Object_Serch();
 	void Monster_Fire2();
 	void Monster_Dead();
+	void Monster_Attack();
 private:											//물리 
 	void Check_Physic();
 	void Object_Collison();
@@ -102,7 +103,7 @@ private:
 	float       			m_fSizeY;
 	float					m_fFrame;
 	float					m_fFowardDealy;
-
+	float					m_fAttack;
 
 	STATE					m_eCurState;   //상태
 	STATE					m_eNextState;
@@ -112,6 +113,7 @@ private:
 
 	bool					m_bObject;
 	bool					m_bShot;
+	bool					m_bAttack;
 
 
 };
