@@ -142,6 +142,15 @@
     <Filter Include="02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket">
       <UniqueIdentifier>{da2e04ad-d2eb-464f-a7ca-2b4a68b9b252}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\04. Explosion\02.">
+      <UniqueIdentifier>{f288791d-d35a-4565-a507-87dedf4bc3f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\05. Fireball">
+      <UniqueIdentifier>{2b66695d-8ebb-4b35-9ac1-f90204b3fea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\06.Firewall">
+      <UniqueIdentifier>{0746258f-0b90-4dc5-9feb-51a22fd7c6de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -283,6 +292,12 @@
     <ClInclude Include="..\Codes\Effect_Explosion_Rocket.h">
       <Filter>02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Effect_Fireball.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\05. Fireball</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Effect_Firewall.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\06.Firewall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -399,6 +414,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Explosion_Rocket.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\04. Explosion\01. Rocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Fireball.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\05. Fireball</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Firewall.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\06.Firewall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

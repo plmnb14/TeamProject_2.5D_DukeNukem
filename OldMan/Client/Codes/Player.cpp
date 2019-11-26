@@ -126,7 +126,7 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_Invincible(false);
 	m_pCondition->Set_JetPack(false);
 	m_pCondition->Set_MeleeAttack(true);
-	m_pCondition->Set_RangeAttack(true);
+	m_pCondition->Set_RangeAttack(false);
 	m_pCondition->Set_SpecialAttack(true);
 	m_pCondition->Set_Slide(false);
 	m_pCondition->Set_Run(false);
@@ -613,8 +613,8 @@ void CPlayer::Shoot()
 
 		if (m_bSpecial == false)
 		{
-			if (m_bZoom == false)
-				m_eActState = W_IDLE;
+			//if (m_bZoom == false)
+			//	m_eActState = W_IDLE;
 
 			if (m_bZoom == true)
 				m_eActState = W_ZOOMOUT;

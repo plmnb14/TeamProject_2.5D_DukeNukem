@@ -344,8 +344,6 @@ void CPlayer_Hand::Weapon_Revolver()
 			else
 			{
 				static_cast<CPlayer*>(m_pTarget)->Set_SpecialShot(true);
-				cout << "Å¸³Ä" << endl;
-				//m_pAnimator->Set_Frame(4);
 			}
 
 			m_pAnimator->Stop_Animation(false);
@@ -404,6 +402,23 @@ void CPlayer_Hand::Weapon_SMG()
 		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
 		m_pAnimator->Set_FrameAmp(50.f);
 		ChangeTex(L"SMG_Fire");
+
+		if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->wMagazineBullet <= 0)
+		{
+			m_pAnimator->Set_Frame(0);
+
+			if (static_cast<CPlayer*>(m_pTarget)->Get_Zoom())
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_ZOOMIN);
+				m_pAnimator->Set_Frame(3);
+			}
+
+			if (static_cast<CPlayer*>(m_pTarget)->Get_Zoom() == false)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			}
+		}
+
 		break;
 	}
 
@@ -502,6 +517,92 @@ void CPlayer_Hand::Weapon_Shotgun()
 
 void CPlayer_Hand::Weapon_Luncher()
 {
+	switch (m_eActState)
+	{
+	case CPlayer::W_IDLE:
+	{
+		if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->wMagazineBullet > 0)
+		{
+
+			if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->fDelayTimer <= 0)
+				ChangeTex(L"RocketLuncher_Idle");
+
+			if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->fDelayTimer > 0)
+				ChangeTex(L"RocketLuncher_Idle_Delay");
+		}
+
+		if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->wMagazineBullet <= 0)
+		{
+			ChangeTex(L"RocketLuncher_NoAmmo");
+		}
+
+		m_pAnimator->Set_Frame(0.f);
+		m_pAnimator->Set_FrameAmp(1.f);
+		break;
+	}
+
+	case CPlayer::W_FIRST:
+	{
+		ChangeTex(L"RocketLuncher_Idle");
+		break;
+	}
+
+	case CPlayer::W_FIRE:
+	{
+		m_pAnimator->Stop_Animation(false);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+		m_pAnimator->Set_FrameAmp(30.f);
+		ChangeTex(L"RocketLuncher_Fire");
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		break;
+	}
+
+	case CPlayer::W_RELOAD:
+	{
+		if (m_eOldAcState == CPlayer::W_ZOOMFIRE ||
+			m_eOldAcState == CPlayer::W_ZOOMOUT ||
+			m_eOldAcState == CPlayer::W_IDLE ||
+			m_eOldAcState == CPlayer::W_ZOOMIN)
+		{
+			m_pAnimator->Stop_Animation(false);
+			m_pAnimator->Set_Frame(0);
+		}
+
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+		m_pAnimator->Set_FrameAmp(30.f);
+		ChangeTex(L"RocketLuncher_Reload");
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		break;
+	}
+
+	case CPlayer::W_DRAW:
+	{
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"RocketLuncher_Draw");
+		m_pAnimator->Set_FrameAmp(10.f);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		break;
+	}
+	}
 }
 
 void CPlayer_Hand::ChangeTex(wstring _wstrTex)

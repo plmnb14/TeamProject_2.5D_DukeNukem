@@ -69,6 +69,9 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 	{
 		for (auto& rSrc : rSrcList)
 		{
+			if (rDst == rSrc)
+				continue;
+
 			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
 			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
@@ -92,10 +95,24 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 					rDstTrans->GetPos().y - rDstCol->Get_Radius().y,
 					rDstTrans->GetPos().z });
 
-				rSrcCol->LateUpdate(rSrcTrans->GetPos());
+				if (rSrc->Get_Tag() == MONSTER || rSrc->Get_Tag() == PLAYER)
+				{
+					ENGINE::CCollider* rSrcGCol = static_cast<CCollider*>(rSrc->Get_Component(L"GCheck_Collider"));
 
-				rDstCol->Set_Length({ 0,0,0 });
-				rSrcCol->Set_Length({ 0,0,0 });
+					rSrcCol->LateUpdate(rSrcTrans->GetPos());
+					rSrcGCol->LateUpdate({ rSrcTrans->GetPos().x ,
+						rSrcTrans->GetPos().y - rSrcCol->Get_Radius().y,
+						rSrcTrans->GetPos().z });
+				}
+
+				//rDstCol->Set_Length({ 0,0,0 });
+				//rSrcCol->Set_Length({ 0,0,0 });
+
+				//if (rDst->Get_Tag() == ENGINE::PLAYER)
+				//	return;
+
+				//else if (rDst->Get_Tag() == ENGINE::MONSTER)
+				//	break;
 			}
 		}
 	}
@@ -128,24 +145,28 @@ void CCollisionMgr::CollisionPlayer_To_Item(list<CGameObject*>& rDstList, list<C
 
 void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
 {
+	int iCount = 0; bool bSkip = false;
 	for (auto& rDst : rDstList)
 	{
-		for (auto& rSrc : rSrcList)
+		for (list<CGameObject*>::iterator rSrc = rSrcList.begin(); rSrc != rSrcList.end(); ++rSrc)
 		{
-			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+			bSkip = false;
+			++iCount;
 
-			//float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
-			//
-			//if (a > 20)
-			//	continue;
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>((*rSrc)->Get_Component(L"Transform"));
+
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+			
+			if (a > 20)
+				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
-			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>((*rSrc)->Get_Component(L"Collider"));
 
 			ENGINE::CRigidBody*	rDstRigid = static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"));
 
-			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			if (Check_AABB(rDst, (*rSrc), rDstCol, rSrcCol))
 			{
 				if (rDstRigid->Get_IsJump())
 					return;
@@ -156,16 +177,31 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 				rDstRigid->Set_IsAir(false);
 				rDstRigid->Set_IsGround(true);
 
-				//cout << "응! 닿음!" << endl;
+				if (rDst->Get_Tag() == ENGINE::PLAYER)
+					return;
 
-				return;
+				else if (rDst->Get_Tag() == ENGINE::MONSTER)
+				{
+					bSkip = true;
+					break;
+				}
 			}
 		}
 
+		if (rDst->Get_Tag() == PLAYER)
+		{
+			static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
+			static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
+		}
 
-	//	cout << "땅에 닿지 않음" << endl;
-		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
-		static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
+		if (rDst->Get_Tag() == MONSTER)
+		{
+			if (bSkip == false)
+			{
+				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsGround(false);
+				static_cast<CRigidBody*>(rDst->Get_Component(L"RigidBody"))->Set_IsFall(true);
+			}
+		}
 	}
 }
 
@@ -253,8 +289,9 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 		if (!rDstBox->bIsTrigger && !rSrtBox->bIsTrigger)
 		{
 			_rDstCol->Set_IsCollision(true);
+			_rSrcCol->Set_IsCollision(true);
 
-			// A 가 static 이고 , B 도 static 일 때
+			// A 가 dynamic 이고 , B 도 dynamic 일 때
 			if (rDstBox->bIsDynamic && rSrtBox->bIsDynamic)
 			{
 				D3DXVECTOR3 tmpLength_Dst = Get_Length(rDstBox, rSrtBox, true);
@@ -272,7 +309,7 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 				_rSrcCol->Set_Length(tmpLength_Srt);
 			}
 
-			// A 가 static 이고 , B 는 Static 일 때
+			// A 가 dynamic 이고 , B 는 Static 일 때
 			else if (rDstBox->bIsDynamic && !rSrtBox->bIsDynamic)
 			{
 				D3DXVECTOR3 tmpLength = Get_Length(rDstBox, rSrtBox);
@@ -284,7 +321,7 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 				_rDstCol->Set_Length(tmpLength);
 			}
 
-			// A 가 Static 이고 , B 는 static 일 때
+			// A 가 Static 이고 , B 는 dynamic 일 때
 			else if (!rDstBox->bIsDynamic && rSrtBox->bIsDynamic)
 			{
 				_rSrcCol->Set_Length(Get_Length(rDstBox, rSrtBox));
@@ -1078,9 +1115,9 @@ D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BO
 	//	vCross.y = 0 : vCross.z = 0 : 
 	//	vCross.y < vCross.z ? vCross.z = 0 : vCross.y = 0);
 
-	if (vCross.x < vCross.y)
+	if (fabs(vCross.x) < fabs(vCross.y))
 	{
-		if (vCross.x < vCross.z)
+		if (fabs(vCross.x) < fabs(vCross.z))
 		{
 			vCross.z = 0;
 		}
@@ -1095,7 +1132,7 @@ D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BO
 	
 	else
 	{
-		if (vCross.y < vCross.z)
+		if (fabs(vCross.y) < fabs(vCross.z))
 		{
 			vCross.z = 0;
 		}

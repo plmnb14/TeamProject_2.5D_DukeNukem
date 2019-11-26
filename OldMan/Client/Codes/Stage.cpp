@@ -106,30 +106,36 @@ HRESULT CStage::Add_Object_Layer()
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	
+
 	// SMG
 	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -5,2,8 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	
+
 	// PumpShotgun
 	pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,8 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	
+
 	// RocketLuncher
 	pObject = CWeapon_Rocket::Create(m_pGraphicDev, D3DXVECTOR3{ -1,2,8 });
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	
-	////// Monster
-	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
+
+	// Monster
+	pObject = CMonster::Create(m_pGraphicDev, D3DXVECTOR3{ 6 , 5 , 0 }, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
+	// Monster
+	pObject = CMonster::Create(m_pGraphicDev, D3DXVECTOR3{ 12 , 5 , 0 }, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
 
 	// Skybox
 	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_ufo.dds", pObject_Layer->Get_Player());
@@ -464,11 +470,11 @@ void CStage::LoadMapObj()
 			pDoor = nullptr;
 		}
 		// Monster
-		else if (!lstrcmp(szType, L"Pigman"))
-		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		}
+		//else if (!lstrcmp(szType, L"Pigman"))
+		//{
+		//	pObject = CMonster::Create(m_pGraphicDev,  ,m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//}
 		//Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{

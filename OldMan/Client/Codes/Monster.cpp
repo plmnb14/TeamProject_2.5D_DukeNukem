@@ -100,7 +100,7 @@ HRESULT CMonster::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(5.f, 12.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
 	m_fMaxRange = 15.0f;//최대사거리
@@ -110,7 +110,7 @@ HRESULT CMonster::Initialize()
 
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
-	m_pCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
+	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
@@ -205,7 +205,7 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_Player");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Buffer_RcTex");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
@@ -516,6 +516,11 @@ void CMonster::Object_Collison()
 
 }
 
+void CMonster::Set_Pos(D3DXVECTOR3 _Pos)
+{
+	m_pTransform->SetPos(_Pos);
+}
+
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CMonster::Monster_State_Set()
 {
@@ -544,7 +549,7 @@ void CMonster::Monster_State_Set()
 }
 
 
-CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
+CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev,D3DXVECTOR3 _Pos ,CGameObject* _Target)
 {
 
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
@@ -557,6 +562,7 @@ CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
 		return nullptr;
 	}
 	pInstance->Set_Target(_Target);
+	pInstance->Set_Pos(_Pos);
 
 	return pInstance;
 }

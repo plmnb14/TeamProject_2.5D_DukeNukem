@@ -12,6 +12,7 @@
 #include "Effect_BloodSplit.h"
 #include "Effect_RocketSmoke.h"
 #include "Effect_Explosion_Rocket.h"
+#include "Effect_Fireball.h"
 
 
 CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -60,6 +61,15 @@ int CBullet::Update()
 
 				pInstance = CEffect_Explosion_Rocket::Create(m_pGraphicDev, vTempPos);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+
+				for (int i = 0; i < 12; ++i)
+				{
+					int Angle = rand() % 30;
+
+					pInstance = CEffect_Fireball::Create(m_pGraphicDev, vTempPos , Angle * ( i + 1 ) );
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX_HIT, pInstance);
+					pInstance->Set_MapLayer(m_mapLayer);
+				}
 			}
 
 			else

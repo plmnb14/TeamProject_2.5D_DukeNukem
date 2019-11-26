@@ -9,7 +9,7 @@ CVfx::CVfx(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pManagement(ENGINE::GetManagement()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_pAnimator(nullptr),
-	m_pSubject(ENGINE::GetCameraSubject()), m_pBillborad(nullptr),
+	m_pSubject(ENGINE::GetCameraSubject()), m_pBillborad(nullptr), m_pRigid(nullptr),
 	m_eTerrainType(ENGINE::TERRAIN_END)
 {
 }
