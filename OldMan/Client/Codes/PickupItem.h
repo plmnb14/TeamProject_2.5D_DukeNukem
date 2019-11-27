@@ -52,7 +52,7 @@ public:
 
 protected:
 	HRESULT AddComponent();
-	void PlayerGet();
+	void Hitted();
 
 public:
 	static CPickupItem* Create(LPDIRECT3DDEVICE9 pGraphicDev, ITEM_TYPE _eType);

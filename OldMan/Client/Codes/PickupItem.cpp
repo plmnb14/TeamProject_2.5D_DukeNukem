@@ -26,7 +26,7 @@ int CPickupItem::Update()
 {
 	if (m_bIsDead)
 	{
-		PlayerGet();
+		Hitted();
 		return DEAD_OBJ;
 	}
 
@@ -160,7 +160,7 @@ HRESULT CPickupItem::AddComponent()
 	return S_OK;
 }
 
-void CPickupItem::PlayerGet()
+void CPickupItem::Hitted()
 {
 	int iAmount = 0;
 

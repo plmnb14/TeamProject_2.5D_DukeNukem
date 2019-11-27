@@ -180,6 +180,7 @@
     <ClInclude Include="..\Codes\Monster.h" />
     <ClInclude Include="..\Codes\Number.h" />
     <ClInclude Include="..\Codes\OctaBrain.h" />
+    <ClInclude Include="..\Codes\OneUseObject.h" />
     <ClInclude Include="..\Codes\PickupItem.h" />
     <ClInclude Include="..\Codes\Player.h" />
     <ClInclude Include="..\Codes\PlayerObserver.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="..\Codes\Monster.cpp" />
     <ClCompile Include="..\Codes\Number.cpp" />
     <ClCompile Include="..\Codes\OctaBrain.cpp" />
+    <ClCompile Include="..\Codes\OneUseObject.cpp" />
     <ClCompile Include="..\Codes\PickupItem.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\PlayerObserver.cpp" />
