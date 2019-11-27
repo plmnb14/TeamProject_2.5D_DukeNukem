@@ -36,6 +36,8 @@ int CDoor::Update()
 void CDoor::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
+
+	m_pCollider->LateUpdate(m_pTransform->GetPos());
 }
 
 void CDoor::Render()

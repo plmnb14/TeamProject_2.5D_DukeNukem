@@ -24,6 +24,8 @@
 // Standard Headers
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <functional>
 
 using namespace std;
 
@@ -41,6 +43,10 @@ using namespace std;
 #pragma comment(lib, "Utilities.lib")
 #pragma comment(lib, "Resources.lib")
 
+// Fmod
+#include <io.h>
+#include "fmod.h"
+#pragma comment(lib, "fmodex_vc.lib")
 
 // ¾Ù¸®»í ¤£¤£
 #pragma comment(linker,"/entry:wWinMainCRTStartup /subsystem:console")

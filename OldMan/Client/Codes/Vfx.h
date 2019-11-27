@@ -15,6 +15,7 @@ namespace ENGINE
 	class CAnimator;
 	class CBillborad;
 	class CCameraSubject;
+	class CRigidBody;
 }
 
 class CCameraObserver;
@@ -49,6 +50,7 @@ protected:
 	ENGINE::CManagement*	m_pManagement;
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
+	ENGINE::CRigidBody*		m_pRigid;
 
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;

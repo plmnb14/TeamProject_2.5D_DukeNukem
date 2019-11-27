@@ -10,6 +10,7 @@ namespace ENGINE
 	class CTimeMgr;
 }
 
+class CSoundMgr;
 class CMainApp
 {
 private:

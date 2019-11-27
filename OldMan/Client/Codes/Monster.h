@@ -65,9 +65,10 @@ private:											//¹°¸®
 
 public:
 	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
+	void Set_Pos(D3DXVECTOR3 _Pos);
 
 public:
-	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
+	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev ,CGameObject* _Target);
 private:
 	CGameObject*			m_pTarget;
 	CCameraObserver*		m_pObserver;

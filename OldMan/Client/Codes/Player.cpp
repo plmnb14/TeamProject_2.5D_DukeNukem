@@ -8,6 +8,7 @@
 #include "CameraObserver.h"
 #include "RigidBody.h"
 #include "Condition.h"
+#include "SoundMgr.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -21,6 +22,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::NO_WEAPON), m_fZoomAccel(0),
 	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0), m_bSpecial(0),
+	m_bCanAttack(true),
 	m_eActState(W_IDLE)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
@@ -73,7 +75,7 @@ HRESULT CPlayer::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 	
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 2.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 35.f, 5.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
 	
 	
@@ -126,7 +128,7 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_Invincible(false);
 	m_pCondition->Set_JetPack(false);
 	m_pCondition->Set_MeleeAttack(true);
-	m_pCondition->Set_RangeAttack(true);
+	m_pCondition->Set_RangeAttack(false);
 	m_pCondition->Set_SpecialAttack(true);
 	m_pCondition->Set_Slide(false);
 	m_pCondition->Set_Run(false);
@@ -139,7 +141,7 @@ HRESULT CPlayer::Initialize()
 	m_fMaxZoom		= 70;
 	m_fMinZoom		= 20;
 	
-	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &m_pCondition);
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(*m_pCondition));
 	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
 	m_pWInfo.wCurBullet = 0;
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
@@ -234,21 +236,19 @@ void CPlayer::KeyInput()
 	float fMoveSpeed = m_pCondition->Get_MoveSpeed() * m_pCondition->Get_MoveAccel() * m_pCondition->Get_MoveAccel() * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
-	//cout << m_eActState << endl;
-
 	ShootType();
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LSHIFT))
 	{
 		m_pCondition->Set_Run(true);
-		m_pCondition->Set_MoveSpeed(16.f);
+		m_pCondition->Set_MoveSpeed(20.f);
 	}
 
 	else if (m_pKeyMgr->KeyUp(ENGINE::KEY_LSHIFT))
 	{
 		m_pCondition->Set_Run(false);
 	
-		m_pCondition->Set_MoveSpeed(10.f);
+		m_pCondition->Set_MoveSpeed(15.f);
 		D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
 		dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 	}
@@ -272,6 +272,12 @@ void CPlayer::KeyInput()
 	// 재장전
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_R))
 	{
+		if (m_eWeaponState == ENGINE::SHOTGUN)
+		{
+			m_eActState = W_RELOAD;
+			return;
+		}
+
 		if (m_eWeaponState == ENGINE::MELLE)
 			return;
 
@@ -524,7 +530,8 @@ void CPlayer::Check_Physic()
 
 void CPlayer::UpdateObserverData()
 {
-	// Update Observer Data
+	// Update Observer 
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(*m_pCondition));
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
 }
 
@@ -546,6 +553,30 @@ void CPlayer::Shoot()
 			if (m_bZoom == true)
 				m_eActState = W_ZOOMFIRE;
 		}
+
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 0.5f);
+
+		int iSound = rand() % 4;
+
+		switch (iSound)
+		{
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+
+		case 0:
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR1.wav", CSoundMgr::WEAPON);
+			break;
+		case 1:
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR2.wav", CSoundMgr::WEAPON);
+			break;
+		case 2:
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR3.wav", CSoundMgr::WEAPON);
+			break;
+		case 4:
+			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR4.wav", CSoundMgr::WEAPON);
+			break;
+		}
+
 
 		m_pCondition->Set_RangeAttack(true);
 
@@ -607,14 +638,18 @@ void CPlayer::Shoot()
 		}
 	}
 
-	if (m_pWInfo.wMagazineBullet <= 0)
+	else if (m_pWInfo.wMagazineBullet <= 0)
 	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"REVCLK1.wav", CSoundMgr::PLAYER);
+
 		m_pCondition->Set_RangeAttack(false);
 
 		if (m_bSpecial == false)
 		{
-			if (m_bZoom == false)
-				m_eActState = W_IDLE;
+			//if (m_bZoom == false)
+			//	m_eActState = W_IDLE;
 
 			if (m_bZoom == true)
 				m_eActState = W_ZOOMOUT;
@@ -626,6 +661,11 @@ void CPlayer::Shoot_Shotgun()
 {
 	if (m_pWInfo.wMagazineBullet > 0)
 	{
+		if (m_bCanAttack == false)
+			return;
+
+		m_bCanAttack = false;
+
 		if (m_bZoom == false)
 			m_eActState = W_FIRE;
 
@@ -710,8 +750,8 @@ void CPlayer::Shoot_Shotgun()
 	{
 		m_pCondition->Set_RangeAttack(false);
 
-		if (m_bZoom == false)
-			m_eActState = W_IDLE;
+		//if (m_bZoom == false)
+		//	m_eActState = W_IDLE;
 
 		if (m_bZoom == true)
 			m_eActState = W_ZOOMOUT;
@@ -738,21 +778,33 @@ void CPlayer::Reload()
 
 	m_eActState = W_RELOAD;
 
-	if (m_pWInfo.wCurBullet < m_pWInfo.wMagazineSize)
+	if (m_eWeaponState != ENGINE::SHOTGUN)
 	{
-		m_pWInfo.wMagazineBullet = m_pWInfo.wCurBullet;
-		m_pWInfo.wCurBullet = 0;
-	}
-
-	else
-	{
-		if (m_pWInfo.wMagazineBullet != 0 && m_pWInfo.wMagazineBullet > 0)
+		if (m_pWInfo.wCurBullet < m_pWInfo.wMagazineSize)
 		{
-			m_pWInfo.wCurBullet += m_pWInfo.wMagazineBullet;
+			m_pWInfo.wMagazineBullet = m_pWInfo.wCurBullet;
+			m_pWInfo.wCurBullet = 0;
 		}
 
-		m_pWInfo.wMagazineBullet = m_pWInfo.wMagazineSize;
-		m_pWInfo.wCurBullet -= m_pWInfo.wMagazineSize;
+		else
+		{
+			if (m_pWInfo.wMagazineBullet != 0 && m_pWInfo.wMagazineBullet > 0)
+			{
+				m_pWInfo.wCurBullet += m_pWInfo.wMagazineBullet;
+			}
+
+			m_pWInfo.wMagazineBullet = m_pWInfo.wMagazineSize;
+			m_pWInfo.wCurBullet -= m_pWInfo.wMagazineSize;
+		}
+	}
+
+	else if(m_eWeaponState == ENGINE::SHOTGUN)
+	{
+		if (m_pWInfo.wCurBullet > 0 && m_pWInfo.wMagazineBullet < m_pWInfo.wMagazineSize)
+		{
+			m_pWInfo.wCurBullet -= 1;
+			m_pWInfo.wMagazineBullet += 1;
+		}
 	}
 
 	cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;
@@ -1026,7 +1078,6 @@ void CPlayer::Zoom()
 	if (m_pKeyMgr->KeyUp(ENGINE::KEY_RBUTTON))
 	{
 		m_bZoom = false;
-		cout << "줌 풀림" << endl;
 	}
 
 
@@ -1048,6 +1099,11 @@ void CPlayer::Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo)
 
 	else
 		m_mWeaponInfo[_WeaponInfo->eWeaponTag]->wCurBullet += _WeaponInfo->wCurBullet;
+}
+
+void CPlayer::Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO * _WeaponInfo)
+{
+	m_mWeaponInfo[_eTag] = _WeaponInfo;
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)

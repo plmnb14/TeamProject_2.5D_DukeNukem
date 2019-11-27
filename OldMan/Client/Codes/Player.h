@@ -62,7 +62,6 @@ private:
 	void ShootDelay();
 	void ShootType();
 	void Zoom();
-	void Reload();
 	void SpecialShot();
 
 private:
@@ -74,14 +73,20 @@ private:
 	void Check_Run();
 
 public:
+	void Reload();
+
+public:
 	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
+	void Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO* _WeaponInfo);
 	void Set_SpecialShot(bool _Special) { m_bSpecial = _Special; }
+	void Set_CanAttack(bool _Attack) { m_bCanAttack = _Attack; }
 
 public:
 	bool Get_Zoom() { return m_bZoom; }
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
 	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
+	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { return m_mWeaponInfo[_eTag]; }
 	ENGINE::WEAPON_TAG	Get_WState() { return m_eWeaponState; }
 
 public:
@@ -122,6 +127,7 @@ private:
 	float m_fSlideUp;
 	bool  m_bZoom;
 	bool  m_bSpecial;
+	bool  m_bCanAttack;
 
 	float m_fZoomSpeed;
 	float m_fZoomAccel;

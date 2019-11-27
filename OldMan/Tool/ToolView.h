@@ -67,6 +67,7 @@ private:
 	void CubeMoveToMouse();
 	void CreateCube(bool _bIsChange);
 	void DragPicking(float _fPointX, float _fPointY);
+	void CheckDeleteCube();
 	bool CheckGrid();
 
 public:
@@ -75,6 +76,7 @@ public:
 	
 	list<CToolTerrain*>				m_pCubeList;
 	CToolTerrain*					m_pSelectCube;
+	CToolTerrain*					m_pDeleteCube;
 
 	typedef map<WORD, ENGINE::CLayer*>	MAP_LAYER;
 	MAP_LAYER	m_mapLayer;
@@ -85,6 +87,8 @@ public:
 
 	D3DXMATRIX m_ViewMatrix;
 	D3DXMATRIX m_ProjMatrix;
+
+	bool m_bIsEraseMode;
 
 };
 

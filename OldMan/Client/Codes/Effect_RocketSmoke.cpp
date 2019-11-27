@@ -43,12 +43,14 @@ void CEffect_RocketSmoke::LateUpdate()
 	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix, vSize);                          // ºôº¸µå ¼³Á¤
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();
 
-	m_fLifetime += m_pTimeMgr->GetDelta();
+	m_fLifetime = m_pTimeMgr->GetDelta();
 
-	m_pTransform->SetSize(D3DXVECTOR3(1.f - m_fLifetime, 1.f - m_fLifetime, 1.f - m_fLifetime));
+	D3DXVECTOR3 vTmpSize = m_pTransform->GetSize();
 
-	if (m_fLifetime >= 0.9f)
+	if (vTmpSize.x < 0.1f)
 		m_bIsDead = true;
+
+	m_pTransform->SetSize(D3DXVECTOR3(vTmpSize.x - m_fLifetime, vTmpSize.y - m_fLifetime, vTmpSize.z - m_fLifetime));
 }
 
 void CEffect_RocketSmoke::Render()
@@ -91,6 +93,11 @@ void CEffect_RocketSmoke::Release()
 void CEffect_RocketSmoke::Set_Pos(D3DXVECTOR3 _Pos)
 {
 	m_pTransform->SetPos(_Pos);
+}
+
+void CEffect_RocketSmoke::Set_Size(D3DXVECTOR3 _Size)
+{
+	m_pTransform->SetSize(_Size);
 }
 
 HRESULT CEffect_RocketSmoke::AddComponent()
@@ -140,7 +147,7 @@ HRESULT CEffect_RocketSmoke::AddComponent()
 	return S_OK;
 }
 
-CEffect_RocketSmoke* CEffect_RocketSmoke::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos)
+CEffect_RocketSmoke* CEffect_RocketSmoke::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos , D3DXVECTOR3 _Size)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
@@ -153,6 +160,7 @@ CEffect_RocketSmoke* CEffect_RocketSmoke::Create(LPDIRECT3DDEVICE9 pGraphicDev, 
 	}
 
 	pInstance->Set_Pos(_Pos);
+	pInstance->Set_Size(_Size);
 
 	return pInstance;
 }

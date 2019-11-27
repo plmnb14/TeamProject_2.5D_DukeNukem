@@ -54,11 +54,6 @@ private:
 	float					m_fShield;
 
 	GAUGEBAR_TYPE			m_eBarType;
-
-	int m_iTestMaxHP;
-	int m_iTestHP;
-	int m_iTestMaxShield;
-	int m_iTestShield;
 };
 
 #define __GAUGEBAR_H__

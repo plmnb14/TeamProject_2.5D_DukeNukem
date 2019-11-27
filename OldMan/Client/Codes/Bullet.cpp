@@ -12,6 +12,8 @@
 #include "Effect_BloodSplit.h"
 #include "Effect_RocketSmoke.h"
 #include "Effect_Explosion_Rocket.h"
+#include "Effect_Fireball.h"
+#include "SoundMgr.h"
 
 
 CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -41,6 +43,24 @@ int CBullet::Update()
 
 			if (m_eTag == ENGINE::TERRAIN)
 			{
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+
+				int iSound = rand() % 3;
+
+				switch (iSound)
+				{
+				case 0:
+					CSoundMgr::GetInstance()->MyPlaySound(L"RICOCHE4.ogg", CSoundMgr::UI);
+					break;
+				case 1:
+					CSoundMgr::GetInstance()->MyPlaySound(L"RICOCHE5.ogg", CSoundMgr::UI);
+					break;
+				case 2:
+					CSoundMgr::GetInstance()->MyPlaySound(L"RICOCHE3.ogg", CSoundMgr::UI);
+					break;
+				}
+
 				pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
 			}
@@ -60,6 +80,15 @@ int CBullet::Update()
 
 				pInstance = CEffect_Explosion_Rocket::Create(m_pGraphicDev, vTempPos);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+
+				for (int i = 0; i < 12; ++i)
+				{
+					int Angle = rand() % 30;
+
+					pInstance = CEffect_Fireball::Create(m_pGraphicDev, vTempPos , Angle * ( i + 1 ) );
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX_HIT, pInstance);
+					pInstance->Set_MapLayer(m_mapLayer);
+				}
 			}
 
 			else

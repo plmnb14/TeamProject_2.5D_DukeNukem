@@ -767,7 +767,7 @@ int CCamera::Update()
 
 	D3DXMATRIX matProj;
 
-	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(m_fFov), WINCX / (float)WINCY, 1.f, 1000.f);
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(m_fFov), WINCX / (float)WINCY, 0.1f, 1000.f);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
 
@@ -816,7 +816,7 @@ HRESULT CCamera::Initialize()
 	SetUp_ViewMatrix(&m_MatView);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_MatView);
 
-	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(m_fFov), WINCX / (float)WINCY, 1.f, 1000.f);
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DXToRadian(m_fFov), WINCX / (float)WINCY, 0.1f, 1000.f);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 
 	ShowCursor(false);

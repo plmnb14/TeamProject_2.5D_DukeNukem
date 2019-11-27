@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MainApp.h"
 #include "SceneSelector.h"
+#include "SoundMgr.h"
 
 CMainApp::CMainApp()
 	: m_pDeviceMgr(ENGINE::GetGraphicDev()),
@@ -71,6 +72,8 @@ HRESULT CMainApp::Initialize()
 
 	hr = m_pManagement->SceneChange(CSceneSelector(CSceneSelector::STAGE));
 	FAILED_CHECK_MSG_RETURN(hr, L"Logo Scene Change Failed", E_FAIL);	
+
+	CSoundMgr::GetInstance()->Initialize();
 
 
 	return S_OK;
