@@ -154,6 +154,9 @@
     <Filter Include="02.GameObject\07.VFX\00. Effect\06. Firewall">
       <UniqueIdentifier>{8291c120-fef1-4a43-a37d-3bea1db6c87a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster\00.OctaBrain">
+      <UniqueIdentifier>{a4769a60-bc61-4ccf-9045-f0c47846274d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -307,6 +310,9 @@
     <ClInclude Include="..\Codes\Effect_Fireball.h">
       <Filter>02.GameObject\07.VFX\00. Effect\05. Fireball</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\OctaBrain.h">
+      <Filter>02.GameObject\05.Monster\00.OctaBrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -435,6 +441,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Fireball.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\05. Fireball</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\OctaBrain.cpp">
+      <Filter>02.GameObject\05.Monster\00.OctaBrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

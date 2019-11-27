@@ -1,4 +1,15 @@
-Texture|LogoBack|LogoBack_%d.png|38|..\Texture\LogoBack\LogoBack_%d.png
+OctaBrain|OctaBrain_Dead|OctaBrain_Dead_%d.png|5|..\Texture\Monster\OctaBrain\OctaBrain_Dead\OctaBrain_Dead_%d.png
+OctaBrain|OctaBrain_DeadFall|OctaBrain_DeadFall_%d.png|1|..\Texture\Monster\OctaBrain\OctaBrain_DeadFall\OctaBrain_DeadFall_%d.png
+OctaBrain|OctaBrain_Fire|OctaBrain_Fire_%d.png|4|..\Texture\Monster\OctaBrain\OctaBrain_Fire\OctaBrain_Fire_%d.png
+OctaBrain|OctaBrain_Idle|OctaBrain_Idle_%d.png|5|..\Texture\Monster\OctaBrain\OctaBrain_Idle\OctaBrain_Idle_%d.png
+Overload|Overload_Dead|Overload_Dead_%d.png|10|..\Texture\Monster\Overload\Overload_Dead\Overload_Dead_%d.png
+Overload|Overload_Fire|Overload_Fire_%d.png|2|..\Texture\Monster\Overload\Overload_Fire\Overload_Fire_%d.png
+Overload|Overload_Met|Overload_Met_%d.png|2|..\Texture\Monster\Overload\Overload_Met\Overload_Met_%d.png
+Overload|Overload_WalkBack|Overload_WalkBack_%d.png|4|..\Texture\Monster\Overload\Overload_WalkBack\Overload_WalkBack_%d.png
+Overload|Overload_WalkBackSide|Overload_WalkBackSide_%d.png|4|..\Texture\Monster\Overload\Overload_WalkBackSide\Overload_WalkBackSide_%d.png
+Overload|Overload_WalkFront|Overload_WalkFront_%d.png|4|..\Texture\Monster\Overload\Overload_WalkFront\Overload_WalkFront_%d.png
+Overload|Overload_WalkFrontSide|Overload_WalkFrontSide_%d.png|4|..\Texture\Monster\Overload\Overload_WalkFrontSide\Overload_WalkFrontSide_%d.png
+Overload|Overload_WalkSide|Overload_WalkSide_%d.png|4|..\Texture\Monster\Overload\Overload_WalkSide\Overload_WalkSide_%d.png
 PigMan|PigMan_Dead|PigMan_Dead_%d.png|6|..\Texture\Monster\PigMan\PigMan_Dead\PigMan_Dead_%d.png
 PigMan|PigMan_Fire|PigMan_Fire_%d.png|1|..\Texture\Monster\PigMan\PigMan_Fire\PigMan_Fire_%d.png
 PigMan|PigMan_Lay|PigMan_Lay_%d.png|1|..\Texture\Monster\PigMan\PigMan_Lay\PigMan_Lay_%d.png
@@ -9,11 +20,19 @@ PigMan|PigMan_WalkFront|PigMan_WalkFront_%d.png|4|..\Texture\Monster\PigMan\PigM
 PigMan|PigMan_WalkSide|PigMan_WalkSide_%d.png|4|..\Texture\Monster\PigMan\PigMan_WalkSide\PigMan_WalkSide_%d.png
 PigMan|PigMan_WalkSideBack|PigMan_WalkSideBack_%d.png|4|..\Texture\Monster\PigMan\PigMan_WalkSideBack\PigMan_WalkSideBack_%d.png
 PigMan|PigMan_WalkSideFront|PigMan_WalkSideFront_%d.png|4|..\Texture\Monster\PigMan\PigMan_WalkSideFront\PigMan_WalkSideFront_%d.png
-PickUp|AmmoBox|AmmoBox_%d.png|4|..\Texture\PickUp\AmmoBox\AmmoBox_%d.png
+Trooper|Trooper_Arms|Trooper_Arms_%d.png|4|..\Texture\Monster\Trooper\Trooper_Arms\Trooper_Arms_%d.png
+Trooper|Trooper_Dead|Trooper_Dead_%d.png|1|..\Texture\Monster\Trooper\Trooper_Dead\Trooper_Dead_%d.png
+Trooper|Trooper_DeadFall|Trooper_DeadFall_%d.png|4|..\Texture\Monster\Trooper\Trooper_DeadFall\Trooper_DeadFall_%d.png
+Trooper|Trooper_FireFront|Trooper_FireFront_%d.png|2|..\Texture\Monster\Trooper\Trooper_FireFront\Trooper_FireFront_%d.png
+Trooper|Trooper_Grogy|Trooper_Grogy_%d.png|3|..\Texture\Monster\Trooper\Trooper_Grogy\Trooper_Grogy_%d.png
+Trooper|Trooper_Heads|Trooper_Heads_%d.png|4|..\Texture\Monster\Trooper\Trooper_Heads\Trooper_Heads_%d.png
+Trooper|Trooper_Legs|Trooper_Legs_%d.png|4|..\Texture\Monster\Trooper\Trooper_Legs\Trooper_Legs_%d.png
+Trooper|Trooper_WalkBack|Trooper_WalkBack_%d.png|4|..\Texture\Monster\Trooper\Trooper_WalkBack\Trooper_WalkBack_%d.png
+Trooper|Trooper_WalkFront|Trooper_WalkFront_%d.png|4|..\Texture\Monster\Trooper\Trooper_WalkFront\Trooper_WalkFront_%d.png
+Trooper|Trooper_WalkFrontSide|Trooper_WalkFrontSide_%d.png|4|..\Texture\Monster\Trooper\Trooper_WalkFrontSide\Trooper_WalkFrontSide_%d.png
+Trooper|Trooper_WalkSide|Trooper_WalkSide_%d.png|4|..\Texture\Monster\Trooper\Trooper_WalkSide\Trooper_WalkSide_%d.png
+Trooper|Trooper_WalkSideBack|Trooper_WalkSideBack_%d.png|4|..\Texture\Monster\Trooper\Trooper_WalkSideBack\Trooper_WalkSideBack_%d.png
 PickUp|Equip|Equip_%d.png|6|..\Texture\PickUp\Equip\Equip_%d.png
-PickUp|JetPack|JetPack_%d.png|1|..\Texture\PickUp\JetPack\JetPack_%d.png
-PickUp|Pack|Pack_1.png|2|..\Texture\PickUp\Pack\Pack_1.png
-Texture|Terrain|Height.bmp|2|..\Texture\Terrain\Height.bmp
 Animation|Lava|Lava_%d.png|6|..\Texture\Tiles\Animation\Lava\Lava_%d.png
 Animation|Screen_Broke|ScreenBroke_%d.png|3|..\Texture\Tiles\Animation\Screen_Broke\ScreenBroke_%d.png
 Animation|Screen_Noise|ScreenNoise_%d.png|4|..\Texture\Tiles\Animation\Screen_Noise\ScreenNoise_%d.png
@@ -38,6 +57,17 @@ VFX|Smoke_Gun|Smoke_Gun_%d.png|1|..\Texture\VFX\Smoke_Gun\Smoke_Gun_%d.png
 VFX|Smoke_Small|SmokeSmall_%d.png|4|..\Texture\VFX\Smoke_Small\SmokeSmall_%d.png
 Bullets|Bullet_Rocket|Bullet_Rocket_%d.png|8|..\Texture\Weapon\Bullets\Bullet_Rocket\Bullet_Rocket_%d.png
 Bullets|Bullet_Yellow|Bullet_Yellow_%d.png|7|..\Texture\Weapon\Bullets\Bullet_Yellow\Bullet_Yellow_%d.png
+PumpShot|PumpShot_Draw|PumpShot_Draw_%d.png|6|..\Texture\Weapon\PumpShot\PumpShot_Draw\PumpShot_Draw_%d.png
+PumpShot|PumpShot_Fire|PumpShot_Fire_%d.png|7|..\Texture\Weapon\PumpShot\PumpShot_Fire\PumpShot_Fire_%d.png
+PumpShot|PumpShot_Idle|PumpShot_Idle_%d.png|2|..\Texture\Weapon\PumpShot\PumpShot_Idle\PumpShot_Idle_%d.png
+PumpShot|PumpShot_PumpIn|PumpShot_PumpIn_%d.png|13|..\Texture\Weapon\PumpShot\PumpShot_PumpIn\PumpShot_PumpIn_%d.png
+PumpShot|PumpShot_PumpOut|PumpShot_PumpOut_%d.png|12|..\Texture\Weapon\PumpShot\PumpShot_PumpOut\PumpShot_PumpOut_%d.png
+PumpShot|PumpShot_Reload|PumpShot_Reload_%d.png|7|..\Texture\Weapon\PumpShot\PumpShot_Reload\PumpShot_Reload_%d.png
+PumpShot|PumpShot_ZoomFire|PumpShot_ZoomFire_%d.png|5|..\Texture\Weapon\PumpShot\PumpShot_ZoomFire\PumpShot_ZoomFire_%d.png
+PumpShot|PumpShot_ZoomIn|PumpShot_ZoomIn_%d.png|5|..\Texture\Weapon\PumpShot\PumpShot_ZoomIn\PumpShot_ZoomIn_%d.png
+PumpShot|PumpShot_ZoomOut|PumpShot_ZoomOut_%d.png|5|..\Texture\Weapon\PumpShot\PumpShot_ZoomOut\PumpShot_ZoomOut_%d.png
+PumpShot|PumpShot_ZoomPumpIn|PumpShot_ZoomPumpIn_%d.png|11|..\Texture\Weapon\PumpShot\PumpShot_ZoomPumpIn\PumpShot_ZoomPumpIn_%d.png
+PumpShot|PumpShot_ZoomPumpOut|PumpShot_ZoomPumpOut_%d.png|11|..\Texture\Weapon\PumpShot\PumpShot_ZoomPumpOut\PumpShot_ZoomPumpOut_%d.png
 Revolver|Revolver_Draw|Revolver_Draw_%d.png|5|..\Texture\Weapon\Revolver\Revolver_Draw\Revolver_Draw_%d.png
 Revolver|Revolver_FaseReady|Revolver_FastReady_%d.png|6|..\Texture\Weapon\Revolver\Revolver_FaseReady\Revolver_FastReady_%d.png
 Revolver|Revolver_Fast|Revolver_Fast_%d.png|8|..\Texture\Weapon\Revolver\Revolver_Fast\Revolver_Fast_%d.png
@@ -47,7 +77,10 @@ Revolver|Revolver_Idle|Revolver_Idle_%d.png|2|..\Texture\Weapon\Revolver\Revolve
 Revolver|Revolver_Reload|Revolver_Reload_%d.png|43|..\Texture\Weapon\Revolver\Revolver_Reload\Revolver_Reload_%d.png
 Weapon|Rocket|Rocket_%d.png|7|..\Texture\Weapon\Rocket\Rocket_%d.png
 RocketLuncher|RocketLuncher_Draw|RocketLuncher_Draw_%d.png|13|..\Texture\Weapon\RocketLuncher\RocketLuncher_Draw\RocketLuncher_Draw_%d.png
-RocketLuncher|RocketLuncher_Fire|RocketLuncher_Fire_%d.png|10|..\Texture\Weapon\RocketLuncher\RocketLuncher_Fire\RocketLuncher_Fire_%d.png
+RocketLuncher|RocketLuncher_Fire|RocketLuncher_Fire_%d.png|9|..\Texture\Weapon\RocketLuncher\RocketLuncher_Fire\RocketLuncher_Fire_%d.png
+RocketLuncher|RocketLuncher_Idle|RocketLuncher_Idle_%d.png|2|..\Texture\Weapon\RocketLuncher\RocketLuncher_Idle\RocketLuncher_Idle_%d.png
+RocketLuncher|RocketLuncher_Idle_Delay|RocketLuncher_Idle_Delay_%d.png|2|..\Texture\Weapon\RocketLuncher\RocketLuncher_Idle_Delay\RocketLuncher_Idle_Delay_%d.png
+RocketLuncher|RocketLuncher_NoAmmo|RocketLuncher_NoAmmo_%d.png|2|..\Texture\Weapon\RocketLuncher\RocketLuncher_NoAmmo\RocketLuncher_NoAmmo_%d.png
 RocketLuncher|RocketLuncher_Reload|RocketLuncher_Reload_%d.png|30|..\Texture\Weapon\RocketLuncher\RocketLuncher_Reload\RocketLuncher_Reload_%d.png
 SMG|SMG_Draw|SMG_Draw_%d.png|5|..\Texture\Weapon\SMG\SMG_Draw\SMG_Draw_%d.png
 SMG|SMG_Fire|SMG_Fire_%d.png|4|..\Texture\Weapon\SMG\SMG_Fire\SMG_Fire_%d.png
@@ -57,14 +90,14 @@ SMG|SMG_Reload|SMG_Reload_%d.png|40|..\Texture\Weapon\SMG\SMG_Reload\SMG_Reload_
 SMG|SMG_Zoom|SMG_Zoom_%d.png|5|..\Texture\Weapon\SMG\SMG_Zoom\SMG_Zoom_%d.png
 SMG|SMG_ZoomFire|SMG_ZoomFire_%d.png|4|..\Texture\Weapon\SMG\SMG_ZoomFire\SMG_ZoomFire_%d.png
 SMG|SMG_ZoomOut|SMG_ZoomOut_%d.png|5|..\Texture\Weapon\SMG\SMG_ZoomOut\SMG_ZoomOut_%d.png
-No_Animation|dds|skybox_hell.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_hell.dds
-No_Animation|dds|skybox_redSpace.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_redSpace.dds
-No_Animation|dds|skybox_space.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_space.dds
+No_Animation|AmmoBox|AmmoBox_0.png|1|..\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_0.png
+No_Animation|AmmoBox|AmmoBox_1.png|1|..\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_1.png
+No_Animation|AmmoBox|AmmoBox_2.png|1|..\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_2.png
+No_Animation|AmmoBox|AmmoBox_3.png|1|..\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_3.png
+No_Animation|JetPack|JetPack_0.png|1|..\Texture\PickUp\No_Animation\JetPack\JetPack_0.png
+No_Animation|Pack|Pack_1.png|1|..\Texture\PickUp\No_Animation\Pack\Pack_1.png
+No_Animation|Pack|Pack_2.png|1|..\Texture\PickUp\No_Animation\Pack\Pack_2.png
 No_Animation|dds|skybox_ufo.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_ufo.dds
-No_Animation|1080 x 1080|Tile_HQ_0.dds|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.dds
-No_Animation|1080 x 1080|Tile_HQ_0.png|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_0.png
-No_Animation|1080 x 1080|Tile_HQ_1.dds|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_1.dds
-No_Animation|1080 x 1080|Tile_HQ_1.png|1|..\Texture\Tiles\No_Animation\1080 x 1080\Tile_HQ_1.png
 No_Animation|128 x 128|Tile128x128_0.dds|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_0.dds
 No_Animation|128 x 128|Tile128x128_0.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_0.png
 No_Animation|128 x 128|Tile128x128_1.dds|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_1.dds
@@ -351,93 +384,6 @@ No_Animation|128 x 128|Tile128x128_98.dds|1|..\Texture\Tiles\No_Animation\128 x 
 No_Animation|128 x 128|Tile128x128_98.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_98.png
 No_Animation|128 x 128|Tile128x128_99.dds|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_99.dds
 No_Animation|128 x 128|Tile128x128_99.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_99.png
-No_Animation|128 x 256|Tile128x256_0.dds|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_0.dds
-No_Animation|128 x 256|Tile128x256_0.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_0.png
-No_Animation|128 x 256|Tile128x256_1.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_1.png
-No_Animation|128 x 256|Tile128x256_10.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_10.png
-No_Animation|128 x 256|Tile128x256_11.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_11.png
-No_Animation|128 x 256|Tile128x256_12.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_12.png
-No_Animation|128 x 256|Tile128x256_13.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_13.png
-No_Animation|128 x 256|Tile128x256_14.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_14.png
-No_Animation|128 x 256|Tile128x256_15.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_15.png
-No_Animation|128 x 256|Tile128x256_16.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_16.png
-No_Animation|128 x 256|Tile128x256_17.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_17.png
-No_Animation|128 x 256|Tile128x256_18.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_18.png
-No_Animation|128 x 256|Tile128x256_19.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_19.png
-No_Animation|128 x 256|Tile128x256_2.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_2.png
-No_Animation|128 x 256|Tile128x256_20.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_20.png
-No_Animation|128 x 256|Tile128x256_21.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_21.png
-No_Animation|128 x 256|Tile128x256_22.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_22.png
-No_Animation|128 x 256|Tile128x256_23.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_23.png
-No_Animation|128 x 256|Tile128x256_24.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_24.png
-No_Animation|128 x 256|Tile128x256_25.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_25.png
-No_Animation|128 x 256|Tile128x256_26.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_26.png
-No_Animation|128 x 256|Tile128x256_27.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_27.png
-No_Animation|128 x 256|Tile128x256_28.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_28.png
-No_Animation|128 x 256|Tile128x256_29.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_29.png
-No_Animation|128 x 256|Tile128x256_3.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_3.png
-No_Animation|128 x 256|Tile128x256_30.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_30.png
-No_Animation|128 x 256|Tile128x256_31.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_31.png
-No_Animation|128 x 256|Tile128x256_32.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_32.png
-No_Animation|128 x 256|Tile128x256_33.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_33.png
-No_Animation|128 x 256|Tile128x256_34.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_34.png
-No_Animation|128 x 256|Tile128x256_35.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_35.png
-No_Animation|128 x 256|Tile128x256_36.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_36.png
-No_Animation|128 x 256|Tile128x256_37.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_37.png
-No_Animation|128 x 256|Tile128x256_38.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_38.png
-No_Animation|128 x 256|Tile128x256_39.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_39.png
-No_Animation|128 x 256|Tile128x256_4.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_4.png
-No_Animation|128 x 256|Tile128x256_40.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_40.png
-No_Animation|128 x 256|Tile128x256_41.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_41.png
-No_Animation|128 x 256|Tile128x256_42.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_42.png
-No_Animation|128 x 256|Tile128x256_43.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_43.png
-No_Animation|128 x 256|Tile128x256_44.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_44.png
-No_Animation|128 x 256|Tile128x256_45.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_45.png
-No_Animation|128 x 256|Tile128x256_46.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_46.png
-No_Animation|128 x 256|Tile128x256_47.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_47.png
-No_Animation|128 x 256|Tile128x256_48.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_48.png
-No_Animation|128 x 256|Tile128x256_49.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_49.png
-No_Animation|128 x 256|Tile128x256_5.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_5.png
-No_Animation|128 x 256|Tile128x256_50.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_50.png
-No_Animation|128 x 256|Tile128x256_51.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_51.png
-No_Animation|128 x 256|Tile128x256_52.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_52.png
-No_Animation|128 x 256|Tile128x256_53.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_53.png
-No_Animation|128 x 256|Tile128x256_54.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_54.png
-No_Animation|128 x 256|Tile128x256_55.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_55.png
-No_Animation|128 x 256|Tile128x256_56.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_56.png
-No_Animation|128 x 256|Tile128x256_57.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_57.png
-No_Animation|128 x 256|Tile128x256_58.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_58.png
-No_Animation|128 x 256|Tile128x256_59.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_59.png
-No_Animation|128 x 256|Tile128x256_6.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_6.png
-No_Animation|128 x 256|Tile128x256_60.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_60.png
-No_Animation|128 x 256|Tile128x256_61.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_61.png
-No_Animation|128 x 256|Tile128x256_62.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_62.png
-No_Animation|128 x 256|Tile128x256_63.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_63.png
-No_Animation|128 x 256|Tile128x256_64.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_64.png
-No_Animation|128 x 256|Tile128x256_65.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_65.png
-No_Animation|128 x 256|Tile128x256_66.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_66.png
-No_Animation|128 x 256|Tile128x256_67.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_67.png
-No_Animation|128 x 256|Tile128x256_68.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_68.png
-No_Animation|128 x 256|Tile128x256_69.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_69.png
-No_Animation|128 x 256|Tile128x256_7.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_7.png
-No_Animation|128 x 256|Tile128x256_70.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_70.png
-No_Animation|128 x 256|Tile128x256_71.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_71.png
-No_Animation|128 x 256|Tile128x256_72.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_72.png
-No_Animation|128 x 256|Tile128x256_73.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_73.png
-No_Animation|128 x 256|Tile128x256_74.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_74.png
-No_Animation|128 x 256|Tile128x256_8.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_8.png
-No_Animation|128 x 256|Tile128x256_9.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_9.png
-No_Animation|128 x 32|Tile128x32_0.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_0.png
-No_Animation|128 x 32|Tile128x32_1.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_1.png
-No_Animation|128 x 32|Tile128x32_10.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_10.png
-No_Animation|128 x 32|Tile128x32_2.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_2.png
-No_Animation|128 x 32|Tile128x32_3.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_3.png
-No_Animation|128 x 32|Tile128x32_4.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_4.png
-No_Animation|128 x 32|Tile128x32_5.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_5.png
-No_Animation|128 x 32|Tile128x32_6.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_6.png
-No_Animation|128 x 32|Tile128x32_7.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_7.png
-No_Animation|128 x 32|Tile128x32_8.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_8.png
-No_Animation|128 x 32|Tile128x32_9.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_9.png
 No_Animation|256 x 256|Tile256x256_0.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_0.dds
 No_Animation|256 x 256|Tile256x256_0.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_0.png
 No_Animation|256 x 256|Tile256x256_1.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_1.dds
@@ -628,126 +574,6 @@ No_Animation|256 x 256|Tile256x256_94.dds|1|..\Texture\Tiles\No_Animation\256 x 
 No_Animation|256 x 256|Tile256x256_94.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_94.png
 No_Animation|256 x 256|Tile256x256_95.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_95.dds
 No_Animation|256 x 256|Tile256x256_95.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_95.png
-No_Animation|32 x 128|Tile32x128_0.png|1|..\Texture\Tiles\No_Animation\32 x 128\Tile32x128_0.png
-No_Animation|32 x 128|Tile32x128_1.png|1|..\Texture\Tiles\No_Animation\32 x 128\Tile32x128_1.png
-No_Animation|32 x 128|Tile32x128_2.png|1|..\Texture\Tiles\No_Animation\32 x 128\Tile32x128_2.png
-No_Animation|32 x 128|Tile32x128_3.png|1|..\Texture\Tiles\No_Animation\32 x 128\Tile32x128_3.png
-No_Animation|64 x 128|Tile64x128_0.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_0.png
-No_Animation|64 x 128|Tile64x128_1.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_1.png
-No_Animation|64 x 128|Tile64x128_10.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_10.png
-No_Animation|64 x 128|Tile64x128_11.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_11.png
-No_Animation|64 x 128|Tile64x128_12.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_12.png
-No_Animation|64 x 128|Tile64x128_13.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_13.png
-No_Animation|64 x 128|Tile64x128_14.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_14.png
-No_Animation|64 x 128|Tile64x128_15.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_15.png
-No_Animation|64 x 128|Tile64x128_16.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_16.png
-No_Animation|64 x 128|Tile64x128_17.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_17.png
-No_Animation|64 x 128|Tile64x128_2.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_2.png
-No_Animation|64 x 128|Tile64x128_3.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_3.png
-No_Animation|64 x 128|Tile64x128_4.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_4.png
-No_Animation|64 x 128|Tile64x128_5.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_5.png
-No_Animation|64 x 128|Tile64x128_6.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_6.png
-No_Animation|64 x 128|Tile64x128_7.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_7.png
-No_Animation|64 x 128|Tile64x128_8.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_8.png
-No_Animation|64 x 128|Tile64x128_9.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_9.png
-No_Animation|64 x 256|Tile64x256_0.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_0.png
-No_Animation|64 x 256|Tile64x256_1.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_1.png
-No_Animation|64 x 256|Tile64x256_10.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_10.png
-No_Animation|64 x 256|Tile64x256_11.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_11.png
-No_Animation|64 x 256|Tile64x256_12.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_12.png
-No_Animation|64 x 256|Tile64x256_13.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_13.png
-No_Animation|64 x 256|Tile64x256_14.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_14.png
-No_Animation|64 x 256|Tile64x256_15.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_15.png
-No_Animation|64 x 256|Tile64x256_16.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_16.png
-No_Animation|64 x 256|Tile64x256_17.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_17.png
-No_Animation|64 x 256|Tile64x256_18.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_18.png
-No_Animation|64 x 256|Tile64x256_19.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_19.png
-No_Animation|64 x 256|Tile64x256_2.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_2.png
-No_Animation|64 x 256|Tile64x256_20.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_20.png
-No_Animation|64 x 256|Tile64x256_21.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_21.png
-No_Animation|64 x 256|Tile64x256_22.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_22.png
-No_Animation|64 x 256|Tile64x256_23.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_23.png
-No_Animation|64 x 256|Tile64x256_24.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_24.png
-No_Animation|64 x 256|Tile64x256_25.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_25.png
-No_Animation|64 x 256|Tile64x256_26.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_26.png
-No_Animation|64 x 256|Tile64x256_27.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_27.png
-No_Animation|64 x 256|Tile64x256_28.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_28.png
-No_Animation|64 x 256|Tile64x256_29.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_29.png
-No_Animation|64 x 256|Tile64x256_3.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_3.png
-No_Animation|64 x 256|Tile64x256_30.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_30.png
-No_Animation|64 x 256|Tile64x256_31.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_31.png
-No_Animation|64 x 256|Tile64x256_32.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_32.png
-No_Animation|64 x 256|Tile64x256_33.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_33.png
-No_Animation|64 x 256|Tile64x256_34.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_34.png
-No_Animation|64 x 256|Tile64x256_35.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_35.png
-No_Animation|64 x 256|Tile64x256_36.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_36.png
-No_Animation|64 x 256|Tile64x256_37.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_37.png
-No_Animation|64 x 256|Tile64x256_38.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_38.png
-No_Animation|64 x 256|Tile64x256_39.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_39.png
-No_Animation|64 x 256|Tile64x256_4.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_4.png
-No_Animation|64 x 256|Tile64x256_40.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_40.png
-No_Animation|64 x 256|Tile64x256_41.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_41.png
-No_Animation|64 x 256|Tile64x256_42.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_42.png
-No_Animation|64 x 256|Tile64x256_43.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_43.png
-No_Animation|64 x 256|Tile64x256_5.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_5.png
-No_Animation|64 x 256|Tile64x256_6.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_6.png
-No_Animation|64 x 256|Tile64x256_7.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_7.png
-No_Animation|64 x 256|Tile64x256_8.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_8.png
-No_Animation|64 x 256|Tile64x256_9.png|1|..\Texture\Tiles\No_Animation\64 x 256\Tile64x256_9.png
-No_Animation|64 x 64|Tile64x64_0.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_0.png
-No_Animation|64 x 64|Tile64x64_1.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_1.png
-No_Animation|64 x 64|Tile64x64_10.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_10.png
-No_Animation|64 x 64|Tile64x64_11.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_11.png
-No_Animation|64 x 64|Tile64x64_12.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_12.png
-No_Animation|64 x 64|Tile64x64_13.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_13.png
-No_Animation|64 x 64|Tile64x64_14.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_14.png
-No_Animation|64 x 64|Tile64x64_15.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_15.png
-No_Animation|64 x 64|Tile64x64_16.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_16.png
-No_Animation|64 x 64|Tile64x64_17.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_17.png
-No_Animation|64 x 64|Tile64x64_18.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_18.png
-No_Animation|64 x 64|Tile64x64_19.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_19.png
-No_Animation|64 x 64|Tile64x64_2.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_2.png
-No_Animation|64 x 64|Tile64x64_20.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_20.png
-No_Animation|64 x 64|Tile64x64_21.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_21.png
-No_Animation|64 x 64|Tile64x64_22.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_22.png
-No_Animation|64 x 64|Tile64x64_23.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_23.png
-No_Animation|64 x 64|Tile64x64_24.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_24.png
-No_Animation|64 x 64|Tile64x64_25.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_25.png
-No_Animation|64 x 64|Tile64x64_26.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_26.png
-No_Animation|64 x 64|Tile64x64_27.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_27.png
-No_Animation|64 x 64|Tile64x64_28.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_28.png
-No_Animation|64 x 64|Tile64x64_29.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_29.png
-No_Animation|64 x 64|Tile64x64_3.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_3.png
-No_Animation|64 x 64|Tile64x64_30.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_30.png
-No_Animation|64 x 64|Tile64x64_31.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_31.png
-No_Animation|64 x 64|Tile64x64_32.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_32.png
-No_Animation|64 x 64|Tile64x64_33.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_33.png
-No_Animation|64 x 64|Tile64x64_34.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_34.png
-No_Animation|64 x 64|Tile64x64_35.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_35.png
-No_Animation|64 x 64|Tile64x64_36.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_36.png
-No_Animation|64 x 64|Tile64x64_37.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_37.png
-No_Animation|64 x 64|Tile64x64_38.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_38.png
-No_Animation|64 x 64|Tile64x64_39.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_39.png
-No_Animation|64 x 64|Tile64x64_4.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_4.png
-No_Animation|64 x 64|Tile64x64_40.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_40.png
-No_Animation|64 x 64|Tile64x64_41.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_41.png
-No_Animation|64 x 64|Tile64x64_42.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_42.png
-No_Animation|64 x 64|Tile64x64_43.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_43.png
-No_Animation|64 x 64|Tile64x64_44.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_44.png
-No_Animation|64 x 64|Tile64x64_45.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_45.png
-No_Animation|64 x 64|Tile64x64_46.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_46.png
-No_Animation|64 x 64|Tile64x64_47.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_47.png
-No_Animation|64 x 64|Tile64x64_48.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_48.png
-No_Animation|64 x 64|Tile64x64_49.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_49.png
-No_Animation|64 x 64|Tile64x64_5.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_5.png
-No_Animation|64 x 64|Tile64x64_50.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_50.png
-No_Animation|64 x 64|Tile64x64_51.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_51.png
-No_Animation|64 x 64|Tile64x64_52.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_52.png
-No_Animation|64 x 64|Tile64x64_53.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_53.png
-No_Animation|64 x 64|Tile64x64_6.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_6.png
-No_Animation|64 x 64|Tile64x64_7.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_7.png
-No_Animation|64 x 64|Tile64x64_8.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_8.png
-No_Animation|64 x 64|Tile64x64_9.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_9.png
 No_Animation|Aim|AimHitMark_L.png|1|..\Texture\UI\No_Animation\Aim\AimHitMark_L.png
 No_Animation|Aim|AimHitMark_S.png|1|..\Texture\UI\No_Animation\Aim\AimHitMark_S.png
 No_Animation|Aim|Aim_1.png|1|..\Texture\UI\No_Animation\Aim\Aim_1.png

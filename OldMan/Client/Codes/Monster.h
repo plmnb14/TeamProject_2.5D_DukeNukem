@@ -22,9 +22,9 @@ namespace ENGINE
 class CCameraObserver;
 class CMonster : public ENGINE::CGameObject
 {
-private:
+protected:
 	explicit CMonster(LPDIRECT3DDEVICE9 pGraphicDev);
-private:
+protected:
 	enum STATE {
 		MONSTER_IDLE, MONSTER_PATROLL, MONSTER_PURSUE,
 		MONSTER_FIRE, MONSTER_MILL, MONSTER_DEAD, MONSTER_SHOT,
@@ -38,12 +38,12 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-private:
+protected:
 	virtual HRESULT Initialize() override;
 	virtual HRESULT LateInit();
 	virtual void Release() override;
 
-private:
+public:
 	HRESULT AddComponent();
 	void Player_Pursue(float _move);  //추격하다 
 	void Monster_Foward();
@@ -56,7 +56,7 @@ private:
 	void Monster_Fire2();
 	void Monster_Dead();
 	void Monster_Attack();
-private:											//물리 
+protected:											//물리 
 	void Check_Physic();
 	void Object_Collison();
 	void ChangeTex(wstring _wstrTex);
@@ -69,13 +69,13 @@ public:
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev ,CGameObject* _Target);
-private:
+protected:
 	CGameObject*			m_pTarget;
 	CCameraObserver*		m_pObserver;
 	D3DXMATRIX              m_matView;
 	D3DXVECTOR3				m_vPos;
 
-private:
+protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
 	ENGINE::CTexture*		m_pTexture;
@@ -91,7 +91,7 @@ private:
 	ENGINE::CCollider*		m_pGroundChekCollider;
 	ENGINE::CAnimator*		m_pAnimator;
 
-private:
+protected:
 	float					m_fRange;                   // 범위
 	float					m_MoveSpeed;                // 속도
 	float					m_fMaxRange;                // 최대범위
