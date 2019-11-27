@@ -16,6 +16,9 @@
 
 #include "Camera.h"
 #include "Monster.h"
+#include "Trooper.h"
+#include "OctaBrain.h"
+#include "PigMan.h"
 
 #include "UI.h"
 #include "Number.h"
@@ -128,6 +131,12 @@ HRESULT CStage::Add_Object_Layer()
 	
 	////// Monster
 	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	
+	
+	pObject = COctaBrain::Create(m_pGraphicDev, pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
@@ -247,10 +256,6 @@ HRESULT CStage::Initialize()
 		ENGINE::CVIBuffer::BUFFER_RCTEX,
 		L"Buffer_Player");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
-
-	// Terrain Buffer
-
-
 	// 
 	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
@@ -466,7 +471,7 @@ void CStage::LoadMapObj()
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger

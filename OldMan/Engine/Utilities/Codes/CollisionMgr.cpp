@@ -252,20 +252,19 @@ void CCollisionMgr::CollisionTarget_To_Monstr_Mele(list<CGameObject*>& rDstList,
 			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
 			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
-			cout << static_cast<CCollider*>(rDst->Get_Component(L"Monster_Mell"))->Get_Enabled() << endl;
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				cout << "충돌체크 됩니다" << endl;
+			//	cout << "충돌체크 됩니다" << endl;
 
-				static_cast<CCollider*>(rDst->Get_Component(L"Monster_Mell"))->Set_IsCollision(true);
+				rDstCol->Set_IsCollision(true);
 				//rSrcCol->Set_IsCollision(true);
 				return;
 			}
 			else
 			{
-				cout << "충돌 안함" << endl;
-				static_cast<CCollider*>(rDst->Get_Component(L"Monster_Mell"))->Set_IsCollision(false);
+			//	cout << "충돌 안함" << endl;
+				rDstCol->Set_IsCollision(false);
 
 			}
 		}
@@ -274,12 +273,7 @@ void CCollisionMgr::CollisionTarget_To_Monstr_Mele(list<CGameObject*>& rDstList,
 	}
 	
 
-
-
-
 }
-
-
 
 
 
