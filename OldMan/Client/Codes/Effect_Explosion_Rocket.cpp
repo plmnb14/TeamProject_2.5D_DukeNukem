@@ -82,6 +82,8 @@ HRESULT CEffect_Explosion_Rocket::LateInit()
 
 void CEffect_Explosion_Rocket::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_Explosion_Rocket::Set_Pos(D3DXVECTOR3 _Pos)

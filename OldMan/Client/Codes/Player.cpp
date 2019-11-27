@@ -165,6 +165,14 @@ void CPlayer::Release()
 {
 	m_pSubject->UnSubscribe(m_pObserver);
 	ENGINE::Safe_Delete(m_pObserver);
+
+	for_each(m_mWeaponInfo.begin(), m_mWeaponInfo.end(),
+		[](auto& MyPair)
+	{
+		Safe_Delete(MyPair.second);
+	});
+
+	m_mWeaponInfo.clear();
 }
 
 HRESULT CPlayer::AddComponent()

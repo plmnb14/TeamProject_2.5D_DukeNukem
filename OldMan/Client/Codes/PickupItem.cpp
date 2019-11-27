@@ -19,6 +19,7 @@ CPickupItem::CPickupItem(LPDIRECT3DDEVICE9 pGraphicDev)
 
 CPickupItem::~CPickupItem()
 {
+	Release();
 }
 
 int CPickupItem::Update()

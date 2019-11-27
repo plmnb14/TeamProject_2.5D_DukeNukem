@@ -9,6 +9,7 @@ CMainApp::CMainApp()
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
+	m_pTextureMgr(ENGINE::GetTextureMgr()),
 	m_fTimeCount(0) , m_iFps(0)
 	
 {
@@ -81,6 +82,8 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Release()
 {		
+	CSoundMgr::GetInstance()->DestroyInstance();
+	m_pTextureMgr->DestroyInstance();
 	m_pTimeMgr->DestroyInstance();
 	m_pManagement->DestroyInstance();
 	m_pResourceMgr->DestroyInstance();

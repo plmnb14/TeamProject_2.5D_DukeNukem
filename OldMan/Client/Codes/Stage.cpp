@@ -304,7 +304,6 @@ HRESULT CStage::Initialize()
 
 void CStage::Release()
 {
-	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 void CStage::PipeLineSetUp()

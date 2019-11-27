@@ -80,6 +80,8 @@ HRESULT CEffect_BulletHole::LateInit()
 
 void CEffect_BulletHole::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_BulletHole::Set_Pos(D3DXVECTOR3 _Pos)

@@ -88,6 +88,8 @@ HRESULT CEffect_RocketSmoke::LateInit()
 
 void CEffect_RocketSmoke::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_RocketSmoke::Set_Pos(D3DXVECTOR3 _Pos)

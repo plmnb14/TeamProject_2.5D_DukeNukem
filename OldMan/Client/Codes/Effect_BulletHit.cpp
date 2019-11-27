@@ -82,6 +82,8 @@ HRESULT CEffect_BulletHit::LateInit()
 
 void CEffect_BulletHit::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_BulletHit::Set_Pos(D3DXVECTOR3 _Pos)

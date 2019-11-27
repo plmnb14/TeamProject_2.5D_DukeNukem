@@ -28,6 +28,7 @@ CPlayer_Hand::CPlayer_Hand(LPDIRECT3DDEVICE9 pGraphicDev)
 
 CPlayer_Hand::~CPlayer_Hand()
 {
+	Release();
 }
 
 int CPlayer_Hand::Update()
