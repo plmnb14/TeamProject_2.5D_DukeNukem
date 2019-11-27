@@ -157,6 +157,12 @@
     <Filter Include="02.GameObject\05.Monster\00.OctaBrain">
       <UniqueIdentifier>{a4769a60-bc61-4ccf-9045-f0c47846274d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster\01.Trooper">
+      <UniqueIdentifier>{37a20705-e1fb-49a3-b269-6ffdf60649fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\02.PigMan">
+      <UniqueIdentifier>{57d575a3-eef4-42fb-a9a3-9d18a9134f50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -313,6 +319,12 @@
     <ClInclude Include="..\Codes\OctaBrain.h">
       <Filter>02.GameObject\05.Monster\00.OctaBrain</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Trooper.h">
+      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\PigMan.h">
+      <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -444,6 +456,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\OctaBrain.cpp">
       <Filter>02.GameObject\05.Monster\00.OctaBrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Trooper.cpp">
+      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PigMan.cpp">
+      <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

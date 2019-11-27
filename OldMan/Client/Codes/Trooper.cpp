@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "OctaBrain.h"
+#include "Trooper.h"
 #include "Trasform.h"
 #include "Collider.h"
 #include "Billborad.h"
@@ -10,16 +10,16 @@
 #include "Animator.h"
 
 
-COctaBrain::COctaBrain(LPDIRECT3DDEVICE9 pGraphicDev)
+CTrooper::CTrooper(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
 {
 }
-COctaBrain::~COctaBrain()
+CTrooper::~CTrooper()
 {
 	Release();
 }
 
-int COctaBrain::Update()
+int CTrooper::Update()
 {
 
 	if (m_bIsDead)
@@ -40,7 +40,7 @@ int COctaBrain::Update()
 	return NO_EVENT;
 }
 
-void COctaBrain::LateUpdate()
+void CTrooper::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 	D3DXMatrixIdentity(&m_matView);
@@ -94,7 +94,7 @@ void COctaBrain::LateUpdate()
 		m_pTransform->GetPos().z });
 }
 
-void COctaBrain::Render()
+void CTrooper::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	m_pAnimator->RenderSet(m_pTimeMgr->GetDelta());
@@ -103,7 +103,7 @@ void COctaBrain::Render()
 	m_pBuffer->Render();
 }
 
-HRESULT COctaBrain::Initialize()
+HRESULT CTrooper::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
@@ -199,7 +199,7 @@ HRESULT COctaBrain::Initialize()
 	return S_OK;
 }
 
-HRESULT COctaBrain::LateInit()
+HRESULT CTrooper::LateInit()
 {
 	m_pObserver = CCameraObserver::Create();
 	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
@@ -209,17 +209,17 @@ HRESULT COctaBrain::LateInit()
 	return S_OK;
 }
 
-void COctaBrain::Release()
+void CTrooper::Release()
 {
 	m_pSubject->UnSubscribe(m_pObserver);
 	ENGINE::Safe_Delete(m_pObserver);
 }
 
-HRESULT COctaBrain::AddComponent()
+HRESULT CTrooper::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"OctaBrain_Idle");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"PigMan_Fire");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -307,7 +307,7 @@ HRESULT COctaBrain::AddComponent()
 // 뒤일경우 데미지 더 받는 몬스터 하나 있음 
 //도는 순서를 정해야 한다. -> 왼쪽 -> 오른쪽 판단후 돌게 만들면된다. 
 // 
-void COctaBrain::Player_Pursue(float _move)
+void CTrooper::Player_Pursue(float _move)
 {
 	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -323,7 +323,7 @@ void COctaBrain::Player_Pursue(float _move)
 
 }
 
-void COctaBrain::Monster_Foward()
+void CTrooper::Monster_Foward()
 {
 
 	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
@@ -383,7 +383,7 @@ void COctaBrain::Monster_Foward()
 
 }
 
-void COctaBrain::Monster_Range()
+void CTrooper::Monster_Range()
 {
 	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -406,11 +406,11 @@ void COctaBrain::Monster_Range()
 
 	}
 }
-void COctaBrain::Monster_Idle()
+void CTrooper::Monster_Idle()
 {
 	m_pTransform->MovePos(0.f);
 }
-void COctaBrain::Monster_Shot()
+void CTrooper::Monster_Shot()
 {
 	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -478,7 +478,7 @@ void COctaBrain::Monster_Shot()
 
 
 
-void COctaBrain::Monster_Fire2()
+void CTrooper::Monster_Fire2()
 {
 	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -539,7 +539,7 @@ void COctaBrain::Monster_Fire2()
 	}
 }
 
-void COctaBrain::Monster_Dead()
+void CTrooper::Monster_Dead()
 {
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"PigMan_Dead");
@@ -548,7 +548,7 @@ void COctaBrain::Monster_Dead()
 
 }
 
-void COctaBrain::Monster_Attack()
+void CTrooper::Monster_Attack()
 {
 
 	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
@@ -572,7 +572,7 @@ void COctaBrain::Monster_Attack()
 
 }
 
-void COctaBrain::Check_Physic()
+void CTrooper::Check_Physic()
 {
 
 	if (m_pRigid->Get_IsJump() == true)
@@ -609,7 +609,7 @@ void COctaBrain::Check_Physic()
 
 }
 
-void COctaBrain::Object_Collison()
+void CTrooper::Object_Collison()
 {
 	// 전부다 받아온다. 
 	// 그래서 그 각도에 겹치는게 없는지 판단하는게 맞다. 
@@ -619,7 +619,7 @@ void COctaBrain::Object_Collison()
 
 }
 
-void COctaBrain::ChangeTex(wstring _wstrTex)
+void CTrooper::ChangeTex(wstring _wstrTex)
 {
 	if (m_wstrTex.compare(_wstrTex) == 0)
 		return;
@@ -640,7 +640,7 @@ void COctaBrain::ChangeTex(wstring _wstrTex)
 }
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
-void COctaBrain::Monster_State_Set()
+void CTrooper::Monster_State_Set()
 {
 	if (m_eCurState != m_eNextState || m_eCurState == m_eNextState)
 	{
@@ -671,12 +671,12 @@ void COctaBrain::Monster_State_Set()
 
 }
 
-COctaBrain * COctaBrain::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
+CTrooper * CTrooper::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
 {
 
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	COctaBrain* pInstance = new COctaBrain(pGraphicDev);
+	CTrooper* pInstance = new CTrooper(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

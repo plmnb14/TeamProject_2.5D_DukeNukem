@@ -1,17 +1,17 @@
 #pragma once
 
-#ifndef __OctaBrain_H__
+#ifndef __TROOPER_H__
 
 #include "Monster.h"
 
-class COctaBrain : public CMonster
+class CTrooper : public CMonster
 {
 private:
-	explicit COctaBrain(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CTrooper(LPDIRECT3DDEVICE9 pGraphicDev);
 
-	
+
 public:
-	virtual ~COctaBrain();
+	virtual ~CTrooper();
 
 public:
 	virtual int Update() override;
@@ -32,7 +32,7 @@ private:
 	void Monster_Range();                           // ¹üÀ§
 	void Monster_Idle();
 	void Monster_Shot();
-	//void Object_Serch();
+	//	void Object_Serch();
 	void Monster_Fire2();
 	void Monster_Dead();
 	void Monster_Attack();
@@ -48,9 +48,9 @@ public:
 	void Set_Pos(D3DXVECTOR3 _Pos);
 
 public:
-	static COctaBrain* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
+	static CTrooper* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
 
 };
 
-#define __OctaBrain_H__
+#define __TROOPER_H__
 #endif
