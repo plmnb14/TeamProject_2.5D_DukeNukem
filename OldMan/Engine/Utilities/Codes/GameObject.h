@@ -31,10 +31,12 @@ public:
 	void Set_MainCamera(ENGINE::CGameObject* _Camera) { m_pCamera = _Camera; }
 	void Set_MapLayer(map<WORD, CLayer*> _mapLayer) { m_mapLayer = _mapLayer; }
 	void Set_Tag(ENGINE::OBJECT_TYPE _Tag) { m_eTag = _Tag; }
+	void Set_Target(ENGINE::CGameObject* _Target) { m_pTarget = _Target; }
 
 public:
-	CComponent* Get_Component(wstring _key) { return m_mapComponent[_key]; }
-	ENGINE::OBJECT_TYPE Get_Tag() { return m_eTag; }
+	CComponent*				Get_Component(wstring _key) { return m_mapComponent[_key]; }
+	ENGINE::OBJECT_TYPE		Get_Tag() { return m_eTag; }
+	ENGINE::CGameObject*	Get_Target() { return m_pTarget; }
 	int GetDead();
 
 public:
@@ -50,6 +52,7 @@ protected:
 	MAP_LAYER	m_mapLayer;
 
 	CGameObject*	m_pCamera;
+	CGameObject*	m_pTarget;
 	ENGINE::OBJECT_TYPE	m_eTag;
 	ENGINE::CONDITION m_eCondition;
 

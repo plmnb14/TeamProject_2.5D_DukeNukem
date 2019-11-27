@@ -110,7 +110,7 @@ int CBullet::Update()
 	
 	KeyInput();
 
-	if (m_eWeaponTag == ENGINE::LUNCHER)
+	if (m_eWeaponTag == ENGINE::LUNCHER || m_eWeaponTag == ENGINE::MONSTER_LUNCHER)
 	{
 		m_fSpeed += m_pTimeMgr->GetDelta() * 70 * m_pTimeMgr->GetDelta() * 70;
 
@@ -286,6 +286,14 @@ void CBullet::BulletType()
 
 		break;
 	}
+	case ENGINE::MONSTER_LUNCHER:
+	{
+		m_pTransform->Move_AdvancedPos(m_dir, m_fSpeed * m_pTimeMgr->GetDelta());
+
+		D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) * 5, 0 };
+		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
+	}
+
 	case ENGINE::MONSTER_REVOLVER:
 	{
 		m_pTransform->Move_AdvancedPos(m_dir,m_fSpeed * m_pTimeMgr->GetDelta());

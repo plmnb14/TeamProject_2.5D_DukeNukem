@@ -23,6 +23,7 @@ public:
 	void SetUp_Box();
 
 public:
+	void Set_MaxY(float _PosY);
 	void Set_Radius(D3DXVECTOR3 _Radius);
 	void Set_Length(D3DXVECTOR3 _Length);
 	void Set_CenterPos(D3DXVECTOR3 _CenterPos);
@@ -62,6 +63,8 @@ private:
 	CGameObject* m_pTarget;
 	ENGINE::COLLISION_TYPE m_eCollisionType;
 	ENGINE::VTX_TEX*	m_pVtx;
+	float				m_fMinus_Y;
+
 
 };
 

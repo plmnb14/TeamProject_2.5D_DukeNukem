@@ -1096,9 +1096,6 @@ void CPlayer::Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo)
 		m_mWeaponInfo.insert(make_pair(_WeaponInfo->eWeaponTag, pTag));
 		m_mWeaponInfo[_WeaponInfo->eWeaponTag];
 	}
-
-	else
-		m_mWeaponInfo[_WeaponInfo->eWeaponTag]->wCurBullet += _WeaponInfo->wCurBullet;
 }
 
 void CPlayer::Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO * _WeaponInfo)

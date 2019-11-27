@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Aim.h" />
+    <ClInclude Include="..\Codes\Boss_Overload.h" />
     <ClInclude Include="..\Codes\Bullet.h" />
     <ClInclude Include="..\Codes\Camera.h" />
     <ClInclude Include="..\Codes\CameraObserver.h">
@@ -217,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Aim.cpp" />
+    <ClCompile Include="..\Codes\Boss_Overload.cpp" />
     <ClCompile Include="..\Codes\Bullet.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp" />
     <ClCompile Include="..\Codes\CameraObserver.cpp">

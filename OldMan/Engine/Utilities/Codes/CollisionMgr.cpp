@@ -1152,37 +1152,33 @@ D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BO
 		return { 0,0,0 };
 	}
 
-	//(vCross.x < vCross.y ? vCross.x < vCross.z ? 
-	//	vCross.y = 0 : vCross.z = 0 : 
-	//	vCross.y < vCross.z ? vCross.z = 0 : vCross.y = 0);
-
 	if (fabs(vCross.x) < fabs(vCross.y))
 	{
 		if (fabs(vCross.x) < fabs(vCross.z))
 		{
 			vCross.z = 0;
 		}
-	
+
 		else
 		{
 			vCross.x = 0;
 		}
-	
+
 		vCross.y = 0;
 	}
-	
+
 	else
 	{
 		if (fabs(vCross.y) < fabs(vCross.z))
 		{
 			vCross.z = 0;
 		}
-	
+
 		else
 		{
 			vCross.y = 0;
 		}
-	
+
 		vCross.x = 0;
 	}
 

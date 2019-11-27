@@ -29,6 +29,7 @@
 #include "Weapon_SMG.h"
 #include "Weapon_Pump.h"
 #include "Weapon_Rocket.h"
+#include "Boss_Overload.h"
 
 #include "Player_Hand.h"
 
@@ -100,6 +101,12 @@ HRESULT CStage::Add_Object_Layer()
 	pObject = CPlayer_Hand::Create(m_pGraphicDev, pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Player Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
+	// Boss
+	pObject = CBoss_Overload::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Boss Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
 	//// Revolver
