@@ -34,7 +34,7 @@ public:
 	void Set_CollisionVertex(ENGINE::CTransform* pTarget, ENGINE::VTX_TEX* pTerrainVtx);
 	void Set_PlaneVtx(float* _Angle, D3DXMATRIX _World);
 	void Set_OldPos(D3DXVECTOR3 _OldPos);
-
+	void Set_Enabled(bool _Enabled) { m_tBoxCollider.bIsEnabled = _Enabled;}
 
 public:
 	D3DXVECTOR3 Get_CenterPos() { return m_tBoxCollider.vCenterPos; }
@@ -47,6 +47,8 @@ public:
 	bool Get_IsCollision() { return m_tBoxCollider.bIsCollision; }
 
 	BOXCOL* Get_BoxCollider() { return &m_tBoxCollider; }
+	bool Get_Enabled() { return m_tBoxCollider.bIsEnabled; }
+
 	ENGINE::VTX_TEX* Get_VertexInfo() { if (m_pVtx == nullptr)return nullptr; else return m_pVtx; }
 	ENGINE::COLLISION_TYPE Get_CollisionType() { return m_eCollisionType; }
 

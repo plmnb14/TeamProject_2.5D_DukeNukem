@@ -16,17 +16,20 @@ namespace ENGINE
 	class CBillborad;
 	class CRigidBody;
 	class CCondition;
+	class CAnimator;
 
 }
 class CCameraObserver;
 class CMonster : public ENGINE::CGameObject
 {
-private:
+protected:
 	explicit CMonster(LPDIRECT3DDEVICE9 pGraphicDev);
-private:
-	 enum STATE { MONSTER_IDLE, MONSTER_PATROLL, MONSTER_PURSUE,
+protected:
+	enum STATE {
+		MONSTER_IDLE, MONSTER_PATROLL, MONSTER_PURSUE,
 		MONSTER_FIRE, MONSTER_MILL, MONSTER_DEAD, MONSTER_SHOT,
-		MONSTER_SIT, MONSTER_END } ;
+		MONSTER_SIT, MONSTER_END
+	};
 public:
 	virtual ~CMonster();
 
@@ -35,40 +38,44 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-private:
+protected:
 	virtual HRESULT Initialize() override;
 	virtual HRESULT LateInit();
 	virtual void Release() override;
 
-private:
+public:
 	HRESULT AddComponent();
-	void Player_Pursue();  //추격하다 
+	void Player_Pursue(float _move);  //추격하다 
 	void Monster_Foward();
 	void Monster_State_Set();   //상태
-//	void Monster_State_Set2();   //상태
+								//	void Monster_State_Set2();   //상태
 	void Monster_Range();                           // 범위
 	void Monster_Idle();
 	void Monster_Shot();
-//	void Object_Serch();
-	void Monster_Fire();
-	void Monster_Bogan();
-private:											//물리 
+	//	void Object_Serch();
+	void Monster_Fire2();
+	void Monster_Dead();
+	void Monster_Attack();
+protected:											//물리 
 	void Check_Physic();
 	void Object_Collison();
+	void ChangeTex(wstring _wstrTex);
 
 
-	
-public: 
+
+public:
 	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
 	void Set_Pos(D3DXVECTOR3 _Pos);
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev ,CGameObject* _Target);
-private:
+protected:
 	CGameObject*			m_pTarget;
 	CCameraObserver*		m_pObserver;
 	D3DXMATRIX              m_matView;
-private:
+	D3DXVECTOR3				m_vPos;
+
+protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
 	ENGINE::CTimeMgr*		m_pTimeMgr;
 	ENGINE::CTexture*		m_pTexture;
@@ -82,30 +89,33 @@ private:
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCondition*		m_pCondition;
 	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CAnimator*		m_pAnimator;
 
-
-	float				m_fRange;                   // 범위
-	float				m_MoveSpeed;                // 속도
-	float				m_fMaxRange;                // 최대범위
-	float				m_fMinRange;                // 최소범위
-	float				m_fTime;
-	D3DXVECTOR3				m_MonsterDir;			// 방향 
-	D3DXVECTOR3				m_MonsterCroos;		    //외적 받을값
-	
-	STATE m_eCurState;
-	STATE m_eNextState;
-
-
-	STATE m_eCurState2;
-	STATE m_eNextState2;
-
-	bool m_bShot;
-	wstring					m_wstrTex;
+protected:
+	float					m_fRange;                   // 범위
+	float					m_MoveSpeed;                // 속도
+	float					m_fMaxRange;                // 최대범위
+	float					m_fMinRange;                // 최소범위
+	float					m_fTime;					//시간 암튼시간임
+	float					m_fHitTime;					//shot쪽 시간
+	float					m_fRangeTiem;				//
+	float					m_fDelayTime;
 	float					m_fSizeX;
-	float					m_fSizeY;
-	float m_fFrame;
-	D3DXVECTOR3				m_vPos;
+	float       			m_fSizeY;
+	float					m_fFrame;
+	float					m_fFowardDealy;
+	float					m_fAttack;
+
+	STATE					m_eCurState;   //상태
+	STATE					m_eNextState;
+
+	wstring					m_wstrTex;      //텍스처
+	wstring					m_OldwstrTex;
+
 	bool					m_bObject;
+	bool					m_bShot;
+	bool					m_bAttack;
+
 
 };
 

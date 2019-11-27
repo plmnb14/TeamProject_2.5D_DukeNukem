@@ -358,7 +358,7 @@ void CPlayer::KeyInput()
 		{
 			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				cout << "Revolver already selected" << endl;
+				//cout << "Revolver already selected" << endl;
 
 				return;
 			}

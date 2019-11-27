@@ -127,11 +127,12 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject->Set_MapLayer(m_mapLayer);
 	
 	////// Monster
-	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-
+	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	//octabrain
+	
 	// Skybox
 	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_ufo.dds", pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Skybox Create Failed", E_FAIL);
@@ -248,13 +249,7 @@ HRESULT CStage::Initialize()
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
 
 	// Terrain Buffer
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_TERRAINTEX,
-		L"Buffer_Terrain",
-		TERRAIN_VTX_X, TERRAIN_VTX_Z, TERRAIN_VTX_ITV);
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Terrain Add Failed", E_FAIL);
+
 
 	// 
 	hr = m_pResourceMgr->AddBuffer(

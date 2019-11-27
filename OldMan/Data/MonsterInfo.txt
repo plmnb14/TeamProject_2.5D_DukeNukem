@@ -1,1 +1,2 @@
 Pigman|Pigman|Walk_Front_0.png|1|..\Client\Texture\Monster\PigMan\PigMan_Walk_Front\Walk_Front_0.png
+Octabrain|Octabrain|Walk_Front_0.png|1|..\Client\Texture\Monster\PigMan\PigMan_Walk_Front\Walk_Front_0.png

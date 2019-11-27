@@ -55,7 +55,7 @@ HRESULT CSkybox::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(200.f, 200.f, 200.f));
+	m_pTransform->SetSize(D3DXVECTOR3(200.f, 200.f, 100.f));
 
 	return S_OK;
 }
