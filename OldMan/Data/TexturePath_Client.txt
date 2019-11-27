@@ -766,6 +766,20 @@ No_Animation|64 x 64|Tile64x64_6.png|1|..\Texture\Tiles\No_Animation\64 x 64\Til
 No_Animation|64 x 64|Tile64x64_7.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_7.png
 No_Animation|64 x 64|Tile64x64_8.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_8.png
 No_Animation|64 x 64|Tile64x64_9.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_9.png
+No_Animation|Aim|AimHitMark_L.png|1|..\Texture\UI\No_Animation\Aim\AimHitMark_L.png
+No_Animation|Aim|AimHitMark_S.png|1|..\Texture\UI\No_Animation\Aim\AimHitMark_S.png
+No_Animation|Aim|Aim_1.png|1|..\Texture\UI\No_Animation\Aim\Aim_1.png
+No_Animation|Aim|Aim_2.png|1|..\Texture\UI\No_Animation\Aim\Aim_2.png
+No_Animation|Aim|Aim_3.png|1|..\Texture\UI\No_Animation\Aim\Aim_3.png
+No_Animation|Aim|Aim_dot.png|1|..\Texture\UI\No_Animation\Aim\Aim_dot.png
+No_Animation|Aim|LuncherAim.png|1|..\Texture\UI\No_Animation\Aim\LuncherAim.png
+No_Animation|Aim|RifleAim_h.png|1|..\Texture\UI\No_Animation\Aim\RifleAim_h.png
+No_Animation|Aim|RifleAim_v.png|1|..\Texture\UI\No_Animation\Aim\RifleAim_v.png
+No_Animation|Aim|ScopeAim.png|1|..\Texture\UI\No_Animation\Aim\ScopeAim.png
+No_Animation|Aim|ShotgunAim.png|1|..\Texture\UI\No_Animation\Aim\ShotgunAim.png
+No_Animation|Aim|ShotgunAim_Bottom.png|1|..\Texture\UI\No_Animation\Aim\ShotgunAim_Bottom.png
+No_Animation|Aim|ShotgunAim_Left.png|1|..\Texture\UI\No_Animation\Aim\ShotgunAim_Left.png
+No_Animation|Aim|ShotgunAim_Right.png|1|..\Texture\UI\No_Animation\Aim\ShotgunAim_Right.png
 No_Animation|Arrow|Arrow_0.png|1|..\Texture\UI\No_Animation\Arrow\Arrow_0.png
 No_Animation|ETC|ArmorIcon.png|1|..\Texture\UI\No_Animation\ETC\ArmorIcon.png
 No_Animation|ETC|HpIcon.png|1|..\Texture\UI\No_Animation\ETC\HpIcon.png

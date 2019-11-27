@@ -3,6 +3,7 @@
 #include "PlayerObserver.h"
 #include "Trasform.h"
 #include "Animator.h"
+#include "Condition.h"
 
 CNumber::CNumber(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CUI(pGraphicDev)
