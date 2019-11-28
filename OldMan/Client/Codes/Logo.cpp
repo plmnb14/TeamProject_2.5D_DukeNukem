@@ -22,6 +22,10 @@ void CLogo::Update()
 
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{		
+		cout << "스레드 로딩 중" << endl;
+
+		WaitForSingleObject(m_hLoadingThread, INFINITE);
+
 		HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
 		FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 	}
@@ -47,20 +51,8 @@ HRESULT CLogo::Add_Object_Layer()
 	// Object Layer
 	ENGINE::CLayer* pObject_Layer = ENGINE::CLayer::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pObject_Layer, E_FAIL);
-
 	m_mapLayer.insert({ ENGINE::CLayer::OBJECT, pObject_Layer });
 
-	// Object Create
-	HRESULT hr = 0;
-	ENGINE::CGameObject* pObject = nullptr;
-
-	// LogoBack
-	pObject = CLogoBack::Create(m_pGraphicDev);
-	NULL_CHECK_MSG_RETURN(pObject, L"LogoBack Create Failed", E_FAIL);
-
-	// Layer insert
-	hr = m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
-	FAILED_CHECK_MSG_RETURN(hr, L"LogoBack Add Failed", E_FAIL);
 	
 	return S_OK;
 }
@@ -72,28 +64,19 @@ HRESULT CLogo::Add_UI_Layer()
 
 HRESULT CLogo::Initialize()
 {
-	PipeLineSetUp();	
+	m_hLoadingThread = (HANDLE)_beginthreadex(nullptr, 0,
+		LoadingThreadFunc, this, 0, nullptr);
+	NULL_CHECK_MSG_RETURN(m_hLoadingThread, L"LoadingThread Create Failed", E_FAIL);
 
-	// Texture
-	HRESULT hr = m_pResourceMgr->AddTexture(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::TEX_NORMAL,
-		L"Texture_LogoBack",
-		L"../Texture/LogoBack/LogoBack_%d.png", 38);
-	FAILED_CHECK_MSG_RETURN(hr, L"Texture_LogoBack Add Failed", E_FAIL);
+	InitializeCriticalSection(&m_CriticalSection);
 
-	// Buffer
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_RCTEX,
-		L"Buffer_RcTex");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
+	cout << "Texture Loading Complete . . ." << endl;
+
+	PipeLineSetUp();
 
 	// Environment Layer
-	hr = Add_Environment_Layer();
-	FAILED_CHECK_RETURN(hr,E_FAIL);
+	HRESULT hr = Add_Environment_Layer();
+	FAILED_CHECK_RETURN(hr, E_FAIL);
 
 	// Object Layer
 	hr = Add_Object_Layer();
@@ -106,9 +89,60 @@ HRESULT CLogo::Initialize()
 	return S_OK;
 }
 
+void CLogo::LoadTexture()
+{
+	cout << "Loading Textrue . . ." << endl;
+
+	HRESULT hr = 0;
+
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Multi())
+	{
+		hr = m_pResourceMgr->AddTexture(
+			m_pGraphicDev,
+			ENGINE::RESOURCE_DYNAMIC,
+			ENGINE::TEX_NORMAL,
+			iter->wstrStateKey,
+			iter->wstrImgPath, iter->iImgCount);
+		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+	}
+
+	// Single은 FileName
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
+	{
+		string strCheckDDS;
+		strCheckDDS.assign(iter->wstrFileName.begin(), iter->wstrFileName.end());
+
+		// .dds 를 찾았다면 TEX_CUBE
+		if (strCheckDDS.find(".dds") != string::npos)
+		{
+			hr = m_pResourceMgr->AddTexture(
+				m_pGraphicDev,
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_CUBE,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
+		else
+		{
+			hr = m_pResourceMgr->AddTexture(
+				m_pGraphicDev,
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_NORMAL,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
+	}
+
+	cout << "Complete Textrue Loading ! ! !" << endl;
+}
+
 void CLogo::Release()
 {
-	m_pResourceMgr->ResetDynamicResource();
+	CloseHandle(m_hLoadingThread);
+	DeleteCriticalSection(&m_CriticalSection);
+	//m_pResourceMgr->ResetDynamicResource();
 }
 
 map<WORD, ENGINE::CLayer*> CLogo::Get_MapLayer()
@@ -135,4 +169,57 @@ CLogo* CLogo::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	}
 
 	return pInstance;
+}
+
+unsigned CLogo::LoadingThreadFunc(void * pParam)
+{
+	CLogo* pLogo = reinterpret_cast<CLogo*>(pParam);
+
+	EnterCriticalSection(&pLogo->m_CriticalSection);
+
+	ENGINE::GetTextureMgr()->InitTextureMgr(ENGINE::GetGraphicDev()->GetDevice());
+	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../../Data/TexturePath_Client.txt");
+	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
+
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Multi())
+	{
+		hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
+			ENGINE::GetGraphicDev()->GetDevice(),
+			ENGINE::RESOURCE_DYNAMIC,
+			ENGINE::TEX_NORMAL,
+			iter->wstrStateKey,
+			iter->wstrImgPath, iter->iImgCount);
+		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+	}
+
+	// Single은 FileName
+	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
+	{
+		string strCheckDDS;
+		strCheckDDS.assign(iter->wstrFileName.begin(), iter->wstrFileName.end());
+
+		// .dds 를 찾았다면 TEX_CUBE
+		if (strCheckDDS.find(".dds") != string::npos)
+		{
+			hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
+				ENGINE::GetGraphicDev()->GetDevice(),
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_CUBE,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
+		else
+		{
+			hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
+				ENGINE::GetGraphicDev()->GetDevice(),
+				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::TEX_NORMAL,
+				iter->wstrFileName,
+				iter->wstrImgPath, 1);
+			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
+		}
+	}
+
+	LeaveCriticalSection(&pLogo->m_CriticalSection);
 }

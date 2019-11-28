@@ -22,7 +22,7 @@ int CWeapon_Revolver::Update()
 {
 	if (m_bIsDead)
 	{
-		dynamic_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Set_WeaponInfo(&m_pWInfo);
+		static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Set_WeaponInfo(&m_pWInfo);
 		return DEAD_OBJ;
 	}
 
@@ -41,7 +41,9 @@ void CWeapon_Revolver::LateUpdate()
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
 	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+
+	if (m_pObserver != nullptr)
+		Cameramatrix = m_pObserver->GetViewMatrix();
 	vSize = m_pTransform->GetSize();
 
 	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
@@ -160,7 +162,7 @@ HRESULT CWeapon_Revolver::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
@@ -168,7 +170,7 @@ HRESULT CWeapon_Revolver::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
-	m_pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(pComponent);
+	m_pBuffer = static_cast<ENGINE::CVIBuffer*>(pComponent);
 	NULL_CHECK_RETURN(m_pBuffer, E_FAIL);
 
 	// Transform
@@ -176,7 +178,7 @@ HRESULT CWeapon_Revolver::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Transform", pComponent });
 
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
+	m_pTransform = static_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
 
@@ -185,7 +187,7 @@ HRESULT CWeapon_Revolver::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Collider", pComponent });
 
-	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
 
@@ -194,7 +196,7 @@ HRESULT CWeapon_Revolver::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
 
 
@@ -203,13 +205,13 @@ HRESULT CWeapon_Revolver::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"RigidBody", pComponent });
 
-	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
+	m_pRigid = static_cast<ENGINE::CRigidBody*>(pComponent);
 	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
 
 	pComponent = ENGINE::CBillborad::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 
-	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
+	m_pBillborad = static_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pBillborad, E_FAIL);
 	m_mapComponent.insert({ L"BillBoard", pComponent });
 

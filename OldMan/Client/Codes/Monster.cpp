@@ -55,7 +55,10 @@ void CMonster::LateUpdate()
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
 	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+
+	if(m_pObserver != nullptr)
+		Cameramatrix = m_pObserver->GetViewMatrix();
+
 	vSize = m_pTransform->GetSize();
 
 	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
@@ -230,7 +233,7 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
@@ -238,7 +241,7 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
-	m_pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(pComponent);
+	m_pBuffer = static_cast<ENGINE::CVIBuffer*>(pComponent);
 	NULL_CHECK_RETURN(m_pBuffer, E_FAIL);
 
 	// Transform
@@ -246,7 +249,7 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Transform", pComponent });
 
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
+	m_pTransform = static_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
 	// Collider
@@ -254,13 +257,13 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Collider", pComponent });
 
-	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 	//빌보드 
 	pComponent = ENGINE::CBillborad::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 
-	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
+	m_pBillborad = static_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pBillborad, E_FAIL);
 	m_mapComponent.insert({ L"BillBoard", pComponent });
 
@@ -269,14 +272,14 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"RigidBody", pComponent });
 
-	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
+	m_pRigid = static_cast<ENGINE::CRigidBody*>(pComponent);
 	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
 	// MEELE
 	pComponent = ENGINE::CCollider::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Monster_Mell", pComponent });
 
-	m_pMelleCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pMelleCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
 	// conditoin  
@@ -284,7 +287,7 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Condition", pComponent });
 
-	m_pCondition = dynamic_cast<ENGINE::CCondition*>(pComponent);
+	m_pCondition = static_cast<ENGINE::CCondition*>(pComponent);
 	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
 
 	// 그라운드 
@@ -292,14 +295,14 @@ HRESULT CMonster::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
 	//ANIMATER
 	pComponent = ENGINE::CAnimator::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Animator", pComponent });
 
-	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	m_pAnimator = static_cast<ENGINE::CAnimator*>(pComponent);
 	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
 
 
@@ -316,7 +319,7 @@ HRESULT CMonster::AddComponent()
 // 
 void CMonster::Player_Pursue(float _move)
 {
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
@@ -333,7 +336,7 @@ void CMonster::Player_Pursue(float _move)
 void CMonster::Monster_Foward()
 {
 
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos - vMonster_Pos;
@@ -392,7 +395,7 @@ void CMonster::Monster_Foward()
 
 void CMonster::Monster_Range()
 {
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos - vMonster_Pos;
@@ -419,7 +422,7 @@ void CMonster::Monster_Idle()
 }
 void CMonster::Monster_Shot()
 {
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vPlayer_Pos_Top_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 15,vPlayer_Pos.z };
@@ -487,7 +490,7 @@ void CMonster::Monster_Shot()
 
 void CMonster::Monster_Fire2()
 {
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
@@ -558,7 +561,7 @@ void CMonster::Monster_Dead()
 void CMonster::Monster_Attack()
 {
 
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
@@ -603,7 +606,7 @@ void CMonster::Check_Physic()
 			//{
 			//	m_pCondition->Set_MoveSpeed(16.f);
 			//	D3DXVECTOR3 vTemp = { 0.3f , 0.2f , 0.3f };
-			//	dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
+			//	static_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 			//}
 
 			return;
@@ -639,9 +642,9 @@ void CMonster::ChangeTex(wstring _wstrTex)
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
-	m_pAnimator->Set_MaxFrame(dynamic_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
 
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK(m_pTexture);
 
 }

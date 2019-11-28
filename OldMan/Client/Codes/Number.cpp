@@ -73,8 +73,13 @@ void CNumber::Render()
 		m_NumberUI[i]->SetSize(m_fSizeX, m_fSizeY);
 	}
 
+
+
 	for (auto& iter : m_NumberUI)
 	{
+		if(iter == nullptr)
+			continue;
+
 		iter->Render();
 	}
 }
@@ -99,7 +104,7 @@ HRESULT CNumber::LateInit()
 	for (int i = 0; i < 10; i++)
 	{
 		m_NumberUI[i] = CUI::Create(m_pGraphicDev, L"Number");
-		dynamic_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_MaxFrame(12); // 0~9, Slash, Infinity
+		static_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_MaxFrame(12); // 0~9, Slash, Infinity
 		m_NumberUI[i]->SetIsAnim(true);
 		m_NumberUI[i]->SetVisible(false);
 	}
@@ -124,7 +129,7 @@ HRESULT CNumber::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
@@ -132,7 +137,7 @@ HRESULT CNumber::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
-	m_pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(pComponent);
+	m_pBuffer = static_cast<ENGINE::CVIBuffer*>(pComponent);
 	NULL_CHECK_RETURN(m_pBuffer, E_FAIL);
 
 	// Transform
@@ -140,7 +145,7 @@ HRESULT CNumber::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Transform", pComponent });
 
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
+	m_pTransform = static_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 	return S_OK;
 }
@@ -202,13 +207,13 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber
 		_iArr[i] = _iNumber % 10;
 		_iNumber /= 10;
 
-		dynamic_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_Frame(_iArr[i]);
+		static_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_Frame(_iArr[i]);
 		m_NumberUI[i]->SetVisible(true);
 	}
 
 	if (_iNumber2 >= 0)
 	{
-		dynamic_cast<ENGINE::CAnimator*>(m_NumberUI[_iCount]->Get_Component(L"Animator"))->Set_Frame(10); // Slash
+		static_cast<ENGINE::CAnimator*>(m_NumberUI[_iCount]->Get_Component(L"Animator"))->Set_Frame(10); // Slash
 		m_NumberUI[_iCount]->SetVisible(true);
 
 		for (int i = _iCount + 1; i < _iCount + iTemp + 1; i++)
@@ -216,7 +221,7 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber
 			_iArr[i] = _iNumber2 % 10;
 			_iNumber2 /= 10;
 		
-			dynamic_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_Frame(_iArr[i]);
+			static_cast<ENGINE::CAnimator*>(m_NumberUI[i]->Get_Component(L"Animator"))->Set_Frame(_iArr[i]);
 			m_NumberUI[i]->SetVisible(true);
 		}
 

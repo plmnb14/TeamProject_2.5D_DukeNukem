@@ -50,6 +50,8 @@ HRESULT CGraphicDev::InitDevice(
 	else
 		vp |= D3DCREATE_SOFTWARE_VERTEXPROCESSING;
 
+	vp |= D3DCREATE_MULTITHREADED;
+
 	// 렌더링 환경을 구성.
 	D3DPRESENT_PARAMETERS	d3dpp;
 	ZeroMemory(&d3dpp, sizeof(D3DPRESENT_PARAMETERS));

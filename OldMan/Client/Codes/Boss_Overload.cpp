@@ -53,7 +53,9 @@ void CBoss_Overload::LateUpdate()
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
 	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+
+	if (m_pObserver != nullptr)
+		Cameramatrix = m_pObserver->GetViewMatrix();
 
 	vSize = m_pTransform->GetSize();
 
@@ -181,7 +183,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
@@ -189,7 +191,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
-	m_pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(pComponent);
+	m_pBuffer = static_cast<ENGINE::CVIBuffer*>(pComponent);
 	NULL_CHECK_RETURN(m_pBuffer, E_FAIL);
 
 	// Transform
@@ -197,7 +199,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Transform", pComponent });
 
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
+	m_pTransform = static_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
 
@@ -206,7 +208,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Collider", pComponent });
 
-	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
 
@@ -215,7 +217,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
 
 
@@ -224,7 +226,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"RigidBody", pComponent });
 
-	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
+	m_pRigid = static_cast<ENGINE::CRigidBody*>(pComponent);
 	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
 
 	// Condition
@@ -232,7 +234,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Condition", pComponent });
 
-	m_pCondition = dynamic_cast<ENGINE::CCondition*>(pComponent);
+	m_pCondition = static_cast<ENGINE::CCondition*>(pComponent);
 	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
 
 	// Billboard
@@ -240,7 +242,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Billboard", pComponent });
 
-	m_pBillboard = dynamic_cast<ENGINE::CBillborad*>(pComponent);
+	m_pBillboard = static_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pBillboard, E_FAIL);
 
 	// Animator
@@ -248,7 +250,7 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Animator", pComponent });
 
-	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	m_pAnimator = static_cast<ENGINE::CAnimator*>(pComponent);
 	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
 
 	return S_OK;
@@ -344,9 +346,22 @@ void CBoss_Overload::Direct_Missile()
 
 	if (m_fLifeTime >= 1.f)
 	{
-		float a[3] = {0,0,0};
+		D3DXVec3Normalize(&vTmpDir, &vTmpDir);
 
-		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vTmpPos, vTmpDir, a, 0.5f, ENGINE::MONSTER_LUNCHER);
+		D3DXVECTOR3 vTmpRight = { 1,0,0 };
+
+		D3DXVec3Cross(&vTmpRight, &vTmpDir, &D3DXVECTOR3{ 0,1,0 });
+
+		D3DXVECTOR3 vTmpPos_Plus = { vTmpPos.x + vTmpRight.x * 2, vTmpPos.y - 0.2f , vTmpPos.z + vTmpRight.z * 2 };
+		D3DXVECTOR3 vTmpPos_Minus{ vTmpPos.x - vTmpRight.x * 2, vTmpPos.y - 0.2f , vTmpPos.z - vTmpRight.z * 2 };
+
+		float a[3] = { 0,0,0 };
+
+		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Plus, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+		pInstance->Set_MapLayer(m_mapLayer);
+
+		pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Minus, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
 		pInstance->Set_MapLayer(m_mapLayer);
 
@@ -380,9 +395,9 @@ void CBoss_Overload::ChangeTex(wstring _wstrTex)
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
-	m_pAnimator->Set_MaxFrame(dynamic_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
 
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK(m_pTexture);
 }
 

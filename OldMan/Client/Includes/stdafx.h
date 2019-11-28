@@ -26,6 +26,7 @@
 #include <string>
 #include <algorithm>
 #include <functional>
+#include <process.h>
 
 using namespace std;
 

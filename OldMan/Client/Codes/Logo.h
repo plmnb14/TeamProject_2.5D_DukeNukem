@@ -34,9 +34,15 @@ private:
 
 private:
 	void PipeLineSetUp();
+	void LoadTexture();
 
 public:
 	static CLogo* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static unsigned __stdcall LoadingThreadFunc(void* pParam);
+
+private:
+	HANDLE m_hLoadingThread;
+	CRITICAL_SECTION m_CriticalSection;
 
 private:
 	ENGINE::CManagement*	m_pManagement;

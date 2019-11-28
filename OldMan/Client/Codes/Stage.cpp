@@ -51,7 +51,7 @@ void CStage::Update()
 	if (ENGINE::CKeyMgr::GetInstance()->KeyDown(ENGINE::KEY_Q))
 	{
 		ENGINE::CGameObject* pObj = CHittedCircle::Create(ENGINE::GetGraphicDev()->GetDevice(), CHittedCircle::SIZE_XL);
-		dynamic_cast<CHittedCircle*>(pObj)->SetAngle(rand() % 360);
+		static_cast<CHittedCircle*>(pObj)->SetAngle(rand() % 360);
 		m_mapLayer[ENGINE::CLayer::UI]->AddObject(ENGINE::OBJECT_TYPE::UI, pObj);
 	}
 
@@ -134,10 +134,10 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject->Set_MapLayer(m_mapLayer);
 	
 	////// Monster
-	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
+	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 	//octabrain
 	
 	// Skybox
@@ -162,83 +162,83 @@ HRESULT CStage::Add_UI_Layer()
 	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
 	
 	// Aim
-	//ENGINE::CGameObject* pObject = CAim::Create(m_pGraphicDev);
-	//NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	
+	ENGINE::CGameObject* pObject = CAim::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+
 	// HP Number
-	ENGINE::CGameObject* pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
 	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_HP Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -330.f, 0.f));
-	
+	static_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -330.f, 0.f));
+
 	// Shield Number
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_SHIELD);
 	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_SHIELD Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -295.f, 0.f));
+	static_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -295.f, 0.f));
 	
 	// HP Icon
 	pObject = CUI::Create(m_pGraphicDev, L"HpIcon.png");
 	NULL_CHECK_MSG_RETURN(pObject, L"HpIcon Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 10.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -330.f, 0.f));
-	
+	static_cast<CUI*>(pObject)->SetSize(10.f, 10.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -330.f, 0.f));
+
 	// Shield Icon
 	pObject = CUI::Create(m_pGraphicDev, L"ArmorIcon.png");
 	NULL_CHECK_MSG_RETURN(pObject, L"ArmorIcon Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 13.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -295.f, 0.f));
+	static_cast<CUI*>(pObject)->SetSize(10.f, 13.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -295.f, 0.f));
 	
 	
 	// Bullet
-	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
-	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
-	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -280.f, 0.f));
+	//pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
+	//NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
+	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
+	//static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
+	//static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -280.f, 0.f));
 	
 	// Buller Line
 	pObject = CUI::Create(m_pGraphicDev, L"WeaponRightLine.png");
 	NULL_CHECK_MSG_RETURN(pObject, L"WeaponRightLine Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(600.f, -310.f, 0.f));
+	static_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(600.f, -310.f, 0.f));
 	
 	//// HP Bar
 	//pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_HP);
 	//NULL_CHECK_MSG_RETURN(pObject, L"BAR_HP Create Failed", E_FAIL);
 	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -330.f, 0.f));
+	//static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
+	//static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -330.f, 0.f));
 	//
 	//// Shield Bar
 	//pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_SHIELD);
 	//NULL_CHECK_MSG_RETURN(pObject, L"BAR_SHIELD Create Failed", E_FAIL);
 	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
-	//dynamic_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
-	//dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -295.f, 0.f));
+	//static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
+	//static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -295.f, 0.f));
 	
 	// Weapon Icon
 	pObject = CWeaponIcon::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Icon Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
-	dynamic_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
-	dynamic_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(530.f, -330.f, 0.f));
+	static_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(530.f, -330.f, 0.f));
 
 	return S_OK;
 }
@@ -290,8 +290,6 @@ HRESULT CStage::Initialize()
 		L"Buffer_RcTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
 
-	LoadTexture();
-
 	// Environment Layer
 	hr = Add_Environment_Layer();
 	FAILED_CHECK_RETURN(hr, E_FAIL);
@@ -311,6 +309,7 @@ HRESULT CStage::Initialize()
 
 void CStage::Release()
 {
+	m_pResourceMgr->ResetDynamicResource();
 	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
@@ -364,7 +363,7 @@ void CStage::LoadTexture()
 	{
 		hr = m_pResourceMgr->AddTexture(
 			m_pGraphicDev,
-			ENGINE::RESOURCE_DYNAMIC,
+			ENGINE::RESOURCE_STATIC,
 			ENGINE::TEX_NORMAL,
 			iter->wstrStateKey,
 			iter->wstrImgPath, iter->iImgCount);
@@ -382,7 +381,7 @@ void CStage::LoadTexture()
 		{
 			hr = m_pResourceMgr->AddTexture(
 				m_pGraphicDev,
-				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::RESOURCE_STATIC,
 				ENGINE::TEX_CUBE,
 				iter->wstrFileName,
 				iter->wstrImgPath, 1);
@@ -392,7 +391,7 @@ void CStage::LoadTexture()
 		{
 			hr = m_pResourceMgr->AddTexture(
 				m_pGraphicDev,
-				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::RESOURCE_STATIC,
 				ENGINE::TEX_NORMAL,
 				iter->wstrFileName,
 				iter->wstrImgPath, 1);
@@ -539,7 +538,7 @@ void CStage::LoadMapObj()
 		}
 
 
-		ENGINE::CTransform* pTransform = dynamic_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
+		ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
 		pTransform->SetPos(vPos);
 		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN
 			/*|| eObjType == ENGINE::OBJECT_TYPE::PROPS*/)

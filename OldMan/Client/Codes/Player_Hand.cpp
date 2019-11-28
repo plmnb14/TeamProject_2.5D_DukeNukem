@@ -70,9 +70,12 @@ void CPlayer_Hand::Render()
 	D3DXMatrixIdentity(&matTempProj);
 
 	// Get Temp
-	matTempView = m_pCameraObserver->GetViewMatrix();
-	matTempProj = m_pCameraObserver->GetProjMatrix();
-	matProj = m_pCameraObserver->GetProjMatrix();
+	if (m_pCameraObserver != nullptr)
+	{
+		matTempView = m_pCameraObserver->GetViewMatrix();
+		matTempProj = m_pCameraObserver->GetProjMatrix();
+		matProj = m_pCameraObserver->GetProjMatrix();
+	}
 
 	// 직교투영
 	D3DXMatrixOrthoLH(&matProj, WINCX, WINCY, 0.f, 1.f);
@@ -162,7 +165,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
@@ -170,7 +173,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
-	m_pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(pComponent);
+	m_pBuffer = static_cast<ENGINE::CVIBuffer*>(pComponent);
 	NULL_CHECK_RETURN(m_pBuffer, E_FAIL);
 
 	// Transform
@@ -178,7 +181,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Transform", pComponent });
 
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
+	m_pTransform = static_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
 	// Animator
@@ -186,7 +189,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Animator", pComponent });
 
-	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	m_pAnimator = static_cast<ENGINE::CAnimator*>(pComponent);
 	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
 
 	return S_OK;
@@ -825,9 +828,9 @@ void CPlayer_Hand::ChangeTex(wstring _wstrTex)
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	
-	m_pAnimator->Set_MaxFrame(dynamic_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
 	
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK(m_pTexture);
 }
 
