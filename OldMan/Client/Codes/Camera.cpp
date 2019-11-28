@@ -263,9 +263,9 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 		{
 			D3DXVECTOR3 vTemp_TargetPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 			m_pCCamera_Component->Set_EyePos({ vTemp_TargetPos.x + (m_vCamShakePos.x * m_pCCamera_Component->Get_Right().z * m_pCCamera_Component->Get_Look().z),
-												vTemp_TargetPos.y + 2.5f + m_vCamShakePos.y + m_fCam_PosY,
+												vTemp_TargetPos.y + 3.0f + m_vCamShakePos.y + m_fCam_PosY,
 												vTemp_TargetPos.z + (m_vCamShakePos.z * m_pCCamera_Component->Get_Right().x * m_pCCamera_Component->Get_Look().x) });
-			m_pCCamera_Component->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y + 2.5f ,vTemp_TargetPos.z + 1 });
+			m_pCCamera_Component->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y + 3.0f ,vTemp_TargetPos.z + 1 });
 
 			CamShakePos();
 		}
@@ -295,7 +295,7 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 			vTempPos.z + (vTempDir.z * m_pCCamera_Component->Get_Distance())
 		});
 
-		m_pCCamera_Component->Set_LookAt({ vTempPos.x, vTempPos.y + 1.3f, vTempPos.z });
+		m_pCCamera_Component->Set_LookAt({ vTempPos.x, vTempPos.y + 1.8f, vTempPos.z });
 		m_pCCamera_Component->Set_Up({ 0, 1, 0 });
 
 		break;

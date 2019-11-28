@@ -37,29 +37,6 @@ void CMainApp::Render()
 	m_pManagement->Render();
 }
 
-void CMainApp::FrameRender()
-{
-	//m_fTimeCount += m_pTimeMgr->GetDelta();
-	//
-	//// 1초가 지났다.
-	//if (1.f <= m_fTimeCount)
-	//{
-	//	swprintf_s(m_szFPS, L"FPS: %d", m_iFps);
-	//	m_iFps = 0;
-	//	m_fTimeCount = 0.f;
-	//}
-	//
-	//D3DXMATRIX matTrans;
-	//D3DXMatrixTranslation(&matTrans, 600.f, 100.f, 0.f);
-	//
-	//CDeviceMgr::GetInstance()->GetSprite()->SetTransform(&matTrans);
-	//
-	//// 다이렉트 폰트 출력
-	//CDeviceMgr::GetInstance()->GetFont()->DrawText(
-	//	CDeviceMgr::GetInstance()->GetSprite(), /* 다이렉트 폰트는 텍스처 기반이다. */
-	//	m_szFPS, lstrlen(m_szFPS), nullptr, 0,
-	//	D3DCOLOR_ARGB(255, 0, 255, 0));
-}
 
 HRESULT CMainApp::Initialize()
 {

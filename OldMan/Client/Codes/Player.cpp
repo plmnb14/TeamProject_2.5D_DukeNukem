@@ -17,12 +17,12 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr),
-	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
+	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr), m_pColliderLedge(nullptr),
 	m_pRigid(nullptr), m_fSlideUp(0),
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::NO_WEAPON), m_fZoomAccel(0),
-	m_pObserver(nullptr) , m_bZoom(false), m_fMaxZoom(0) , m_fMinZoom(0), m_bSpecial(0),
-	m_bCanAttack(true),
+	m_pObserver(nullptr), m_bZoom(false), m_fMaxZoom(0), m_fMinZoom(0), m_bSpecial(0),
+	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0) ,m_bCanLedge(0),
 	m_eActState(W_IDLE)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
@@ -61,6 +61,11 @@ void CPlayer::LateUpdate()
 										m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 										m_pTransform->GetPos().z });
 	m_pCollider->Set_IsCollision(false);
+
+	D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x , m_pTransform->GetPos().y + 1 , m_pTransform->GetPos().z + tmpDir.z };
+
+	m_pColliderLedge->LateUpdate(tmpPos);
 }
 
 void CPlayer::Render()
@@ -75,7 +80,7 @@ HRESULT CPlayer::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 	
 	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 35.f, 5.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 8.f, 2.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
 	
 	
@@ -98,6 +103,22 @@ HRESULT CPlayer::Initialize()
 	m_pGroundChekCollider->SetUp_Box();
 	
 	
+	D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+	D3DXVECTOR3 tmpRight = {};
+
+	D3DXVec3Cross(&tmpRight, &tmpDir, &D3DXVECTOR3{0,1,0});
+
+	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y + 1 , m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
+
+	// 렛지 콜라이더
+	m_pColliderLedge->Set_Radius({ 0.3f , 1.0f, 0.3f });	
+	m_pColliderLedge->Set_Dynamic(true);					
+	m_pColliderLedge->Set_Trigger(true);					
+	m_pColliderLedge->Set_CenterPos(tmpPos);
+	m_pColliderLedge->Set_UnderPos();						
+	m_pColliderLedge->SetUp_Box();							
+
+
 	// 리지드 바디 세팅
 	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
 	
@@ -220,6 +241,14 @@ HRESULT CPlayer::AddComponent()
 
 	m_pGroundChekCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+
+	// Ledge Collider
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Ledge_Collider", pComponent });
+
+	m_pColliderLedge = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pColliderLedge, E_FAIL);
 
 
 	// Rigid
@@ -344,9 +373,34 @@ void CPlayer::KeyInput()
 	// 점프
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_SPACE))
 	{
-		m_pRigid->Set_Accel({ 1, 1.5f, 1 });
-		m_pRigid->Set_IsJump(true);
-		m_pRigid->Set_IsGround(false);
+		if (!m_bCanLedge && !m_bIsLedge)
+		{
+			m_pRigid->Set_Accel({ 1, 1.5f, 1 });
+			m_pRigid->Set_IsJump(true);
+			m_pRigid->Set_IsGround(false);
+		}
+
+		if (m_bCanLedge)
+		{
+			float fLength_x = m_pTransform->GetPos().x - m_vLedgeVec.x;
+			float fLength_z = m_pTransform->GetPos().z - m_vLedgeVec.z;
+
+			(fLength_x > fLength_z ? fLength_z = 0 : fLength_x = 0);
+
+			D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + fLength_x * 0.95f , m_vLedgeVec.y + m_pCollider->Get_Radius().y + 0.1f , m_pTransform->GetPos().z + fLength_z * 0.95f };
+			m_pTransform->SetPos(tmpPos);
+			m_pCollider->LateUpdate(m_pTransform->GetPos());
+			m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+				m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+				m_pTransform->GetPos().z });
+
+			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+			D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x , m_pTransform->GetPos().y + 1 , m_pTransform->GetPos().z + tmpDir.z };
+
+			m_pColliderLedge->LateUpdate(tmpPos);
+
+			m_bCanLedge = false;
+		}
 	}
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_1))
@@ -751,7 +805,7 @@ void CPlayer::Shoot_Shotgun()
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 				pInstance->Set_MapLayer(m_mapLayer);
 			}
-0.		}
+		}
 
 		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
 		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;

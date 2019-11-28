@@ -34,6 +34,7 @@ private:
 
 private:
 	void PipeLineSetUp();
+	bool Loading();
 
 public:
 	static CLogo* Create(LPDIRECT3DDEVICE9 pGraphicDev);

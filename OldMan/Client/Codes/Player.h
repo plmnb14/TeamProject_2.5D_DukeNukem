@@ -80,8 +80,13 @@ public:
 	void Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO* _WeaponInfo);
 	void Set_SpecialShot(bool _Special) { m_bSpecial = _Special; }
 	void Set_CanAttack(bool _Attack) { m_bCanAttack = _Attack; }
+	void Set_CanLedge(bool _Ledge) { m_bCanLedge = _Ledge; }
+	void Set_IsLedge(bool _IsLedge) { m_bIsLedge = _IsLedge; }
+	void Set_LedgeVec(D3DXVECTOR3 _Vec) { m_vLedgeVec = _Vec; }
 
 public:
+	bool Get_CanLedge() { return m_bCanLedge; }
+	bool Get_IsLedge() { return m_bIsLedge; }
 	bool Get_Zoom() { return m_bZoom; }
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
@@ -100,9 +105,11 @@ private:
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
+	ENGINE::CRigidBody*		m_pRigid;
+
 	ENGINE::CCollider*		m_pCollider;
 	ENGINE::CCollider*		m_pGroundChekCollider;
-	ENGINE::CRigidBody*		m_pRigid;
+	ENGINE::CCollider*		m_pColliderLedge;
 
 	ENGINE::VTX_TEX*		m_myVtx;
 
@@ -127,6 +134,8 @@ private:
 	WEAPONACT		m_eActState;
 
 private:
+	D3DXVECTOR3 m_vLedgeVec;
+
 	float m_fSlideUp;
 	bool  m_bZoom;
 	bool  m_bSpecial;
@@ -136,6 +145,9 @@ private:
 	float m_fZoomAccel;
 	float m_fMaxZoom;
 	float m_fMinZoom;
+
+	bool m_bCanLedge;
+	bool m_bIsLedge;
 	
 	
 

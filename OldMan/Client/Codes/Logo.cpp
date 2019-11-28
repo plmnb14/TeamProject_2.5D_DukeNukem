@@ -18,19 +18,17 @@ CLogo::~CLogo()
 
 void CLogo::Update()
 {
-	system("cls");
-	cout << ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount();
-	cout << " / ";
-	cout << ENGINE::GetTextureMgr()->Get_MaxTextureCount() / ENGINE::GetTextureMgr()->Get_MaxTextureCount() * 100 << endl;
-
 	ENGINE::CScene::Update();
 
-	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
-	{		
-		WaitForSingleObject(m_hLoadingThread, INFINITE);
+	if (Loading())
+	{
+		if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+		{
+			WaitForSingleObject(m_hLoadingThread, INFINITE);
 
-		HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
-		FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
+			HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
+			FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
+		}
 	}
 }
 
@@ -107,6 +105,48 @@ void CLogo::PipeLineSetUp()
 {
 	// Α¶Έν off
 	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
+}
+
+bool CLogo::Loading()
+{
+	system("cls");
+
+	if ((ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount()) != 0)
+	{
+		if ((ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount()) == 100)
+		{
+			cout << "Complete !!" << endl;
+			return true;
+		}
+
+		if ((ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount()) < 100)
+		{
+			cout << "Loading" << endl;
+		}
+
+		if ((ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount()) % 1 == 0)
+		{
+			cout << " .";
+		}
+
+		if ((ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount()) % 2 == 0)
+		{
+			cout << " .";
+		}
+
+		if ((ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount()) % 3 == 0)
+		{
+			cout << " .";
+		}
+	}
+
+	cout << "" << endl;
+
+	cout << ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount();
+	cout << " / ";
+	cout << ENGINE::GetTextureMgr()->Get_MaxTextureCount() / ENGINE::GetTextureMgr()->Get_MaxTextureCount() * 100 << endl;
+
+	return false;
 }
 
 CLogo* CLogo::Create(LPDIRECT3DDEVICE9 pGraphicDev)

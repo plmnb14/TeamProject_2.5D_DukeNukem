@@ -62,6 +62,38 @@ void CCollisionMgr::CollisionSphere(list<CGameObject*>& rDstList, list<CGameObje
 	}
 }
 
+void CCollisionMgr::CollisionPlayer_To_Trigger(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			if (rDst == rSrc)
+				continue;
+
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+			if (a > 20)
+				continue;
+
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Ledge_Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				rSrcCol->Set_IsCollision(true);
+				cout << "Ãß¤Ñ¤·¤§¤©" << endl;
+			}
+
+			else
+				rSrcCol->Set_IsCollision(false);
+		}
+	}
+}
+
 void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
 {
 	for (auto& rDst : rDstList)

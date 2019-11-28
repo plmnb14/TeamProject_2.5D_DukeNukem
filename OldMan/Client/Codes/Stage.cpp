@@ -354,7 +354,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/MapObject_Une.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/Map_Moon.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -436,6 +436,15 @@ void CStage::LoadMapObj()
 			pObject = pTrigger;
 			pTrigger = nullptr;
 		}
+
+		else if (!lstrcmp(szType, L"Trigger_Ledge"))
+		{
+			CTrigger* pTrigger = nullptr;
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_LEDGE);
+			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			pObject = pTrigger;
+			pTrigger = nullptr;
+		}
 		// Weapon
 		else if (!lstrcmp(szType, L"Waepon_0"))
 		{
@@ -492,6 +501,7 @@ void CStage::LoadMapObj()
 
 		ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
 		pTransform->SetPos(vPos);
+
 		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN
 			/*|| eObjType == ENGINE::OBJECT_TYPE::PROPS*/)
 		{

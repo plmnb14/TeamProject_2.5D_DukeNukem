@@ -107,6 +107,7 @@ protected:
 	float					m_fAttack;
 
 	STATE					m_eNextState;
+	STATE					m_eCurState;
 
 	wstring					m_wstrTex;      //≈ÿΩ∫√≥
 	wstring					m_OldwstrTex;

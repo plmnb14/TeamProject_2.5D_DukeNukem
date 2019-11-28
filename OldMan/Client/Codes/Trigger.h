@@ -19,6 +19,7 @@ public:
 	enum TRIGGER_TYPE
 	{ 
 		TRIGGER_NEXTSTAGE,
+		TRIGGER_LEDGE,
 		TRIGGER_END
 	};
 
