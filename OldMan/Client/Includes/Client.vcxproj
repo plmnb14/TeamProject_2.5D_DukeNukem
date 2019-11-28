@@ -184,6 +184,7 @@
     <ClInclude Include="..\Codes\OctaBrain.h" />
     <ClInclude Include="..\Codes\OneUseObject.h" />
     <ClInclude Include="..\Codes\PickupItem.h" />
+    <ClInclude Include="..\Codes\PigMan.h" />
     <ClInclude Include="..\Codes\Player.h" />
     <ClInclude Include="..\Codes\PlayerObserver.h" />
     <ClInclude Include="..\Codes\Player_Hand.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="..\Codes\TerrainRect.h" />
     <ClInclude Include="..\Codes\TerrainWallCube.h" />
     <ClInclude Include="..\Codes\Trigger.h" />
+    <ClInclude Include="..\Codes\Trooper.h" />
     <ClInclude Include="..\Codes\UI.h" />
     <ClInclude Include="..\Codes\Vfx.h" />
     <ClInclude Include="..\Codes\Weapon.h">
@@ -245,6 +247,7 @@
     <ClCompile Include="..\Codes\OctaBrain.cpp" />
     <ClCompile Include="..\Codes\OneUseObject.cpp" />
     <ClCompile Include="..\Codes\PickupItem.cpp" />
+    <ClCompile Include="..\Codes\PigMan.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\PlayerObserver.cpp" />
     <ClCompile Include="..\Codes\Player_Hand.cpp" />
@@ -257,6 +260,7 @@
     <ClCompile Include="..\Codes\TerrainRect.cpp" />
     <ClCompile Include="..\Codes\TerrainWallCube.cpp" />
     <ClCompile Include="..\Codes\Trigger.cpp" />
+    <ClCompile Include="..\Codes\Trooper.cpp" />
     <ClCompile Include="..\Codes\UI.cpp" />
     <ClCompile Include="..\Codes\Vfx.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp">

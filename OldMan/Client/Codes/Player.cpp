@@ -685,34 +685,34 @@ void CPlayer::Shoot_Shotgun()
 		if (m_bZoom == true)
 			m_eActState = W_ZOOMFIRE;
 
-		for (int i = 0; i < 30; ++i)
-		{
-			float a = 0.f;
-			float c = 0.f;
-			float b = (float)(rand() % 2);
+	for (int i = 0; i < 30; ++i)
+	{
+				float a = 0.f;
+				float c = 0.f;
+				float b = (float)(rand() % 2);
 
-			if (b == 1)
-			{
-				a = 1;
-				c = -1;
-			}
-			else if (b == 0)
-			{
+				if (b == 1)
+				{
+					a = 1;
+					c = -1;
+				}
+				else if (b == 0)
+				{
 				a = -1;
 				c = 1;
-			}
+				}
 
 
-			int xSpread = (int)(m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2) + (i * a * 2));
-			int ySpread = (int)(m_pWInfo.fSpread_Y - (m_pWInfo.fSpread_Y * 2) + (i * c * 2));
+				int xSpread = (int)(m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2) + (i * a * 2));
+				int ySpread = (int)(m_pWInfo.fSpread_Y - (m_pWInfo.fSpread_Y * 2) + (i * c * 2));
 
-			float xRand = rand() % xSpread * 0.01f;
-			float yRand = rand() % ySpread * 0.01f;
+				float xRand = rand() % xSpread * 0.01f;
+				float yRand = rand() % ySpread * 0.01f;
 
-			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
-			D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
-			D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
-			D3DXVECTOR3 tmpRight = dynamic_cast<CCamera*>(m_pCamera)->Get_Right();
+				D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+				D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
+				D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
+				D3DXVECTOR3 tmpRight = dynamic_cast<CCamera*>(m_pCamera)->Get_Right();
 
 			if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 			{
@@ -751,7 +751,7 @@ void CPlayer::Shoot_Shotgun()
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 				pInstance->Set_MapLayer(m_mapLayer);
 			}
-		}
+0.		}
 
 		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
 		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;

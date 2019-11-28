@@ -106,7 +106,6 @@ protected:
 	float					m_fFowardDealy;
 	float					m_fAttack;
 
-	STATE					m_eCurState;   //상태
 	STATE					m_eNextState;
 
 	wstring					m_wstrTex;      //텍스처

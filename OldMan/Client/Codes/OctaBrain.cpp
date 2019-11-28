@@ -26,12 +26,12 @@ int COctaBrain::Update()
 		return DEAD_OBJ;
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
-	Check_Physic();
+//	Check_Physic();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	//Monster_Foward();
 
 	Monster_State_Set();
-
+	cout << m_pMelleCollider->Get_IsCollision() << endl;
 	//Player_Pursue();
 	//cout << m_pCondition->Get_Hp() << endl;
 
@@ -59,7 +59,7 @@ void COctaBrain::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	cout << m_pCondition->Get_Hp() << endl;
+	//cout << m_pCondition->Get_Hp() << endl;
 
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
@@ -110,9 +110,9 @@ HRESULT COctaBrain::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
-	m_fMaxRange = 19.0f;//최대사거리
+	m_fMaxRange = 24.0f;//최대사거리
 	m_fRange = 0.f;
-	m_fMinRange = 11.0f;
+	m_fMinRange = 14.0f;
 	m_fAttack = 5.0f;
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
@@ -149,12 +149,11 @@ HRESULT COctaBrain::Initialize()
 	m_pGroundChekCollider->SetUp_Box();
 
 	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
-	m_pMelleCollider->Set_Radius({ 1.6f , 1.6f, 1.6f });
+	m_pMelleCollider->Set_Radius({ 3.6f , 5.6f, 3.6f });
 	m_pMelleCollider->Set_Dynamic(true);
 	m_pMelleCollider->Set_Trigger(true);
 	m_pMelleCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
-		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-		m_pTransform->GetPos().z });
+		m_pTransform->GetPos().y ,m_pTransform->GetPos().z });
 	m_pMelleCollider->Set_UnderPos();
 	m_pMelleCollider->SetUp_Box();
 	m_pMelleCollider->Set_Enabled(false);
@@ -219,11 +218,11 @@ HRESULT COctaBrain::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"PigMan_Fire");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"OctaBrain_Idle");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
@@ -231,7 +230,7 @@ HRESULT COctaBrain::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
-	m_pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(pComponent);
+	m_pBuffer = static_cast<ENGINE::CVIBuffer*>(pComponent);
 	NULL_CHECK_RETURN(m_pBuffer, E_FAIL);
 
 	// Transform
@@ -239,7 +238,7 @@ HRESULT COctaBrain::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Transform", pComponent });
 
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
+	m_pTransform = static_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
 	// Collider
@@ -247,13 +246,13 @@ HRESULT COctaBrain::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Collider", pComponent });
 
-	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 	//빌보드 
 	pComponent = ENGINE::CBillborad::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 
-	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
+	m_pBillborad = static_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pBillborad, E_FAIL);
 	m_mapComponent.insert({ L"BillBoard", pComponent });
 
@@ -262,22 +261,22 @@ HRESULT COctaBrain::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"RigidBody", pComponent });
 
-	m_pRigid = dynamic_cast<ENGINE::CRigidBody*>(pComponent);
+	m_pRigid = static_cast<ENGINE::CRigidBody*>(pComponent);
 	NULL_CHECK_RETURN(m_pRigid, E_FAIL);
 	// MEELE
 	pComponent = ENGINE::CCollider::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Monster_Mell", pComponent });
 
-	m_pMelleCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
-	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+	m_pMelleCollider = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pMelleCollider, E_FAIL);
 
 	// conditoin  
 	pComponent = ENGINE::CCondition::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Condition", pComponent });
 
-	m_pCondition = dynamic_cast<ENGINE::CCondition*>(pComponent);
+	m_pCondition = static_cast<ENGINE::CCondition*>(pComponent);
 	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
 
 	// 그라운드 
@@ -285,14 +284,14 @@ HRESULT COctaBrain::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
 	//ANIMATER
 	pComponent = ENGINE::CAnimator::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Animator", pComponent });
 
-	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	m_pAnimator = static_cast<ENGINE::CAnimator*>(pComponent);
 	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
 
 
@@ -309,9 +308,9 @@ HRESULT COctaBrain::AddComponent()
 // 
 void COctaBrain::Player_Pursue(float _move)
 {
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
-	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
+	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 5,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
 	//좌우 방향벡터로 내적을 구하고  그것으로 도는 방향을 결정하는 값을 구해서 그쪽으로 돌게만드는게 핵심 
 	// 플레이어의 중점을 받아서 가면 몬스터가 점점 가라앉는 문제가 생겨서 top으로 위치를 다르게 줌 
@@ -326,7 +325,7 @@ void COctaBrain::Player_Pursue(float _move)
 void COctaBrain::Monster_Foward()
 {
 
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos - vMonster_Pos;
@@ -355,6 +354,7 @@ void COctaBrain::Monster_Foward()
 		{
 			m_pAnimator->Stop_Animation(false);
 			ChangeTex(L"OctaBrain_Idle");
+			m_pAnimator->Set_Frame(0);
 			m_pAnimator->Set_FrameAmp(5.f);
 			m_fFowardDealy = 0;
 			Player_Pursue(1.f);
@@ -364,6 +364,7 @@ void COctaBrain::Monster_Foward()
 			m_pAnimator->Stop_Animation(false);
 			ChangeTex(L"OctaBrain_Idle");
 			m_pAnimator->Set_FrameAmp(5.f);
+			m_pAnimator->Set_Frame(5);
 			m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 10.f);
 			Player_Pursue(0.f);
 			m_fFowardDealy = 0;
@@ -385,7 +386,7 @@ void COctaBrain::Monster_Foward()
 
 void COctaBrain::Monster_Range()
 {
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos - vMonster_Pos;
@@ -412,7 +413,7 @@ void COctaBrain::Monster_Idle()
 }
 void COctaBrain::Monster_Shot()
 {
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vPlayer_Pos_Top_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 15,vPlayer_Pos.z };
@@ -433,7 +434,7 @@ void COctaBrain::Monster_Shot()
 
 	//딜레이 만들기 
 	m_pTransform->MovePos(0.f);
-	ChangeTex(L"PigMan_Dead");
+	ChangeTex(L"OctaBrain_Dead");
 	m_pAnimator->Set_Frame(0.f);
 	m_pAnimator->Stop_Animation(true);
 	//m_pCondition->Add_Hp(-1);
@@ -480,7 +481,7 @@ void COctaBrain::Monster_Shot()
 
 void COctaBrain::Monster_Fire2()
 {
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
@@ -517,20 +518,13 @@ void COctaBrain::Monster_Fire2()
 	//cout << vMonsterPos.y<<"y2" << endl;
 	m_pAnimator->Stop_Animation(false);
 
-	ChangeTex(L"PigMan_PreFire");
-	m_pAnimator->Set_FrameAmp(0.5f);
-
+	ChangeTex(L"OctaBrain_Fire");
+	m_pAnimator->Set_FrameAmp(0.7f);
+	//m_pAnimator->Set_MaxFrame(4);
 	//cout << fDot_Player_Monster_Forward << endl;
 	if (acos(fDot_Player_Monster_Forward) * 90 < 250)                                         // 정면일 경우만 사격한다. 
 	{
-		if (m_fTime > 1.8f)
-		{
-			ChangeTex(L"PigMan_Fire");
-			m_pAnimator->Set_FrameAmp(1.f);
-			m_pAnimator->Stop_Animation(false);
-
-		}
-		if (m_fTime > 2)
+		if (m_fTime > 3.4f)
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
@@ -542,7 +536,7 @@ void COctaBrain::Monster_Fire2()
 void COctaBrain::Monster_Dead()
 {
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
-	ChangeTex(L"PigMan_Dead");
+	ChangeTex(L"OctaBrain_Dead");
 	m_pAnimator->Set_FrameAmp(1.f);
 	m_pAnimator->Set_Frame(5.f);
 
@@ -550,26 +544,21 @@ void COctaBrain::Monster_Dead()
 
 void COctaBrain::Monster_Attack()
 {
-
-	D3DXVECTOR3 vPlayer_Pos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
+	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
 	float fMove;
 	fMove = 100.f * m_pTimeMgr->GetDelta();
 	m_pMelleCollider->Set_Enabled(true);
-
-
+	
+	//정면으로 순간 가속 하게 한다. 
 	//m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, fMove);
 	if (m_pMelleCollider->Get_IsCollision())
 	{
 		m_pCondition->Add_Hp(+1);
 	}
-
-
-	//cout << "거림" << endl;
-
-
+	
 }
 
 void COctaBrain::Check_Physic()
@@ -628,23 +617,20 @@ void COctaBrain::ChangeTex(wstring _wstrTex)
 
 	m_mapComponent.erase(L"Texture");
 	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
-	m_pAnimator->Set_MaxFrame(dynamic_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
 
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK(m_pTexture);
 
 }
 
-// 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void COctaBrain::Monster_State_Set()
 {
-	if (m_eCurState != m_eNextState || m_eCurState == m_eNextState)
-	{
-		switch (m_eNextState)
+	switch (m_eNextState)
 		{
 		case MONSTER_IDLE:
 			Monster_Idle();
@@ -665,10 +651,6 @@ void COctaBrain::Monster_State_Set()
 			Monster_Attack();
 			break;
 		}
-		m_eCurState = m_eNextState;
-	}
-	// 맞았을 경우 탐색이 켜진다. 
-
 }
 
 COctaBrain * COctaBrain::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
