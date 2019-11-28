@@ -13,7 +13,6 @@
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS      // 일부 CString 생성자는 명시적으로 선언됩니다.
 
-
 //// VLD
 //#include <vld.h>
 // memory leaks finder

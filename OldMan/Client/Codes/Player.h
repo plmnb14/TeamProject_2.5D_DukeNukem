@@ -113,6 +113,9 @@ private:
 	// 현재 장착중인 무기 정보
 	ENGINE::W_INFO			m_pWInfo;
 
+	// 현재 플레이어 정보 구조체 (일단 체력, 쉴드만)
+	ENGINE::CONDITION		m_tCondition;
+
 	// 현재 플레이어의 정보 ( 체력 등 수치 값 & 각종 bool 값 )
 	ENGINE::CCondition*		m_pCondition;
 

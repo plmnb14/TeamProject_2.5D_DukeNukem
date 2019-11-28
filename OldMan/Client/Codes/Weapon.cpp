@@ -20,6 +20,7 @@ CWeapon::CWeapon(LPDIRECT3DDEVICE9 pGraphicDev)
 
 CWeapon::~CWeapon()
 {
+	Release();
 }
 
 int CWeapon::Update()

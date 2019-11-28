@@ -159,6 +159,8 @@ HRESULT CEffect_Fireball::LateInit()
 
 void CEffect_Fireball::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_Fireball::Set_Pos(D3DXVECTOR3 _Pos)

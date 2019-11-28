@@ -157,8 +157,8 @@
     <Filter Include="02.GameObject\05.Monster\00.OctaBrain">
       <UniqueIdentifier>{a4769a60-bc61-4ccf-9045-f0c47846274d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\08.Boss">
-      <UniqueIdentifier>{aba2d534-b6ca-4f82-b5fd-71fadab371c3}</UniqueIdentifier>
+    <Filter Include="02.GameObject\01.MapObject\01.Object\02.OneUseObject">
+      <UniqueIdentifier>{c0ec9d23-c397-4013-a45a-b9b9e196d2a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -316,8 +316,8 @@
     <ClInclude Include="..\Codes\OctaBrain.h">
       <Filter>02.GameObject\05.Monster\00.OctaBrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Boss_Overload.h">
-      <Filter>02.GameObject\08.Boss</Filter>
+    <ClInclude Include="..\Codes\OneUseObject.h">
+      <Filter>02.GameObject\01.MapObject\01.Object\02.OneUseObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -451,8 +451,8 @@
     <ClCompile Include="..\Codes\OctaBrain.cpp">
       <Filter>02.GameObject\05.Monster\00.OctaBrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Boss_Overload.cpp">
-      <Filter>02.GameObject\08.Boss</Filter>
+    <ClCompile Include="..\Codes\OneUseObject.cpp">
+      <Filter>02.GameObject\01.MapObject\01.Object\02.OneUseObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -82,6 +82,8 @@ HRESULT CEffect_BloodSplit::LateInit()
 
 void CEffect_BloodSplit::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_BloodSplit::Set_Pos(D3DXVECTOR3 _Pos)

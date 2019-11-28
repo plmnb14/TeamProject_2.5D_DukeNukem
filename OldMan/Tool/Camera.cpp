@@ -545,6 +545,7 @@ void CCamera::KeyInput()
 		m_pCCamera_Component->Set_LookAt({ 0,3,1 });
 
 		m_pCCamera_Component->Set_Distance(5.f);
+		m_fFov = 70.f;
 	}
 }
 

@@ -7,6 +7,7 @@
 namespace ENGINE
 {
 	class CPlayerSubject;
+	class CCondition;
 }
 
 class CPlayerObserver : public ENGINE::CObserver

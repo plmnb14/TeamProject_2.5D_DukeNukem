@@ -2,6 +2,7 @@
 #include "GaugeBar.h"
 #include "PlayerObserver.h"
 #include "Trasform.h"
+#include "Condition.h"
 
 CGaugeBar::CGaugeBar(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CUI(pGraphicDev)

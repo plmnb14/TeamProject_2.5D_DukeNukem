@@ -19,13 +19,14 @@ CPickupItem::CPickupItem(LPDIRECT3DDEVICE9 pGraphicDev)
 
 CPickupItem::~CPickupItem()
 {
+	Release();
 }
 
 int CPickupItem::Update()
 {
 	if (m_bIsDead)
 	{
-		PlayerGet();
+		Hitted();
 		return DEAD_OBJ;
 	}
 
@@ -161,7 +162,7 @@ HRESULT CPickupItem::AddComponent()
 	return S_OK;
 }
 
-void CPickupItem::PlayerGet()
+void CPickupItem::Hitted()
 {
 	int iAmount = 0;
 

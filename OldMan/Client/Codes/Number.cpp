@@ -3,6 +3,7 @@
 #include "PlayerObserver.h"
 #include "Trasform.h"
 #include "Animator.h"
+#include "Condition.h"
 
 CNumber::CNumber(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CUI(pGraphicDev)
@@ -109,6 +110,8 @@ HRESULT CNumber::LateInit()
 		m_NumberUI[i]->SetVisible(false);
 	}
 
+	m_iNumArr = new int[20];
+
 	return S_OK;
 }
 
@@ -118,6 +121,8 @@ void CNumber::Release()
 	{
 		ENGINE::Safe_Delete(iter);
 	}
+
+	ENGINE::Safe_Delete_Array(m_iNumArr);
 }
 
 HRESULT CNumber::AddComponent()
@@ -197,10 +202,8 @@ void CNumber::GetNumberArr(int _iNumber, int*& _iArr, int& _iCount, int _iNumber
 				break;
 			}
 		}
-		_iArr = new int[_iCount + iTemp + 1];
 	}
-	else
-		_iArr = new int[_iCount];
+
 
 	for (int i = 0; i < _iCount; i++)
 	{

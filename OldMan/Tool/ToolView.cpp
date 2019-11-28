@@ -198,13 +198,9 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	GetCursorPos(&m_ptFitCursorPos);
 
-	if (m_pSelectCube)
-	{
-		m_pSelectCube->SetClicked();
-		CreateCube(false);
-	}
 
-	if (!m_bIsMousePressing && (GetAsyncKeyState(VK_MENU) & 0x8000)) //ALT
+
+	if (!m_bIsMousePressing && m_bIsEraseMode)
 	{
 		// Delete Data
 		auto& iter_DataBegin = m_pCubeList.begin();
@@ -235,6 +231,14 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 				iter_Begin++;
 		}
 	}
+	else
+	{
+		if (m_pSelectCube)
+		{
+			m_pSelectCube->SetClicked();
+			CreateCube(false);
+		}
+	}
 
 	m_vLastPickedCubePos = D3DXVECTOR3((float)point.x, (float)point.y, 0.f);
 	m_bIsMousePressing = true;
@@ -247,7 +251,13 @@ void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnRButtonDown(nFlags, point);
 
-	if ((GetAsyncKeyState(VK_MENU) & 0x8000) && m_pDeleteCube)
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
+	if (m_bIsEraseMode && m_pDeleteCube)
 	{
 		if (m_pSelectCube)
 		{
@@ -282,6 +292,7 @@ void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
 		m_pSelectCube->SetTexName(m_pDeleteCube->GetTexName());
 		m_pSelectCube->ChangeTex();
 		m_pSelectCube->SetObjType(m_pDeleteCube->GetObjType());
+		pFormView->m_wstrObjType = m_pDeleteCube->GetObjType();
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 		m_pDeleteCube = nullptr;
 
@@ -466,9 +477,7 @@ HRESULT CToolView::Initialize()
 	hr = Add_Object_Layer();
 	FAILED_CHECK_RETURN(hr, E_FAIL);
 
-	//// UI Layer
-	//hr = Add_UI_Layer();
-	//FAILED_CHECK_RETURN(hr, E_FAIL);
+	m_bIsEraseMode = false;
 
 	return S_OK;
 }
@@ -530,9 +539,13 @@ void CToolView::Update()
 	for (; iter_begin != iter_end; ++iter_begin)
 		iter_begin->second->Update();
 
-	//if (!CheckGrid())
 	CubeMoveToMouse();
 	CheckDeleteCube();
+
+	if (GetAsyncKeyState('1') & 0x8000)
+		m_bIsEraseMode = false;
+	if (GetAsyncKeyState('2') & 0x8000)
+		m_bIsEraseMode = true;
 
 	CCamera* pCamera = dynamic_cast<CCamera*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_List(ENGINE::CAMERA).front());
 	m_ViewMatrix = pCamera->GetViewMatrix();
@@ -579,14 +592,14 @@ void CToolView::CubeMoveToMouse()
 	if (!m_pSelectCube)
 		return;
 
-	if ((GetAsyncKeyState('1') & 0x8000))
+	if ((GetAsyncKeyState('3') & 0x8000))
 	{
 		POINT ptNowCursor;
 		GetCursorPos(&ptNowCursor);
 		SetCursorPos(m_ptFitCursorPos.x, ptNowCursor.y);
 	}
 
-	if ((GetAsyncKeyState('2') & 0x8000))
+	if ((GetAsyncKeyState('4') & 0x8000))
 	{
 		POINT ptNowCursor;
 		GetCursorPos(&ptNowCursor);
@@ -703,7 +716,7 @@ void CToolView::DragPicking(float _fPointX, float _fPointY)
 
 void CToolView::CheckDeleteCube()
 {
-	if (GetAsyncKeyState(VK_MENU) & 0x8000)
+	if (m_bIsEraseMode)
 	{
 		bool bCheck = false;
 		// Delete Data
@@ -711,6 +724,9 @@ void CToolView::CheckDeleteCube()
 		auto& iter_DataEnd = m_pCubeList.end();
 		for (; iter_DataBegin != iter_DataEnd; iter_DataBegin++)
 		{
+			if (!(*iter_DataBegin) || (*iter_DataBegin)->GetDead())
+				continue;
+
 			if ((*iter_DataBegin)->GetPicked())
 			{
 				m_pDeleteCube = *iter_DataBegin;

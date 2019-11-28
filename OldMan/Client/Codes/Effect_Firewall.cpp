@@ -90,6 +90,8 @@ HRESULT CEffect_Firewall::LateInit()
 
 void CEffect_Firewall::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_Firewall::Set_Pos(D3DXVECTOR3 _Pos)

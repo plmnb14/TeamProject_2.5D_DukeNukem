@@ -141,7 +141,9 @@ HRESULT CPlayer::Initialize()
 	m_fMaxZoom		= 70;
 	m_fMinZoom		= 20;
 	
-	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(*m_pCondition));
+	m_tCondition.fHp = m_pCondition->Get_Hp();
+	m_tCondition.fArmor = m_pCondition->Get_Armor();
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(m_tCondition));
 	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
 	m_pWInfo.wCurBullet = 0;
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
@@ -163,6 +165,14 @@ void CPlayer::Release()
 {
 	m_pSubject->UnSubscribe(m_pObserver);
 	ENGINE::Safe_Delete(m_pObserver);
+
+	for_each(m_mWeaponInfo.begin(), m_mWeaponInfo.end(),
+		[](auto& MyPair)
+	{
+		Safe_Delete(MyPair.second);
+	});
+
+	m_mWeaponInfo.clear();
 }
 
 HRESULT CPlayer::AddComponent()
@@ -531,7 +541,10 @@ void CPlayer::Check_Physic()
 void CPlayer::UpdateObserverData()
 {
 	// Update Observer 
-	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(*m_pCondition));
+
+	m_tCondition.fHp = m_pCondition->Get_Hp();
+	m_tCondition.fArmor = m_pCondition->Get_Armor();
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(m_tCondition));
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
 }
 
