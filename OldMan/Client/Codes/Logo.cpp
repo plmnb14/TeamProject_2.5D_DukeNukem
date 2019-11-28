@@ -18,12 +18,15 @@ CLogo::~CLogo()
 
 void CLogo::Update()
 {
+	system("cls");
+	cout << ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount();
+	cout << " / ";
+	cout << ENGINE::GetTextureMgr()->Get_MaxTextureCount() / ENGINE::GetTextureMgr()->Get_MaxTextureCount() * 100 << endl;
+
 	ENGINE::CScene::Update();
 
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{		
-		cout << "스레드 로딩 중" << endl;
-
 		WaitForSingleObject(m_hLoadingThread, INFINITE);
 
 		HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
@@ -64,13 +67,13 @@ HRESULT CLogo::Add_UI_Layer()
 
 HRESULT CLogo::Initialize()
 {
+	ENGINE::GetTextureMgr()->InitTextureMgr(ENGINE::GetGraphicDev()->GetDevice());
+
 	m_hLoadingThread = (HANDLE)_beginthreadex(nullptr, 0,
 		LoadingThreadFunc, this, 0, nullptr);
 	NULL_CHECK_MSG_RETURN(m_hLoadingThread, L"LoadingThread Create Failed", E_FAIL);
 
 	InitializeCriticalSection(&m_CriticalSection);
-
-	cout << "Texture Loading Complete . . ." << endl;
 
 	PipeLineSetUp();
 
@@ -89,60 +92,10 @@ HRESULT CLogo::Initialize()
 	return S_OK;
 }
 
-void CLogo::LoadTexture()
-{
-	cout << "Loading Textrue . . ." << endl;
-
-	HRESULT hr = 0;
-
-	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Multi())
-	{
-		hr = m_pResourceMgr->AddTexture(
-			m_pGraphicDev,
-			ENGINE::RESOURCE_DYNAMIC,
-			ENGINE::TEX_NORMAL,
-			iter->wstrStateKey,
-			iter->wstrImgPath, iter->iImgCount);
-		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
-	}
-
-	// Single은 FileName
-	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
-	{
-		string strCheckDDS;
-		strCheckDDS.assign(iter->wstrFileName.begin(), iter->wstrFileName.end());
-
-		// .dds 를 찾았다면 TEX_CUBE
-		if (strCheckDDS.find(".dds") != string::npos)
-		{
-			hr = m_pResourceMgr->AddTexture(
-				m_pGraphicDev,
-				ENGINE::RESOURCE_DYNAMIC,
-				ENGINE::TEX_CUBE,
-				iter->wstrFileName,
-				iter->wstrImgPath, 1);
-			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
-		}
-		else
-		{
-			hr = m_pResourceMgr->AddTexture(
-				m_pGraphicDev,
-				ENGINE::RESOURCE_DYNAMIC,
-				ENGINE::TEX_NORMAL,
-				iter->wstrFileName,
-				iter->wstrImgPath, 1);
-			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
-		}
-	}
-
-	cout << "Complete Textrue Loading ! ! !" << endl;
-}
-
 void CLogo::Release()
 {
 	CloseHandle(m_hLoadingThread);
 	DeleteCriticalSection(&m_CriticalSection);
-	//m_pResourceMgr->ResetDynamicResource();
 }
 
 map<WORD, ENGINE::CLayer*> CLogo::Get_MapLayer()
@@ -177,7 +130,6 @@ unsigned CLogo::LoadingThreadFunc(void * pParam)
 
 	EnterCriticalSection(&pLogo->m_CriticalSection);
 
-	ENGINE::GetTextureMgr()->InitTextureMgr(ENGINE::GetGraphicDev()->GetDevice());
 	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../../Data/TexturePath_Client.txt");
 	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
 
@@ -185,7 +137,7 @@ unsigned CLogo::LoadingThreadFunc(void * pParam)
 	{
 		hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
 			ENGINE::GetGraphicDev()->GetDevice(),
-			ENGINE::RESOURCE_DYNAMIC,
+			ENGINE::RESOURCE_STATIC,
 			ENGINE::TEX_NORMAL,
 			iter->wstrStateKey,
 			iter->wstrImgPath, iter->iImgCount);
@@ -203,17 +155,18 @@ unsigned CLogo::LoadingThreadFunc(void * pParam)
 		{
 			hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
 				ENGINE::GetGraphicDev()->GetDevice(),
-				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::RESOURCE_STATIC,
 				ENGINE::TEX_CUBE,
 				iter->wstrFileName,
 				iter->wstrImgPath, 1);
 			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
 		}
+
 		else
 		{
 			hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
 				ENGINE::GetGraphicDev()->GetDevice(),
-				ENGINE::RESOURCE_DYNAMIC,
+				ENGINE::RESOURCE_STATIC,
 				ENGINE::TEX_NORMAL,
 				iter->wstrFileName,
 				iter->wstrImgPath, 1);

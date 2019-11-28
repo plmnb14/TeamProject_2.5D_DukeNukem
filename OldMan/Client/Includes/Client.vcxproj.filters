@@ -160,6 +160,12 @@
     <Filter Include="02.GameObject\01.MapObject\01.Object\02.OneUseObject">
       <UniqueIdentifier>{c0ec9d23-c397-4013-a45a-b9b9e196d2a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.Boss">
+      <UniqueIdentifier>{1b888b77-fc80-4fd4-9bac-f004d4f329b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.Boss\00. Overload">
+      <UniqueIdentifier>{cab7b83d-f0d5-4477-9669-48804c960694}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -319,6 +325,9 @@
     <ClInclude Include="..\Codes\OneUseObject.h">
       <Filter>02.GameObject\01.MapObject\01.Object\02.OneUseObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Boss_Overload.h">
+      <Filter>02.GameObject\09.Boss\00. Overload</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -453,6 +462,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\OneUseObject.cpp">
       <Filter>02.GameObject\01.MapObject\01.Object\02.OneUseObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Boss_Overload.cpp">
+      <Filter>02.GameObject\09.Boss\00. Overload</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

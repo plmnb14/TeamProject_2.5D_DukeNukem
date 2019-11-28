@@ -107,7 +107,7 @@ HRESULT CEffect_RocketSmoke::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Smoke_Gun");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Smoke_Gun");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

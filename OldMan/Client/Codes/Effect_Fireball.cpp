@@ -205,7 +205,7 @@ HRESULT CEffect_Fireball::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Explosion_Fire");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Explosion_Fire");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

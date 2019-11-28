@@ -105,7 +105,7 @@ void COneUseObject::ChangeTex(wstring _wstrTex)
 	m_mapComponent.erase(L"Texture");
 
 	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -118,7 +118,7 @@ HRESULT COneUseObject::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Tile256x256_0.png");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Tile256x256_0.png");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

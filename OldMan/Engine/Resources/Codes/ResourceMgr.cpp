@@ -13,7 +13,7 @@ USING(ENGINE)
 IMPLEMENT_SINGLETON(CResourceMgr)
 
 CResourceMgr::CResourceMgr()
-	: m_pResource(nullptr)
+	: m_pResource(nullptr), iCount(0), iMaxCount(0)
 {
 
 }
@@ -109,6 +109,8 @@ HRESULT CResourceMgr::AddTexture(
 		pGraphicDev, eTextureType, wstrFilePath, dwCnt);
 
 	NULL_CHECK_RETURN(pResource, E_FAIL);
+
+	++iCount;
 
 	pResource->Set_MaxFrame(int(dwCnt));
 	m_mapResource[eResourceType][wstrResourceKey] = pResource;

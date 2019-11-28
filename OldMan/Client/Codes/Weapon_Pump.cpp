@@ -156,7 +156,7 @@ HRESULT CWeapon_Pump::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Equip");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Equip");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

@@ -210,7 +210,7 @@ HRESULT CBullet::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-		pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Bullet_Yellow");
+		pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Bullet_Yellow");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

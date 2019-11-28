@@ -188,7 +188,7 @@ HRESULT CPlayer::AddComponent()
 	//NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_Player");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Buffer_Player");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 

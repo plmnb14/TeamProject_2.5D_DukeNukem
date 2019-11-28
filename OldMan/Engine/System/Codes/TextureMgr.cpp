@@ -9,6 +9,7 @@ USING(ENGINE)
 IMPLEMENT_SINGLETON(CTextureMgr)
 
 CTextureMgr::CTextureMgr()
+	:iTextureCount(0)
 {
 }
 
@@ -77,6 +78,8 @@ HRESULT CTextureMgr::LoadTextureFromImgPath( const wstring& wstrImgPath)
 
 		if (!lstrcmp(szObjectKey, L"No_Animation"))
 		{
+			++iTextureCount;
+
 			HRESULT hr = LoadTexture(
 				SINGLE_TEXTURE, szImgPath,
 				szFileName);
@@ -92,6 +95,8 @@ HRESULT CTextureMgr::LoadTextureFromImgPath( const wstring& wstrImgPath)
 		}
 		else
 		{
+			++iTextureCount;
+
 			HRESULT hr = LoadTexture(
 				MULTI_TEXTURE, szImgPath,
 				szObjectKey, szStateKey, _ttoi(szImgCount));

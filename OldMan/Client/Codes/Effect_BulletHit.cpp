@@ -105,7 +105,7 @@ HRESULT CEffect_BulletHit::AddComponent()
 		wTmp = (L"Bullet_Hit_YellowS");
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, wTmp);
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, wTmp);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

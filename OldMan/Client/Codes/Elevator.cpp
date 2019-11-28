@@ -95,7 +95,7 @@ void CElevator::ChangeTex(wstring _wstrTex)
 	m_mapComponent.erase(L"Texture");
 
 	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
 	if (!pComponent)
 		return;
 	m_mapComponent.insert({ L"Texture", pComponent });
@@ -115,7 +115,7 @@ HRESULT CElevator::AddComponent()
 
 	// Texture
 	m_wstrTex = L"Tile256x256_0.dds";
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, m_wstrTex);
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, m_wstrTex);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

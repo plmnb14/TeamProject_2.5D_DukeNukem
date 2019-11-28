@@ -34,7 +34,6 @@ private:
 
 private:
 	void PipeLineSetUp();
-	void LoadTexture();
 
 public:
 	static CLogo* Create(LPDIRECT3DDEVICE9 pGraphicDev);

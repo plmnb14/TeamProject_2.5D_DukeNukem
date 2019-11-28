@@ -250,7 +250,7 @@ HRESULT CStage::Initialize()
 	// Player Buffer
 	HRESULT hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
-		ENGINE::RESOURCE_STATIC,
+		ENGINE::RESOURCE_DYNAMIC,
 		ENGINE::CVIBuffer::BUFFER_RCTEX,
 		L"Buffer_Player");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
@@ -310,7 +310,6 @@ HRESULT CStage::Initialize()
 void CStage::Release()
 {
 	m_pResourceMgr->ResetDynamicResource();
-	ENGINE::GetTextureMgr()->DestroyInstance();
 }
 
 void CStage::PipeLineSetUp()
@@ -351,53 +350,6 @@ void CStage::PipeLineSetUp()
 
 	// 장치에게 투영 행렬 전달.
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
-}
-
-void CStage::LoadTexture()
-{
-	ENGINE::GetTextureMgr()->InitTextureMgr(ENGINE::GetGraphicDev()->GetDevice());
-	HRESULT hr = ENGINE::GetTextureMgr()->LoadTextureFromImgPath(L"../../Data/TexturePath_Client.txt");
-	FAILED_CHECK_MSG(hr, L"LoadTextureFromImgPath Failed");
-
-	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Multi())
-	{
-		hr = m_pResourceMgr->AddTexture(
-			m_pGraphicDev,
-			ENGINE::RESOURCE_STATIC,
-			ENGINE::TEX_NORMAL,
-			iter->wstrStateKey,
-			iter->wstrImgPath, iter->iImgCount);
-		FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
-	}
-
-	// Single은 FileName
-	for (auto& iter : ENGINE::GetTextureMgr()->GetMapTexture_Single())
-	{
-		string strCheckDDS;
-		strCheckDDS.assign(iter->wstrFileName.begin(), iter->wstrFileName.end());
-
-		// .dds 를 찾았다면 TEX_CUBE
-		if (strCheckDDS.find(".dds") != string::npos)
-		{
-			hr = m_pResourceMgr->AddTexture(
-				m_pGraphicDev,
-				ENGINE::RESOURCE_STATIC,
-				ENGINE::TEX_CUBE,
-				iter->wstrFileName,
-				iter->wstrImgPath, 1);
-			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
-		}
-		else
-		{
-			hr = m_pResourceMgr->AddTexture(
-				m_pGraphicDev,
-				ENGINE::RESOURCE_STATIC,
-				ENGINE::TEX_NORMAL,
-				iter->wstrFileName,
-				iter->wstrImgPath, 1);
-			FAILED_CHECK_MSG(hr, iter->wstrFileName.c_str());
-		}
-	}
 }
 
 void CStage::LoadMapObj()
