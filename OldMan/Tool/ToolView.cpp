@@ -251,6 +251,12 @@ void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnRButtonDown(nFlags, point);
 
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	NULL_CHECK(pMainFrm);
+
+	CMyFormView* pFormView = dynamic_cast<CMyFormView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
+	NULL_CHECK(pFormView);
+
 	if (m_bIsEraseMode && m_pDeleteCube)
 	{
 		if (m_pSelectCube)
@@ -286,6 +292,7 @@ void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
 		m_pSelectCube->SetTexName(m_pDeleteCube->GetTexName());
 		m_pSelectCube->ChangeTex();
 		m_pSelectCube->SetObjType(m_pDeleteCube->GetObjType());
+		pFormView->m_wstrObjType = m_pDeleteCube->GetObjType();
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 		m_pDeleteCube = nullptr;
 

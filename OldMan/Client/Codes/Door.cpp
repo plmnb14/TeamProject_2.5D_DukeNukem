@@ -176,10 +176,10 @@ void CDoor::CheckOpen()
 {
 	D3DXVECTOR3 vPlayerPos = dynamic_cast<ENGINE::CTransform*>(m_pPlayer->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMyPos = m_pTransform->GetPos();
-	D3DXVECTOR3 vDist = { vPlayerPos.x - vMyPos.x, vPlayerPos.y - vMyPos.y, vPlayerPos.y - vMyPos.y };
+	D3DXVECTOR3 vDist = { vPlayerPos.x - vMyPos.x, vPlayerPos.y - vMyPos.y, vPlayerPos.z - vMyPos.z };
 	D3DXVECTOR3 vMySize = m_pTransform->GetSize();
 
-	bool bIsCanOpen = abs(vDist.x) < vMySize.x + m_fActiveDist && abs(vDist.y) < vMySize.y + m_fActiveDist && abs(vDist.z) < vMySize.z + m_fActiveDist;
+	bool bIsCanOpen = abs(vDist.x) < vMySize.x + m_fActiveDist && /*abs(vDist.y) < vMySize.y + m_fActiveDist &&*/ abs(vDist.z) < vMySize.z + m_fActiveDist;
 
 	if (bIsCanOpen &&
 		m_pKeyMgr->KeyDown(ENGINE::KEY_F))
