@@ -60,6 +60,11 @@ void CRigidBody::Set_IsBound(bool _Bound)
 	m_tRigid.bIsBoundable = _Bound;
 }
 
+void CRigidBody::Set_IsPush(bool _Push)
+{
+	m_tRigid.bIsPush = _Push;
+}
+
 void CRigidBody::Set_fMass(float _Mass)
 {
 	m_tRigid.fMass = _Mass;
@@ -104,7 +109,7 @@ float CRigidBody::Set_Jump(D3DXVECTOR3 _TransForm , float _Time)
 {
 	m_tRigid.vAccel.y -= m_tRigid.vMaxAccel.y * _Time;
 
-	return (m_tRigid.fPower * m_tRigid.vAccel.y + GRAVITY * m_tRigid.vAccel.y * m_tRigid.vAccel.y * 0.5f) * _Time;;
+	return (m_tRigid.fPower * m_tRigid.vAccel.y + GRAVITY * m_tRigid.vAccel.y * m_tRigid.vAccel.y * 0.5f) * _Time;
 }
 
 float CRigidBody::Set_Fall(D3DXVECTOR3 _TransForm, float _Time)

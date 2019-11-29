@@ -210,7 +210,6 @@ void CPlayer_Hand::Set_WeaponAct()
 
 void CPlayer_Hand::WeaponActState()
 {
-
 	switch(m_eWeapon)
 	{
 	case ENGINE::MELLE:
@@ -248,8 +247,43 @@ void CPlayer_Hand::WeaponActState()
 
 void CPlayer_Hand::Weapon_Revolver()
 {
+	//if (m_eActState == CPlayer::W_LEDGE)
+	//{
+	//	ChangeTex(L"Ledge_Hand");
+	//	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+	//	m_pAnimator->Set_FrameAmp(5.f);
+	//
+	//	if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+	//	{
+	//		if (m_eWeapon == ENGINE::MELLE)
+	//			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+	//
+	//		else
+	//			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+	//	}
+	//}
+
 	switch (m_eActState)
 	{
+	case CPlayer::W_LEDGE:
+	{
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"Ledge_Hand");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(20.f);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			if (m_eWeapon == ENGINE::MELLE)
+				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+
+			else
+				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+		}
+
+		break;
+	}
+
 	case CPlayer::W_IDLE:
 	{
 		ChangeTex(L"Revolver_Idle");
@@ -328,7 +362,7 @@ void CPlayer_Hand::Weapon_Revolver()
 	{
 		m_pAnimator->Stop_Animation(false);
 		ChangeTex(L"Revolver_Draw");
-		m_pAnimator->Set_FrameAmp(10.f);
+		m_pAnimator->Set_FrameAmp(15.f);
 		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 
 		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())

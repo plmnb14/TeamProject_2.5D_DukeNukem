@@ -27,18 +27,21 @@ public:
 	void Set_IsJump(bool _Jump);
 	void Set_IsLanding(bool _Land);
 	void Set_IsBound(bool _Bound);
-		;
+	void Set_IsPush(bool _Push);
+
 public:
 	void Set_fMass(float _Mass);
 	void Set_fPower(float _Power);
 	void Set_fForce(float _Force);
 	void Set_BoundReduce(float _Value);
+	void Set_Distance(float _Distance);
 
 public:
 	void Set_Speed(D3DXVECTOR3 _Speed = { 1.f, 1.f, 1.f });
 	void Set_Accel(D3DXVECTOR3 _Accel = { 0.f, 0.f, 0.f });
 	void Set_MaxAccel(D3DXVECTOR3 _MaxAccel = { 0.1f, 0.1f, 0.1f });
 	void Set_MaxSpeed(D3DXVECTOR3 _MaxSpeed = { 1.f, 1.f, 1.f });
+	void Set_PushDir(D3DXVECTOR3 _PushDir = { 0,0,1 });
 
 public:
 	D3DXVECTOR3 Get_Accel() { return m_tRigid.vAccel; }
@@ -51,6 +54,9 @@ public:
 	bool Get_IsAir() { return m_tRigid.bIsAir; }
 	bool Get_IsHit() { return m_tRigid.bIsHit; }
 	bool Get_IsLanding() { return m_tRigid.bIsLanding; }
+	bool Get_IsPush() { return m_tRigid.bIsPush; };
+	bool Get_Distance() { return m_tRigid.fDistance; }
+	bool Get_PushDir() { return m_tRigid.vPushDir; }
 public:
 	float Get_Force() { return m_tRigid.fForce; }
 	

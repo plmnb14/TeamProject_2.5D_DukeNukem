@@ -4,9 +4,10 @@
 #include "Animator.h"
 #include "CameraObserver.h"
 #include "Billborad.h"
+#include "Collider.h"
 
 CEffect_Explosion_Rocket::CEffect_Explosion_Rocket(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CVfx(pGraphicDev), m_wFrame(0)
+	:CVfx(pGraphicDev), m_wFrame(0), m_pBombCollider(nullptr)
 {
 }
 
@@ -134,6 +135,14 @@ HRESULT CEffect_Explosion_Rocket::AddComponent()
 	m_pBillborad = dynamic_cast<ENGINE::CBillborad*>(pComponent);
 	NULL_CHECK_RETURN(m_pBillborad, E_FAIL);
 	m_mapComponent.insert({ L"BillBoard", pComponent });
+
+	// Collider
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"BombCollider", pComponent });
+
+	m_pBombCollider = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pBombCollider, E_FAIL);
 
 	return S_OK;
 }

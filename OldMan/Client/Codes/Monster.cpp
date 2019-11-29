@@ -28,9 +28,11 @@ CMonster::~CMonster()
 
 int CMonster::Update()
 {
+	cout << m_pCondition->Get_Hp() << endl;
 
 	if (m_bIsDead)
 		return DEAD_OBJ;
+
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	Check_Physic();
@@ -117,7 +119,7 @@ HRESULT CMonster::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 10.f, 8.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
 	m_fMaxRange = 19.0f;//최대사거리
@@ -259,6 +261,7 @@ HRESULT CMonster::AddComponent()
 
 	m_pCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
 	//빌보드 
 	pComponent = ENGINE::CBillborad::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
@@ -560,7 +563,7 @@ void CMonster::Monster_Attack()
 		//m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, fMove);
 	if (m_pMelleCollider->Get_IsCollision())
 	{
-		m_pCondition->Add_Hp(+1);
+		//m_pCondition->Add_Hp(+1);
 	}
 
 

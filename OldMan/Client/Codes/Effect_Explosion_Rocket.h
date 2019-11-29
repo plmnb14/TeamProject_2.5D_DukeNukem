@@ -43,6 +43,7 @@ public:
 
 private:
 	WORD	m_wFrame;
+	ENGINE::CCollider*	m_pBombCollider;
 };
 
 #define __EFFECT_EXPLOSION_ROCKET_H__

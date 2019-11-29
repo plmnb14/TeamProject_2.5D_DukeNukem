@@ -32,6 +32,7 @@ public:
 	inline void Set_Stamina(float _Stamina) { m_tCondition.fStamina = _Stamina; };
 	inline void Set_MoveSpeed(float _MoveSpeed) { m_tCondition.fMoveSpeed = _MoveSpeed; };
 	inline void Set_MoveAccel(float _MoveAccel) { m_tCondition.fMoveAccel = _MoveAccel; };
+	inline void Set_Damage(float _Damage) { m_tCondition.fDamage = _Damage; }
 
 public:
 	inline void Set_Cinematic(bool _Cinematic) { m_tCondition.bIsCinematic = _Cinematic; };
@@ -54,6 +55,7 @@ public:
 	inline float Get_Stamina() { return m_tCondition.fStamina; };
 	inline float Get_MoveSpeed() { return m_tCondition.fMoveSpeed; };
 	inline float Get_MoveAccel() { return m_tCondition.fMoveAccel; };
+	inline float Get_Damage() { return m_tCondition.fDamage; }
 		 
 public:	 
 	inline bool Get_Cinematic() { return m_tCondition.bIsCinematic; };

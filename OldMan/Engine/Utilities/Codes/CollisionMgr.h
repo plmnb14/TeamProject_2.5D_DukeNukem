@@ -25,6 +25,7 @@ public:
 	static void CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
+	static void CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionTarget_To_Monstr_Mele(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 
 public:

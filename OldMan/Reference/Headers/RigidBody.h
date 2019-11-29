@@ -27,7 +27,8 @@ public:
 	void Set_IsJump(bool _Jump);
 	void Set_IsLanding(bool _Land);
 	void Set_IsBound(bool _Bound);
-		;
+	void Set_IsPush(bool _Push);
+
 public:
 	void Set_fMass(float _Mass);
 	void Set_fPower(float _Power);
@@ -51,6 +52,7 @@ public:
 	bool Get_IsAir() { return m_tRigid.bIsAir; }
 	bool Get_IsHit() { return m_tRigid.bIsHit; }
 	bool Get_IsLanding() { return m_tRigid.bIsLanding; }
+	bool Get_IsPush() { return m_tRigid.bIsPush; };
 public:
 	float Get_Force() { return m_tRigid.fForce; }
 	
