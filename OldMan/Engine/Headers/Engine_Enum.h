@@ -67,6 +67,7 @@ namespace ENGINE
 	{
 		TERRAIN,
 		WALL,
+		STAIR,
 		PLAYER,
 		MONSTER,
 		BULLET_PLAYER,

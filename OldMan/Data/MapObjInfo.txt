@@ -4,6 +4,8 @@ Elevator|Elevator_2|Tile128x128_132.png|1|..\Client\Texture\Tiles\No_Animation\1
 Door|Door_0|Tile128x128_127.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_127.png
 Door|Door_1|Tile128x128_71.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_71.png
 Door|Door_2|Tile256x256_56.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_56.png
+Stair|Stair_1|Tile128x128_39.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_39.png
+Stair|Stair_2|Tile128x128_77.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_77.png
 HealPack|HealPack|Pack_2.png|1|..\Client\Texture\PickUp\No_Animation\Pack\Pack_2.png
 ArmorPack|ArmorPack|Pack_1.png|1|..\Client\Texture\PickUp\No_Animation\Pack\Pack_1.png
 JetPack|JetPack|JetPack_0.png|1|..\Client\Texture\PickUp\No_Animation\JetPack\JetPack_0.png

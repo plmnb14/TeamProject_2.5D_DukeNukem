@@ -57,8 +57,8 @@ HRESULT CElevator::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 	m_eTerrainType = ENGINE::TERRAIN_CUBE;
-	m_fMoveSpeed = 2.f;
-	m_fMoveDistY = 10.f;
+	m_fMoveSpeed = 20.f;
+	m_fMoveDistY = 140.f;
 	m_fActiveDist = 3.f;
 
 	return S_OK;

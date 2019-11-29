@@ -166,6 +166,9 @@
     <Filter Include="02.GameObject\09.Boss\00. Overload">
       <UniqueIdentifier>{cab7b83d-f0d5-4477-9669-48804c960694}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\01.MapObject\01.Object\03.Rock">
+      <UniqueIdentifier>{8be3bca0-92df-4a6c-a562-8117fa407457}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -328,6 +331,8 @@
     <ClInclude Include="..\Codes\Boss_Overload.h">
       <Filter>02.GameObject\09.Boss\00. Overload</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\PigMan.h" />
+    <ClInclude Include="..\Codes\Trooper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -466,6 +471,8 @@
     <ClCompile Include="..\Codes\Boss_Overload.cpp">
       <Filter>02.GameObject\09.Boss\00. Overload</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\PigMan.cpp" />
+    <ClCompile Include="..\Codes\Trooper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
