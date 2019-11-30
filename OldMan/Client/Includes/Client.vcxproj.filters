@@ -169,6 +169,12 @@
     <Filter Include="02.GameObject\01.MapObject\01.Object\03.Rock">
       <UniqueIdentifier>{8be3bca0-92df-4a6c-a562-8117fa407457}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\07. Guide">
+      <UniqueIdentifier>{7562fbb6-f341-42a8-b9a9-81802336f113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Bullet\00. Grenade">
+      <UniqueIdentifier>{13415ceb-6ff5-4575-b22f-b180d75d890a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -333,6 +339,12 @@
     </ClInclude>
     <ClInclude Include="..\Codes\PigMan.h" />
     <ClInclude Include="..\Codes\Trooper.h" />
+    <ClInclude Include="..\Codes\Effect_Guide.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\07. Guide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Grenade.h">
+      <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -473,6 +485,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\PigMan.cpp" />
     <ClCompile Include="..\Codes\Trooper.cpp" />
+    <ClCompile Include="..\Codes\Effect_Guide.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\07. Guide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Grenade.cpp">
+      <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
