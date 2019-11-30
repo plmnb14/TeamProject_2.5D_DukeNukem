@@ -1,3 +1,4 @@
+MapObject|GlassBottle|Bottle_%d.png|12|..\Texture\MapObject\GlassBottle\Bottle_%d.png
 OctaBrain|OctaBrain_Dead|OctaBrain_Dead_%d.png|5|..\Texture\Monster\OctaBrain\OctaBrain_Dead\OctaBrain_Dead_%d.png
 OctaBrain|OctaBrain_DeadFall|OctaBrain_DeadFall_%d.png|1|..\Texture\Monster\OctaBrain\OctaBrain_DeadFall\OctaBrain_DeadFall_%d.png
 OctaBrain|OctaBrain_Fire|OctaBrain_Fire_%d.png|4|..\Texture\Monster\OctaBrain\OctaBrain_Fire\OctaBrain_Fire_%d.png
@@ -54,7 +55,6 @@ VFX|Smoke_Gun|Smoke_Gun_%d.png|1|..\Texture\VFX\Smoke_Gun\Smoke_Gun_%d.png
 VFX|Smoke_Small|SmokeSmall_%d.png|4|..\Texture\VFX\Smoke_Small\SmokeSmall_%d.png
 Bullets|Bullet_Rocket|Bullet_Rocket_%d.png|8|..\Texture\Weapon\Bullets\Bullet_Rocket\Bullet_Rocket_%d.png
 Bullets|Bullet_Yellow|Bullet_Yellow_%d.png|7|..\Texture\Weapon\Bullets\Bullet_Yellow\Bullet_Yellow_%d.png
-Melee|Ledge_Hand|Ledge_Hand_%d.png|11|..\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_%d.png
 PumpShot|PumpShot_Draw|PumpShot_Draw_%d.png|6|..\Texture\Weapon\PumpShot\PumpShot_Draw\PumpShot_Draw_%d.png
 PumpShot|PumpShot_Fire|PumpShot_Fire_%d.png|7|..\Texture\Weapon\PumpShot\PumpShot_Fire\PumpShot_Fire_%d.png
 PumpShot|PumpShot_Idle|PumpShot_Idle_%d.png|2|..\Texture\Weapon\PumpShot\PumpShot_Idle\PumpShot_Idle_%d.png
@@ -335,12 +335,16 @@ No_Animation|256 x 256|Tile256x256_14.dds|1|..\Texture\Tiles\No_Animation\256 x 
 No_Animation|256 x 256|Tile256x256_14.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_14.png
 No_Animation|256 x 256|Tile256x256_15.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_15.dds
 No_Animation|256 x 256|Tile256x256_15.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_15.png
+No_Animation|256 x 256|Tile256x256_19.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_19.dds
+No_Animation|256 x 256|Tile256x256_19.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_19.png
 No_Animation|256 x 256|Tile256x256_2.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_2.dds
 No_Animation|256 x 256|Tile256x256_2.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_2.png
 No_Animation|256 x 256|Tile256x256_20.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_20.dds
 No_Animation|256 x 256|Tile256x256_20.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_20.png
 No_Animation|256 x 256|Tile256x256_22.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_22.dds
 No_Animation|256 x 256|Tile256x256_22.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_22.png
+No_Animation|256 x 256|Tile256x256_24.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_24.dds
+No_Animation|256 x 256|Tile256x256_24.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_24.png
 No_Animation|256 x 256|Tile256x256_25.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_25.dds
 No_Animation|256 x 256|Tile256x256_25.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_25.png
 No_Animation|256 x 256|Tile256x256_26.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_26.dds
@@ -405,8 +409,16 @@ No_Animation|256 x 256|Tile256x256_82.dds|1|..\Texture\Tiles\No_Animation\256 x 
 No_Animation|256 x 256|Tile256x256_83.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_83.png
 No_Animation|256 x 256|Tile256x256_91.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_91.dds
 No_Animation|256 x 256|Tile256x256_91.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_91.png
+No_Animation|256 x 256|Tile256x256_93.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_93.dds
+No_Animation|256 x 256|Tile256x256_93.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_93.png
 No_Animation|256 x 256|Tile256x256_96.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_96.dds
 No_Animation|256 x 256|Tile256x256_96.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_96.png
+No_Animation|256 x 256|Tile256x256_97.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_97.dds
+No_Animation|256 x 256|Tile256x256_97.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_97.png
+No_Animation|256 x 256|Tile256x256_98.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_98.dds
+No_Animation|256 x 256|Tile256x256_98.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_98.png
+No_Animation|256 x 256|Tile256x256_99.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_99.dds
+No_Animation|256 x 256|Tile256x256_99.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_99.png
 No_Animation|64 x 128|Tile64x128_0.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_0.png
 No_Animation|64 x 128|Tile64x128_1.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_1.png
 No_Animation|64 x 128|Tile64x128_14.png|1|..\Texture\Tiles\No_Animation\64 x 128\Tile64x128_14.png

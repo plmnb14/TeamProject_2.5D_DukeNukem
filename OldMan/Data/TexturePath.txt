@@ -1,3 +1,15 @@
+Bottle_0.png|Bottle_0.png|Bottle_0.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_0.png
+Bottle_1.png|Bottle_1.png|Bottle_1.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_1.png
+Bottle_10.png|Bottle_10.png|Bottle_10.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_10.png
+Bottle_11.png|Bottle_11.png|Bottle_11.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_11.png
+Bottle_2.png|Bottle_2.png|Bottle_2.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_2.png
+Bottle_3.png|Bottle_3.png|Bottle_3.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_3.png
+Bottle_4.png|Bottle_4.png|Bottle_4.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_4.png
+Bottle_5.png|Bottle_5.png|Bottle_5.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_5.png
+Bottle_6.png|Bottle_6.png|Bottle_6.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_6.png
+Bottle_7.png|Bottle_7.png|Bottle_7.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_7.png
+Bottle_8.png|Bottle_8.png|Bottle_8.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_8.png
+Bottle_9.png|Bottle_9.png|Bottle_9.png|1|..\Client\Texture\MapObject\GlassBottle\Bottle_9.png
 OctaBrain_Dead_0.png|OctaBrain_Dead_0.png|OctaBrain_Dead_0.png|1|..\Client\Texture\Monster\OctaBrain\OctaBrain_Dead\OctaBrain_Dead_0.png
 OctaBrain_Dead_1.png|OctaBrain_Dead_1.png|OctaBrain_Dead_1.png|1|..\Client\Texture\Monster\OctaBrain\OctaBrain_Dead\OctaBrain_Dead_1.png
 OctaBrain_Dead_2.png|OctaBrain_Dead_2.png|OctaBrain_Dead_2.png|1|..\Client\Texture\Monster\OctaBrain\OctaBrain_Dead\OctaBrain_Dead_2.png
@@ -387,12 +399,16 @@ No_Animation|256 x 256|Tile256x256_14.dds|1|..\Client\Texture\Tiles\No_Animation
 No_Animation|256 x 256|Tile256x256_14.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_14.png
 No_Animation|256 x 256|Tile256x256_15.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_15.dds
 No_Animation|256 x 256|Tile256x256_15.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_15.png
+No_Animation|256 x 256|Tile256x256_19.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_19.dds
+No_Animation|256 x 256|Tile256x256_19.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_19.png
 No_Animation|256 x 256|Tile256x256_2.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_2.dds
 No_Animation|256 x 256|Tile256x256_2.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_2.png
 No_Animation|256 x 256|Tile256x256_20.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_20.dds
 No_Animation|256 x 256|Tile256x256_20.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_20.png
 No_Animation|256 x 256|Tile256x256_22.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_22.dds
 No_Animation|256 x 256|Tile256x256_22.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_22.png
+No_Animation|256 x 256|Tile256x256_24.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_24.dds
+No_Animation|256 x 256|Tile256x256_24.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_24.png
 No_Animation|256 x 256|Tile256x256_25.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_25.dds
 No_Animation|256 x 256|Tile256x256_25.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_25.png
 No_Animation|256 x 256|Tile256x256_26.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_26.dds
@@ -457,8 +473,16 @@ No_Animation|256 x 256|Tile256x256_82.dds|1|..\Client\Texture\Tiles\No_Animation
 No_Animation|256 x 256|Tile256x256_83.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_83.png
 No_Animation|256 x 256|Tile256x256_91.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_91.dds
 No_Animation|256 x 256|Tile256x256_91.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_91.png
+No_Animation|256 x 256|Tile256x256_93.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_93.dds
+No_Animation|256 x 256|Tile256x256_93.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_93.png
 No_Animation|256 x 256|Tile256x256_96.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_96.dds
 No_Animation|256 x 256|Tile256x256_96.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_96.png
+No_Animation|256 x 256|Tile256x256_97.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_97.dds
+No_Animation|256 x 256|Tile256x256_97.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_97.png
+No_Animation|256 x 256|Tile256x256_98.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_98.dds
+No_Animation|256 x 256|Tile256x256_98.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_98.png
+No_Animation|256 x 256|Tile256x256_99.dds|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_99.dds
+No_Animation|256 x 256|Tile256x256_99.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_99.png
 No_Animation|64 x 128|Tile64x128_0.png|1|..\Client\Texture\Tiles\No_Animation\64 x 128\Tile64x128_0.png
 No_Animation|64 x 128|Tile64x128_1.png|1|..\Client\Texture\Tiles\No_Animation\64 x 128\Tile64x128_1.png
 No_Animation|64 x 128|Tile64x128_14.png|1|..\Client\Texture\Tiles\No_Animation\64 x 128\Tile64x128_14.png
@@ -762,17 +786,6 @@ Bullet_Yellow_3.png|Bullet_Yellow_3.png|Bullet_Yellow_3.png|1|..\Client\Texture\
 Bullet_Yellow_4.png|Bullet_Yellow_4.png|Bullet_Yellow_4.png|1|..\Client\Texture\Weapon\Bullets\Bullet_Yellow\Bullet_Yellow_4.png
 Bullet_Yellow_5.png|Bullet_Yellow_5.png|Bullet_Yellow_5.png|1|..\Client\Texture\Weapon\Bullets\Bullet_Yellow\Bullet_Yellow_5.png
 Bullet_Yellow_6.png|Bullet_Yellow_6.png|Bullet_Yellow_6.png|1|..\Client\Texture\Weapon\Bullets\Bullet_Yellow\Bullet_Yellow_6.png
-Ledge_Hand_0.png|Ledge_Hand_0.png|Ledge_Hand_0.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_0.png
-Ledge_Hand_1.png|Ledge_Hand_1.png|Ledge_Hand_1.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_1.png
-Ledge_Hand_10.png|Ledge_Hand_10.png|Ledge_Hand_10.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_10.png
-Ledge_Hand_2.png|Ledge_Hand_2.png|Ledge_Hand_2.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_2.png
-Ledge_Hand_3.png|Ledge_Hand_3.png|Ledge_Hand_3.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_3.png
-Ledge_Hand_4.png|Ledge_Hand_4.png|Ledge_Hand_4.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_4.png
-Ledge_Hand_5.png|Ledge_Hand_5.png|Ledge_Hand_5.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_5.png
-Ledge_Hand_6.png|Ledge_Hand_6.png|Ledge_Hand_6.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_6.png
-Ledge_Hand_7.png|Ledge_Hand_7.png|Ledge_Hand_7.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_7.png
-Ledge_Hand_8.png|Ledge_Hand_8.png|Ledge_Hand_8.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_8.png
-Ledge_Hand_9.png|Ledge_Hand_9.png|Ledge_Hand_9.png|1|..\Client\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_9.png
 PumpShot_Draw_0.png|PumpShot_Draw_0.png|PumpShot_Draw_0.png|1|..\Client\Texture\Weapon\PumpShot\PumpShot_Draw\PumpShot_Draw_0.png
 PumpShot_Draw_1.png|PumpShot_Draw_1.png|PumpShot_Draw_1.png|1|..\Client\Texture\Weapon\PumpShot\PumpShot_Draw\PumpShot_Draw_1.png
 PumpShot_Draw_2.png|PumpShot_Draw_2.png|PumpShot_Draw_2.png|1|..\Client\Texture\Weapon\PumpShot\PumpShot_Draw\PumpShot_Draw_2.png

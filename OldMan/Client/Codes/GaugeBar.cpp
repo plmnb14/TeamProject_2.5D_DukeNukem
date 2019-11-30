@@ -53,6 +53,9 @@ void CGaugeBar::Render()
 {
 	for (int i = 0; i < m_iBarMaxCount; i++)
 	{
+		if (m_vecBarUI.size() == 0)
+			break;
+
 		float fPadding = m_fSizeX * 0.3f;
 		float fIdxPos = 0.f;
 		fIdxPos += (i * m_fSizeX) - (fPadding * i);

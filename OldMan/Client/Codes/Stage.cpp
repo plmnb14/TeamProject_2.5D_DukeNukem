@@ -201,12 +201,12 @@ HRESULT CStage::Add_UI_Layer()
 	
 	
 	// Bullet
-	//pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
-	//NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
-	//static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -280.f, 0.f));
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
+	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -280.f, 0.f));
 	
 	// Buller Line
 	pObject = CUI::Create(m_pGraphicDev, L"WeaponRightLine.png");
@@ -216,21 +216,21 @@ HRESULT CStage::Add_UI_Layer()
 	static_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(600.f, -310.f, 0.f));
 	
-	//// HP Bar
-	//pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_HP);
-	//NULL_CHECK_MSG_RETURN(pObject, L"BAR_HP Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
-	//static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -330.f, 0.f));
-	//
-	//// Shield Bar
-	//pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_SHIELD);
-	//NULL_CHECK_MSG_RETURN(pObject, L"BAR_SHIELD Create Failed", E_FAIL);
-	//pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
-	//static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -295.f, 0.f));
+	// HP Bar
+	pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_HP);
+	NULL_CHECK_MSG_RETURN(pObject, L"BAR_HP Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -330.f, 0.f));
+	
+	// Shield Bar
+	pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_SHIELD);
+	NULL_CHECK_MSG_RETURN(pObject, L"BAR_SHIELD Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -295.f, 0.f));
 	
 	// Weapon Icon
 	pObject = CWeaponIcon::Create(m_pGraphicDev);
@@ -420,6 +420,16 @@ void CStage::LoadMapObj()
 			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 			pObject = pDoor;
 			pDoor = nullptr;
+		}
+		else if (!lstrcmp(szType, L"Stair"))
+		{
+			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pStair->ChangeTex(szName);
+
+			//eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			eObjType = ENGINE::OBJECT_TYPE::STAIR;
+			pObject = pStair;
+			pStair = nullptr;
 		}
 		// Monster
 		//else if (!lstrcmp(szType, L"Pigman"))

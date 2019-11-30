@@ -23,7 +23,6 @@ public:
 	{
 		MAPOBJ_GLASSBOTTLE,
 		MAPOBJ_BOX,
-		MAPOBJ_GAS,
 		MAPOBJ_END
 	};
 
