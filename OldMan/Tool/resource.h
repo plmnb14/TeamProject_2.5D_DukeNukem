@@ -33,6 +33,7 @@
 #define IDC_CHECK6                      1020
 #define IDC_CHECK7                      1021
 #define IDC_FORMPICTURE                 1022
+#define IDC_EDIT11                      1023
 #define IDC_BUTTON4                     1025
 #define IDC_BUTTON5                     1026
 #define IDC_RADIO1                      1027

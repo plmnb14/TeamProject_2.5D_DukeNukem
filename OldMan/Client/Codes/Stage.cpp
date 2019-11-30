@@ -354,7 +354,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/Map_Moon.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/Map_Desert.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -364,6 +364,7 @@ void CStage::LoadMapObj()
 	TCHAR szType[MAX_STR] = L"";
 	D3DXVECTOR3 vPos, vSize, vAngle;
 	ENGINE::TERRAIN_TYPE eTerrainType;
+	int iIndex;
 
 	while (true)
 	{
@@ -373,6 +374,7 @@ void CStage::LoadMapObj()
 		::ReadFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 		::ReadFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 		::ReadFile(hFile, &eTerrainType, sizeof(ENGINE::TERRAIN_TYPE), &dwByte, nullptr);
+		::ReadFile(hFile, &iIndex, sizeof(int), &dwByte, nullptr);
 
 		if (0 == dwByte)
 			break;
@@ -441,7 +443,7 @@ void CStage::LoadMapObj()
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{
 			CTrigger* pTrigger = nullptr;
-			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_NEXTSTAGE);
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_NEXTSTAGE, iIndex);
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;
@@ -450,7 +452,7 @@ void CStage::LoadMapObj()
 		else if (!lstrcmp(szType, L"Trigger_Ledge"))
 		{
 			CTrigger* pTrigger = nullptr;
-			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_LEDGE);
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_LEDGE, iIndex);
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;

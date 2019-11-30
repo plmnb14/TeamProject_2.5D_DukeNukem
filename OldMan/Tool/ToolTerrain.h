@@ -29,6 +29,7 @@ public:
 	wstring GetObjType();
 	 ENGINE::TERRAIN_TYPE GetTerrainType();
 	 bool GetPicked();
+	 int GetIndex();
 
 public:
 	void SetClicked(bool _bIsSet = true);
@@ -36,6 +37,7 @@ public:
 	void SetFitX(bool _bIsFit);
 	void SetTexName(wstring _wstrTex);
 	void SetObjType(wstring _wstrType);
+	void SetIndex(int _iIdx);
 
 protected:
 	void MouseInput();
@@ -62,6 +64,8 @@ protected:
 	bool					m_bSetted;
 	bool					m_bIsFitGrid;
 	bool					m_bIsFitX;
+
+	int						m_iIndex;
 };
 
 #define __TOOL_TERRAIN_H__
