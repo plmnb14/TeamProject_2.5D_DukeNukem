@@ -52,7 +52,6 @@ protected:
 	virtual	void Monster_Range();                           // 재정의
 	virtual void Monster_Idle();
 	virtual	void Monster_Shot();
-	//void Object_Serch();
 	virtual void Monster_Fire2();                           // 계산빼고 전부 오버라이드 좇까
 	virtual void Monster_Dead();
 	virtual void Monster_Attack();							// 나머지는 오버라이드로 정의를 다시하는게 맞다. 
@@ -61,6 +60,7 @@ protected:											//물리
 	virtual void Check_Physic();
 	virtual void Object_Collison();
 	virtual void ChangeTex(wstring _wstrTex);
+	void Check_Push();
 
 
 

@@ -28,11 +28,10 @@ private:
 	virtual void Player_Pursue(float _move)override;  //추격하다 
 	virtual void Monster_Foward()override;
 	virtual void Monster_State_Set();   //상태
-								//	void Monster_State_Set2();   //상태
+							
 	virtual void Monster_Range()override;                           // 범위
 	virtual void Monster_Idle()override;
 	virtual void Monster_Shot()override;
-	//	void Object_Serch();
 	virtual void Monster_Fire2()override;
 	virtual void Monster_Dead()override;
 	virtual void Monster_Attack()override;

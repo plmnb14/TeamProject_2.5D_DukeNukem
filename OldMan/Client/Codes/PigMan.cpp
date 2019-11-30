@@ -532,6 +532,7 @@ void CPigMan::Monster_Fire2()
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
 			m_fTime = 0;
 		}
 	}

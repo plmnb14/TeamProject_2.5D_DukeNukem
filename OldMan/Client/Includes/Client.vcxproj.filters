@@ -178,6 +178,12 @@
     <Filter Include="02.GameObject\05.Monster\03.Alien">
       <UniqueIdentifier>{e7f0f87f-5f23-42f4-bdef-d25805e01986}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster\01.PigMan">
+      <UniqueIdentifier>{a7de153a-32d6-4d73-a76b-fcbc1910244e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\02.Trooper">
+      <UniqueIdentifier>{9c0d229c-950d-4ac2-895a-b4acaf7026fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -267,9 +273,6 @@
     <ClInclude Include="..\Codes\Weapon_Revolver.h">
       <Filter>02.GameObject\06.Weapon\00.Revolver</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Weapon.h">
-      <Filter>02.GameObject\06.Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="..\Codes\Weapon_SMG.h">
       <Filter>02.GameObject\06.Weapon\01. SMG</Filter>
     </ClInclude>
@@ -340,16 +343,23 @@
     <ClInclude Include="..\Codes\Boss_Overload.h">
       <Filter>02.GameObject\09.Boss\00. Overload</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\PigMan.h" />
-    <ClInclude Include="..\Codes\Trooper.h" />
     <ClInclude Include="..\Codes\Effect_Guide.h">
       <Filter>02.GameObject\07.VFX\00. Effect\07. Guide</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Grenade.h">
       <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Trooper.h">
+      <Filter>02.GameObject\05.Monster\02.Trooper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\PigMan.h">
+      <Filter>02.GameObject\05.Monster\01.PigMan</Filter>
+    </ClInclude>
     <ClInclude Include="..\Codes\Alien.h">
       <Filter>02.GameObject\05.Monster\03.Alien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Weapon.h">
+      <Filter>02.GameObject\07.VFX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -489,13 +499,17 @@
     <ClCompile Include="..\Codes\Boss_Overload.cpp">
       <Filter>02.GameObject\09.Boss\00. Overload</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\PigMan.cpp" />
-    <ClCompile Include="..\Codes\Trooper.cpp" />
     <ClCompile Include="..\Codes\Effect_Guide.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\07. Guide</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Grenade.cpp">
       <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Trooper.cpp">
+      <Filter>02.GameObject\05.Monster\02.Trooper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PigMan.cpp">
+      <Filter>02.GameObject\05.Monster\01.PigMan</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Alien.cpp">
       <Filter>02.GameObject\05.Monster\03.Alien</Filter>

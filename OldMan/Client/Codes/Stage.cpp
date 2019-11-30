@@ -434,11 +434,11 @@ void CStage::LoadMapObj()
 			pStair = nullptr;
 		}
 		// Monster
-		//else if (!lstrcmp(szType, L"Pigman"))
-		//{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		//}
+		else if (!lstrcmp(szType, L"Pigman"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
 		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{

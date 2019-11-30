@@ -39,7 +39,6 @@ private:
 public:											//¹°¸® 
 	virtual void Check_Physic()override;
 	virtual void Object_Collison()override;
-	virtual void Monster_Callcul()override;
 
 
 

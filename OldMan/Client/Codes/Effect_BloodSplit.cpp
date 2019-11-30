@@ -97,7 +97,7 @@ HRESULT CEffect_BloodSplit::AddComponent()
 
 	int tmp = rand() % 3;
 	wstring wTmp = {};
-
+	//·£´ý»ý¼º 
 	if (tmp == 0)
 		wTmp = (L"BloodSplit_01");
 

@@ -297,15 +297,6 @@ HRESULT COctaBrain::AddComponent()
 
 	return S_OK;
 }
-void COctaBrain::Monster_Callcul()
-{
-	m_vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
-	m_vMonster_Pos = m_pTransform->GetPos();
-	m_vPlayer_Pos_Top = { m_vPlayer_Pos.x, m_vPlayer_Pos.y + 3 ,m_vPlayer_Pos.z };
-	m_vMonster_Player_Dir = m_vPlayer_Pos_Top - m_vMonster_Pos;
-	m_vMonsterDir_Fowrd_Get = m_pTransform->GetDir();
-
-}
 
 
 void COctaBrain::Player_Pursue(float _move)
@@ -319,28 +310,27 @@ void COctaBrain::Player_Pursue(float _move)
 void COctaBrain::Monster_Foward()
 {
 
-	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
-	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
+	Monster_Callcul();
 
-	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos - vMonster_Pos;
-	D3DXVECTOR3 vMonster_Player_Dir_Free = vPlayer_Pos - vMonster_Pos;
+	
+	D3DXVECTOR3 vMonster_Player_Dir_Free = m_vPlayer_Pos - m_vMonster_Pos;
 
 	D3DXVECTOR3 vMonsterDir_Get = m_pTransform->GetDir();              // 몬스터가 보는 방향 
 
 	D3DXVECTOR3 vMonsterDir_Forward = { 1.f, 0.f,0.f };                // 몬스터의 룩 벡터 X축 기준 룩 벡터 
-\
-	D3DXVec3Normalize(&vMonster_Player_Dir, &vMonster_Player_Dir);
+
+	D3DXVec3Normalize(&m_vMonster_Player_Dir, &m_vMonster_Player_Dir);
 	D3DXVec3Normalize(&vMonsterDir_Forward, &vMonsterDir_Forward);
 	D3DXVec3Normalize(&vMonsterDir_Get, &vMonsterDir_Get);
 	float fDot_Player_Monster_Forward, fDot_Monster_Right, fMonster_Get_Angle;
-	fDot_Player_Monster_Forward = D3DXVec3Dot(&vMonster_Player_Dir, &vMonsterDir_Get);
+	fDot_Player_Monster_Forward = D3DXVec3Dot(&m_vMonster_Player_Dir, &m_vMonsterDir_Fowrd_Get);
 	D3DXVECTOR3 vMonsterDir_Right = { vMonsterDir_Get.x, vMonsterDir_Get.y + 1.0f,vMonsterDir_Get.z };      																   //m_pTransform->SetDir(vMonster_Player_Dir);
 
 	D3DXVECTOR3 vMonster_RIght_Dir, Mon_Left_Dir, cross;
 	D3DXVec3Cross(&vMonster_RIght_Dir, &vMonsterDir_Get, &vMonsterDir_Right); // 우향 벡터를 구하기 위한 외적 
 																							  //D3DXVec3Cross(&Mon_Left_Dir, &vMonsterDir_Fowrd2, &D3DXVECTOR3(0.0f, -1.0f, 0.0f)); // 좌향 벡터를 구하기 위한 외적 
 
-	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
+	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &m_vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
 	
 
@@ -546,6 +536,7 @@ void COctaBrain::Monster_Fire2()
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
 			m_fTime = 0;
 		}
 	}

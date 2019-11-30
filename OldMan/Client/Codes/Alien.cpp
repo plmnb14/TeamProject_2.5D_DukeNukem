@@ -470,7 +470,8 @@ void CAlien::Monster_Shot()
 
 void CAlien::Monster_Fire2()
 {
-	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
+	Monster_Callcul();
+			D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
@@ -540,6 +541,7 @@ void CAlien::Monster_Dead()
 
 void CAlien::Monster_Attack()
 {
+	Monster_Callcul();
 
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -564,7 +566,21 @@ void CAlien::Monster_Attack()
 
 void CAlien::Check_Physic()
 {
+	if (m_pRigid->Get_IsJump() == true)
+	{
+		D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Jump(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) , 0 };
+		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
 
+		if (m_pRigid->Get_Accel().y <= 0.f)
+		{
+			m_pRigid->Set_Accel({ 1, 1.5f, 1 });
+			m_pRigid->Set_IsFall(true);
+			m_pRigid->Set_IsJump(false);
+			D3DXVECTOR3  Monster_Jump = { m_vMonster_Player_Dir.x,0,m_vMonster_Player_Dir.z };
+
+			m_pTransform->Move_AdvancedPos(Monster_Jump, 2 * m_pTimeMgr->GetDelta());
+		}
+	}
 
 	if (m_pRigid->Get_IsJump() == false)
 	{
