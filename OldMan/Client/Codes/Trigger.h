@@ -19,6 +19,7 @@ public:
 	enum TRIGGER_TYPE
 	{ 
 		TRIGGER_NEXTSTAGE,
+		TRIGGER_LEDGE,
 		TRIGGER_END
 	};
 
@@ -46,7 +47,7 @@ protected:
 	void CheckTriggerActive();
 
 public:
-	static CTrigger* Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType);
+	static CTrigger* Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType, int iIdx);
 
 protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -60,6 +61,7 @@ protected:
 	ENGINE::VTX_TEX*		m_myVtx;
 
 	TRIGGER_TYPE			m_eTriggerType;
+	int						m_iIndex;
 	
 	//void(*m_fpTriggerEvent)();
 };

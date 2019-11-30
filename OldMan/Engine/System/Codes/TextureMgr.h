@@ -37,6 +37,8 @@ public:
 		const wstring& wstrStateKey = L"",
 		int iImgCount = 0);
 
+	int Get_MaxTextureCount() { return iTextureCount; }
+
 private:
 	void Release();
 
@@ -46,6 +48,7 @@ private:
 	list<ENGINE::PATH_INFO*>	m_PathInfoLst_Single;
 
 	LPDIRECT3DDEVICE9			m_pGraphicDev;
+	int iTextureCount;
 };
 
 END

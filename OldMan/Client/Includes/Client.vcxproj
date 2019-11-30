@@ -83,8 +83,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../Bin/</OutDir>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Visual Leak Detector\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -137,6 +137,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Libraries/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,7 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Aim.h" />
-    <ClInclude Include="..\Codes\Alien.h" />
+    <ClInclude Include="..\Codes\Boss_Overload.h" />
     <ClInclude Include="..\Codes\Bullet.h" />
     <ClInclude Include="..\Codes\Camera.h" />
     <ClInclude Include="..\Codes\CameraObserver.h">
@@ -174,6 +175,8 @@
     <ClInclude Include="..\Codes\Elevator.h" />
     <ClInclude Include="..\Codes\Effect_Fireball.h" />
     <ClInclude Include="..\Codes\GaugeBar.h" />
+    <ClInclude Include="..\Codes\Grenade.h" />
+    <ClInclude Include="..\Codes\Effect_Guide.h" />
     <ClInclude Include="..\Codes\HittedCircle.h" />
     <ClInclude Include="..\Codes\Logo.h" />
     <ClInclude Include="..\Codes\LogoBack.h" />
@@ -181,6 +184,7 @@
     <ClInclude Include="..\Codes\Monster.h" />
     <ClInclude Include="..\Codes\Number.h" />
     <ClInclude Include="..\Codes\OctaBrain.h" />
+    <ClInclude Include="..\Codes\OneUseObject.h" />
     <ClInclude Include="..\Codes\PickupItem.h" />
     <ClInclude Include="..\Codes\PigMan.h" />
     <ClInclude Include="..\Codes\Player.h" />
@@ -220,7 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Aim.cpp" />
-    <ClCompile Include="..\Codes\Alien.cpp" />
+    <ClCompile Include="..\Codes\Boss_Overload.cpp" />
     <ClCompile Include="..\Codes\Bullet.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp" />
     <ClCompile Include="..\Codes\CameraObserver.cpp">
@@ -236,6 +240,8 @@
     <ClCompile Include="..\Codes\Elevator.cpp" />
     <ClCompile Include="..\Codes\Effect_Fireball.cpp" />
     <ClCompile Include="..\Codes\GaugeBar.cpp" />
+    <ClCompile Include="..\Codes\Grenade.cpp" />
+    <ClCompile Include="..\Codes\Effect_Guide.cpp" />
     <ClCompile Include="..\Codes\HittedCircle.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\LogoBack.cpp" />
@@ -243,6 +249,7 @@
     <ClCompile Include="..\Codes\Monster.cpp" />
     <ClCompile Include="..\Codes\Number.cpp" />
     <ClCompile Include="..\Codes\OctaBrain.cpp" />
+    <ClCompile Include="..\Codes\OneUseObject.cpp" />
     <ClCompile Include="..\Codes\PickupItem.cpp" />
     <ClCompile Include="..\Codes\PigMan.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />

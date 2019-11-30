@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "Effect_Explosion_Rocket.h"
+#include "Condition.h"
 #include "Trasform.h"
 #include "Animator.h"
 #include "CameraObserver.h"
 #include "Billborad.h"
+#include "Collider.h"
 
 CEffect_Explosion_Rocket::CEffect_Explosion_Rocket(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CVfx(pGraphicDev), m_wFrame(0)
+	:CVfx(pGraphicDev), m_wFrame(0), m_pBombCollider(nullptr), m_pCondition(nullptr)
 {
 }
 
@@ -45,6 +47,8 @@ void CEffect_Explosion_Rocket::LateUpdate()
 
 	if (m_pAnimator->Get_Frame() >= m_pAnimator->Get_MaxFrame() - 1)
 		m_bIsDead = true;
+
+	m_pBombCollider->LateUpdate(m_pTransform->GetPos());
 }
 
 void CEffect_Explosion_Rocket::Render()
@@ -67,6 +71,14 @@ HRESULT CEffect_Explosion_Rocket::Initialize()
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	m_pAnimator->Stop_Animation(false);
 
+	m_pBombCollider->Set_Radius({ 6.f , 6.f, 6.f });			// 각 축에 해당하는 반지름을 설정
+	m_pBombCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
+	m_pBombCollider->Set_Trigger(true);						// 트리거 유무
+	m_pBombCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
+	m_pBombCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
+	m_pBombCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+	m_pBombCollider->Set_Type(ENGINE::COLLISION_AABB);
+
 	return S_OK;
 }
 
@@ -82,6 +94,8 @@ HRESULT CEffect_Explosion_Rocket::LateInit()
 
 void CEffect_Explosion_Rocket::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_Explosion_Rocket::Set_Pos(D3DXVECTOR3 _Pos)
@@ -89,12 +103,17 @@ void CEffect_Explosion_Rocket::Set_Pos(D3DXVECTOR3 _Pos)
 	m_pTransform->SetPos(_Pos);
 }
 
+void CEffect_Explosion_Rocket::Set_Damage(float _Damage)
+{
+	m_pCondition->Set_Damage(_Damage);
+}
+
 HRESULT CEffect_Explosion_Rocket::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Explosion_Rocket");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Explosion_Rocket");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -133,10 +152,26 @@ HRESULT CEffect_Explosion_Rocket::AddComponent()
 	NULL_CHECK_RETURN(m_pBillborad, E_FAIL);
 	m_mapComponent.insert({ L"BillBoard", pComponent });
 
+	// Collider
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"BombCollider", pComponent });
+
+	m_pBombCollider = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pBombCollider, E_FAIL);
+
+	// conditoin  
+	pComponent = ENGINE::CCondition::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Condition", pComponent });
+	
+	m_pCondition = static_cast<ENGINE::CCondition*>(pComponent);
+	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
+
 	return S_OK;
 }
 
-CEffect_Explosion_Rocket* CEffect_Explosion_Rocket::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos)
+CEffect_Explosion_Rocket* CEffect_Explosion_Rocket::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos , float _Attack)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
@@ -149,6 +184,7 @@ CEffect_Explosion_Rocket* CEffect_Explosion_Rocket::Create(LPDIRECT3DDEVICE9 pGr
 	}
 
 	pInstance->Set_Pos(_Pos);
+	pInstance->Set_Damage(_Attack);
 
 	return pInstance;
 }

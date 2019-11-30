@@ -6,6 +6,7 @@
 #include "RigidBody.h"
 #include "Collider.h"
 #include "Billborad.h"
+#include "Condition.h"
 #include "CameraObserver.h"
 #include "Effect_BulletHit.h"
 #include "Effect_BulletHole.h"
@@ -23,7 +24,8 @@ CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_pCollider(nullptr), m_pRigid(nullptr),m_pBillborad(nullptr), m_pObserver(nullptr),
-	m_eWeaponTag(ENGINE::WEAPON_TAG::MELLE), m_pSubject(ENGINE::GetCameraSubject())
+	m_eWeaponTag(ENGINE::WEAPON_TAG::MELLE), m_pSubject(ENGINE::GetCameraSubject()),
+	m_pCondition(nullptr)
 
 {
 }
@@ -78,8 +80,8 @@ int CBullet::Update()
 										m_pCollider->Get_CenterPos().y + vTempDir.y * 10 ,
 										m_pCollider->Get_CenterPos().z + vTempDir.z * 10 };
 
-				pInstance = CEffect_Explosion_Rocket::Create(m_pGraphicDev, vTempPos);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+				pInstance = CEffect_Explosion_Rocket::Create(m_pGraphicDev, vTempPos, m_pCondition->Get_Damage() * 0.8f );
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::EXPLOSION, pInstance);
 
 				for (int i = 0; i < 12; ++i)
 				{
@@ -110,7 +112,7 @@ int CBullet::Update()
 	
 	KeyInput();
 
-	if (m_eWeaponTag == ENGINE::LUNCHER)
+	if (m_eWeaponTag == ENGINE::LUNCHER || m_eWeaponTag == ENGINE::MONSTER_LUNCHER)
 	{
 		m_fSpeed += m_pTimeMgr->GetDelta() * 70 * m_pTimeMgr->GetDelta() * 70;
 
@@ -210,7 +212,7 @@ HRESULT CBullet::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-		pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Bullet_Yellow");
+		pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Bullet_Yellow");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -257,6 +259,14 @@ HRESULT CBullet::AddComponent()
 	NULL_CHECK_RETURN(m_pBillborad, E_FAIL);
 	m_mapComponent.insert({ L"BillBoard", pComponent });
 
+	// conditoin  
+	pComponent = ENGINE::CCondition::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Condition", pComponent });
+
+	m_pCondition = static_cast<ENGINE::CCondition*>(pComponent);
+	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
+
 	return S_OK;
 }
 
@@ -287,6 +297,14 @@ void CBullet::BulletType()
 
 		break;
 	}
+	case ENGINE::MONSTER_LUNCHER:
+	{
+		m_pTransform->Move_AdvancedPos(m_dir, m_fSpeed * m_pTimeMgr->GetDelta());
+
+		D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) * 5, 0 };
+		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
+	}
+
 	case ENGINE::MONSTER_REVOLVER:
 	{
 		m_pTransform->Move_AdvancedPos(m_dir,m_fSpeed * m_pTimeMgr->GetDelta());
@@ -322,7 +340,12 @@ void CBullet::Set_Angle(float * _Angle)
 	m_pTransform->SetAngle(_Angle[2], ENGINE::ANGLE_Z);
 }
 
-CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir, float* _Angle, float _Speed , ENGINE::WEAPON_TAG _WeaponTag)
+void CBullet::Set_Attack(float _Attack)
+{
+	m_pCondition->Set_Damage(_Attack);
+}
+
+CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVECTOR3 _Dir, float* _Angle, float _Speed , ENGINE::WEAPON_TAG _WeaponTag ,float _Attack)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
@@ -340,6 +363,7 @@ CBullet* CBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, D3DXVE
 	pInstance->Set_Angle(_Angle);
 	pInstance->Set_Speed(_Speed);
 	pInstance->Set_WeaponTag(_WeaponTag);
+	pInstance->Set_Attack(_Attack);
 
 	return pInstance;
 }

@@ -28,6 +28,7 @@ CPlayer_Hand::CPlayer_Hand(LPDIRECT3DDEVICE9 pGraphicDev)
 
 CPlayer_Hand::~CPlayer_Hand()
 {
+	CGameObject::Release();
 }
 
 int CPlayer_Hand::Update()
@@ -69,9 +70,12 @@ void CPlayer_Hand::Render()
 	D3DXMatrixIdentity(&matTempProj);
 
 	// Get Temp
-	matTempView = m_pCameraObserver->GetViewMatrix();
-	matTempProj = m_pCameraObserver->GetProjMatrix();
-	matProj = m_pCameraObserver->GetProjMatrix();
+	if (m_pCameraObserver != nullptr)
+	{
+		matTempView = m_pCameraObserver->GetViewMatrix();
+		matTempProj = m_pCameraObserver->GetProjMatrix();
+		matProj = m_pCameraObserver->GetProjMatrix();
+	}
 
 	// 직교투영
 	D3DXMatrixOrthoLH(&matProj, WINCX, WINCY, 0.f, 1.f);
@@ -157,11 +161,11 @@ HRESULT CPlayer_Hand::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"SMG_Idle");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"SMG_Idle");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
@@ -169,7 +173,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
-	m_pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(pComponent);
+	m_pBuffer = static_cast<ENGINE::CVIBuffer*>(pComponent);
 	NULL_CHECK_RETURN(m_pBuffer, E_FAIL);
 
 	// Transform
@@ -177,7 +181,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Transform", pComponent });
 
-	m_pTransform = dynamic_cast<ENGINE::CTransform*>(pComponent);
+	m_pTransform = static_cast<ENGINE::CTransform*>(pComponent);
 	NULL_CHECK_RETURN(m_pTransform, E_FAIL);
 
 	// Animator
@@ -185,7 +189,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Animator", pComponent });
 
-	m_pAnimator = dynamic_cast<ENGINE::CAnimator*>(pComponent);
+	m_pAnimator = static_cast<ENGINE::CAnimator*>(pComponent);
 	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
 
 	return S_OK;
@@ -206,6 +210,24 @@ void CPlayer_Hand::Set_WeaponAct()
 
 void CPlayer_Hand::WeaponActState()
 {
+	if (m_eActState == CPlayer::W_GRENADE)
+	{
+		m_pTransform->SetPos(D3DXVECTOR3(0.f, 570.f, 0.f));
+		m_pTransform->SetSize(D3DXVECTOR3(20.f, 20.f, 20.f));
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"Grenade_Throw");
+		m_pAnimator->Set_FrameAmp(10.f);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			m_pTransform->SetPos(D3DXVECTOR3(0.f, 285.f, 0.f));
+			m_pTransform->SetSize(D3DXVECTOR3(13.f, 13.f, 13.f));
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			static_cast<CPlayer*>(m_pTarget)->Set_Grenade(false);
+			m_pAnimator->Stop_Animation(false);
+		}
+	}
 
 	switch(m_eWeapon)
 	{
@@ -244,12 +266,47 @@ void CPlayer_Hand::WeaponActState()
 
 void CPlayer_Hand::Weapon_Revolver()
 {
+	//if (m_eActState == CPlayer::W_LEDGE)
+	//{
+	//	ChangeTex(L"Ledge_Hand");
+	//	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+	//	m_pAnimator->Set_FrameAmp(5.f);
+	//
+	//	if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+	//	{
+	//		if (m_eWeapon == ENGINE::MELLE)
+	//			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+	//
+	//		else
+	//			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+	//	}
+	//}
+
 	switch (m_eActState)
 	{
+	case CPlayer::W_LEDGE:
+	{
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"Ledge_Hand");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(20.f);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			if (m_eWeapon == ENGINE::MELLE)
+				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+
+			else
+				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+		}
+
+		break;
+	}
+
 	case CPlayer::W_IDLE:
 	{
 		ChangeTex(L"Revolver_Idle");
-		m_pAnimator->Set_Frame(0.f);
+		m_pAnimator->Set_Frame(0);
 		m_pAnimator->Set_FrameAmp(1.f);
 		break;
 	}
@@ -324,7 +381,7 @@ void CPlayer_Hand::Weapon_Revolver()
 	{
 		m_pAnimator->Stop_Animation(false);
 		ChangeTex(L"Revolver_Draw");
-		m_pAnimator->Set_FrameAmp(10.f);
+		m_pAnimator->Set_FrameAmp(15.f);
 		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 
 		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
@@ -412,7 +469,7 @@ void CPlayer_Hand::Weapon_SMG()
 	case CPlayer::W_IDLE:
 	{
 		ChangeTex(L"SMG_Idle");
-		m_pAnimator->Set_Frame(0.f);
+		m_pAnimator->Set_Frame(0);
 		m_pAnimator->Set_FrameAmp(1.f);
 		break;
 	}
@@ -545,7 +602,7 @@ void CPlayer_Hand::Weapon_Shotgun()
 	case CPlayer::W_IDLE:
 	{
 		ChangeTex(L"PumpShot_Idle");
-		m_pAnimator->Set_Frame(0.f);
+		m_pAnimator->Set_Frame(0);
 		m_pAnimator->Set_FrameAmp(1.f);
 		break;
 	}
@@ -741,7 +798,7 @@ void CPlayer_Hand::Weapon_Luncher()
 			ChangeTex(L"RocketLuncher_NoAmmo");
 		}
 
-		m_pAnimator->Set_Frame(0.f);
+		m_pAnimator->Set_Frame(0);
 		m_pAnimator->Set_FrameAmp(1.f);
 		break;
 	}
@@ -820,13 +877,13 @@ void CPlayer_Hand::ChangeTex(wstring _wstrTex)
 	m_mapComponent.erase(L"Texture");
 	
 	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	
-	m_pAnimator->Set_MaxFrame(dynamic_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
 	
-	m_pTexture = dynamic_cast<ENGINE::CTexture*>(pComponent);
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK(m_pTexture);
 }
 

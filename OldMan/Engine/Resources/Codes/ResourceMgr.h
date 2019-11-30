@@ -43,6 +43,9 @@ public:
 	void Render(const wstring& wstrResourceKey, const int& iIndex = -1);
 	void ResetDynamicResource();
 
+	int Get_TextureCount() { return iCount; };
+	int Get_MaxTextureCount() { return iMaxCount; };
+
 	// 프로토 타입
 	CComponent* CloneResource(
 		RESOURCE_TYPE eResourceType,
@@ -55,6 +58,9 @@ private:
 	typedef map<wstring, CResources*>	MAP_RESOURCE;
 	MAP_RESOURCE	m_mapResource[RESOURCE_END];
 	CResources*		m_pResource;
+
+	int iCount;
+	int iMaxCount;
 };
 
 END

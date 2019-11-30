@@ -19,11 +19,16 @@ public:
 	static void CollisionRectEX(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionSphere(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 
+	static void CollisionPlayer_To_Trigger(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionPlayer_To_Item(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
+
 	static void CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
+	static void CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
+	static void CollisionVFX_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
+
 	static void CollisionTarget_To_Monstr_Mele(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 
 public:

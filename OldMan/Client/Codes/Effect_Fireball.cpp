@@ -159,6 +159,8 @@ HRESULT CEffect_Fireball::LateInit()
 
 void CEffect_Fireball::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_Fireball::Set_Pos(D3DXVECTOR3 _Pos)
@@ -203,7 +205,7 @@ HRESULT CEffect_Fireball::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Explosion_Fire");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Explosion_Fire");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

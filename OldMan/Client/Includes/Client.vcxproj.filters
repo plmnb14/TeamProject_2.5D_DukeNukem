@@ -157,11 +157,23 @@
     <Filter Include="02.GameObject\05.Monster\00.OctaBrain">
       <UniqueIdentifier>{a4769a60-bc61-4ccf-9045-f0c47846274d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.Monster\01.Trooper">
-      <UniqueIdentifier>{37a20705-e1fb-49a3-b269-6ffdf60649fc}</UniqueIdentifier>
+    <Filter Include="02.GameObject\01.MapObject\01.Object\02.OneUseObject">
+      <UniqueIdentifier>{c0ec9d23-c397-4013-a45a-b9b9e196d2a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.Monster\02.PigMan">
-      <UniqueIdentifier>{57d575a3-eef4-42fb-a9a3-9d18a9134f50}</UniqueIdentifier>
+    <Filter Include="02.GameObject\09.Boss">
+      <UniqueIdentifier>{1b888b77-fc80-4fd4-9bac-f004d4f329b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.Boss\00. Overload">
+      <UniqueIdentifier>{cab7b83d-f0d5-4477-9669-48804c960694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.MapObject\01.Object\03.Rock">
+      <UniqueIdentifier>{8be3bca0-92df-4a6c-a562-8117fa407457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\07. Guide">
+      <UniqueIdentifier>{7562fbb6-f341-42a8-b9a9-81802336f113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Bullet\00. Grenade">
+      <UniqueIdentifier>{13415ceb-6ff5-4575-b22f-b180d75d890a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\05.Monster\03.Alien">
       <UniqueIdentifier>{e7f0f87f-5f23-42f4-bdef-d25805e01986}</UniqueIdentifier>
@@ -322,11 +334,19 @@
     <ClInclude Include="..\Codes\OctaBrain.h">
       <Filter>02.GameObject\05.Monster\00.OctaBrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Trooper.h">
-      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    <ClInclude Include="..\Codes\OneUseObject.h">
+      <Filter>02.GameObject\01.MapObject\01.Object\02.OneUseObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\PigMan.h">
-      <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
+    <ClInclude Include="..\Codes\Boss_Overload.h">
+      <Filter>02.GameObject\09.Boss\00. Overload</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\PigMan.h" />
+    <ClInclude Include="..\Codes\Trooper.h" />
+    <ClInclude Include="..\Codes\Effect_Guide.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\07. Guide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Grenade.h">
+      <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Alien.h">
       <Filter>02.GameObject\05.Monster\03.Alien</Filter>
@@ -463,11 +483,19 @@
     <ClCompile Include="..\Codes\OctaBrain.cpp">
       <Filter>02.GameObject\05.Monster\00.OctaBrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Trooper.cpp">
-      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    <ClCompile Include="..\Codes\OneUseObject.cpp">
+      <Filter>02.GameObject\01.MapObject\01.Object\02.OneUseObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\PigMan.cpp">
-      <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
+    <ClCompile Include="..\Codes\Boss_Overload.cpp">
+      <Filter>02.GameObject\09.Boss\00. Overload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PigMan.cpp" />
+    <ClCompile Include="..\Codes\Trooper.cpp" />
+    <ClCompile Include="..\Codes\Effect_Guide.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\07. Guide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Grenade.cpp">
+      <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Alien.cpp">
       <Filter>02.GameObject\05.Monster\03.Alien</Filter>

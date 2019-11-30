@@ -17,7 +17,7 @@ CToolTerrain::CToolTerrain(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_bIsPicked(false),
 	m_myVtxCol(nullptr), m_myVtxTex(nullptr), m_myVtxCube(nullptr), m_pRay(new CRay),
-	m_wstrObjType(L"Terrain")
+	m_wstrObjType(L"Terrain"), m_iIndex(0)
 {
 }
 
@@ -53,6 +53,11 @@ void CToolTerrain::SetTexName(wstring _wstrTex)
 void CToolTerrain::SetObjType(wstring _wstrType)
 {
 	m_wstrObjType = _wstrType;
+}
+
+void CToolTerrain::SetIndex(int _iIdx)
+{
+	m_iIndex = _iIdx;
 }
 
 void CToolTerrain::MouseInput()
@@ -195,4 +200,9 @@ ENGINE::TERRAIN_TYPE CToolTerrain::GetTerrainType()
 bool CToolTerrain::GetPicked()
 {
 	return m_bIsPicked;
+}
+
+int CToolTerrain::GetIndex()
+{
+	return m_iIndex;
 }

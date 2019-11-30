@@ -4,7 +4,7 @@ USING(ENGINE)
 
 CCollider::CCollider()
 	: m_pTarget(nullptr) , m_eCollisionType(ENGINE::COLLISION_AABB),
-	m_pVtx(nullptr), m_vOldPos()
+	m_pVtx(nullptr), m_vOldPos(), m_fMinus_Y(0)
 {
 	ZeroMemory(&m_tBoxCollider, sizeof(BOXCOL));
 }
@@ -18,6 +18,7 @@ void CCollider::LateUpdate(D3DXVECTOR3 _Pos)
 	Set_CenterPos(_Pos);
 	Set_UnderPos();
 	SetUp_Box();
+	m_tBoxCollider.vMaxPos.y = m_tBoxCollider.vMaxPos.y + m_fMinus_Y;
 }
 
 void CCollider::Set_CollisionVertex(ENGINE::CTransform* pTarget, ENGINE::VTX_TEX* pTerrainVtx)
@@ -62,6 +63,11 @@ void CCollider::SetUp_Box()
 {
 	m_tBoxCollider.vMinPos = {m_tBoxCollider.vCenterPos - m_tBoxCollider.vRadius };
 	m_tBoxCollider.vMaxPos = {m_tBoxCollider.vCenterPos + m_tBoxCollider.vRadius };
+}
+
+void CCollider::Set_MaxY(float _PosY)
+{
+	m_fMinus_Y  = _PosY;
 }
 
 void CCollider::Set_Radius(D3DXVECTOR3 _Radius)

@@ -9,6 +9,7 @@ CMainApp::CMainApp()
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
+	m_pTextureMgr(ENGINE::GetTextureMgr()),
 	m_fTimeCount(0) , m_iFps(0)
 	
 {
@@ -36,29 +37,6 @@ void CMainApp::Render()
 	m_pManagement->Render();
 }
 
-void CMainApp::FrameRender()
-{
-	//m_fTimeCount += m_pTimeMgr->GetDelta();
-	//
-	//// 1초가 지났다.
-	//if (1.f <= m_fTimeCount)
-	//{
-	//	swprintf_s(m_szFPS, L"FPS: %d", m_iFps);
-	//	m_iFps = 0;
-	//	m_fTimeCount = 0.f;
-	//}
-	//
-	//D3DXMATRIX matTrans;
-	//D3DXMatrixTranslation(&matTrans, 600.f, 100.f, 0.f);
-	//
-	//CDeviceMgr::GetInstance()->GetSprite()->SetTransform(&matTrans);
-	//
-	//// 다이렉트 폰트 출력
-	//CDeviceMgr::GetInstance()->GetFont()->DrawText(
-	//	CDeviceMgr::GetInstance()->GetSprite(), /* 다이렉트 폰트는 텍스처 기반이다. */
-	//	m_szFPS, lstrlen(m_szFPS), nullptr, 0,
-	//	D3DCOLOR_ARGB(255, 0, 255, 0));
-}
 
 HRESULT CMainApp::Initialize()
 {
@@ -70,7 +48,7 @@ HRESULT CMainApp::Initialize()
 		m_pDeviceMgr->GetDevice());
 	FAILED_CHECK_MSG_RETURN(hr, L"InitManagement Failed", E_FAIL);
 
-	hr = m_pManagement->SceneChange(CSceneSelector(CSceneSelector::STAGE));
+	hr = m_pManagement->SceneChange(CSceneSelector(CSceneSelector::LOGO));
 	FAILED_CHECK_MSG_RETURN(hr, L"Logo Scene Change Failed", E_FAIL);	
 
 	CSoundMgr::GetInstance()->Initialize();
@@ -81,6 +59,8 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Release()
 {		
+	CSoundMgr::GetInstance()->DestroyInstance();
+	m_pTextureMgr->DestroyInstance();
 	m_pTimeMgr->DestroyInstance();
 	m_pManagement->DestroyInstance();
 	m_pResourceMgr->DestroyInstance();

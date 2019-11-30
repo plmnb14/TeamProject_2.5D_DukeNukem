@@ -82,6 +82,8 @@ HRESULT CEffect_BulletHit::LateInit()
 
 void CEffect_BulletHit::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_BulletHit::Set_Pos(D3DXVECTOR3 _Pos)
@@ -103,7 +105,7 @@ HRESULT CEffect_BulletHit::AddComponent()
 		wTmp = (L"Bullet_Hit_YellowS");
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, wTmp);
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, wTmp);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

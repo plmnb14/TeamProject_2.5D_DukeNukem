@@ -88,6 +88,8 @@ HRESULT CEffect_RocketSmoke::LateInit()
 
 void CEffect_RocketSmoke::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_RocketSmoke::Set_Pos(D3DXVECTOR3 _Pos)
@@ -105,7 +107,7 @@ HRESULT CEffect_RocketSmoke::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Smoke_Gun");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Smoke_Gun");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

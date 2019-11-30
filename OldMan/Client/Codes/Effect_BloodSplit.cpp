@@ -82,6 +82,8 @@ HRESULT CEffect_BloodSplit::LateInit()
 
 void CEffect_BloodSplit::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_BloodSplit::Set_Pos(D3DXVECTOR3 _Pos)
@@ -106,7 +108,7 @@ HRESULT CEffect_BloodSplit::AddComponent()
 		wTmp = (L"BloodSplit_03");
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, wTmp);
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, wTmp);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

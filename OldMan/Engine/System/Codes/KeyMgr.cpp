@@ -92,6 +92,10 @@ void CKeyMgr::Update()
 
 	if (GetAsyncKeyState('8') * 0x8000)
 		m_dwKey |= KEY_8;
+
+
+	if (GetAsyncKeyState('G') * 0x8000)
+		m_dwKey |= KEY_G;
 }
 
 

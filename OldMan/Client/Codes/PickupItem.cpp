@@ -19,13 +19,14 @@ CPickupItem::CPickupItem(LPDIRECT3DDEVICE9 pGraphicDev)
 
 CPickupItem::~CPickupItem()
 {
+	Release();
 }
 
 int CPickupItem::Update()
 {
 	if (m_bIsDead)
 	{
-		PlayerGet();
+		Hitted();
 		return DEAD_OBJ;
 	}
 
@@ -43,7 +44,9 @@ void CPickupItem::LateUpdate()
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
 	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+
+	if (m_pObserver != nullptr)
+		Cameramatrix = m_pObserver->GetViewMatrix();
 	vSize = m_pTransform->GetSize();
 
 	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
@@ -104,7 +107,7 @@ void CPickupItem::ChangeTex(wstring _wstrTex)
 	m_mapComponent.erase(L"Texture");
 
 	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -117,7 +120,7 @@ HRESULT CPickupItem::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Tile256x256_0.png");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Tile256x256_0.png");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -159,7 +162,7 @@ HRESULT CPickupItem::AddComponent()
 	return S_OK;
 }
 
-void CPickupItem::PlayerGet()
+void CPickupItem::Hitted()
 {
 	int iAmount = 0;
 

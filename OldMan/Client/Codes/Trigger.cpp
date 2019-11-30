@@ -2,12 +2,14 @@
 #include "Trigger.h"
 #include "Trasform.h"
 #include "Collider.h"
+#include "Player.h"
 
 CTrigger::CTrigger(LPDIRECT3DDEVICE9 pGraphicDev)
 	:ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
+	m_iIndex(0)
 {
 }
 
@@ -37,7 +39,7 @@ void CTrigger::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
-	//m_pBuffer->Render();
+	m_pBuffer->Render();
 
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
@@ -114,19 +116,34 @@ void CTrigger::CheckTriggerActive()
 		case CTrigger::TRIGGER_NEXTSTAGE:
 		{
 			cout << "Next Stage Trigger ON!!!!!" << endl;
+			m_bIsDead = true;
+			break;
+		}
+		case CTrigger::TRIGGER_LEDGE:
+		{
+			CPlayer* TmpPlayer = static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+
+			TmpPlayer->Set_LedgeVec(m_pTransform->GetPos());
+
+			if (TmpPlayer->Get_CanLedge() == false && TmpPlayer->Get_IsLedge() == false)
+			{
+				TmpPlayer->Set_CanLedge(true);
+			}
+
 			break;
 		}
 		case CTrigger::TRIGGER_END:
+		{
+			m_bIsDead = true;
 			break;
+		}
 		default:
 			break;
 		}
-
-		m_bIsDead = true;
 	}
 }
 
-CTrigger* CTrigger::Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType)
+CTrigger* CTrigger::Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType, int iIdx)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
@@ -139,6 +156,7 @@ CTrigger* CTrigger::Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType)
 	}
 
 	pInstance->m_eTriggerType = _eType;
+	pInstance->m_iIndex = iIdx;
 
 	return pInstance;
 }

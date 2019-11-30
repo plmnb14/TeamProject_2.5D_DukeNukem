@@ -90,6 +90,8 @@ HRESULT CEffect_Firewall::LateInit()
 
 void CEffect_Firewall::Release()
 {
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 void CEffect_Firewall::Set_Pos(D3DXVECTOR3 _Pos)
@@ -107,7 +109,7 @@ HRESULT CEffect_Firewall::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Fire_Big");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Fire_Big");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

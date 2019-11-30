@@ -32,7 +32,8 @@ public:
 		W_NONE, W_IDLE, W_WALK, W_RUN,
 		W_FIRST, W_DRAW, W_FIRE, W_RELOAD,
 		W_SPECIAL_READY, W_SPECIAL_SHOT , W_SPECIAL_END,
-		W_ZOOMIN, W_ZOOMOUT, W_ZOOMFIRE
+		W_ZOOMIN, W_ZOOMOUT, W_ZOOMFIRE,
+		W_LEDGE, W_GRENADE
 	};
 
 private:
@@ -63,6 +64,7 @@ private:
 	void ShootType();
 	void Zoom();
 	void SpecialShot();
+	void Grenade();
 
 private:
 	void WeaponActState();
@@ -71,6 +73,7 @@ private:
 	void Check_Physic();
 	void Check_Slide();
 	void Check_Run();
+	void Check_Ledge();
 
 public:
 	void Reload();
@@ -80,8 +83,14 @@ public:
 	void Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO* _WeaponInfo);
 	void Set_SpecialShot(bool _Special) { m_bSpecial = _Special; }
 	void Set_CanAttack(bool _Attack) { m_bCanAttack = _Attack; }
+	void Set_CanLedge(bool _Ledge) { m_bCanLedge = _Ledge; }
+	void Set_IsLedge(bool _IsLedge) { m_bIsLedge = _IsLedge; }
+	void Set_LedgeVec(D3DXVECTOR3 _Vec) { m_vLedgeVec = _Vec; }
+	void Set_Grenade(bool _Grenade) { m_bGrenade = _Grenade; }
 
 public:
+	bool Get_CanLedge() { return m_bCanLedge; }
+	bool Get_IsLedge() { return m_bIsLedge; }
 	bool Get_Zoom() { return m_bZoom; }
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
@@ -100,9 +109,11 @@ private:
 	ENGINE::CTexture*		m_pTexture;
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
+	ENGINE::CRigidBody*		m_pRigid;
+
 	ENGINE::CCollider*		m_pCollider;
 	ENGINE::CCollider*		m_pGroundChekCollider;
-	ENGINE::CRigidBody*		m_pRigid;
+	ENGINE::CCollider*		m_pColliderLedge;
 
 	ENGINE::VTX_TEX*		m_myVtx;
 
@@ -112,6 +123,9 @@ private:
 
 	// 현재 장착중인 무기 정보
 	ENGINE::W_INFO			m_pWInfo;
+
+	// 현재 플레이어 정보 구조체 (일단 체력, 쉴드만)
+	ENGINE::CONDITION		m_tCondition;
 
 	// 현재 플레이어의 정보 ( 체력 등 수치 값 & 각종 bool 값 )
 	ENGINE::CCondition*		m_pCondition;
@@ -124,15 +138,27 @@ private:
 	WEAPONACT		m_eActState;
 
 private:
+	D3DXVECTOR3 m_vLedgeVec;
+	D3DXVECTOR3 m_vLedgeUpVec;
+
 	float m_fSlideUp;
 	bool  m_bZoom;
 	bool  m_bSpecial;
 	bool  m_bCanAttack;
+	bool  m_bGrenade;
 
 	float m_fZoomSpeed;
 	float m_fZoomAccel;
 	float m_fMaxZoom;
 	float m_fMinZoom;
+
+	bool m_bCanLedge;
+	bool m_bIsLedge;
+
+	float m_fLength_Y;
+	float m_fHorizontal;
+
+	int	m_iJumpCount;
 	
 	
 
