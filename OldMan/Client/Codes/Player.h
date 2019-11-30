@@ -74,6 +74,7 @@ private:
 	void Check_Slide();
 	void Check_Run();
 	void Check_Ledge();
+	void Check_Hitted();
 
 public:
 	void Reload();

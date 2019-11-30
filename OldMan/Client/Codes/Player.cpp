@@ -10,6 +10,7 @@
 #include "Condition.h"
 #include "SoundMgr.h"
 #include "Grenade.h"
+#include "HittedCircle.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -47,6 +48,7 @@ int CPlayer::Update()
 	Check_Run();
 	Check_Physic();
 	Check_Ledge();
+	Check_Hitted();
 	
 	UpdateObserverData();
 
@@ -1133,10 +1135,25 @@ void CPlayer::Check_Ledge()
 	else
 	{
 
-		cout << " 여 탑니다" << endl;
+		//cout << " 여 탑니다" << endl;
 		m_bCanLedge = false;
 		m_bIsLedge = false;
 		m_pRigid->Set_UseGravity(true);
+	}
+}
+
+void CPlayer::Check_Hitted()
+{
+	if (m_pRigid->Get_IsPush())
+	{
+		CHittedCircle* pCircle = CHittedCircle::Create(m_pGraphicDev, CHittedCircle::SIZE_XL);
+		float fAngle = D3DXVec3Dot(&m_pRigid->Get_PushDir(), &D3DXVECTOR3(0, 0, -1));
+		if (m_pTransform->GetDir().x < 0)
+			fAngle == -1.f;
+		static_cast<CHittedCircle*>(pCircle)->SetAngle(fAngle);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::UI, pCircle);
+
+		m_pRigid->Set_IsPush(false);
 	}
 }
 

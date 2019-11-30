@@ -44,17 +44,24 @@ Bullet_Hit|Bullet_Hit_YellowB|Bullet_Hit_YellowB_%d.png|14|..\Texture\VFX\Bullet
 Bullet_Hit|Bullet_Hit_YellowS|Bullet_Hit_YellowS_%d.png|14|..\Texture\VFX\Bullet_Hit\Bullet_Hit_YellowS\Bullet_Hit_YellowS_%d.png
 VFX|Bullet_Hole|Bullet_Hole_%d.png|3|..\Texture\VFX\Bullet_Hole\Bullet_Hole_%d.png
 Explosion|Explosion_Fire|Explosion_Fire_%d.png|1|..\Texture\VFX\Explosion\Explosion_Fire\Explosion_Fire_%d.png
+Explosion|Explosion_Nova|Explosion_Nova_%d.png|18|..\Texture\VFX\Explosion\Explosion_Nova\Explosion_Nova_%d.png
 Explosion|Explosion_Plasma|Explosion_Plasma_%d.png|19|..\Texture\VFX\Explosion\Explosion_Plasma\Explosion_Plasma_%d.png
 Explosion|Explosion_Rocket|Explosion_Rocket_%d.png|18|..\Texture\VFX\Explosion\Explosion_Rocket\Explosion_Rocket_%d.png
 Explosion|Explosion_Smoke|Explosion_Smoke_%d.png|26|..\Texture\VFX\Explosion\Explosion_Smoke\Explosion_Smoke_%d.png
 Fire|Fire_Big|Fire_Big_%d.png|16|..\Texture\VFX\Fire\Fire_Big\Fire_Big_%d.png
 Fire|Fire_Small|Fire_Small_%d.png|12|..\Texture\VFX\Fire\Fire_Small\Fire_Small_%d.png
 VFX|Flare|Flare_%d.png|1|..\Texture\VFX\Flare\Flare_%d.png
+VFX|Grenade_Guide|Grenade_Guide_%d.png|1|..\Texture\VFX\Grenade_Guide\Grenade_Guide_%d.png
 VFX|Smoke_Big|SmokeBig_%d.png|4|..\Texture\VFX\Smoke_Big\SmokeBig_%d.png
 VFX|Smoke_Gun|Smoke_Gun_%d.png|1|..\Texture\VFX\Smoke_Gun\Smoke_Gun_%d.png
 VFX|Smoke_Small|SmokeSmall_%d.png|4|..\Texture\VFX\Smoke_Small\SmokeSmall_%d.png
+Bullets|Bullet_Grenade|Bullet_Grenade_%d.png|1|..\Texture\Weapon\Bullets\Bullet_Grenade\Bullet_Grenade_%d.png
 Bullets|Bullet_Rocket|Bullet_Rocket_%d.png|8|..\Texture\Weapon\Bullets\Bullet_Rocket\Bullet_Rocket_%d.png
 Bullets|Bullet_Yellow|Bullet_Yellow_%d.png|7|..\Texture\Weapon\Bullets\Bullet_Yellow\Bullet_Yellow_%d.png
+Grenade|Grenade_Idle|Grenade_Idle_%d.png|2|..\Texture\Weapon\Grenade\Grenade_Idle\Grenade_Idle_%d.png
+Grenade|Grenade_Pin|Grenade_Pin_%d.png|15|..\Texture\Weapon\Grenade\Grenade_Pin\Grenade_Pin_%d.png
+Grenade|Grenade_Throw|Grenade_Throw_%d.png|6|..\Texture\Weapon\Grenade\Grenade_Throw\Grenade_Throw_%d.png
+Melee|Ledge_Hand|Ledge_Hand_%d.png|11|..\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_%d.png
 PumpShot|PumpShot_Draw|PumpShot_Draw_%d.png|6|..\Texture\Weapon\PumpShot\PumpShot_Draw\PumpShot_Draw_%d.png
 PumpShot|PumpShot_Fire|PumpShot_Fire_%d.png|7|..\Texture\Weapon\PumpShot\PumpShot_Fire\PumpShot_Fire_%d.png
 PumpShot|PumpShot_Idle|PumpShot_Idle_%d.png|2|..\Texture\Weapon\PumpShot\PumpShot_Idle\PumpShot_Idle_%d.png
@@ -246,6 +253,7 @@ No_Animation|128 x 128|Tile128x128_99.dds|1|..\Texture\Tiles\No_Animation\128 x 
 No_Animation|128 x 128|Tile128x128_99.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_99.png
 No_Animation|128 x 256|Tile128x256_0.dds|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_0.dds
 No_Animation|128 x 256|Tile128x256_0.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_0.png
+No_Animation|128 x 256|Tile128x256_1.dds|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_1.dds
 No_Animation|128 x 256|Tile128x256_1.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_1.png
 No_Animation|128 x 256|Tile128x256_10.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_10.png
 No_Animation|128 x 256|Tile128x256_11.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_11.png
@@ -318,6 +326,7 @@ No_Animation|128 x 256|Tile128x256_71.png|1|..\Texture\Tiles\No_Animation\128 x 
 No_Animation|128 x 256|Tile128x256_72.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_72.png
 No_Animation|128 x 256|Tile128x256_73.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_73.png
 No_Animation|128 x 256|Tile128x256_74.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_74.png
+No_Animation|128 x 256|Tile128x256_75.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_75.png
 No_Animation|128 x 256|Tile128x256_8.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_8.png
 No_Animation|128 x 256|Tile128x256_9.png|1|..\Texture\Tiles\No_Animation\128 x 256\Tile128x256_9.png
 No_Animation|128 x 32|Tile128x32_0.png|1|..\Texture\Tiles\No_Animation\128 x 32\Tile128x32_0.png

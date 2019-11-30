@@ -91,7 +91,7 @@ void CUI::Render()
 
 	// Set UI Angle
 	D3DXMATRIX matRot;
-	D3DXMatrixRotationZ(&matRot, D3DXToRadian(m_fAngle));
+	D3DXMatrixRotationZ(&matRot, m_fAngle);
 	matView *= matRot;
 
 	// Set UI Pos
@@ -155,9 +155,9 @@ void CUI::SetPos(D3DXVECTOR3 _vPos)
 	m_vPos = _vPos;
 }
 
-void CUI::SetAngle(float _fAngleDegree)
+void CUI::SetAngle(float _fAngleRadian)
 {
-	m_fAngle = _fAngleDegree;
+	m_fAngle = _fAngleRadian;
 }
 
 void CUI::SetVisible(bool _bIsVisible)

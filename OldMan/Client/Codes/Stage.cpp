@@ -48,13 +48,6 @@ CStage::~CStage()
 
 void CStage::Update()
 {
-	if (ENGINE::CKeyMgr::GetInstance()->KeyDown(ENGINE::KEY_Q))
-	{
-		ENGINE::CGameObject* pObj = CHittedCircle::Create(ENGINE::GetGraphicDev()->GetDevice(), CHittedCircle::SIZE_XL);
-		static_cast<CHittedCircle*>(pObj)->SetAngle(rand() % 360);
-		m_mapLayer[ENGINE::CLayer::UI]->AddObject(ENGINE::OBJECT_TYPE::UI, pObj);
-	}
-
 	ENGINE::CScene::Update();
 }
 
@@ -103,11 +96,11 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
-	// Boss
-	pObject = CBoss_Overload::Create(m_pGraphicDev);
-	NULL_CHECK_MSG_RETURN(pObject, L"Boss Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
+	//// Boss
+	//pObject = CBoss_Overload::Create(m_pGraphicDev);
+	//NULL_CHECK_MSG_RETURN(pObject, L"Boss Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 
 	//// Revolver
 	//pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{ -7,2,8 });
@@ -423,6 +416,24 @@ void CStage::LoadMapObj()
 			pObject = pDoor;
 			pDoor = nullptr;
 		}
+		else if (!lstrcmp(szType, L"Door_Left"))
+		{
+			CDoor* pDoor = CDoor::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pDoor->ChangeTex(szName);
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			pObject = pDoor;
+			pDoor = nullptr;
+		}
+		else if (!lstrcmp(szType, L"Door_Right"))
+		{
+			CDoor* pDoor = CDoor::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pDoor->ChangeTex(szName);
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			pObject = pDoor;
+			pDoor = nullptr;
+		}
 		else if (!lstrcmp(szType, L"Stair"))
 		{
 			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
@@ -434,11 +445,11 @@ void CStage::LoadMapObj()
 			pStair = nullptr;
 		}
 		// Monster
-		//else if (!lstrcmp(szType, L"Pigman"))
-		//{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		//}
+		else if (!lstrcmp(szType, L"Pigman"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
 		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{

@@ -274,6 +274,21 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 					}
 				}
 
+				if (rDst->Get_Tag() == ENGINE::BULLET_MONSTER &&
+					rSrc->Get_Tag() == ENGINE::PLAYER)
+				{
+					ENGINE::CRigidBody* rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
+
+					if (rSrcRigid != nullptr)
+					{
+						D3DXVECTOR3 vDirection = { 0, 0, 0 };
+						D3DXVec3Normalize(&vDirection, &rSrcTrans->GetDir());
+
+						rSrcRigid->Set_IsPush(true);
+						rSrcRigid->Set_PushDir(vDirection);
+					}
+				}
+
 				rDstCol->Set_IsCollision(true);
 				rDst->Set_Tag(rSrc->Get_Tag());
 				rDst->SetDead();
