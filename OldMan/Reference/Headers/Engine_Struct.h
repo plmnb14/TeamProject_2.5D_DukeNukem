@@ -136,6 +136,7 @@ namespace ENGINE
 		D3DXVECTOR3 vMaxAccel;
 		D3DXVECTOR3 vSpeed;
 		D3DXVECTOR3 vMaxSpeed;
+		D3DXVECTOR3 vPushDir;
 
 		bool bIsPush;
 		bool bIsGravity; // 중력 영향력을 체크합니다.
@@ -150,6 +151,7 @@ namespace ENGINE
 		bool bIsJump;	 // 점프 체크
 		bool bIsBoundable;//	지형 충돌 시 튕기는 물체인지
 
+		float fDistance;// 거리
 		float fPower;	// 힘
 		float fMass;	// 질량
 		float fForce;	// 넉백할 량

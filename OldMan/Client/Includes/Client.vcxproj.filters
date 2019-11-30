@@ -166,6 +166,15 @@
     <Filter Include="02.GameObject\09.Boss\00. Overload">
       <UniqueIdentifier>{cab7b83d-f0d5-4477-9669-48804c960694}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\NewFilter1">
+      <UniqueIdentifier>{8abc2a9d-603e-4585-89d6-d6ed563b7b9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Bullet\01. Grenade">
+      <UniqueIdentifier>{26e8e184-f147-4706-86f8-0fff1104159a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\07. Grenade_Guide">
+      <UniqueIdentifier>{bb3e26a9-eff2-4b4c-87b1-2b3db40212e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -328,6 +337,14 @@
     <ClInclude Include="..\Codes\Boss_Overload.h">
       <Filter>02.GameObject\09.Boss\00. Overload</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\PigMan.h" />
+    <ClInclude Include="..\Codes\Trooper.h" />
+    <ClInclude Include="..\Codes\Grenade.h">
+      <Filter>02.GameObject\04.Bullet\01. Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Effect_Guide.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\07. Grenade_Guide</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -465,6 +482,14 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Boss_Overload.cpp">
       <Filter>02.GameObject\09.Boss\00. Overload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PigMan.cpp" />
+    <ClCompile Include="..\Codes\Trooper.cpp" />
+    <ClCompile Include="..\Codes\Grenade.cpp">
+      <Filter>02.GameObject\04.Bullet\01. Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Guide.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\07. Grenade_Guide</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

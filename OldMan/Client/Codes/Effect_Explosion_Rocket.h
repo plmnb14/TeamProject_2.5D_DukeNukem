@@ -12,6 +12,7 @@ namespace ENGINE
 	class CTexture;
 	class CTransform;
 	class CCollider;
+	class CCondition;
 }
 
 class CEffect_Explosion_Rocket : public CVfx
@@ -34,16 +35,18 @@ protected:
 
 public:
 	virtual void Set_Pos(D3DXVECTOR3 _Pos);
+	virtual void Set_Damage(float _Damage);
 
 protected:
 	HRESULT AddComponent();
 
 public:
-	static CEffect_Explosion_Rocket* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos);
+	static CEffect_Explosion_Rocket* Create(LPDIRECT3DDEVICE9 pGraphicDev, D3DXVECTOR3 _Pos, float _Attack);
 
-private:
+protected:
 	WORD	m_wFrame;
-	ENGINE::CCollider*	m_pBombCollider;
+	ENGINE::CCollider*		m_pBombCollider;
+	ENGINE::CCondition*		m_pCondition;
 };
 
 #define __EFFECT_EXPLOSION_ROCKET_H__

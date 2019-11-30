@@ -80,8 +80,8 @@ int CBullet::Update()
 										m_pCollider->Get_CenterPos().y + vTempDir.y * 10 ,
 										m_pCollider->Get_CenterPos().z + vTempDir.z * 10 };
 
-				pInstance = CEffect_Explosion_Rocket::Create(m_pGraphicDev, vTempPos);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+				pInstance = CEffect_Explosion_Rocket::Create(m_pGraphicDev, vTempPos, m_pCondition->Get_Damage() * 0.8f );
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::EXPLOSION, pInstance);
 
 				for (int i = 0; i < 12; ++i)
 				{

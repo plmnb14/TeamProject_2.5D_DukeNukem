@@ -55,14 +55,14 @@ public:
 	bool Get_IsHit() { return m_tRigid.bIsHit; }
 	bool Get_IsLanding() { return m_tRigid.bIsLanding; }
 	bool Get_IsPush() { return m_tRigid.bIsPush; };
-	bool Get_Distance() { return m_tRigid.fDistance; }
-	bool Get_PushDir() { return m_tRigid.vPushDir; }
+	float Get_Distance() { return m_tRigid.fDistance; }
+	D3DXVECTOR3 Get_PushDir() { return m_tRigid.vPushDir; }
 public:
 	float Get_Force() { return m_tRigid.fForce; }
 	
 
 public:
-	float Set_Jump(D3DXVECTOR3 _TransForm, float _Time);
+	float Set_Jump(D3DXVECTOR3 _TransForm, float _Time); 
 	float Set_Fall(D3DXVECTOR3 _TransForm, float _Time);
 
 

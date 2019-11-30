@@ -85,6 +85,11 @@ void CRigidBody::Set_BoundReduce(float _Value)
 	m_tRigid.fBoundReduce = _Value;
 }
 
+void CRigidBody::Set_Distance(float _Distance)
+{
+	m_tRigid.fDistance = _Distance;
+}
+
 void CRigidBody::Set_Speed(D3DXVECTOR3 _Speed)
 {
 	m_tRigid.vSpeed = _Speed;
@@ -103,6 +108,11 @@ void CRigidBody::Set_MaxAccel(D3DXVECTOR3 _MaxAccel)
 void CRigidBody::Set_MaxSpeed(D3DXVECTOR3 _MaxSpeed)
 {
 	m_tRigid.vMaxSpeed = _MaxSpeed;
+}
+
+void CRigidBody::Set_PushDir(D3DXVECTOR3 _PushDir)
+{
+	m_tRigid.vPushDir = _PushDir;
 }
 
 float CRigidBody::Set_Jump(D3DXVECTOR3 _TransForm , float _Time)
