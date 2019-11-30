@@ -36,6 +36,7 @@ CMyFormView::CMyFormView()
 	, m_strScaleY(_T("1"))
 	, m_strScaleZ(_T("1"))
 	, m_wstrObjType(L"Terrain")
+	, m_strIndex(_T(""))
 {
 
 }
@@ -62,6 +63,7 @@ void CMyFormView::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT9, m_strScaleY);
 	DDX_Text(pDX, IDC_EDIT10, m_strScaleZ);
 	DDX_Control(pDX, IDC_CHECK1, m_CheckButton_Grid);
+	DDX_Text(pDX, IDC_EDIT11, m_strIndex);
 }
 
 BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
@@ -85,6 +87,7 @@ BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMyFormView::OnBnClickedButton_Load)
 	ON_BN_CLICKED(IDC_BUTTON6, &CMyFormView::OnBnClickedButton_PathUpdate)
 	ON_BN_CLICKED(IDC_BUTTON7, &CMyFormView::OnBnClickedButtonMapObj)
+	ON_EN_CHANGE(IDC_EDIT11, &CMyFormView::OnEnChangeEdit11)
 END_MESSAGE_MAP()
 
 
@@ -238,6 +241,15 @@ void CMyFormView::UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXV
 	m_strScaleX = to_string(_vSize.x).substr(0, (_vSize.x < 0) ? 5 : 4).c_str();
 	m_strScaleY = to_string(_vSize.y).substr(0, (_vSize.y < 0) ? 5 : 4).c_str();
 	m_strScaleZ = to_string(_vSize.z).substr(0, (_vSize.z < 0) ? 5 : 4).c_str();
+
+	UpdateData(FALSE);
+}
+
+void CMyFormView::UpdateIndex()
+{
+	UpdateData(TRUE);
+
+	m_iIndex = (int)stof((wstring)m_strIndex);
 
 	UpdateData(FALSE);
 }
@@ -495,6 +507,7 @@ void CMyFormView::OnBnClickedButton_Save()
 		DWORD dwByte = 0;
 		D3DXVECTOR3 vPos, vSize, vAngle;
 		ENGINE::TERRAIN_TYPE eTerrainType;
+		int iIndex;
 
 		for (auto iter : pTerrainList)
 		{
@@ -508,6 +521,7 @@ void CMyFormView::OnBnClickedButton_Save()
 			vSize = pTransform->GetSize();
 			vAngle = D3DXVECTOR3(pTransform->GetAngle(ENGINE::ANGLE_X), pTransform->GetAngle(ENGINE::ANGLE_Y), pTransform->GetAngle(ENGINE::ANGLE_Z));
 			eTerrainType = iter->GetTerrainType();
+			iIndex = iter->GetIndex();
 
 			::WriteFile(hFile, &szName, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
 			::WriteFile(hFile, &szType, sizeof(TCHAR) * MAX_STR, &dwByte, nullptr);
@@ -515,6 +529,7 @@ void CMyFormView::OnBnClickedButton_Save()
 			::WriteFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			::WriteFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			::WriteFile(hFile, &eTerrainType, sizeof(ENGINE::TERRAIN_TYPE), &dwByte, nullptr);
+			::WriteFile(hFile, &iIndex, sizeof(int), &dwByte, nullptr);
 		}
 
 		CloseHandle(hFile);
@@ -574,6 +589,7 @@ void CMyFormView::OnBnClickedButton_Load()
 		TCHAR szType[MAX_STR] = L"";
 		D3DXVECTOR3 vPos, vSize, vAngle;
 		ENGINE::TERRAIN_TYPE eTerrainType;
+		int iIndex;
 
 		while (true)
 		{
@@ -583,6 +599,7 @@ void CMyFormView::OnBnClickedButton_Load()
 			::ReadFile(hFile, &vSize, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			::ReadFile(hFile, &vAngle, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			::ReadFile(hFile, &eTerrainType, sizeof(ENGINE::TERRAIN_TYPE), &dwByte, nullptr);
+			::ReadFile(hFile, &iIndex, sizeof(int), &dwByte, nullptr);
 
 			if (0 == dwByte)
 				break;
@@ -621,6 +638,7 @@ void CMyFormView::OnBnClickedButton_Load()
 
 			pTerrain->SetTexName(szName);
 			pTerrain->SetObjType(szType);
+			pTerrain->SetIndex(iIndex);
 
 			pView->AddCubeForLoad(pTerrain);
 		}
@@ -643,3 +661,15 @@ void CMyFormView::OnBnClickedButton_PathUpdate()
 	ENGINE::Safe_Delete(pPath);
 }
 
+
+
+void CMyFormView::OnEnChangeEdit11()
+{
+	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
+	// CFormView::OnInitDialog() 함수를 재지정 
+	//하고 마스크에 OR 연산하여 설정된 ENM_CHANGE 플래그를 지정하여 CRichEditCtrl().SetEventMask()를 호출하지 않으면
+	// 이 알림 메시지를 보내지 않습니다.
+
+	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateIndex();
+}

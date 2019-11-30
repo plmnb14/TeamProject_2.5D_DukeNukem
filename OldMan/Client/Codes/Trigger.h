@@ -18,11 +18,6 @@ class CTrigger : public ENGINE::CGameObject
 public:
 	enum TRIGGER_TYPE
 	{ 
-		TRIGGER_EVENT,
-		TRIGGER_CAMERA_EVENT,
-		TRIGGER_MONSTER_SPAWNER,
-		TRIGGER_ITEM_SPAWNER,
-		TRIGGER_WAYPOINT,
 		TRIGGER_NEXTSTAGE,
 		TRIGGER_LEDGE,
 		TRIGGER_END
@@ -52,10 +47,7 @@ protected:
 	void CheckTriggerActive();
 
 public:
-	void Set_Index(int _Index) { m_iIndex = _Index; }
-
-public:
-	static CTrigger* Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType);
+	static CTrigger* Create(LPDIRECT3DDEVICE9 pGraphicDev, TRIGGER_TYPE _eType, int iIdx);
 
 protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -69,8 +61,8 @@ protected:
 	ENGINE::VTX_TEX*		m_myVtx;
 
 	TRIGGER_TYPE			m_eTriggerType;
+	int						m_iIndex;
 	
-	int	m_iIndex;
 	//void(*m_fpTriggerEvent)();
 };
 

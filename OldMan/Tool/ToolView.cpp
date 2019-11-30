@@ -292,6 +292,7 @@ void CToolView::OnRButtonDown(UINT nFlags, CPoint point)
 		m_pSelectCube->SetTexName(m_pDeleteCube->GetTexName());
 		m_pSelectCube->ChangeTex();
 		m_pSelectCube->SetObjType(m_pDeleteCube->GetObjType());
+		m_pSelectCube->SetIndex(m_pDeleteCube->GetIndex());
 		pFormView->m_wstrObjType = m_pDeleteCube->GetObjType();
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 		m_pDeleteCube = nullptr;
@@ -678,6 +679,7 @@ void CToolView::CreateCube(bool _bIsChange)
 	m_pSelectCube->SetTexName(pFormView->m_wstrFileName);
 	m_pSelectCube->ChangeTex();
 	m_pSelectCube->SetObjType(pFormView->m_wstrObjType);
+	m_pSelectCube->SetIndex(pFormView->m_iIndex);
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::PROPS, m_pSelectCube);
 
 	pFormView->EditDataExchange();

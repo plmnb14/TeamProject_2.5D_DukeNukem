@@ -56,6 +56,7 @@ public:
 public:
 	void UpdatePicture(wstring _wstrName, wstring _wstrPath);
 	void UpdateTransformStr(D3DXVECTOR3 _vPos, D3DXVECTOR3 _vRot, D3DXVECTOR3 _vSize);
+	void UpdateIndex();
 	void EditDataExchange();
 	void InitData();
 	void Update();
@@ -82,6 +83,8 @@ public:
 	CString m_strScaleY;
 	CString m_strScaleZ;
 
+	CString m_strIndex;
+
 public:
 	CMapObjectSelectDlg m_ObjSelect_Tile;
 	CMapObjectSelectDlg m_ObjSelect_Monster;
@@ -100,5 +103,7 @@ public:
 	ENGINE::TERRAIN_TYPE m_eTerrainType;
 
 	bool m_bIsOnDlg;
+	int m_iIndex;
+	afx_msg void OnEnChangeEdit11();
 };
 
