@@ -19,6 +19,7 @@
 #include "Trooper.h"
 #include "OctaBrain.h"
 #include "PigMan.h"
+#include "Alien.h"
 
 #include "UI.h"
 #include "Number.h"
@@ -135,7 +136,7 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	
-	
+	////// Monste- octabrian
 	pObject = COctaBrain::Create(m_pGraphicDev, pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
@@ -471,7 +472,7 @@ void CStage::LoadMapObj()
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
-			pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			pObject = CAlien::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger

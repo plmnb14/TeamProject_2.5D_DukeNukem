@@ -43,23 +43,24 @@ protected:
 	virtual HRESULT LateInit();
 	virtual void Release() override;
 
-public:
-	HRESULT AddComponent();
-	void Player_Pursue(float _move);  //추격하다 
-	void Monster_Foward();
-	void Monster_State_Set();   //상태
-								//	void Monster_State_Set2();   //상태
-	void Monster_Range();                           // 범위
-	void Monster_Idle();
-	void Monster_Shot();
-	//	void Object_Serch();
-	void Monster_Fire2();
-	void Monster_Dead();
-	void Monster_Attack();
+protected:
+	virtual HRESULT AddComponent();
+	virtual	void Player_Pursue(float _move);  //추격하다    //재정의
+	virtual	void Monster_Foward();
+	virtual void Monster_State_Set();   //상태
+								
+	virtual	void Monster_Range();                           // 재정의
+	virtual void Monster_Idle();
+	virtual	void Monster_Shot();
+	//void Object_Serch();
+	virtual void Monster_Fire2();                           // 계산빼고 전부 오버라이드 좇까
+	virtual void Monster_Dead();
+	virtual void Monster_Attack();							// 나머지는 오버라이드로 정의를 다시하는게 맞다. 
+	virtual void Monster_Callcul();                            // 가상함수는 칼큘만 걸고 
 protected:											//물리 
-	void Check_Physic();
-	void Object_Collison();
-	void ChangeTex(wstring _wstrTex);
+	virtual void Check_Physic();
+	virtual void Object_Collison();
+	virtual void ChangeTex(wstring _wstrTex);
 
 
 
@@ -74,6 +75,13 @@ protected:
 	CCameraObserver*		m_pObserver;
 	D3DXMATRIX              m_matView;
 	D3DXVECTOR3				m_vPos;
+	D3DXVECTOR3				m_vMonster_Player_Dir;
+	D3DXVECTOR3				m_vPlayer_Pos;
+	D3DXVECTOR3				m_vMonster_Pos;
+	D3DXVECTOR3				m_vPlayer_Pos_Top;
+	D3DXVECTOR3				m_vMonsterDir_Fowrd_Get;
+
+
 
 protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;

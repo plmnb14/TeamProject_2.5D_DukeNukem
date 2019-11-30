@@ -163,6 +163,9 @@
     <Filter Include="02.GameObject\05.Monster\02.PigMan">
       <UniqueIdentifier>{57d575a3-eef4-42fb-a9a3-9d18a9134f50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Alien">
+      <UniqueIdentifier>{e7f0f87f-5f23-42f4-bdef-d25805e01986}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -325,6 +328,9 @@
     <ClInclude Include="..\Codes\PigMan.h">
       <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Alien.h">
+      <Filter>02.GameObject\05.Monster\03.Alien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -462,6 +468,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\PigMan.cpp">
       <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Alien.cpp">
+      <Filter>02.GameObject\05.Monster\03.Alien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

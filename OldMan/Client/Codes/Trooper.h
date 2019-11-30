@@ -25,21 +25,20 @@ private:
 
 private:
 	HRESULT AddComponent();
-	void Player_Pursue(float _move);  //추격하다 
-	void Monster_Foward();
-	void Monster_State_Set();   //상태
-								//	void Monster_State_Set2();   //상태
-	void Monster_Range();                           // 범위
-	void Monster_Idle();
-	void Monster_Shot();
+	virtual void Player_Pursue(float _move)override;  //추격하다 
+	virtual void Monster_Foward()override;
+	virtual void Monster_State_Set();   //상태
+										
+	virtual void Monster_Range()override;                           // 범위
+	virtual void Monster_Idle()override;
+	virtual void Monster_Shot()override;
 	//	void Object_Serch();
-	void Monster_Fire2();
-	void Monster_Dead();
-	void Monster_Attack();
+	virtual void Monster_Fire2()override;
+	virtual void Monster_Dead()override;
+	virtual void Monster_Attack()override;
 public:											//물리 
-	void Check_Physic();
-	void Object_Collison();
-	void ChangeTex(wstring _wstrTex);
+	virtual void Check_Physic()override;
+	virtual void Object_Collison()override;
 
 
 

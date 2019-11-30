@@ -59,7 +59,6 @@ void CPigMan::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	cout << m_pCondition->Get_Hp() << endl;
 
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
@@ -351,7 +350,7 @@ void CPigMan::Monster_Foward()
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
 
 	if (m_fFowardDealy > 0.1) {
-		if (acos(fDot_Player_Monster_Forward) * 90 < 250)
+		if (acos(fDot_Player_Monster_Forward) * 90 < 1)
 		{
 			m_pAnimator->Stop_Animation(false);
 			ChangeTex(L"OctaBrain_Idle");
@@ -373,7 +372,6 @@ void CPigMan::Monster_Foward()
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
 	//cout << acos(fDot_Monster_Right)*90 << endl;
-	cout << acos(fDot_Player_Monster_Forward) * 90 << endl;
 	//cout << vMonster_Player_Dir.x <<"X"<< endl;
 	//cout << vMonster_Player_Dir.y <<"Y"<< endl;
 	//cout << vMonster_Player_Dir.z <<"Z"<<endl;
@@ -619,25 +617,6 @@ void CPigMan::Object_Collison()
 
 }
 
-void CPigMan::ChangeTex(wstring _wstrTex)
-{
-	if (m_wstrTex.compare(_wstrTex) == 0)
-		return;
-
-	m_wstrTex = _wstrTex;
-
-	m_mapComponent.erase(L"Texture");
-	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
-	NULL_CHECK(pComponent);
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
-
-	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK(m_pTexture);
-
-}
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CPigMan::Monster_State_Set()

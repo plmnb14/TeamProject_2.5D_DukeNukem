@@ -798,7 +798,7 @@ HRESULT CCamera::Initialize()
 	m_pCCamera_Component->set_MainCamera(true);
 
 	if(m_eCameraViewPoint == THIRD_PERSON )
-		m_pCCamera_Component->Set_Distance(5.5f);
+		m_pCCamera_Component->Set_Distance(5.5f);                     //±æÀÌ
 
 	else if (m_eCameraViewPoint == FIRST_PERSON)
 		m_pCCamera_Component->Set_Distance(0.5f);

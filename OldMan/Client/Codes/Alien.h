@@ -1,17 +1,17 @@
 #pragma once
 
-#ifndef __OctaBrain_H__
+#ifndef __ALIEN_H__
 
 #include "Monster.h"
-
-class COctaBrain : public CMonster
+//총알 샷건 처럼 5발 
+class CAlien : public CMonster
 {
 private:
-	explicit COctaBrain(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CAlien(LPDIRECT3DDEVICE9 pGraphicDev);
 
-	
+
 public:
-	virtual ~COctaBrain();
+	virtual ~CAlien();
 
 public:
 	virtual int Update() override;
@@ -28,7 +28,7 @@ private:
 	virtual void Player_Pursue(float _move)override;  //추격하다 
 	virtual void Monster_Foward()override;
 	virtual void Monster_State_Set();   //상태
-
+										//	void Monster_State_Set2();   //상태
 	virtual void Monster_Range()override;                           // 범위
 	virtual void Monster_Idle()override;
 	virtual void Monster_Shot()override;
@@ -39,7 +39,7 @@ private:
 public:											//물리 
 	virtual void Check_Physic()override;
 	virtual void Object_Collison()override;
-	virtual void Monster_Callcul()override;
+			void Monster_Jump();
 
 
 
@@ -48,9 +48,9 @@ public:
 	void Set_Pos(D3DXVECTOR3 _Pos);
 
 public:
-	static COctaBrain* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
+	static CAlien* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
 
 };
 
-#define __OctaBrain_H__
+#define __ALIEN_H__
 #endif

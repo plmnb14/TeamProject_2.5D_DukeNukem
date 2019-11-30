@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Trooper.h"
+#include "Alien.h"
 #include "Trasform.h"
 #include "Collider.h"
 #include "Billborad.h"
@@ -10,16 +10,16 @@
 #include "Animator.h"
 
 
-CTrooper::CTrooper(LPDIRECT3DDEVICE9 pGraphicDev)
+CAlien::CAlien(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
 {
 }
-CTrooper::~CTrooper()
+CAlien::~CAlien()
 {
 	Release();
 }
 
-int CTrooper::Update()
+int CAlien::Update()
 {
 
 	if (m_bIsDead)
@@ -35,12 +35,12 @@ int CTrooper::Update()
 	//Player_Pursue();
 	//cout << m_pCondition->Get_Hp() << endl;
 
-
+	//Monster_Jump();
 
 	return NO_EVENT;
 }
 
-void CTrooper::LateUpdate()
+void CAlien::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 	D3DXMatrixIdentity(&m_matView);
@@ -58,7 +58,8 @@ void CTrooper::LateUpdate()
 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
-	
+
+
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
 	{
@@ -92,7 +93,7 @@ void CTrooper::LateUpdate()
 		m_pTransform->GetPos().z });
 }
 
-void CTrooper::Render()
+void CAlien::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	m_pAnimator->RenderSet(m_pTimeMgr->GetDelta());
@@ -101,7 +102,7 @@ void CTrooper::Render()
 	m_pBuffer->Render();
 }
 
-HRESULT CTrooper::Initialize()
+HRESULT CAlien::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
@@ -127,7 +128,7 @@ HRESULT CTrooper::Initialize()
 	m_pRigid->Set_IsGround(false);							// 지상인지 체크
 	m_pRigid->Set_IsAir(true);								// 공중인지 체크
 	m_pRigid->Set_IsFall(true);								// 낙하중인지 체크
-	m_pRigid->Set_IsJump(false);
+	m_pRigid->Set_IsJump(true);
 
 	m_pRigid->Set_fMass(1.f);								// 물체의 무게
 	m_pRigid->Set_fPower(10.f);								// 점프 파워
@@ -141,22 +142,23 @@ HRESULT CTrooper::Initialize()
 	m_pGroundChekCollider->Set_Dynamic(true);
 	m_pGroundChekCollider->Set_Trigger(true);
 	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
-											m_pTransform->GetPos().y,
-										m_pTransform->GetPos().z });
+		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+		m_pTransform->GetPos().z });
 	m_pGroundChekCollider->Set_UnderPos();
 	m_pGroundChekCollider->SetUp_Box();
-
+	//점프 트리거 콜라이더 필요함
 	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
 	m_pMelleCollider->Set_Radius({ 1.6f , 1.6f, 1.6f });
 	m_pMelleCollider->Set_Dynamic(true);
 	m_pMelleCollider->Set_Trigger(true);
 	m_pMelleCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
-									m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-									m_pTransform->GetPos().z });
+		m_pTransform->GetPos().y ,
+		m_pTransform->GetPos().z });
 	m_pMelleCollider->Set_UnderPos();
 	m_pMelleCollider->SetUp_Box();
 	m_pMelleCollider->Set_Enabled(false);
 	m_pMelleCollider->Set_Type(ENGINE::COLLISION_AABB);
+	
 
 	//컨디션 
 	m_pCondition->Set_Hp(100.f);
@@ -187,7 +189,7 @@ HRESULT CTrooper::Initialize()
 	return S_OK;
 }
 
-HRESULT CTrooper::LateInit()
+HRESULT CAlien::LateInit()
 {
 	m_pObserver = CCameraObserver::Create();
 	NULL_CHECK_RETURN(m_pObserver, E_FAIL);
@@ -197,13 +199,13 @@ HRESULT CTrooper::LateInit()
 	return S_OK;
 }
 
-void CTrooper::Release()
+void CAlien::Release()
 {
 	m_pSubject->UnSubscribe(m_pObserver);
 	ENGINE::Safe_Delete(m_pObserver);
 }
 
-HRESULT CTrooper::AddComponent()
+HRESULT CAlien::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
@@ -287,7 +289,15 @@ HRESULT CTrooper::AddComponent()
 	return S_OK;
 }
 
-void CTrooper::Player_Pursue(float _move)
+
+//정면 보는지 안보는지 하나 만들긴 해야됨 -> 각도에 따라서 렌더가 다르게 되야되기 때문이다. 
+// 360/ 8 /45 간격으로 그림을 출력하게 만들어야 됨 사격이 되는 각도는 
+// 4방향 에서는 사격이 가능해야 함 -> 45, 90,135,180 
+// 뒤를 볼 경우 사격을 안한다 -> 인지범위 도달 했을시 뒤이면 앞으로 돌게 설정 
+// 뒤일경우 데미지 더 받는 몬스터 하나 있음 
+//도는 순서를 정해야 한다. -> 왼쪽 -> 오른쪽 판단후 돌게 만들면된다. 
+// 
+void CAlien::Player_Pursue(float _move)
 {
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -303,7 +313,7 @@ void CTrooper::Player_Pursue(float _move)
 
 }
 
-void CTrooper::Monster_Foward()
+void CAlien::Monster_Foward()
 {
 
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
@@ -331,7 +341,7 @@ void CTrooper::Monster_Foward()
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
 
 	if (m_fFowardDealy > 0.1) {
-		if (acos(fDot_Player_Monster_Forward) * 90 < 250)
+		if (acos(fDot_Player_Monster_Forward) * 90 < 1)
 		{
 			m_pAnimator->Stop_Animation(false);
 			ChangeTex(L"OctaBrain_Idle");
@@ -353,7 +363,6 @@ void CTrooper::Monster_Foward()
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
 	//cout << acos(fDot_Monster_Right)*90 << endl;
-	cout << acos(fDot_Player_Monster_Forward) * 90 << endl;
 	//cout << vMonster_Player_Dir.x <<"X"<< endl;
 	//cout << vMonster_Player_Dir.y <<"Y"<< endl;
 	//cout << vMonster_Player_Dir.z <<"Z"<<endl;
@@ -363,7 +372,7 @@ void CTrooper::Monster_Foward()
 
 }
 
-void CTrooper::Monster_Range()
+void CAlien::Monster_Range()
 {
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -374,11 +383,12 @@ void CTrooper::Monster_Range()
 
 	if (fRange < m_fMaxRange && fRange >m_fMinRange)
 	{
-		m_eNextState = MONSTER_PURSUE;
+		Player_Pursue(1.f);
+
 	}
 	else if (fRange <m_fMinRange && fRange>m_fAttack)
 	{
-		m_eNextState = MONSTER_FIRE;
+		 Monster_Jump();
 	}
 	else if (fRange<m_fAttack)
 	{
@@ -386,11 +396,11 @@ void CTrooper::Monster_Range()
 
 	}
 }
-void CTrooper::Monster_Idle()
+void CAlien::Monster_Idle()
 {
 	m_pTransform->MovePos(0.f);
 }
-void CTrooper::Monster_Shot()
+void CAlien::Monster_Shot()
 {
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -458,7 +468,7 @@ void CTrooper::Monster_Shot()
 
 
 
-void CTrooper::Monster_Fire2()
+void CAlien::Monster_Fire2()
 {
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
@@ -519,7 +529,7 @@ void CTrooper::Monster_Fire2()
 	}
 }
 
-void CTrooper::Monster_Dead()
+void CAlien::Monster_Dead()
 {
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"PigMan_Dead");
@@ -528,7 +538,7 @@ void CTrooper::Monster_Dead()
 
 }
 
-void CTrooper::Monster_Attack()
+void CAlien::Monster_Attack()
 {
 
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
@@ -545,23 +555,16 @@ void CTrooper::Monster_Attack()
 	{
 		m_pCondition->Add_Hp(+1);
 	}
+
+
+	//cout << "거림" << endl;
+
+
 }
 
-void CTrooper::Check_Physic()
+void CAlien::Check_Physic()
 {
 
-	if (m_pRigid->Get_IsJump() == true)
-	{
-		D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Jump(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) , 0 };
-		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
-
-		if (m_pRigid->Get_Accel().y <= 0.f)
-		{
-			m_pRigid->Set_Accel({ 1,0,1 });
-			m_pRigid->Set_IsFall(true);
-			m_pRigid->Set_IsJump(false);
-		}
-	}
 
 	if (m_pRigid->Get_IsJump() == false)
 	{
@@ -584,7 +587,7 @@ void CTrooper::Check_Physic()
 
 }
 
-void CTrooper::Object_Collison()
+void CAlien::Object_Collison()
 {
 	// 전부다 받아온다. 
 	// 그래서 그 각도에 겹치는게 없는지 판단하는게 맞다. 
@@ -594,41 +597,57 @@ void CTrooper::Object_Collison()
 
 }
 
+void CAlien::Monster_Jump()
+{
+	Monster_Callcul();
+	m_pRigid->Set_Accel({ 1, 1.5f, 1 });
+	m_pRigid->Set_IsJump(true);
+	m_pRigid->Set_IsGround(false);
+	D3DXVECTOR3  Monster_Jump = { m_vMonster_Player_Dir.x,0,m_vMonster_Player_Dir.z };
+
+	m_pTransform->Move_AdvancedPos(Monster_Jump,2 * m_pTimeMgr->GetDelta());
+
+	D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) * 5, 0 };
+	m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
+}
+
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
-void CTrooper::Monster_State_Set()
+void CAlien::Monster_State_Set()
 {
+
 	switch (m_eNextState)
-		{
-		case MONSTER_IDLE:
-			Monster_Idle();
-			break;
-		case MONSTER_PURSUE:
-			Monster_Foward();
-			break;
-		case MONSTER_SHOT:
-			Monster_Shot();
-			break;
-		case MONSTER_FIRE:
-			Monster_Fire2();
-			break;
-		case MONSTER_DEAD:
-			Monster_Dead();
-			break;
-		case MONSTER_MILL:
-			Monster_Attack();
-			break;
-		}
-	
+	{
+	case MONSTER_IDLE:
+		Monster_Idle();
+		break;
+	case MONSTER_PURSUE:
+		Monster_Foward();
+		break;
+	case MONSTER_SHOT:
+		Monster_Shot();
+		break;
+	case MONSTER_FIRE:
+		Monster_Fire2();
+		break;
+	case MONSTER_DEAD:
+		Monster_Dead();
+		break;
+	case MONSTER_MILL:
+		Monster_Attack();
+		break;
+	}
+
+	// 맞았을 경우 탐색이 켜진다. 
 
 }
 
-CTrooper * CTrooper::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
+CAlien * CAlien::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
 {
 
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CTrooper* pInstance = new CTrooper(pGraphicDev);
+	CAlien* pInstance = new CAlien(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

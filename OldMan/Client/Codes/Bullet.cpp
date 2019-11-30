@@ -282,6 +282,7 @@ void CBullet::BulletType()
 		m_pTransform->MovePos(m_fSpeed * m_pTimeMgr->GetDelta());
 
 		D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) * 5, 0 };
+	
 		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
 
 		break;

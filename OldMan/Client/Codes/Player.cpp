@@ -589,7 +589,7 @@ void CPlayer::Shoot()
 		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
 		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;
 
-		cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
+		   cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
 
 		D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
 		D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
@@ -738,7 +738,7 @@ void CPlayer::Shoot_Shotgun()
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 				pInstance->Set_MapLayer(m_mapLayer);
 			}
-0.		}
+		}
 
 		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
 		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;
