@@ -2,7 +2,8 @@
 #include "PlayerObserver.h"
 
 CPlayerObserver::CPlayerObserver()
-	: m_pSubject(ENGINE::GetPlayerSubject())
+	: m_pSubject(ENGINE::GetPlayerSubject()),
+	m_iGrenadeCount(0)
 {
 }
 
@@ -21,6 +22,11 @@ const ENGINE::W_INFO CPlayerObserver::GetWeaponInfo() const
 	return m_tWeaponInfo;
 }
 
+const int CPlayerObserver::GetGrenadeCount() const
+{
+	return m_iGrenadeCount;
+}
+
 void CPlayerObserver::Update(int iMessage)
 {
 	// Pull
@@ -35,6 +41,8 @@ void CPlayerObserver::Update(int iMessage)
 	case ENGINE::CPlayerSubject::WEAPON_INFO:
 		m_tWeaponInfo = *reinterpret_cast<ENGINE::W_INFO*>(pData);
 		break;
+	case ENGINE::CPlayerSubject::GRENADE_COUNT:
+		m_iGrenadeCount = *reinterpret_cast<int*>(pData);
 	}
 }
 

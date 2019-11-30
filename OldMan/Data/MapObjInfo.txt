@@ -13,6 +13,7 @@ AmmoBox_0|AmmoBox_0|AmmoBox_0.png|1|..\Client\Texture\PickUp\No_Animation\AmmoBo
 AmmoBox_1|AmmoBox_1|AmmoBox_1.png|1|..\Client\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_1.png
 AmmoBox_2|AmmoBox_2|AmmoBox_2.png|1|..\Client\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_2.png
 AmmoBox_3|AmmoBox_3|AmmoBox_3.png|1|..\Client\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_3.png
+AmmoBox_4|AmmoBox_4|AmmoBox_4.png|1|..\Client\Texture\PickUp\No_Animation\AmmoBox\AmmoBox_4.png
 Waepon_0|Waepon_0|Equip_0.png|1|..\Client\Texture\PickUp\Equip\Equip_0.png
 Waepon_1|Waepon_1|Equip_1.png|1|..\Client\Texture\PickUp\Equip\Equip_1.png
 Waepon_2|Waepon_2|Equip_2.png|1|..\Client\Texture\PickUp\Equip\Equip_2.png

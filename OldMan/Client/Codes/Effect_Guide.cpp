@@ -43,7 +43,7 @@ void CEffect_Guide::LateUpdate()
 	m_pBillborad->Billborad_Front(Localmatrix, Cameramatrix, vSize);                          // ºôº¸µå ¼³Á¤
 	m_matView = m_pBillborad->GetWorldMatrix_Billborad();
 
-	m_fLifetime = m_pTimeMgr->GetDelta() * 0.5f;
+	m_fLifetime = m_pTimeMgr->GetDelta() * 0.1f;
 
 	D3DXVECTOR3 vTmpSize = m_pTransform->GetSize();
 

@@ -3,12 +3,13 @@
 #include "Trasform.h"
 #include "Collider.h"
 #include "Player.h"
+#include "Monster.h"
 
 CTrigger::CTrigger(LPDIRECT3DDEVICE9 pGraphicDev)
 	:ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
-	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr)
+	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr), m_iIndex(0)
 {
 }
 
@@ -38,7 +39,7 @@ void CTrigger::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
-	m_pBuffer->Render();
+	//m_pBuffer->Render();
 
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
@@ -47,7 +48,7 @@ HRESULT CTrigger::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(100.f, 100.f, 100.f));
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 	return S_OK;
@@ -131,6 +132,64 @@ void CTrigger::CheckTriggerActive()
 
 			break;
 		}
+
+		case CTrigger::TRIGGER_MONSTER_SPAWNER:
+		{
+			cout << "현재 작동된 스폰 트리거는 [ " << m_iIndex << "] 입니다." << endl;
+
+			switch (m_iIndex)
+			{
+			case 0:
+			{
+				cout << "소환 되었습니다." << endl;
+
+				CGameObject*	pInstance = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pInstance);
+				ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pInstance->Get_Component(L"Transform"));
+				pTransform->SetPos({14,-4,73});
+				pInstance->Set_MapLayer(m_mapLayer);
+
+				m_bIsDead = true;
+			}
+			case 1:
+			{
+
+			}
+			case 2:
+			{
+
+			}
+			case 3:
+			{
+
+			}
+			}
+
+			break;
+		}
+
+		case CTrigger::TRIGGER_ITEM_SPAWNER:
+		{
+			break;
+		}
+
+		case CTrigger::TRIGGER_WAYPOINT:
+		{
+			cout << "현재 WayPoint 는 [ " << m_iIndex << "] 입니다." << endl;
+
+			break;
+		}
+
+		case CTrigger::TRIGGER_EVENT:
+		{
+			break;
+		}
+
+		case CTrigger::TRIGGER_CAMERA_EVENT:
+		{
+			break;
+		}
+
 		case CTrigger::TRIGGER_END:
 		{
 			m_bIsDead = true;

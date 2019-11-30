@@ -290,6 +290,23 @@ void CPickupItem::Hitted()
 		}
 		break;
 	}
+
+	case CPickupItem::ITEM_AMMOBOX_GRENADE:
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+
+		if (pPlayer->Get_GrenadeCount() + 3 > 5)
+		{
+			pPlayer->Add_GrenadeCount(5 - pPlayer->Get_GrenadeCount());
+		}
+
+		else
+		{
+			pPlayer->Add_GrenadeCount(3);
+		}
+
+		break;
+	}
 	}
 }
 

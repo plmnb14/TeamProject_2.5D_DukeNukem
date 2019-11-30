@@ -44,6 +44,9 @@ public:
 private:
 	ENGINE::CManagement*	m_pManagement;
 	ENGINE::CResourceMgr*	m_pResourceMgr;
+
+	float m_fTrigger_Index;
+	float m_Monster_Index;
 };
 
 #define __STAGE_H__

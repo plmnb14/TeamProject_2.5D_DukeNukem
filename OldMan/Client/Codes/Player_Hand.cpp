@@ -161,7 +161,7 @@ HRESULT CPlayer_Hand::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"SMG_Idle");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Hand_Idle");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 	
@@ -223,7 +223,7 @@ void CPlayer_Hand::WeaponActState()
 		{
 			m_pTransform->SetPos(D3DXVECTOR3(0.f, 285.f, 0.f));
 			m_pTransform->SetSize(D3DXVECTOR3(13.f, 13.f, 13.f));
-			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
 			static_cast<CPlayer*>(m_pTarget)->Set_Grenade(false);
 			m_pAnimator->Stop_Animation(false);
 		}
@@ -266,22 +266,6 @@ void CPlayer_Hand::WeaponActState()
 
 void CPlayer_Hand::Weapon_Revolver()
 {
-	//if (m_eActState == CPlayer::W_LEDGE)
-	//{
-	//	ChangeTex(L"Ledge_Hand");
-	//	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
-	//	m_pAnimator->Set_FrameAmp(5.f);
-	//
-	//	if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
-	//	{
-	//		if (m_eWeapon == ENGINE::MELLE)
-	//			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
-	//
-	//		else
-	//			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
-	//	}
-	//}
-
 	switch (m_eActState)
 	{
 	case CPlayer::W_LEDGE:
@@ -293,11 +277,7 @@ void CPlayer_Hand::Weapon_Revolver()
 
 		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
 		{
-			if (m_eWeapon == ENGINE::MELLE)
-				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
-
-			else
-				static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
 		}
 
 		break;
@@ -456,6 +436,53 @@ void CPlayer_Hand::Weapon_Revolver()
 
 void CPlayer_Hand::Weapon_Melee()
 {
+	switch (m_eActState)
+	{
+	case CPlayer::W_LEDGE:
+	{
+		//m_pTransform->SetPos(D3DXVECTOR3(0.f, 520.f, 0.f));
+		//m_pTransform->SetSize(D3DXVECTOR3(18.f, 18.f, 18.f));
+
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"Ledge_Hand");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(20.f);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			//m_pTransform->SetPos(D3DXVECTOR3(0.f, 285.f, 0.f));
+			//m_pTransform->SetSize(D3DXVECTOR3(13.f, 13.f, 13.f));
+
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+		}
+
+		break;
+	}
+
+	case CPlayer::W_IDLE:
+	{
+		ChangeTex(L"Hand_Idle");
+		m_pAnimator->Set_Frame(0);
+		m_pAnimator->Set_FrameAmp(1.f);
+		break;
+	}
+	case CPlayer::W_DRAW:
+	{
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"Hand_Draw");
+		m_pAnimator->Set_FrameAmp(10.f);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		break;
+	}
+	}
+
 }
 
 void CPlayer_Hand::Weapon_Rifle()
@@ -466,6 +493,21 @@ void CPlayer_Hand::Weapon_SMG()
 {
 	switch (m_eActState)
 	{
+	case CPlayer::W_LEDGE:
+	{
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"Ledge_Hand");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(20.f);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+		}
+
+		break;
+	}
+
 	case CPlayer::W_IDLE:
 	{
 		ChangeTex(L"SMG_Idle");
@@ -599,6 +641,21 @@ void CPlayer_Hand::Weapon_Shotgun()
 {
 	switch (m_eActState)
 	{
+	case CPlayer::W_LEDGE:
+	{
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"Ledge_Hand");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(20.f);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+		}
+
+		break;
+	}
+
 	case CPlayer::W_IDLE:
 	{
 		ChangeTex(L"PumpShot_Idle");
@@ -781,6 +838,21 @@ void CPlayer_Hand::Weapon_Luncher()
 {
 	switch (m_eActState)
 	{
+	case CPlayer::W_LEDGE:
+	{
+		m_pAnimator->Stop_Animation(false);
+		ChangeTex(L"Ledge_Hand");
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+		m_pAnimator->Set_FrameAmp(20.f);
+
+		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_DRAW);
+		}
+
+		break;
+	}
+
 	case CPlayer::W_IDLE:
 	{
 		if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->wMagazineBullet > 0)

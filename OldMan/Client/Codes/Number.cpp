@@ -46,6 +46,11 @@ int CNumber::Update()
 		}
 		break;
 	}
+	case CNumber::NUMBER_GRENADE:
+	{
+		GetNumberArr((int)m_pPlayerObserver->GetGrenadeCount(), m_iNumArr, m_iArrCount);
+	}
+
 	case CNumber::NUMBER_END:
 		break;
 	}

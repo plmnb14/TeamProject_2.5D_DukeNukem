@@ -21,10 +21,11 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr), m_pColliderLedge(nullptr),
 	m_pRigid(nullptr), m_fSlideUp(0),
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
-	m_eWeaponState(ENGINE::WEAPON_TAG::NO_WEAPON), m_fZoomAccel(0),
+	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE), m_fZoomAccel(0),
 	m_pObserver(nullptr), m_bZoom(false), m_fMaxZoom(0), m_fMinZoom(0), m_bSpecial(0),
 	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0) ,m_bCanLedge(0), m_fLength_Y(0),
-	m_eActState(W_IDLE), m_vLedgeUpVec({0,0,0}), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0)
+	m_eActState(W_IDLE), m_vLedgeUpVec({0,0,0}), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0),
+	m_iGrenadeCount(0), m_iMaxGrenadeCount(0)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -47,6 +48,7 @@ int CPlayer::Update()
 	Check_Run();
 	Check_Physic();
 	Check_Ledge();
+	Check_Grenade();
 	
 	UpdateObserverData();
 
@@ -163,6 +165,9 @@ HRESULT CPlayer::Initialize()
 	m_fZoomSpeed	= 5;
 	m_fMaxZoom		= 70;
 	m_fMinZoom		= 20;
+	m_iGrenadeCount = 3;
+	m_iMaxGrenadeCount = 5;
+
 	
 	m_tCondition.fHp = m_pCondition->Get_Hp();
 	m_tCondition.fArmor = m_pCondition->Get_Armor();
@@ -285,6 +290,9 @@ void CPlayer::KeyInput()
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_G))
 	{
+		if (m_iGrenadeCount <= 0)
+			return;
+
 		if (m_eActState != W_GRENADE)
 		{
 			Grenade();
@@ -608,6 +616,7 @@ void CPlayer::UpdateObserverData()
 	m_tCondition.fArmor = m_pCondition->Get_Armor();
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(m_tCondition));
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::GRENADE_COUNT, &m_iGrenadeCount);
 }
 
 void CPlayer::Shoot()
@@ -911,6 +920,11 @@ void CPlayer::SpecialShot()
 
 void CPlayer::Grenade()
 {
+	if (m_iGrenadeCount <= 0)
+		return;
+
+	--m_iGrenadeCount;
+
 	D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
 	D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
 	D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
@@ -1137,6 +1151,14 @@ void CPlayer::Check_Ledge()
 		m_bCanLedge = false;
 		m_bIsLedge = false;
 		m_pRigid->Set_UseGravity(true);
+	}
+}
+
+void CPlayer::Check_Grenade()
+{
+	if (m_iGrenadeCount > m_iMaxGrenadeCount)
+	{
+		m_iGrenadeCount = m_iMaxGrenadeCount;
 	}
 }
 

@@ -8,7 +8,7 @@
 
 CCamera::CCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CGameObject(pGraphicDev),
-	m_eCameraMode(LAND_MODE), m_eCameraViewPoint(THIRD_PERSON),
+	m_eCameraMode(LAND_MODE), m_eCameraViewPoint(FIRST_PERSON),
 	m_pGraphicDev(pGraphicDev), m_pSubject(ENGINE::GetCameraSubject()),
 	m_pTarget(nullptr), m_pCCamera_Component(nullptr),
 	m_fMax_PlayerRoll_Angle(0), m_fCamShake_Y(0),
@@ -263,9 +263,9 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 		{
 			D3DXVECTOR3 vTemp_TargetPos = dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 			m_pCCamera_Component->Set_EyePos({ vTemp_TargetPos.x + (m_vCamShakePos.x * m_pCCamera_Component->Get_Right().z * m_pCCamera_Component->Get_Look().z),
-												vTemp_TargetPos.y + 3.0f + m_vCamShakePos.y + m_fCam_PosY,
+												vTemp_TargetPos.y + 4.0f + m_vCamShakePos.y + m_fCam_PosY,
 												vTemp_TargetPos.z + (m_vCamShakePos.z * m_pCCamera_Component->Get_Right().x * m_pCCamera_Component->Get_Look().x) });
-			m_pCCamera_Component->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y + 3.0f ,vTemp_TargetPos.z + 1 });
+			m_pCCamera_Component->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y + 4.0f ,vTemp_TargetPos.z + 1 });
 
 			CamShakePos();
 		}
@@ -760,7 +760,7 @@ int CCamera::Update()
 
 	CamShakeAngle();
 	KeyInput();
-	SetUp_Zoom();
+	//SetUp_Zoom();
 	SetUp_FirstPerson_ViewPoint();
 	SetUp_ViewPoint(m_eCameraViewPoint);
 	SetUp_ViewMatrix(&m_MatView);

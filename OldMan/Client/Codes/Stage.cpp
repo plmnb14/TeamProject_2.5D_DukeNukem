@@ -37,7 +37,8 @@
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
-	m_pManagement(ENGINE::GetManagement())
+	m_pManagement(ENGINE::GetManagement()),
+	m_fTrigger_Index(0), m_Monster_Index(0)
 {
 }
 
@@ -91,6 +92,9 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PLAYER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
+	ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
+	pTransform->SetPos({0,4,0});
+
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Terrain Create Failed", E_FAIL);
@@ -103,11 +107,11 @@ HRESULT CStage::Add_Object_Layer()
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
-	// Boss
-	pObject = CBoss_Overload::Create(m_pGraphicDev);
-	NULL_CHECK_MSG_RETURN(pObject, L"Boss Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
+	//// Boss
+	//pObject = CBoss_Overload::Create(m_pGraphicDev);
+	//NULL_CHECK_MSG_RETURN(pObject, L"Boss Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 
 	//// Revolver
 	//pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{ -7,2,8 });
@@ -133,12 +137,12 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
 	
-	//// Monster
-	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
-	//octabrain
+	////// Monster
+	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
+	////octabrain
 	
 	// Skybox
 	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_ufo.dds", pObject_Layer->Get_Player());
@@ -199,7 +203,6 @@ HRESULT CStage::Add_UI_Layer()
 	static_cast<CUI*>(pObject)->SetSize(10.f, 13.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -295.f, 0.f));
 	
-	
 	// Bullet
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
 	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
@@ -207,6 +210,16 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -280.f, 0.f));
+
+	
+	// Grenade
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_GRENADE);
+	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -230.f, 0.f));
+
 	
 	// Buller Line
 	pObject = CUI::Create(m_pGraphicDev, L"WeaponRightLine.png");
@@ -438,6 +451,7 @@ void CStage::LoadMapObj()
 		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		//}
 		// Trigger
+
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{
 			CTrigger* pTrigger = nullptr;
@@ -455,6 +469,58 @@ void CStage::LoadMapObj()
 			pObject = pTrigger;
 			pTrigger = nullptr;
 		}
+
+		else if (!lstrcmp(szType, L"Trigger_WayPoint"))
+		{
+			CTrigger* pTrigger = nullptr;
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_WAYPOINT);
+			pTrigger->Set_Index(m_fTrigger_Index);
+			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			pObject = pTrigger;
+			pTrigger = nullptr;
+
+			m_fTrigger_Index++;
+		}
+
+		else if (!lstrcmp(szType, L"Trigger_Monster_Spawner"))
+		{
+			CTrigger* pTrigger = nullptr;
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_MONSTER_SPAWNER);
+			pTrigger->Set_Index(m_Monster_Index);
+			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			pObject = pTrigger;
+			pTrigger = nullptr;
+
+			m_Monster_Index++;
+		}
+
+		else if (!lstrcmp(szType, L"Trigger_Item_Spawner"))
+		{
+			CTrigger* pTrigger = nullptr;
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_ITEM_SPAWNER);
+			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			pObject = pTrigger;
+			pTrigger = nullptr;
+		}
+
+		else if (!lstrcmp(szType, L"Trigger_Event"))
+		{
+			CTrigger* pTrigger = nullptr;
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_EVENT);
+			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			pObject = pTrigger;
+			pTrigger = nullptr;
+		}
+
+		else if (!lstrcmp(szType, L"Trigger_Camera_Event"))
+		{
+			CTrigger* pTrigger = nullptr;
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_CAMERA_EVENT);
+			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			pObject = pTrigger;
+			pTrigger = nullptr;
+		}
+
 		// Weapon
 		else if (!lstrcmp(szType, L"Waepon_0"))
 		{

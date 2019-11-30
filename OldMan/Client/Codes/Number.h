@@ -19,7 +19,7 @@ class CPlayerObserver;
 class CNumber : public CUI
 {
 public:
-	enum NUMBER_TYPE { NUMBER_HP, NUMBER_SHIELD, NUMBER_BULLET, NUMBER_END };
+	enum NUMBER_TYPE { NUMBER_HP, NUMBER_SHIELD, NUMBER_BULLET, NUMBER_GRENADE , NUMBER_END };
 
 protected:
 	explicit CNumber(LPDIRECT3DDEVICE9 pGraphicDev);

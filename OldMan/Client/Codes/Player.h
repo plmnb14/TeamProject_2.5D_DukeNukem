@@ -74,9 +74,13 @@ private:
 	void Check_Slide();
 	void Check_Run();
 	void Check_Ledge();
+	void Check_Grenade();
 
 public:
 	void Reload();
+
+public:
+	void Add_GrenadeCount(int _GrenadeCount) { m_iGrenadeCount = _GrenadeCount; }
 
 public:
 	void Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo);
@@ -87,6 +91,7 @@ public:
 	void Set_IsLedge(bool _IsLedge) { m_bIsLedge = _IsLedge; }
 	void Set_LedgeVec(D3DXVECTOR3 _Vec) { m_vLedgeVec = _Vec; }
 	void Set_Grenade(bool _Grenade) { m_bGrenade = _Grenade; }
+	void Set_GrenadeCount(int _iCount) { m_iGrenadeCount = _iCount; }
 
 public:
 	bool Get_CanLedge() { return m_bCanLedge; }
@@ -97,6 +102,7 @@ public:
 	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
 	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { return m_mWeaponInfo[_eTag]; }
 	ENGINE::WEAPON_TAG	Get_WState() { return m_eWeaponState; }
+	int Get_GrenadeCount() { return m_iGrenadeCount; }
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -159,7 +165,8 @@ private:
 	float m_fHorizontal;
 
 	int	m_iJumpCount;
-	
+	int m_iGrenadeCount;
+	int m_iMaxGrenadeCount;
 	
 
 };

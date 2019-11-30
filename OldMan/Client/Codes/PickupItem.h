@@ -27,6 +27,7 @@ public:
 		ITEM_AMMOBOX_LONG,  // for Rifle, Sniper Rifle
 		ITEM_AMMOBOX_SHOTGUN,
 		ITEM_AMMOBOX_ROCKET,
+		ITEM_AMMOBOX_GRENADE,
 		ITEM_END
 	};
 

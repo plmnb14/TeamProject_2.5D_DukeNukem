@@ -1,2 +1,7 @@
 Trigger_ToNextStage|Trigger_ToNextStage|Tile256x256_85.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_85.png
 Trigger_Ledge|Trigger_Ledge|Tile256x256_85.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_85.png
+Trigger_WayPoint|Trigger_WayPoint|Tile256x256_85.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_85.png
+Trigger_Monster_Spawner|Trigger_Monster_Spawner|Tile256x256_85.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_85.png
+Trigger_Item_Spawner|Trigger_Item_Spawner|Tile256x256_85.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_85.png
+Trigger_Event|Trigger_Event|Tile256x256_85.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_85.png
+Trigger_Camera_Event|Trigger_Camera_Event|Tile256x256_85.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_85.png
