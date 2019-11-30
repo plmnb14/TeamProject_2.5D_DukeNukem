@@ -90,7 +90,7 @@ HRESULT CWeapon_Rocket::Initialize()
 
 	m_pWInfo.fBullet_Speed = 10.f;
 
-	m_pWInfo.wWeaponDamage = 10.f;				// 무기 데미지
+	m_pWInfo.wWeaponDamage = 50.f;				// 무기 데미지
 	m_pWInfo.eWeaponTag = ENGINE::LUNCHER;
 
 	// 트랜스폼 세팅

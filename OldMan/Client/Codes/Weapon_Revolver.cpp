@@ -92,7 +92,7 @@ HRESULT CWeapon_Revolver::Initialize()
 	m_pWInfo.fSpread_X = 5;
 	m_pWInfo.fSpread_Y = 5;
 
-	m_pWInfo.wWeaponDamage = 3;				// 무기 데미지
+	m_pWInfo.wWeaponDamage = 10;				// 무기 데미지
 	m_pWInfo.eWeaponTag = ENGINE::REVOLVER;
 
 

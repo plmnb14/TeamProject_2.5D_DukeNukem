@@ -60,6 +60,7 @@ protected:											//¹°¸®
 	void Check_Physic();
 	void Object_Collison();
 	void ChangeTex(wstring _wstrTex);
+	void Check_Push();
 
 
 

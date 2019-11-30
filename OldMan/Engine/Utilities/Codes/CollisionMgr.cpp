@@ -112,7 +112,6 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 				continue;
 
 			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
-			ENGINE::CCollider* rDstGCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
 			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
@@ -122,18 +121,24 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 
 
 				rDstCol->LateUpdate(rDstTrans->GetPos());
-				rDstGCol->LateUpdate({ rDstTrans->GetPos().x ,
-					rDstTrans->GetPos().y - rDstCol->Get_Radius().y,
-					rDstTrans->GetPos().z });
 
-				if (rSrc->Get_Tag() == MONSTER || rSrc->Get_Tag() == PLAYER)
+				if (rDst->Get_Tag() != GRENADE)
 				{
-					ENGINE::CCollider* rSrcGCol = static_cast<CCollider*>(rSrc->Get_Component(L"GCheck_Collider"));
+					ENGINE::CCollider* rDstGCol = static_cast<CCollider*>(rDst->Get_Component(L"GCheck_Collider"));
 
-					rSrcCol->LateUpdate(rSrcTrans->GetPos());
-					rSrcGCol->LateUpdate({ rSrcTrans->GetPos().x ,
-						rSrcTrans->GetPos().y - rSrcCol->Get_Radius().y,
-						rSrcTrans->GetPos().z });
+					rDstGCol->LateUpdate({ rDstTrans->GetPos().x ,
+						rDstTrans->GetPos().y - rDstCol->Get_Radius().y,
+						rDstTrans->GetPos().z });
+
+					if (rSrc->Get_Tag() == MONSTER || rSrc->Get_Tag() == PLAYER)
+					{
+						ENGINE::CCollider* rSrcGCol = static_cast<CCollider*>(rSrc->Get_Component(L"GCheck_Collider"));
+
+						rSrcCol->LateUpdate(rSrcTrans->GetPos());
+						rSrcGCol->LateUpdate({ rSrcTrans->GetPos().x ,
+							rSrcTrans->GetPos().y - rSrcCol->Get_Radius().y,
+							rSrcTrans->GetPos().z });
+					}
 				}
 
 				//rDstCol->Set_Length({ 0,0,0 });
@@ -258,10 +263,99 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 
 			if (Check_AABB_Bullet(rDst, rSrc, rDstCol, rSrcCol))
 			{
+				if (rSrc->Get_Tag() != ENGINE::TERRAIN)
+				{
+					ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+					ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
+
+					if (rSrcCon != nullptr)
+					{
+						rSrcCon->Add_Hp(-rDstCon->Get_Damage());
+					}
+				}
+
 				rDstCol->Set_IsCollision(true);
 				rDst->Set_Tag(rSrc->Get_Tag());
 				rDst->SetDead();
 				continue;
+			}
+		}
+
+	}
+}
+
+void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			if (rDst->GetDead())
+				continue;
+
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+			if (a > 20)
+				continue;
+
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"BombCollider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				if (rSrc->Get_Tag() != ENGINE::TERRAIN)
+				{
+					ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+					ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
+
+					if (rSrcCon != nullptr)
+					{
+						rSrcCon->Add_Hp(-rDstCon->Get_Damage());
+					}
+				}
+
+				D3DXVECTOR3 vDstPos = rDstTrans->GetPos();
+				D3DXVECTOR3 vSrcPos = rSrcTrans->GetPos();
+				D3DXVECTOR3 vTmpDir = vSrcPos - vDstPos;
+				D3DXVec3Normalize(&vTmpDir , &vTmpDir);
+
+				cout << "¿À³Ä" << endl;
+
+				ENGINE::CRigidBody*	rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
+				rSrcRigid->Set_Distance(D3DXVec3Length(&(vSrcPos - vDstPos)));
+				rSrcRigid->Set_IsPush(true);
+				rSrcRigid->Set_PushDir(vTmpDir);
+			}
+		}
+
+	}
+}
+
+void CCollisionMgr::CollisionVFX_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			if (rDst->GetDead())
+				continue;
+
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+			if (a > 20)
+				continue;
+
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+			if (Check_AABB_Bullet(rDst, rSrc, rDstCol, rSrcCol))
+			{
 			}
 		}
 

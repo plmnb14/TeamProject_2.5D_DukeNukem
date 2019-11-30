@@ -32,7 +32,8 @@ public:
 		W_NONE, W_IDLE, W_WALK, W_RUN,
 		W_FIRST, W_DRAW, W_FIRE, W_RELOAD,
 		W_SPECIAL_READY, W_SPECIAL_SHOT , W_SPECIAL_END,
-		W_ZOOMIN, W_ZOOMOUT, W_ZOOMFIRE
+		W_ZOOMIN, W_ZOOMOUT, W_ZOOMFIRE,
+		W_LEDGE, W_GRENADE
 	};
 
 private:
@@ -63,6 +64,7 @@ private:
 	void ShootType();
 	void Zoom();
 	void SpecialShot();
+	void Grenade();
 
 private:
 	void WeaponActState();
@@ -71,6 +73,7 @@ private:
 	void Check_Physic();
 	void Check_Slide();
 	void Check_Run();
+	void Check_Ledge();
 
 public:
 	void Reload();
@@ -83,6 +86,7 @@ public:
 	void Set_CanLedge(bool _Ledge) { m_bCanLedge = _Ledge; }
 	void Set_IsLedge(bool _IsLedge) { m_bIsLedge = _IsLedge; }
 	void Set_LedgeVec(D3DXVECTOR3 _Vec) { m_vLedgeVec = _Vec; }
+	void Set_Grenade(bool _Grenade) { m_bGrenade = _Grenade; }
 
 public:
 	bool Get_CanLedge() { return m_bCanLedge; }
@@ -135,11 +139,13 @@ private:
 
 private:
 	D3DXVECTOR3 m_vLedgeVec;
+	D3DXVECTOR3 m_vLedgeUpVec;
 
 	float m_fSlideUp;
 	bool  m_bZoom;
 	bool  m_bSpecial;
 	bool  m_bCanAttack;
+	bool  m_bGrenade;
 
 	float m_fZoomSpeed;
 	float m_fZoomAccel;
@@ -148,6 +154,11 @@ private:
 
 	bool m_bCanLedge;
 	bool m_bIsLedge;
+
+	float m_fLength_Y;
+	float m_fHorizontal;
+
+	int	m_iJumpCount;
 	
 	
 

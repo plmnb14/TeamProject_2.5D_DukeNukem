@@ -175,6 +175,8 @@
     <ClInclude Include="..\Codes\Elevator.h" />
     <ClInclude Include="..\Codes\Effect_Fireball.h" />
     <ClInclude Include="..\Codes\GaugeBar.h" />
+    <ClInclude Include="..\Codes\Grenade.h" />
+    <ClInclude Include="..\Codes\Effect_Guide.h" />
     <ClInclude Include="..\Codes\HittedCircle.h" />
     <ClInclude Include="..\Codes\Logo.h" />
     <ClInclude Include="..\Codes\LogoBack.h" />
@@ -238,6 +240,8 @@
     <ClCompile Include="..\Codes\Elevator.cpp" />
     <ClCompile Include="..\Codes\Effect_Fireball.cpp" />
     <ClCompile Include="..\Codes\GaugeBar.cpp" />
+    <ClCompile Include="..\Codes\Grenade.cpp" />
+    <ClCompile Include="..\Codes\Effect_Guide.cpp" />
     <ClCompile Include="..\Codes\HittedCircle.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\LogoBack.cpp" />

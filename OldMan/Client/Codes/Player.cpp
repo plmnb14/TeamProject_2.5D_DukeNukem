@@ -9,6 +9,7 @@
 #include "RigidBody.h"
 #include "Condition.h"
 #include "SoundMgr.h"
+#include "Grenade.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -22,8 +23,8 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::NO_WEAPON), m_fZoomAccel(0),
 	m_pObserver(nullptr), m_bZoom(false), m_fMaxZoom(0), m_fMinZoom(0), m_bSpecial(0),
-	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0) ,m_bCanLedge(0),
-	m_eActState(W_IDLE)
+	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0) ,m_bCanLedge(0), m_fLength_Y(0),
+	m_eActState(W_IDLE), m_vLedgeUpVec({0,0,0}), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -45,6 +46,7 @@ int CPlayer::Update()
 	Check_Slide();
 	Check_Run();
 	Check_Physic();
+	Check_Ledge();
 	
 	UpdateObserverData();
 
@@ -85,7 +87,7 @@ HRESULT CPlayer::Initialize()
 	
 	
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 1.0f , 2.0f, 1.0f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 0.9f , 2.0f, 0.9f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
@@ -111,7 +113,7 @@ HRESULT CPlayer::Initialize()
 	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y + 1 , m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
 
 	// 렛지 콜라이더
-	m_pColliderLedge->Set_Radius({ 0.3f , 1.0f, 0.3f });	
+	m_pColliderLedge->Set_Radius({ 0.3f , 1.5f, 0.3f });	
 	m_pColliderLedge->Set_Dynamic(true);					
 	m_pColliderLedge->Set_Trigger(true);					
 	m_pColliderLedge->Set_CenterPos(tmpPos);
@@ -272,10 +274,24 @@ HRESULT CPlayer::AddComponent()
 
 void CPlayer::KeyInput()
 {
+	if (m_bIsLedge)
+		return;
+
 	float fMoveSpeed = m_pCondition->Get_MoveSpeed() * m_pCondition->Get_MoveAccel() * m_pCondition->Get_MoveAccel() * m_pTimeMgr->GetDelta();
 	float fAngleSpeed = 90.f * m_pTimeMgr->GetDelta();
 
 	ShootType();
+
+
+	if (m_pKeyMgr->KeyDown(ENGINE::KEY_G))
+	{
+		if (m_eActState != W_GRENADE)
+		{
+			Grenade();
+			m_eActState = W_GRENADE;
+			m_bGrenade = true;
+		}
+	}
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LSHIFT))
 	{
@@ -375,33 +391,24 @@ void CPlayer::KeyInput()
 	{
 		if (!m_bCanLedge && !m_bIsLedge)
 		{
+			if (m_iJumpCount >= 2)
+				return;
+
+			++m_iJumpCount;
+
 			m_pRigid->Set_Accel({ 1, 1.5f, 1 });
 			m_pRigid->Set_IsJump(true);
 			m_pRigid->Set_IsGround(false);
 		}
 
-		if (m_bCanLedge)
+		if (m_bCanLedge && !m_bIsLedge)
 		{
-			float fLength_x = m_pTransform->GetPos().x - m_vLedgeVec.x;
-			float fLength_z = m_pTransform->GetPos().z - m_vLedgeVec.z;
-
-			(fLength_x > fLength_z ? fLength_z = 0 : fLength_x = 0);
-
-			D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + fLength_x * 0.95f , m_vLedgeVec.y + m_pCollider->Get_Radius().y + 0.1f , m_pTransform->GetPos().z + fLength_z * 0.95f };
-			m_pTransform->SetPos(tmpPos);
-			m_pCollider->LateUpdate(m_pTransform->GetPos());
-			m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
-				m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-				m_pTransform->GetPos().z });
-
-			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
-			D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x , m_pTransform->GetPos().y + 1 , m_pTransform->GetPos().z + tmpDir.z };
-
-			m_pColliderLedge->LateUpdate(tmpPos);
-
-			m_bCanLedge = false;
+			m_eActState = W_LEDGE;
 		}
 	}
+
+	if (m_bGrenade)
+		return;
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_1))
 	{
@@ -584,6 +591,7 @@ void CPlayer::Check_Physic()
 	{
 		if (m_pRigid->Get_IsGround() == true && m_pRigid->Get_IsFall() == false)
 		{
+			m_iJumpCount = 0;
 			return;
 		}
 
@@ -680,7 +688,7 @@ void CPlayer::Shoot()
 			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) + yRand;
 			fAngle[2] = 0;
 
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
+			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag , 10);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 			pInstance->Set_MapLayer(m_mapLayer);
 
@@ -901,6 +909,36 @@ void CPlayer::SpecialShot()
 	}
 }
 
+void CPlayer::Grenade()
+{
+	D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+	D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
+	D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
+	D3DXVECTOR3 tmpRight = dynamic_cast<CCamera*>(m_pCamera)->Get_Right();
+
+	if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
+	{
+		//D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
+		//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
+		//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
+
+		D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x - 0.5f * tmpUp.x,
+			dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 0.5f * tmpUp.y,
+			dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z - 0.5f * tmpUp.z };
+
+		float fAngle[3];
+
+		// 탄 퍼짐 관련
+		fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 90;
+		fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
+		fAngle[2] = 0;
+
+		CGameObject* pInstance = CGrenade::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, 60, m_pWInfo.eWeaponTag, 10);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::GRENADE, pInstance);
+		pInstance->Set_MapLayer(m_mapLayer);
+	}
+}
+
 void CPlayer::WeaponActState()
 {
 	switch (m_eActState)
@@ -953,6 +991,8 @@ void CPlayer::Check_Slide()
 	{
 		if (m_pCondition->Get_MoveAccel() > 0)
 		{
+			m_pCollider->Set_MaxY(-2);
+
 			float tmpX = m_pCondition->Get_MoveAccel() - m_pTimeMgr->GetDelta() * 3;
 			m_pCondition->Set_MoveAccel(tmpX);
 
@@ -975,6 +1015,8 @@ void CPlayer::Check_Slide()
 
 			else if (m_fSlideUp >= 2.f)
 			{
+				m_pCollider->Set_MaxY(0);
+
 				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(0.f);
 				m_pCondition->Set_Slide(false);
 				m_pCondition->Set_MoveAccel(1.f);
@@ -994,6 +1036,12 @@ void CPlayer::Check_Run()
 {
 	if (m_pCondition->Get_Run())
 	{
+		if (m_bIsLedge)
+		{
+			D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
+			dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
+		}
+
 		if (dynamic_cast<CCamera*>(m_pCamera)->Get_CamShakePos() == D3DXVECTOR3{ 0,0,0 } &&
 			!m_pRigid->Get_IsJump() && !m_pRigid->Get_IsFall())
 		{
@@ -1006,6 +1054,89 @@ void CPlayer::Check_Run()
 			D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
 			dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 		}
+	}
+}
+
+void CPlayer::Check_Ledge()
+{
+	if (m_eActState == W_LEDGE)
+	{
+		if (m_bIsLedge == false)
+		{
+			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(-35);
+
+			cout << "매달리지 아낫스" << endl;
+
+			float fLength_x = m_pTransform->GetPos().x - m_vLedgeVec.x;
+			float fLength_z = m_pTransform->GetPos().z - m_vLedgeVec.z;
+
+			(fLength_x > fLength_z ? fLength_x = 0 : fLength_z = 0);
+
+			D3DXVECTOR3 tmpPos1 = { m_pTransform->GetPos().x + fLength_x * 0.95f , m_vLedgeVec.y - 1.5f, m_pTransform->GetPos().z + fLength_z * 0.95f };
+			D3DXVECTOR3 tmpPos2 = { m_pTransform->GetPos().x + fLength_x * 0.95f , m_vLedgeVec.y + m_pCollider->Get_Radius().y + 0.2f , m_pTransform->GetPos().z + fLength_z * 0.95f };
+
+			m_pRigid->Set_UseGravity(false);
+
+			m_pTransform->SetPos(tmpPos1);
+			m_pCollider->LateUpdate(m_pTransform->GetPos());
+			m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+				m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+				m_pTransform->GetPos().z });
+
+			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+			D3DXVECTOR3 tmpPos3 = { m_pTransform->GetPos().x + tmpDir.x , m_pTransform->GetPos().y + 1, m_pTransform->GetPos().z + tmpDir.z };
+
+			m_pColliderLedge->LateUpdate(tmpPos3);
+
+			m_vLedgeUpVec = tmpPos2;
+			m_fLength_Y = m_pTransform->GetPos().y - tmpPos2.y;
+			m_bIsLedge = true;
+		}
+
+		if (m_bIsLedge)
+		{
+			if (m_pTransform->GetPos().y < m_vLedgeUpVec.y)
+			{
+				float yLength = (m_vLedgeUpVec.y - m_pTransform->GetPos().y);
+				D3DXVECTOR3 tmpDir = { 0,1,0 };
+				//D3DXVec3Normalize(&tmpDir, &tmpDir);
+				D3DXVECTOR3 tmpY = {};
+
+				m_pTransform->Move_AdvancedPos(tmpDir, 10 * m_pTimeMgr->GetDelta());
+
+				m_pCollider->LateUpdate(m_pTransform->GetPos());
+				m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+					m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+					m_pTransform->GetPos().z });
+
+				D3DXVECTOR3 tmpDir2 = m_pTransform->GetDir();
+				D3DXVECTOR3 tmpPos3 = { m_pTransform->GetPos().x + tmpDir2.x , m_pTransform->GetPos().y + 1, m_pTransform->GetPos().z + tmpDir2.z };
+
+				m_pColliderLedge->LateUpdate(tmpPos3);
+			}
+
+			else if (m_pTransform->GetPos().y >= m_vLedgeUpVec.y + 1)
+			{
+				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(0);
+
+				D3DXVECTOR3 tmpDir = { m_pTransform->GetDir().x , 0 ,m_pTransform->GetDir().z };
+				D3DXVECTOR3 tmpY = {};
+
+				m_pTransform->Move_AdvancedPos(tmpDir, 10 * m_pTimeMgr->GetDelta());
+				m_bCanLedge = false;
+				m_bIsLedge = false;
+				m_pRigid->Set_UseGravity(true);
+			}
+		}
+	}
+
+	else
+	{
+
+		cout << " 여 탑니다" << endl;
+		m_bCanLedge = false;
+		m_bIsLedge = false;
+		m_pRigid->Set_UseGravity(true);
 	}
 }
 

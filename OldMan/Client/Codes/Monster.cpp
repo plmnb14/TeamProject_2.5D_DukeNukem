@@ -28,12 +28,13 @@ CMonster::~CMonster()
 
 int CMonster::Update()
 {
-
 	if (m_bIsDead)
 		return DEAD_OBJ;
+
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	Check_Physic();
+	Check_Push();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	//Monster_Foward();
 	
@@ -69,7 +70,7 @@ void CMonster::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	cout << m_pCondition->Get_Hp() << endl;
+	//cout << m_pCondition->Get_Hp() << endl;
 
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
@@ -117,7 +118,7 @@ HRESULT CMonster::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 10.f, 8.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
 	m_fMaxRange = 19.0f;//최대사거리
@@ -259,6 +260,7 @@ HRESULT CMonster::AddComponent()
 
 	m_pCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
 	//빌보드 
 	pComponent = ENGINE::CBillborad::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
@@ -432,7 +434,7 @@ void CMonster::Monster_Shot()
 	//딜레이 만들기 
 	m_pTransform->MovePos(0.f);
 	ChangeTex(L"PigMan_Dead");
-	m_pAnimator->Set_Frame(0.f);
+	m_pAnimator->Set_Frame(0);
 	m_pAnimator->Stop_Animation(true);
 	//m_pCondition->Add_Hp(-1);
 
@@ -541,7 +543,7 @@ void CMonster::Monster_Dead()
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 		ChangeTex(L"PigMan_Dead");
 		m_pAnimator->Set_FrameAmp(1.f);
-		m_pAnimator->Set_Frame(5.0f);
+		m_pAnimator->Set_Frame(5);
 
 }
 
@@ -560,7 +562,7 @@ void CMonster::Monster_Attack()
 		//m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, fMove);
 	if (m_pMelleCollider->Get_IsCollision())
 	{
-		m_pCondition->Add_Hp(+1);
+		//m_pCondition->Add_Hp(+1);
 	}
 
 
@@ -634,6 +636,24 @@ void CMonster::ChangeTex(wstring _wstrTex)
 	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
 	NULL_CHECK(m_pTexture);
 
+}
+
+void CMonster::Check_Push()
+{
+	if(m_pRigid->Get_IsPush())
+	{ 
+		float m_fSpeed = m_pRigid->Get_Distance() * m_pRigid->Get_Distance() * m_pTimeMgr->GetDelta();
+		D3DXVECTOR3 vTmpDir = m_pRigid->Get_PushDir();
+
+		m_pTransform->Move_AdvancedPos(vTmpDir, m_fSpeed);
+		m_pRigid->Set_Distance(m_pRigid->Get_Distance() - m_pTimeMgr->GetDelta());
+
+		if (m_pRigid->Get_Distance() <= 0.2f)
+		{
+			m_pRigid->Set_Distance(0.f);
+			m_pRigid->Set_IsPush(false);
+		}
+	}
 }
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 

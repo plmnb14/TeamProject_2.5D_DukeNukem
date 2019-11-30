@@ -123,12 +123,7 @@ void CTrigger::CheckTriggerActive()
 		{
 			CPlayer* TmpPlayer = static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 
-			cout << "매달릴 수 있숩니다" << endl;
-
 			TmpPlayer->Set_LedgeVec(m_pTransform->GetPos());
-
-			cout << TmpPlayer->Get_CanLedge() << endl;
-			cout << TmpPlayer->Get_IsLedge() << endl;
 
 			if (TmpPlayer->Get_CanLedge() == false && TmpPlayer->Get_IsLedge() == false)
 			{

@@ -16,6 +16,7 @@ namespace ENGINE
 	class CBillborad;
 	class CCameraSubject;
 	class CRigidBody;
+	class CCondition;
 }
 
 class CCameraObserver;

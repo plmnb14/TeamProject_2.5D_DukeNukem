@@ -133,11 +133,11 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
 	
-	////// Monster
-	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
+	//// Monster
+	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
 	//octabrain
 	
 	// Skybox
@@ -434,11 +434,11 @@ void CStage::LoadMapObj()
 			pStair = nullptr;
 		}
 		// Monster
-		else if (!lstrcmp(szType, L"Pigman"))
-		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		}
+		//else if (!lstrcmp(szType, L"Pigman"))
+		//{
+		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//}
 		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{
@@ -521,6 +521,11 @@ void CStage::LoadMapObj()
 			pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
 			pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
 			pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+		}
+
+		else if (eObjType == ENGINE::OBJECT_TYPE::TRIGGER)
+		{
+			pTransform->SetSize(vSize);
 		}
 
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
