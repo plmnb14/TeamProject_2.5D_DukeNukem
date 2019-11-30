@@ -6,6 +6,12 @@ Door|Door_1|Tile128x128_71.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\
 Door|Door_2|Tile256x256_56.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_56.png
 Stair|Stair_1|Tile128x128_39.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_39.png
 Stair|Stair_2|Tile128x128_77.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_77.png
+Box_Wood|Box_Wood_0|Tile256x256_100.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_100.png
+Box_Wood|Box_Wood_1|Tile256x256_101.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_101.png
+Box_Metal|Box_Metal_0|Tile128x128_85.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_85.png
+Box_Metal|Box_Metal_1|Tile128x128_86.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_86.png
+Box_Metal|Box_Metal_2|Tile128x128_87.png|1|..\Client\Texture\Tiles\No_Animation\128 x 128\Tile128x128_87.png
+Box_Metal|Box_Metal_3|Tile256x256_102.png|1|..\Client\Texture\Tiles\No_Animation\256 x 256\Tile256x256_102.png
 HealPack|HealPack|Pack_2.png|1|..\Client\Texture\PickUp\No_Animation\Pack\Pack_2.png
 ArmorPack|ArmorPack|Pack_1.png|1|..\Client\Texture\PickUp\No_Animation\Pack\Pack_1.png
 JetPack|JetPack|JetPack_0.png|1|..\Client\Texture\PickUp\No_Animation\JetPack\JetPack_0.png

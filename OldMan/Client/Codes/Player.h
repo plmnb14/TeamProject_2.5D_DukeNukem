@@ -92,6 +92,7 @@ public:
 	void Set_LedgeVec(D3DXVECTOR3 _Vec) { m_vLedgeVec = _Vec; }
 	void Set_Grenade(bool _Grenade) { m_bGrenade = _Grenade; }
 	void Set_GrenadeCount(int _iCount) { m_iGrenadeCount = _iCount; }
+	void Set_WayPoint(int _Index) { m_iWaypoint_Index = _Index; }
 
 public:
 	bool Get_CanLedge() { return m_bCanLedge; }
@@ -167,6 +168,8 @@ private:
 	int	m_iJumpCount;
 	int m_iGrenadeCount;
 	int m_iMaxGrenadeCount;
+
+	int m_iWaypoint_Index;
 	
 
 };

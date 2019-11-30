@@ -85,7 +85,6 @@ void CCollisionMgr::CollisionPlayer_To_Trigger(list<CGameObject*>& rDstList, lis
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
 				rSrcCol->Set_IsCollision(true);
-				cout << "추ㅡㅇㄷㄹ" << endl;
 			}
 
 			else
@@ -140,15 +139,6 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 							rSrcTrans->GetPos().z });
 					}
 				}
-
-				//rDstCol->Set_Length({ 0,0,0 });
-				//rSrcCol->Set_Length({ 0,0,0 });
-
-				//if (rDst->Get_Tag() == ENGINE::PLAYER)
-				//	return;
-
-				//else if (rDst->Get_Tag() == ENGINE::MONSTER)
-				//	break;
 			}
 		}
 	}
@@ -459,8 +449,20 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 			// A 가 dynamic 이고 , B 도 dynamic 일 때
 			if (rDstBox->bIsDynamic && rSrtBox->bIsDynamic)
 			{
-				D3DXVECTOR3 tmpLength_Dst = Get_Length(rDstBox, rSrtBox, true);
-				D3DXVECTOR3 tmpLength_Srt = Get_Length(rDstBox, rSrtBox, true);
+				D3DXVECTOR3 tmpLength_Dst = {};
+				D3DXVECTOR3 tmpLength_Srt = {};
+
+
+				if(rSrc->Get_Tag() == ENGINE::STAIR)
+				{ 
+					tmpLength_Dst = Get_Stair_Length(rDstBox, rSrtBox, true);
+					tmpLength_Srt = Get_Stair_Length(rDstBox, rSrtBox, true);
+				}
+				else
+				{
+					tmpLength_Dst = Get_Length(rDstBox, rSrtBox, true);
+					tmpLength_Srt = Get_Length(rDstBox, rSrtBox, true);
+				}
 
 				(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength_Dst.x *= -1.f : tmpLength_Dst.x *= 1.f);
 				(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength_Dst.y *= -1.f : tmpLength_Dst.y *= 1.f);
@@ -477,13 +479,25 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst , ENGINE::CGameObject* 
 			// A 가 dynamic 이고 , B 는 Static 일 때
 			else if (rDstBox->bIsDynamic && !rSrtBox->bIsDynamic)
 			{
-				D3DXVECTOR3 tmpLength = Get_Length(rDstBox, rSrtBox);
-				
-				(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength.x *= -1.f : tmpLength.x *= 1.f);
-				(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength.y *= -1.f : tmpLength.y *= 1.f);
-				(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength.z *= -1.f : tmpLength.z *= 1.f);
+				D3DXVECTOR3 tmpLength_Dst = {};
 
-				_rDstCol->Set_Length(tmpLength);
+				if (rSrc->Get_Tag() == ENGINE::STAIR)
+				{
+					tmpLength_Dst = { 0, rSrtBox->vRadius.y * 2, 0 };
+
+					//tmpLength_Dst = Get_Stair_Length(rDstBox, rSrtBox, true);
+					//tmpLength_Dst.y = fabs(tmpLength_Dst.y);
+				}
+				else
+				{
+					tmpLength_Dst = Get_Length(rDstBox, rSrtBox, true);
+
+					(rDstBox->vCenterPos.x < rSrtBox->vCenterPos.x ? tmpLength_Dst.x *= -1.f : tmpLength_Dst.x *= 1.f);
+					(rDstBox->vCenterPos.y < rSrtBox->vCenterPos.y ? tmpLength_Dst.y *= -1.f : tmpLength_Dst.y *= 1.f);
+					(rDstBox->vCenterPos.z < rSrtBox->vCenterPos.z ? tmpLength_Dst.z *= -1.f : tmpLength_Dst.z *= 1.f);
+				}
+
+				_rDstCol->Set_Length(tmpLength_Dst);
 			}
 
 			// A 가 Static 이고 , B 는 dynamic 일 때
@@ -1301,6 +1315,32 @@ D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BO
 
 		vCross.x = 0;
 	}
+
+
+	if (_static)
+		return vCross * 0.5f;
+
+	else
+		return vCross;
+}
+
+D3DXVECTOR3 CCollisionMgr::Get_Stair_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BOXCOL * _TargetCollider, bool _static)
+{
+	D3DXVECTOR3 vMin = {};
+	D3DXVECTOR3 vMax = {};
+	D3DXVECTOR3 vCross = {};
+
+	vMax.x = min(_DistCollider->vMaxPos.x, _TargetCollider->vMaxPos.x);
+	vMax.y = min(_DistCollider->vMaxPos.y, _TargetCollider->vMaxPos.y);
+	vMax.z = min(_DistCollider->vMaxPos.z, _TargetCollider->vMaxPos.z);
+
+	vMin.x = max(_DistCollider->vMinPos.x, _TargetCollider->vMinPos.x);
+	vMin.y = max(_DistCollider->vMinPos.y, _TargetCollider->vMinPos.y);
+	vMin.z = max(_DistCollider->vMinPos.z, _TargetCollider->vMinPos.z);
+
+	vCross.x = 0;
+	vCross.y = vMax.y - vMin.y;
+	vCross.z = 0;
 
 
 	if (_static)

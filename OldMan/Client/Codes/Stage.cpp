@@ -367,7 +367,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/Map_Desert.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -378,6 +378,7 @@ void CStage::LoadMapObj()
 	D3DXVECTOR3 vPos, vSize, vAngle;
 	ENGINE::TERRAIN_TYPE eTerrainType;
 	int iIndex;
+	ENGINE::OBJECT_TYPE	tmpTag;
 
 	while (true)
 	{
@@ -442,7 +443,8 @@ void CStage::LoadMapObj()
 			pStair->ChangeTex(szName);
 
 			//eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
-			eObjType = ENGINE::OBJECT_TYPE::STAIR;
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			tmpTag = ENGINE::OBJECT_TYPE::STAIR;
 			pObject = pStair;
 			pStair = nullptr;
 		}
@@ -475,31 +477,25 @@ void CStage::LoadMapObj()
 		else if (!lstrcmp(szType, L"Trigger_WayPoint"))
 		{
 			CTrigger* pTrigger = nullptr;
-			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_WAYPOINT);
-			pTrigger->Set_Index(m_fTrigger_Index);
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_WAYPOINT, iIndex);
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;
-
-			m_fTrigger_Index++;
 		}
 
 		else if (!lstrcmp(szType, L"Trigger_Monster_Spawner"))
 		{
 			CTrigger* pTrigger = nullptr;
-			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_MONSTER_SPAWNER);
-			pTrigger->Set_Index(m_Monster_Index);
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_MONSTER_SPAWNER, iIndex);
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;
-
-			m_Monster_Index++;
 		}
 
 		else if (!lstrcmp(szType, L"Trigger_Item_Spawner"))
 		{
 			CTrigger* pTrigger = nullptr;
-			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_ITEM_SPAWNER);
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_ITEM_SPAWNER, iIndex);
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;
@@ -508,7 +504,7 @@ void CStage::LoadMapObj()
 		else if (!lstrcmp(szType, L"Trigger_Event"))
 		{
 			CTrigger* pTrigger = nullptr;
-			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_EVENT);
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_EVENT, iIndex);
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;
@@ -517,7 +513,7 @@ void CStage::LoadMapObj()
 		else if (!lstrcmp(szType, L"Trigger_Camera_Event"))
 		{
 			CTrigger* pTrigger = nullptr;
-			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_CAMERA_EVENT);
+			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_CAMERA_EVENT, iIndex);
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;
@@ -581,7 +577,7 @@ void CStage::LoadMapObj()
 		pTransform->SetPos(vPos);
 
 		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN
-			/*|| eObjType == ENGINE::OBJECT_TYPE::PROPS*/)
+			|| eObjType == ENGINE::OBJECT_TYPE::STAIR)
 		{
 			pTransform->SetSize(vSize);
 			pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
@@ -596,6 +592,9 @@ void CStage::LoadMapObj()
 
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
 		pObject->Set_MapLayer(m_mapLayer);
+
+		if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
+			pObject->Set_Tag(ENGINE::OBJECT_TYPE::STAIR);
 	}
 
 	CloseHandle(hFile);

@@ -25,7 +25,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pObserver(nullptr), m_bZoom(false), m_fMaxZoom(0), m_fMinZoom(0), m_bSpecial(0),
 	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0) ,m_bCanLedge(0), m_fLength_Y(0),
 	m_eActState(W_IDLE), m_vLedgeUpVec({0,0,0}), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0),
-	m_iGrenadeCount(0), m_iMaxGrenadeCount(0)
+	m_iGrenadeCount(0), m_iMaxGrenadeCount(0), m_iWaypoint_Index(0)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -157,7 +157,7 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_SpecialAttack(true);
 	m_pCondition->Set_Slide(false);
 	m_pCondition->Set_Run(false);
-	m_pCondition->Set_MoveSpeed(15.f);
+	m_pCondition->Set_MoveSpeed(20.f);
 	m_pCondition->Set_MoveAccel(1.f);
 	
 	
@@ -304,14 +304,14 @@ void CPlayer::KeyInput()
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_LSHIFT))
 	{
 		m_pCondition->Set_Run(true);
-		m_pCondition->Set_MoveSpeed(20.f);
+		m_pCondition->Set_MoveSpeed(28.f);
 	}
 
 	else if (m_pKeyMgr->KeyUp(ENGINE::KEY_LSHIFT))
 	{
 		m_pCondition->Set_Run(false);
 	
-		m_pCondition->Set_MoveSpeed(15.f);
+		m_pCondition->Set_MoveSpeed(20.f);
 		D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
 		dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 	}
@@ -326,7 +326,7 @@ void CPlayer::KeyInput()
 		m_pCondition->Set_MoveAccel(2.5f);
 		m_pCondition->Set_Slide(true);
 
-		m_pCondition->Set_MoveSpeed(10.f);
+		m_pCondition->Set_MoveSpeed(30.f);
 		D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
 		dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 
@@ -1014,18 +1014,18 @@ void CPlayer::Check_Slide()
 				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(tmpX * tmpX - 6);
 
 			else
-				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-2);
+				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-3);
 		}
 
 		else if (m_pCondition->Get_MoveAccel() <= 0)
 		{
 			//m_pCondition->Set_MoveAccel(0.f);
-			m_pCondition->Set_MoveSpeed(10.f);
+			m_pCondition->Set_MoveSpeed(20.f);
 
 			m_fSlideUp += m_pTimeMgr->GetDelta() * m_pTimeMgr->GetDelta() * 400 + 0.1f;
 
 			if (m_fSlideUp < 2.f)
-				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-2 + m_fSlideUp);
+				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-3 + m_fSlideUp);
 
 			else if (m_fSlideUp >= 2.f)
 			{
@@ -1034,12 +1034,12 @@ void CPlayer::Check_Slide()
 				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(0.f);
 				m_pCondition->Set_Slide(false);
 				m_pCondition->Set_MoveAccel(1.f);
-				m_pCondition->Set_MoveSpeed(10.f);
+				m_pCondition->Set_MoveSpeed(20.f);
 				m_fSlideUp = 0.f;
 
 				if (m_pCondition->Get_Run())
 				{
-					m_pCondition->Set_MoveSpeed(16.f);
+					m_pCondition->Set_MoveSpeed(28.f);
 				}
 			}
 		}

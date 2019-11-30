@@ -132,6 +132,32 @@ void CTrigger::CheckTriggerActive()
 
 			break;
 		}
+		case CTrigger::TRIGGER_EVENT:
+		{
+			break;
+		}
+
+		case CTrigger::TRIGGER_CAMERA_EVENT:
+		{
+			break;
+		}
+
+		case CTrigger::TRIGGER_ITEM_SPAWNER:
+		{
+			break;
+		}
+		case CTrigger::TRIGGER_MONSTER_SPAWNER:
+		{
+			break;
+		}
+		case CTrigger::TRIGGER_WAYPOINT:
+		{
+			cout << "웨이포인트 번호 : " << m_iIndex << endl;
+
+			break;
+		}
+
+
 		case CTrigger::TRIGGER_END:
 		{
 			m_bIsDead = true;
