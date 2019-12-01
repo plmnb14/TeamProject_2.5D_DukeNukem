@@ -153,24 +153,74 @@ HRESULT CDoor::AddComponent()
 void CDoor::Move()
 {
 	// Up Door
-	if (m_bIsOpened && m_pTransform->GetPos().y <= m_vOriPos.y + (m_fMoveDistY))
+	if (m_eDir == DOOR_UP)
+	{
+		if (m_bIsOpened && m_pTransform->GetPos().y <= m_vOriPos.y + (m_fMoveDistY))
+		{
+			D3DXVECTOR3 vMovePos =
+			{
+				m_pTransform->GetPos().x,
+				m_pTransform->GetPos().y + (m_fMoveSpeed * m_pTimeMgr->GetDelta()),
+				m_pTransform->GetPos().z };
+			m_pTransform->SetPos(vMovePos);
+		}
+		else if (!m_bIsOpened && m_pTransform->GetPos().y > m_vOriPos.y)
+		{
+			D3DXVECTOR3 vMovePos =
+			{
+				m_pTransform->GetPos().x,
+				m_pTransform->GetPos().y - (m_fMoveSpeed * m_pTimeMgr->GetDelta()),
+				m_pTransform->GetPos().z };
+			m_pTransform->SetPos(vMovePos);
+		}
+	}
+	
+	// Left
+	if (m_eDir == DOOR_LEFT)
+	{
+		if(m_bIsOpened && m_pTransform->GetPos().x <= m_vOriPos.x + (m_fMoveDistY))
+		{
+			D3DXVECTOR3 vMovePos =
+			{
+				m_pTransform->GetPos().x + (m_fMoveSpeed * m_pTimeMgr->GetDelta()),
+				m_pTransform->GetPos().y,
+				m_pTransform->GetPos().z };
+			m_pTransform->SetPos(vMovePos);
+		}
+	else if (!m_bIsOpened && m_pTransform->GetPos().y > m_vOriPos.y)
 	{
 		D3DXVECTOR3 vMovePos =
 		{
-			m_pTransform->GetPos().x, 
-			m_pTransform->GetPos().y + (m_fMoveSpeed * m_pTimeMgr->GetDelta()), 
+			m_pTransform->GetPos().x - (m_fMoveSpeed * m_pTimeMgr->GetDelta()),
+			m_pTransform->GetPos().y,
 			m_pTransform->GetPos().z };
 		m_pTransform->SetPos(vMovePos);
 	}
-	else if(!m_bIsOpened && m_pTransform->GetPos().y > m_vOriPos.y)
+	}
+
+	// Right
+	if (m_eDir == DOOR_RIGHT)
+	{
+		if(m_bIsOpened && m_pTransform->GetPos().x <= m_vOriPos.x + (m_fMoveDistY))
+		{
+			D3DXVECTOR3 vMovePos =
+			{
+				m_pTransform->GetPos().x - (m_fMoveSpeed * m_pTimeMgr->GetDelta()),
+				m_pTransform->GetPos().y,
+				m_pTransform->GetPos().z };
+			m_pTransform->SetPos(vMovePos);
+		}
+	else if (!m_bIsOpened && m_pTransform->GetPos().y > m_vOriPos.y)
 	{
 		D3DXVECTOR3 vMovePos =
 		{
-			m_pTransform->GetPos().x,
-			m_pTransform->GetPos().y - (m_fMoveSpeed * m_pTimeMgr->GetDelta()),
+			m_pTransform->GetPos().x + (m_fMoveSpeed * m_pTimeMgr->GetDelta()),
+			m_pTransform->GetPos().y,
 			m_pTransform->GetPos().z };
 		m_pTransform->SetPos(vMovePos);
 	}
+	}
+
 }
 
 void CDoor::CheckOpen()
@@ -193,7 +243,7 @@ void CDoor::CheckOpen()
 	}
 }
 
-CDoor* CDoor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CDoor* CDoor::Create(LPDIRECT3DDEVICE9 pGraphicDev, DOOR_DIR _eDir)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
@@ -204,6 +254,8 @@ CDoor* CDoor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 		ENGINE::Safe_Delete(pInstance);
 		return nullptr;
 	}
+
+	pInstance->m_eDir = _eDir;
 
 	return pInstance;
 }

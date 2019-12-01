@@ -16,6 +16,9 @@ namespace ENGINE
 
 class CDoor : public ENGINE::CGameObject
 {
+public:
+	enum DOOR_DIR { DOOR_LEFT, DOOR_RIGHT, DOOR_UP, DOOR_DOWN, DOOR_END };
+
 protected:
 	explicit CDoor(LPDIRECT3DDEVICE9 pGraphicDev);
 
@@ -44,7 +47,7 @@ protected:
 	void CheckOpen();
 
 public:
-	static CDoor* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CDoor* Create(LPDIRECT3DDEVICE9 pGraphicDev, DOOR_DIR _eDir = DOOR_DIR::DOOR_UP);
 
 protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -66,6 +69,7 @@ protected:
 	D3DXVECTOR3				m_vOriPos;
 	CGameObject*			m_pPlayer;
 
+	DOOR_DIR				m_eDir;
 };
 
 #define __DOOR_H__
