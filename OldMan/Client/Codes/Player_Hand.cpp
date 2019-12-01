@@ -314,6 +314,8 @@ void CPlayer_Hand::Weapon_Revolver()
 
 	case CPlayer::W_RELOAD:
 	{
+		m_pAnimator->Stop_Animation(false);
+
 		if (m_eOldAcState == CPlayer::W_IDLE)
 		{
 			m_pAnimator->Stop_Animation(false);

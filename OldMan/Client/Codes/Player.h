@@ -70,6 +70,7 @@ private:
 	void WeaponActState();
 
 private:
+	void Check_Weapon();
 	void Check_Physic();
 	void Check_Slide();
 	void Check_Run();

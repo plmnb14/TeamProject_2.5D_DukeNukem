@@ -113,10 +113,10 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject->Set_MapLayer(m_mapLayer);
 	//
 	// SMG
-	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ 8,0,0 });
-	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
+	//pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ 8,0,0 });
+	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 	
 	//// PumpShotgun
 	//pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,8 });
@@ -363,7 +363,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/Map_Desert_test.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");

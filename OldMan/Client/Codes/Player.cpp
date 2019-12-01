@@ -452,6 +452,11 @@ void CPlayer::KeyInput()
 	if (m_bGrenade)
 		return;
 
+	Check_Weapon();
+}
+
+void CPlayer::Check_Weapon()
+{
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_1))
 	{
 		// 근접 무기
@@ -469,7 +474,7 @@ void CPlayer::KeyInput()
 		{
 			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				//cout << "Revolver already selected" << endl;
+				cout << "Revolver already selected" << endl;
 
 				return;
 			}
@@ -507,19 +512,17 @@ void CPlayer::KeyInput()
 
 		else
 		{
-			if (m_eWeaponState != ENGINE::NO_WEAPON && m_eWeaponState != ENGINE::MELLE)
+			
+			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				if (m_eWeaponState == iter_find->second->eWeaponTag)
-				{
-					cout << "SMG already selected" << endl;
+				cout << "SMG already selected" << endl;
 
-					return;
-				}
+				return;
 			}
 
 			else
 			{
-				if (m_eWeaponState != ENGINE::MELLE && m_eWeaponState != ENGINE::NO_WEAPON)
+				if (m_eWeaponState != ENGINE::NO_WEAPON)
 				{
 					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
 
@@ -549,19 +552,19 @@ void CPlayer::KeyInput()
 
 		else
 		{
+			cout << "여까진 옵니다" << endl;
 
-			if (m_eWeaponState != ENGINE::NO_WEAPON && m_eWeaponState != ENGINE::MELLE)
+			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
-				if (m_eWeaponState == iter_find->second->eWeaponTag)
-				{
-					cout << "Pump_Shotgun already selected" << endl;
+				cout << "Pump_Shotgun already selected" << endl;
 
-					return;
-				}
+				return;
 			}
 
 			else
 			{
+				cout << "Is here?" << endl;
+
 				if (m_eWeaponState != ENGINE::NO_WEAPON)
 				{
 					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
@@ -737,7 +740,7 @@ void CPlayer::Shoot()
 			int iSound = rand() % 2;
 
 			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_SHOOT, 1.0f);
-			CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
+			//CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
 			switch (iSound)
 			{
 			case 0:
