@@ -16,6 +16,10 @@
 
 #include "Camera.h"
 #include "Monster.h"
+#include "PigMan.h"
+#include "OctaBrain.h"
+#include "Trooper.h"
+#include "Boss_Overload.h"
 
 #include "UI.h"
 #include "Number.h"
@@ -29,7 +33,6 @@
 #include "Weapon_SMG.h"
 #include "Weapon_Pump.h"
 #include "Weapon_Rocket.h"
-#include "Boss_Overload.h"
 
 #include "Player_Hand.h"
 
@@ -491,8 +494,22 @@ void CStage::LoadMapObj()
 			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
+		else if (!lstrcmp(szType, L"Octabrain"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
+		else if (!lstrcmp(szType, L"Trooper"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
+		else if (!lstrcmp(szType, L"Overload"))
+		{
+			pObject = CBoss_Overload::Create(m_pGraphicDev);
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
 		// Trigger
-
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{
 			CTrigger* pTrigger = nullptr;
