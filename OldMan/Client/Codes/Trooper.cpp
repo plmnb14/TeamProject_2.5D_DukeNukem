@@ -423,7 +423,7 @@ void CTrooper::Monster_Shot()
 
 	//딜레이 만들기 
 	m_pTransform->MovePos(0.f);
-	ChangeTex(L"PigMan_Dead");
+	ChangeTex(L"Trooper_DeadFall");
 	m_pAnimator->Set_Frame(0.f);
 	m_pAnimator->Stop_Animation(true);
 	//m_pCondition->Add_Hp(-1);
@@ -495,27 +495,13 @@ void CTrooper::Monster_Fire2()
 	float fDot_Player_Monster_Forward;                        // 몬스터의 정면을 구하기 위한 내적값 -> +정면 -후면 이다. 
 	fDot_Player_Monster_Forward = D3DXVec3Dot(&vMonster_Player_Dir, &vMonsterDir_Fowrd_Get);
 
-	//cout << Mon_RIght_Dir.x << "x" << endl;
-	//cout << Mon_RIght_Dir.y << "y" << endl;
-	//cout << Mon_RIght_Dir.z <<"z"<< endl;
-	//cout << vMonsterDir_Fowrd2.x<<"몬" << endl;
-	//	cout << vMonsterDir_Fowrd2.y << "몬" << endl;
-	//cout << vMonsterDir_Fowrd2.z << "몬" << endl;
-	//	cout << <<"y"<< endl;
-	//cout << Mon_RIght_Dir.z	<<"z"<< endl;
-	//cout << vMonsterPos.x<<"x2" << endl;
-	//cout << vMonsterPos.y<<"y2" << endl;
-	m_pAnimator->Stop_Animation(false);
 
-	ChangeTex(L"PigMan_PreFire");
-	m_pAnimator->Set_FrameAmp(0.5f);
 
 	//cout << fDot_Player_Monster_Forward << endl;
-	if (acos(fDot_Player_Monster_Forward) * 90 < 250)                                         // 정면일 경우만 사격한다. 
-	{
+
 		if (m_fTime > 1.8f)
 		{
-			ChangeTex(L"PigMan_Fire");
+			ChangeTex(L"Trooper_FireFront");
 			m_pAnimator->Set_FrameAmp(1.f);
 			m_pAnimator->Stop_Animation(false);
 
@@ -526,13 +512,13 @@ void CTrooper::Monster_Fire2()
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
 			m_fTime = 0;
 		}
-	}
 }
+
 
 void CTrooper::Monster_Dead()
 {
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
-	ChangeTex(L"PigMan_Dead");
+	ChangeTex(L"Trooper_DeadFall");
 	m_pAnimator->Set_FrameAmp(1.f);
 	m_pAnimator->Set_Frame(5.f);
 
@@ -604,25 +590,6 @@ void CTrooper::Object_Collison()
 
 }
 
-void CTrooper::ChangeTex(wstring _wstrTex)
-{
-	if (m_wstrTex.compare(_wstrTex) == 0)
-		return;
-
-	m_wstrTex = _wstrTex;
-
-	m_mapComponent.erase(L"Texture");
-	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
-	NULL_CHECK(pComponent);
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
-
-	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK(m_pTexture);
-
-}
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CTrooper::Monster_State_Set()
@@ -633,7 +600,7 @@ void CTrooper::Monster_State_Set()
 			Monster_Idle();
 			break;
 		case MONSTER_PURSUE:
-			Monster_Foward();
+			Player_Pursue(0.9f);
 			break;
 		case MONSTER_SHOT:
 			Monster_Shot();

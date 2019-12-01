@@ -110,7 +110,7 @@ HRESULT COctaBrain::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
-	m_fMaxRange = 24.0f;//최대사거리
+	m_fMaxRange = 40.0f;//최대사거리
 	m_fRange = 0.f;
 	m_fMinRange = 14.0f;
 	m_fAttack = 5.0f;
@@ -218,7 +218,7 @@ HRESULT COctaBrain::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"OctaBrain_Idle");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"OctaBrain_Idle");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -226,7 +226,7 @@ HRESULT COctaBrain::AddComponent()
 	NULL_CHECK_RETURN(m_pTexture, E_FAIL);
 
 	// Buffer
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Buffer_RcTex");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Buffer_RcTex");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Buffer", pComponent });
 
@@ -319,7 +319,8 @@ void COctaBrain::Player_Pursue(float _move)
 	m_MoveSpeed = 2.f* _move * m_pTimeMgr->GetDelta();   // 속도
 
 	m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, m_MoveSpeed);
-
+	m_pAnimator->Stop_Animation(true);
+	ChangeTex(L"OctaBrain_Idle");
 }
 
 void COctaBrain::Monster_Foward()
@@ -352,7 +353,7 @@ void COctaBrain::Monster_Foward()
 	if (m_fFowardDealy > 0.1) {
 		if (acos(fDot_Player_Monster_Forward) * 90 < 250)
 		{
-			m_pAnimator->Stop_Animation(false);
+			m_pAnimator->Stop_Animation(true);
 			ChangeTex(L"OctaBrain_Idle");
 			m_pAnimator->Set_Frame(0);
 			m_pAnimator->Set_FrameAmp(5.f);
@@ -454,28 +455,15 @@ void COctaBrain::Monster_Shot()
 	{
 		m_bShot = false;
 
-		//	if (acos(fDot_Player_Monster_Forward) * 90 > 250)
-		{
 			m_pAnimator->Stop_Animation(false);
 			m_pCondition->Set_Hit(false);
 			m_eNextState = MONSTER_PURSUE;
 			m_fHitTime = 0;
-
-			//if (fRange > 7)                                       //5 사거리 안에서 피격당할경우 위로 사격을 하게 만들어 논것이다. 착각하지마라
-			{
-				/*if (m_fDelayTime > 0.2)
-				{
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster_Dir_Top, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-				m_fHitTime = 0;
-				m_fDelayTime = 0;
-				m_eNextState = MONSTER_PURSUE;
-
-				}*/
+						
 			}
-		}
-	}
 }
+	
+
 
 
 
@@ -522,16 +510,14 @@ void COctaBrain::Monster_Fire2()
 	m_pAnimator->Set_FrameAmp(0.7f);
 	//m_pAnimator->Set_MaxFrame(4);
 	//cout << fDot_Player_Monster_Forward << endl;
-	if (acos(fDot_Player_Monster_Forward) * 90 < 250)                                         // 정면일 경우만 사격한다. 
-	{
-		if (m_fTime > 3.4f)
+	if (m_fTime > 3.4f)
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
 			m_fTime = 0;
 		}
 	}
-}
 
 void COctaBrain::Monster_Dead()
 {
@@ -604,28 +590,6 @@ void COctaBrain::Object_Collison()
 	// 그래서 그 각도에 겹치는게 없는지 판단하는게 맞다. 
 	// 벽 판단하기 
 	// 텍스처 넣기 
-
-
-}
-
-void COctaBrain::ChangeTex(wstring _wstrTex)
-{
-	if (m_wstrTex.compare(_wstrTex) == 0)
-		return;
-
-	m_wstrTex = _wstrTex;
-
-	m_mapComponent.erase(L"Texture");
-	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
-	NULL_CHECK(pComponent);
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
-
-	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK(m_pTexture);
-
 }
 
 void COctaBrain::Monster_State_Set()

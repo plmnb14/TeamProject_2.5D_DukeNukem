@@ -175,6 +175,15 @@
     <Filter Include="02.GameObject\04.Bullet\00. Grenade">
       <UniqueIdentifier>{13415ceb-6ff5-4575-b22f-b180d75d890a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster\01.Trooper">
+      <UniqueIdentifier>{d0a36835-8b66-4140-bf0c-13bdcaddfdb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Alien">
+      <UniqueIdentifier>{01b2d09b-2f84-4285-a66f-832104e7e31d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\02.PigMan">
+      <UniqueIdentifier>{0c963c3d-ddab-487a-8f63-d11da13dc34e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -337,13 +346,20 @@
     <ClInclude Include="..\Codes\Boss_Overload.h">
       <Filter>02.GameObject\09.Boss\00. Overload</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\PigMan.h" />
-    <ClInclude Include="..\Codes\Trooper.h" />
     <ClInclude Include="..\Codes\Effect_Guide.h">
       <Filter>02.GameObject\07.VFX\00. Effect\07. Guide</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Grenade.h">
       <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Trooper.h">
+      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\PigMan.h">
+      <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Alien.h">
+      <Filter>02.GameObject\05.Monster\03.Alien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -483,13 +499,20 @@
     <ClCompile Include="..\Codes\Boss_Overload.cpp">
       <Filter>02.GameObject\09.Boss\00. Overload</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\PigMan.cpp" />
-    <ClCompile Include="..\Codes\Trooper.cpp" />
     <ClCompile Include="..\Codes\Effect_Guide.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\07. Guide</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Grenade.cpp">
       <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Trooper.cpp">
+      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PigMan.cpp">
+      <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Alien.cpp">
+      <Filter>02.GameObject\05.Monster\03.Alien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -138,11 +138,11 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject->Set_MapLayer(m_mapLayer);
 	
 	////// Monster
-	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	////octabrain
+	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	//octabrain
 	
 	// Skybox
 	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_ufo.dds", pObject_Layer->Get_Player());
@@ -367,7 +367,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/Map_Desert.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -449,11 +449,11 @@ void CStage::LoadMapObj()
 			pStair = nullptr;
 		}
 		// Monster
-		//else if (!lstrcmp(szType, L"Pigman"))
-		//{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		//}
+		else if (!lstrcmp(szType, L"Pigman"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
 		// Trigger
 
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
@@ -522,7 +522,7 @@ void CStage::LoadMapObj()
 		// Weapon
 		else if (!lstrcmp(szType, L"Waepon_0"))
 		{
-			pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{0, 0, 0});
+			pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{ 0, 0, 0 });
 			eObjType = ENGINE::OBJECT_TYPE::EQUIPMENT;
 		}
 		else if (!lstrcmp(szType, L"Waepon_1"))
@@ -572,31 +572,31 @@ void CStage::LoadMapObj()
 			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
 		}
 
+		if (pObject != nullptr) {
+			ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
+			pTransform->SetPos(vPos);
 
-		ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
-		pTransform->SetPos(vPos);
+			if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN
+				|| eObjType == ENGINE::OBJECT_TYPE::STAIR)
+			{
+				pTransform->SetSize(vSize);
+				pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
+				pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
+				pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+			}
 
-		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN
-			|| eObjType == ENGINE::OBJECT_TYPE::STAIR)
-		{
-			pTransform->SetSize(vSize);
-			pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
-			pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
-			pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+			else if (eObjType == ENGINE::OBJECT_TYPE::TRIGGER)
+			{
+				pTransform->SetSize(vSize);
+			}
+
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
+			pObject->Set_MapLayer(m_mapLayer);
+
+			if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
+				pObject->Set_Tag(ENGINE::OBJECT_TYPE::STAIR);
 		}
-
-		else if (eObjType == ENGINE::OBJECT_TYPE::TRIGGER)
-		{
-			pTransform->SetSize(vSize);
-		}
-
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
-		pObject->Set_MapLayer(m_mapLayer);
-
-		if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
-			pObject->Set_Tag(ENGINE::OBJECT_TYPE::STAIR);
 	}
-
 	CloseHandle(hFile);
 }
 
