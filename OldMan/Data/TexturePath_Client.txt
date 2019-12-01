@@ -1,14 +1,14 @@
 MapObject|GlassBottle|Bottle_%d.png|12|..\Texture\MapObject\GlassBottle\Bottle_%d.png
 Alien|Ailen_AttackSide|Alien_Attack7.png|10|..\Texture\Monster\Alien\Ailen_AttackSide\Alien_Attack7.png
-Alien|Alien_Attack|Alien_Attack%d.png|7|..\Texture\Monster\Alien\Alien_Attack\Alien_Attack%d.png
+Alien|Alien_Attack|Alien_Attack%d.png|5|..\Texture\Monster\Alien\Alien_Attack\Alien_Attack%d.png
 Alien|Alien_BackRun|Alien_BackRun%d.png|4|..\Texture\Monster\Alien\Alien_BackRun\Alien_BackRun%d.png
 Alien|Alien_Dead|Alien_Dead%d.png|9|..\Texture\Monster\Alien\Alien_Dead\Alien_Dead%d.png
 Alien|Alien_Idle|Alien_Idle%d.png|5|..\Texture\Monster\Alien\Alien_Idle\Alien_Idle%d.png
-Alien|Alien_Jump|Alien_Attack_0000_tile4695.png|4|..\Texture\Monster\Alien\Alien_Jump\Alien_Attack_0000_tile4695.png
+Alien|Alien_Jump|Alien_Jump%d.png|3|..\Texture\Monster\Alien\Alien_Jump\Alien_Jump%d.png
 Alien|Alien_JumpBack|tile4694.png|3|..\Texture\Monster\Alien\Alien_JumpBack\tile4694.png
 Alien|Alien_JumpSide|Alien_Attack_0000_tile4702.png|8|..\Texture\Monster\Alien\Alien_JumpSide\Alien_Attack_0000_tile4702.png
 Alien|Alien_Run|Alien_Attack_0000_tile4636.png|9|..\Texture\Monster\Alien\Alien_Run\Alien_Attack_0000_tile4636.png
-Alien|Alien_RunFront|Alien_Attack_0000_tile4625.png|4|..\Texture\Monster\Alien\Alien_RunFront\Alien_Attack_0000_tile4625.png
+Alien|Alien_RunFront|Alien_RunFront%d.png|4|..\Texture\Monster\Alien\Alien_RunFront\Alien_RunFront%d.png
 Alien|Alien_RunSide|Alien_Attack_0000_tile4621.png|3|..\Texture\Monster\Alien\Alien_RunSide\Alien_Attack_0000_tile4621.png
 OctaBrain|OctaBrain_Dead|OctaBrain_Dead_%d.png|5|..\Texture\Monster\OctaBrain\OctaBrain_Dead\OctaBrain_Dead_%d.png
 OctaBrain|OctaBrain_DeadFall|OctaBrain_DeadFall_%d.png|1|..\Texture\Monster\OctaBrain\OctaBrain_DeadFall\OctaBrain_DeadFall_%d.png

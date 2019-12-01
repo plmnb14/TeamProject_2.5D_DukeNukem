@@ -525,6 +525,7 @@ void CPigMan::Monster_Fire2()
 		if (m_fTime > 2)
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+			pInstance->Set_MapLayer(m_mapLayer);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
 			m_fTime = 0;
 		}
@@ -610,28 +611,7 @@ void CPigMan::Object_Collison()
 	
 }
 
-<<<<<<< HEAD
-=======
-void CPigMan::ChangeTex(wstring _wstrTex)
-{
-	if (m_wstrTex.compare(_wstrTex) == 0)
-		return;
 
-	m_wstrTex = _wstrTex;
-
-	m_mapComponent.erase(L"Texture");
-	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
-	NULL_CHECK(pComponent);
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
-
-	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK(m_pTexture);
-
-}
->>>>>>> origin/MERGE_BRANCH
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CPigMan::Monster_State_Set()

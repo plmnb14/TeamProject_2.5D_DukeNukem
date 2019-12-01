@@ -28,7 +28,7 @@ protected:
 	enum STATE {
 		MONSTER_IDLE, MONSTER_PATROLL, MONSTER_PURSUE,
 		MONSTER_FIRE, MONSTER_MILL, MONSTER_DEAD, MONSTER_SHOT,
-		MONSTER_SIT, MONSTER_END
+		MONSTER_SIT, MONSTER_JUMP, MONSTER_END
 	};
 public:
 	virtual ~CMonster();
@@ -60,7 +60,7 @@ protected:											//물리
 	virtual void Check_Physic();
 	virtual void Object_Collison();
 	virtual void ChangeTex(wstring _wstrTex);
-	void Check_Push();
+	virtual	void Check_Push();
 
 
 
@@ -113,7 +113,7 @@ protected:
 	float					m_fFrame;
 	float					m_fFowardDealy;
 	float					m_fAttack;
-
+	float					m_JumpTiem;
 	STATE					m_eNextState;
 
 	wstring					m_wstrTex;      //텍스처

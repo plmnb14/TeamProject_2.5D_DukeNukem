@@ -27,6 +27,7 @@ int CAlien::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	Check_Physic();
+	Check_Push();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	//Monster_Foward();
 
@@ -46,9 +47,12 @@ void CAlien::LateUpdate()
 	D3DXMatrixIdentity(&m_matView);
 
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
-	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
+	D3DXVECTOR3 vSize;	
 	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+	
+	if (m_pObserver != nullptr)                                                                    //체크 
+		Cameramatrix = m_pObserver->GetViewMatrix();
+
 	vSize = m_pTransform->GetSize();
 
 	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
@@ -68,7 +72,6 @@ void CAlien::LateUpdate()
 	}
 	else
 	{
-
 		if (m_bShot)
 		{
 			m_eNextState = MONSTER_SHOT;
@@ -77,7 +80,7 @@ void CAlien::LateUpdate()
 		{
 			m_fRangeTiem += m_pTimeMgr->GetDelta();
 
-			if (m_fRangeTiem > 0.5)
+			if (m_fRangeTiem > 0.1)
 			{
 				Monster_Range();
 				m_fRangeTiem = 0;
@@ -86,7 +89,6 @@ void CAlien::LateUpdate()
 	}
 
 	m_bAttack = m_pMelleCollider->Get_IsCollision();
-
 
 	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
@@ -106,12 +108,12 @@ HRESULT CAlien::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
+	m_pTransform->SetPos(D3DXVECTOR3(5.f, 12.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
-	m_fMaxRange = 19.0f;//최대사거리
+	m_fMaxRange = 50.0f;//최대사거리
 	m_fRange = 0.f;
-	m_fMinRange = 11.0f;
+	m_fMinRange = 25.0f;
 	m_fAttack = 5.0f;
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
@@ -148,7 +150,7 @@ HRESULT CAlien::Initialize()
 	m_pGroundChekCollider->SetUp_Box();
 	//점프 트리거 콜라이더 필요함
 	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
-	m_pMelleCollider->Set_Radius({ 1.6f , 1.6f, 1.6f });
+	m_pMelleCollider->Set_Radius({ 5.6f , 5.6f, 5.6f });
 	m_pMelleCollider->Set_Dynamic(true);
 	m_pMelleCollider->Set_Trigger(true);
 	m_pMelleCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
@@ -209,7 +211,7 @@ HRESULT CAlien::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Alien_Idle");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Alien_Idle");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -290,25 +292,18 @@ HRESULT CAlien::AddComponent()
 }
 
 
-//정면 보는지 안보는지 하나 만들긴 해야됨 -> 각도에 따라서 렌더가 다르게 되야되기 때문이다. 
-// 360/ 8 /45 간격으로 그림을 출력하게 만들어야 됨 사격이 되는 각도는 
-// 4방향 에서는 사격이 가능해야 함 -> 45, 90,135,180 
-// 뒤를 볼 경우 사격을 안한다 -> 인지범위 도달 했을시 뒤이면 앞으로 돌게 설정 
-// 뒤일경우 데미지 더 받는 몬스터 하나 있음 
-//도는 순서를 정해야 한다. -> 왼쪽 -> 오른쪽 판단후 돌게 만들면된다. 
-// 
 void CAlien::Player_Pursue(float _move)
 {
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
-	//좌우 방향벡터로 내적을 구하고  그것으로 도는 방향을 결정하는 값을 구해서 그쪽으로 돌게만드는게 핵심 
-	// 플레이어의 중점을 받아서 가면 몬스터가 점점 가라앉는 문제가 생겨서 top으로 위치를 다르게 줌 
+	
 
 	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
-	m_MoveSpeed = 2.f* _move * m_pTimeMgr->GetDelta();   // 속도
-
+	m_MoveSpeed = 1.f* _move * m_pTimeMgr->GetDelta();   // 속도
+	ChangeTex(L"Alien_RunFront");
+	m_pAnimator->Set_FrameAmp(5.f);
 	m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, m_MoveSpeed);
 
 }
@@ -361,17 +356,17 @@ void CAlien::Monster_Range()
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos - vMonster_Pos;
-	float  fRange;
+	float  fRange,fJumpRange;
 	fRange = D3DXVec3Length(&(vMonster_Pos - vPlayer_Pos));				 // 사정거리
-
+	
+	fJumpRange = 12.f;
 	if (fRange < m_fMaxRange && fRange >m_fMinRange)
 	{
-		Player_Pursue(1.f);
-
+		m_eNextState = MONSTER_PURSUE;
 	}
-	else if (fRange <m_fMinRange && fRange>m_fAttack)
+	else if (fRange <m_fMinRange && fRange>fJumpRange)
 	{
-		 Monster_Jump();
+		m_eNextState = MONSTER_JUMP;
 	}
 	else if (fRange<m_fAttack)
 	{
@@ -411,7 +406,6 @@ void CAlien::Monster_Shot()
 	m_pAnimator->Stop_Animation(true);
 	//m_pCondition->Add_Hp(-1);
 
-
 	D3DXVECTOR3 vMonsterPos_ShotPoint = { vMonster_Pos.x - vMonster_RIght_Dir.x, vMonster_Pos.y - vMonster_RIght_Dir.y  ,vMonster_Pos.z - vMonster_RIght_Dir.z };
 
 	D3DXVECTOR3 vMonster = vPlayer_Pos_Top - vMonsterPos_ShotPoint;
@@ -426,29 +420,15 @@ void CAlien::Monster_Shot()
 	{
 		m_bShot = false;
 
-		//	if (acos(fDot_Player_Monster_Forward) * 90 > 250)
-		{
-			m_pAnimator->Stop_Animation(false);
-			m_pCondition->Set_Hit(false);
-			m_eNextState = MONSTER_PURSUE;
-			m_fHitTime = 0;
+		m_pAnimator->Stop_Animation(false);
+		m_pCondition->Set_Hit(false);
+		m_eNextState = MONSTER_PURSUE;
+		m_fHitTime = 0;
 
-			//if (fRange > 7)                                       //5 사거리 안에서 피격당할경우 위로 사격을 하게 만들어 논것이다. 착각하지마라
-			{
-				/*if (m_fDelayTime > 0.2)
-				{
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster_Dir_Top, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-				m_fHitTime = 0;
-				m_fDelayTime = 0;
-				m_eNextState = MONSTER_PURSUE;
-
-				}*/
-			}
-		}
 	}
+		
+	
 }
-
 
 
 void CAlien::Monster_Fire2()
@@ -491,15 +471,14 @@ void CAlien::Monster_Fire2()
 	//cout << vMonsterPos.y<<"y2" << endl;
 	m_pAnimator->Stop_Animation(false);
 
-	ChangeTex(L"PigMan_PreFire");
+	ChangeTex(L"Alien_Idle");
 	m_pAnimator->Set_FrameAmp(0.5f);
 
 	//cout << fDot_Player_Monster_Forward << endl;
-	if (acos(fDot_Player_Monster_Forward) * 90 < 250)                                         // 정면일 경우만 사격한다. 
-	{
+	
 		if (m_fTime > 1.8f)
 		{
-			ChangeTex(L"PigMan_Fire");
+			ChangeTex(L"Alien_Idle");
 			m_pAnimator->Set_FrameAmp(1.f);
 			m_pAnimator->Stop_Animation(false);
 
@@ -508,10 +487,11 @@ void CAlien::Monster_Fire2()
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
 			m_fTime = 0;
 		}
 	}
-}
+
 
 void CAlien::Monster_Dead()
 {
@@ -549,19 +529,21 @@ void CAlien::Monster_Attack()
 
 void CAlien::Check_Physic()
 {
+	Monster_Callcul();
 	if (m_pRigid->Get_IsJump() == true)
 	{
-		D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Jump(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) , 0 };
-		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
+		D3DXVECTOR3 JumpLength = { m_vMonster_Player_Dir.x,  m_pRigid->Set_Jump(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()),m_vMonster_Player_Dir.z };
+		float fMove;
+		fMove = 100.f * m_pTimeMgr->GetDelta();
+		m_pMelleCollider->Set_Enabled(true);
+		m_pTransform->Move_AdvancedPos(JumpLength,fMove);
 
 		if (m_pRigid->Get_Accel().y <= 0.f)
 		{
-			m_pRigid->Set_Accel({ 1, 1.5f, 1 });
+			m_pRigid->Set_Accel({ 1,0,1 });
 			m_pRigid->Set_IsFall(true);
 			m_pRigid->Set_IsJump(false);
-			D3DXVECTOR3  Monster_Jump = { m_vMonster_Player_Dir.x,0,m_vMonster_Player_Dir.z };
-
-			m_pTransform->Move_AdvancedPos(Monster_Jump, 2 * m_pTimeMgr->GetDelta());
+			
 		}
 	}
 
@@ -598,7 +580,18 @@ void CAlien::Object_Collison()
 
 void CAlien::Monster_Jump()
 {
-	
+	m_JumpTiem  += m_pTimeMgr->GetDelta();
+
+	if (m_JumpTiem > 1.f)
+	{
+		m_pRigid->Set_Accel({ 1, 1.5f, 1 });
+		m_pRigid->Set_IsJump(true);
+		m_pRigid->Set_IsGround(false);
+		m_JumpTiem = 0;
+
+	}
+
+
 }
 
 
@@ -625,6 +618,9 @@ void CAlien::Monster_State_Set()
 		break;
 	case MONSTER_MILL:
 		Monster_Attack();
+		break;
+	case MONSTER_JUMP:
+		Monster_Jump();
 		break;
 	}
 

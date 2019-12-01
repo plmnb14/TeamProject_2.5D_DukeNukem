@@ -1197,11 +1197,10 @@ void CPlayer::Check_Ledge()
 		{
 			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(-35);
 
-<<<<<<< HEAD
+
 		//	cout << "매달리지 아낫스" << endl;
 
-=======
->>>>>>> origin/MERGE_BRANCH
+
 			float fLength_x = m_pTransform->GetPos().x - m_vLedgeVec.x;
 			float fLength_z = m_pTransform->GetPos().z - m_vLedgeVec.z;
 
@@ -1267,11 +1266,7 @@ void CPlayer::Check_Ledge()
 
 	else
 	{
-<<<<<<< HEAD
 
-		//cout << " 여 탑니다" << endl;
-=======
->>>>>>> origin/MERGE_BRANCH
 		m_bCanLedge = false;
 		m_bIsLedge = false;
 		m_pRigid->Set_UseGravity(true);

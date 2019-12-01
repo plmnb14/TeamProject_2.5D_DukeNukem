@@ -38,7 +38,7 @@ int CMonster::Update()
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	Monster_Foward();
 
-	//Monster_State_Set();
+	Monster_State_Set();
 
 	//Player_Pursue();
 	//cout << m_pCondition->Get_Hp() << endl;
@@ -171,15 +171,6 @@ HRESULT CMonster::Initialize()
 	m_pMelleCollider->Set_Enabled(false);
 	m_pMelleCollider->Set_Type(ENGINE::COLLISION_AABB);
 
-	//일단 트리거 설정은 되었지만 -> 의문점 충돌을 판정하지만 
-	// 밀리 공격 상태는 어떤식으로 설정해야 하지? 
-	// 1. 물리 공격의 사거리가 되었을때까지 이동한후 플레이어를 공격한다. 
-	// 2. 여기서 공격은? 더 이동했다가 멈추는것을 말하는가?
-	// 3. 그럼 피격시 플레이어가 뒤로 밀리는 것인가 ? 
-	// 4.  다시 근접공격 가능한 거리까지 추적을 하는것 우선시 해야함 
-	// 5. 근접 가능한 공격 사거리까지 도달했을때 
-
-	//공중으로 안쫓게 해야한다. 
 
 	//컨디션 
 	m_pCondition->Set_Hp(100.f);
@@ -312,13 +303,6 @@ HRESULT CMonster::AddComponent()
 }
 
 
-//정면 보는지 안보는지 하나 만들긴 해야됨 -> 각도에 따라서 렌더가 다르게 되야되기 때문이다. 
-// 360/ 8 /45 간격으로 그림을 출력하게 만들어야 됨 사격이 되는 각도는 
-// 4방향 에서는 사격이 가능해야 함 -> 45, 90,135,180 
-// 뒤를 볼 경우 사격을 안한다 -> 인지범위 도달 했을시 뒤이면 앞으로 돌게 설정 
-// 뒤일경우 데미지 더 받는 몬스터 하나 있음 
-//도는 순서를 정해야 한다. -> 왼쪽 -> 오른쪽 판단후 돌게 만들면된다. 
-// 
 void CMonster::Player_Pursue(float _move)
 {
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
@@ -330,7 +314,9 @@ void CMonster::Player_Pursue(float _move)
 
 	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
 	m_MoveSpeed = 2.f* _move * m_pTimeMgr->GetDelta();   // 속도
-
+	m_pAnimator->Stop_Animation(false);
+	ChangeTex(L"PigMan_WalkFront");
+	m_pAnimator->Set_FrameAmp(5.f);
 	m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, m_MoveSpeed);
 
 }
@@ -543,26 +529,13 @@ void CMonster::Monster_Shot()
 	{
 		m_bShot = false;
 
-		//	if (acos(fDot_Player_Monster_Forward) * 90 > 250)
-		{
-			m_pAnimator->Stop_Animation(false);
-			m_pCondition->Set_Hit(false);
-			m_eNextState = MONSTER_PURSUE;
-			m_fHitTime = 0;
-
-			{
-				/*if (m_fDelayTime > 0.2)
-				{
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster_Dir_Top, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-				m_fHitTime = 0;
-				m_fDelayTime = 0;
-				m_eNextState = MONSTER_PURSUE;
-
-				}*/
-			}
-		}
+		m_pAnimator->Stop_Animation(false);
+		m_pCondition->Set_Hit(false);
+		m_eNextState = MONSTER_PURSUE;
+		m_fHitTime = 0;
+	
 	}
+	
 }
 
 
@@ -613,8 +586,8 @@ void CMonster::Monster_Fire2()
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
 			pInstance->Set_MapLayer(m_mapLayer);
+
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-			pInstance->Set_MapLayer(m_mapLayer);
 			m_fTime = 0;
 		}
 }

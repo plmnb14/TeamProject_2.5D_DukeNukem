@@ -47,8 +47,9 @@ void CTrooper::LateUpdate()
 
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
-	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+	if (m_pObserver != nullptr)                                                                    //체크 
+		Cameramatrix = m_pObserver->GetViewMatrix();
+
 	vSize = m_pTransform->GetSize();
 
 	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
@@ -209,7 +210,7 @@ HRESULT CTrooper::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"PigMan_Fire");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Trooper_WalkFront");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -308,7 +309,9 @@ void CTrooper::Player_Pursue(float _move)
 
 	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
 	m_MoveSpeed = 2.f* _move * m_pTimeMgr->GetDelta();   // 속도
-
+	ChangeTex(L"Trooper_WalkFront");
+	m_pAnimator->Set_FrameAmp(5.f);
+	m_pAnimator->Stop_Animation(false);
 	m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, m_MoveSpeed);
 
 }
@@ -340,25 +343,7 @@ void CTrooper::Monster_Foward()
 	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
 
-	if (m_fFowardDealy > 0.1) {
-		if (acos(fDot_Player_Monster_Forward) * 90 < 250)
-		{
-			m_pAnimator->Stop_Animation(false);
-			ChangeTex(L"OctaBrain_Idle");
-			m_pAnimator->Set_FrameAmp(5.f);
-			m_fFowardDealy = 0;
-			Player_Pursue(1.f);
-		}
-		else if (acos(fDot_Player_Monster_Forward) * 90 > 250)
-		{
-			m_pAnimator->Stop_Animation(false);
-			ChangeTex(L"OctaBrain_Idle");
-			m_pAnimator->Set_FrameAmp(5.f);
-			m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 10.f);
-			Player_Pursue(0.f);
-			m_fFowardDealy = 0;
-		}
-	}
+
 	//	cout<<m_pTransform->GetAngle(ENGINE::ANGLE_X)*180 <<"X"<<endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
@@ -370,8 +355,8 @@ void CTrooper::Monster_Foward()
 	//m_pTransform->SetDir(vMonster_Player_Dir);
 	//cout << test <<"좌우"<< endl;  
 	//cout << Dot2 <<"앞뒤"<< endl;
-
 }
+
 
 void CTrooper::Monster_Range()
 {
@@ -509,7 +494,9 @@ void CTrooper::Monster_Fire2()
 		if (m_fTime > 2)
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+			pInstance->Set_MapLayer(m_mapLayer);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+
 			m_fTime = 0;
 		}
 }

@@ -19,6 +19,7 @@
 #include "PigMan.h"
 #include "OctaBrain.h"
 #include "Trooper.h"
+#include "Alien.h"
 #include "Boss_Overload.h"
 
 #include "UI.h"
@@ -134,11 +135,11 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject->Set_MapLayer(m_mapLayer);
 	
 	////// Monster
-	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	////octabrain
+	pObject = CTrooper::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	//octabrain
 	
 	// Skybox
 	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_ufo.dds", pObject_Layer->Get_Player());
