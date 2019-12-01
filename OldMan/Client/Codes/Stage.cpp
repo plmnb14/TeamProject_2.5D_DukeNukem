@@ -86,7 +86,7 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
-	pTransform->SetPos({3,4,0});
+	pTransform->SetPos({3,6,0});
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());

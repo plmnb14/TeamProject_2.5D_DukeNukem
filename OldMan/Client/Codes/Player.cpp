@@ -1117,10 +1117,7 @@ void CPlayer::Check_Slide()
 				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(tmpX * tmpX - 6);
 
 			else
-<<<<<<< HEAD
 				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-3);
-=======
-				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-2);
 
 
 			if (!m_bPlaySlideSound)
@@ -1131,7 +1128,6 @@ void CPlayer::Check_Slide()
 
 				m_bPlaySlideSound = true;
 			}
->>>>>>> origin/MERGE_BRANCH
 		}
 
 		else if (m_pCondition->Get_MoveAccel() <= 0)
@@ -1266,24 +1262,21 @@ void CPlayer::Check_Ledge()
 
 	else
 	{
-<<<<<<< HEAD
-=======
-
-		//cout << " 여 탑니다" << endl;
->>>>>>> origin/MERGE_BRANCH
 		m_bCanLedge = false;
 		m_bIsLedge = false;
 		m_pRigid->Set_UseGravity(true);
 	}
 }
 
-<<<<<<< HEAD
+
 void CPlayer::Check_Grenade()
 {
 	if (m_iGrenadeCount > m_iMaxGrenadeCount)
 	{
 		m_iGrenadeCount = m_iMaxGrenadeCount;
-=======
+	}
+}
+
 void CPlayer::Check_Hitted()
 {
 	if (m_pRigid->Get_IsPushForUI())
@@ -1344,7 +1337,6 @@ void CPlayer::Check_WalkSound(bool _bIsRun)
 	else
 	{
 		m_fWalkSoundDelay += m_pTimeMgr->GetDelta();
->>>>>>> origin/MERGE_BRANCH
 	}
 }
 
