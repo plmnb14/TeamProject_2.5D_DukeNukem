@@ -268,6 +268,21 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 					}
 				}
 
+				if (rDst->Get_Tag() == ENGINE::BULLET_MONSTER &&
+					rSrc->Get_Tag() == ENGINE::PLAYER)
+				{
+					ENGINE::CRigidBody* rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
+
+					if (rSrcRigid != nullptr)
+					{
+						D3DXVECTOR3 vDirection = { 0, 0, 0 };
+						D3DXVec3Normalize(&vDirection, &rDstTrans->GetDir());
+
+						rSrcRigid->Set_IsPushForUI(true);
+						rSrcRigid->Set_PushDirForUI(vDirection);
+					}
+				}
+
 				rDstCol->Set_IsCollision(true);
 				rDst->Set_Tag(rSrc->Get_Tag());
 				rDst->SetDead();
@@ -322,6 +337,15 @@ void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CG
 				rSrcRigid->Set_Distance(D3DXVec3Length(&(vSrcPos - vDstPos)));
 				rSrcRigid->Set_IsPush(true);
 				rSrcRigid->Set_PushDir(vTmpDir);
+
+				if (rSrc->Get_Tag() == ENGINE::PLAYER)
+				{
+					if (rSrcRigid != nullptr)
+					{
+						rSrcRigid->Set_IsPushForUI(true);
+						rSrcRigid->Set_PushDirForUI(vTmpDir);
+					}
+				}
 			}
 		}
 

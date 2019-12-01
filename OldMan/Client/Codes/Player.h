@@ -75,6 +75,8 @@ private:
 	void Check_Run();
 	void Check_Ledge();
 	void Check_Grenade();
+	void Check_Hitted();
+	void Check_WalkSound(bool _bIsRun = false);
 
 public:
 	void Reload();
@@ -171,6 +173,10 @@ private:
 
 	int m_iWaypoint_Index;
 	
+	float	m_fWalkSoundDelay;
+	int		m_iWalkSoundIndex;
+
+	bool	m_bPlaySlideSound;
 
 };
 
