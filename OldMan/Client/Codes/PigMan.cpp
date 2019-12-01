@@ -48,7 +48,8 @@ void CPigMan::LateUpdate()
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
 	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+	if (m_pObserver != nullptr)
+		Cameramatrix = m_pObserver->GetViewMatrix();
 	vSize = m_pTransform->GetSize();
 
 	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
@@ -210,7 +211,7 @@ HRESULT CPigMan::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"PigMan_Fire");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"PigMan_Fire");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -609,6 +610,28 @@ void CPigMan::Object_Collison()
 	
 }
 
+<<<<<<< HEAD
+=======
+void CPigMan::ChangeTex(wstring _wstrTex)
+{
+	if (m_wstrTex.compare(_wstrTex) == 0)
+		return;
+
+	m_wstrTex = _wstrTex;
+
+	m_mapComponent.erase(L"Texture");
+	ENGINE::CComponent* pComponent = nullptr;
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
+	NULL_CHECK(pComponent);
+	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK(m_pTexture);
+
+}
+>>>>>>> origin/MERGE_BRANCH
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CPigMan::Monster_State_Set()

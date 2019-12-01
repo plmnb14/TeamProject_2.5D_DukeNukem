@@ -42,7 +42,7 @@ public:
 	void ChangeTex(wstring _wstrTex);
 	void SetSize(float _fSizeX, float _fSizeY);
 	void SetPos(D3DXVECTOR3 _vPos);
-	void SetAngle(float _fAngleDegree);
+	void SetAngle(float _fAngleRadian);
 	void SetVisible(bool _bIsVisible);
 	void SetIsAnim(bool _bIsAnim);
 

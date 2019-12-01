@@ -75,6 +75,8 @@ private:
 	void Check_Run();
 	void Check_Ledge();
 	void Check_Grenade();
+	void Check_Hitted();
+	void Check_WalkSound(bool _bIsRun = false);
 
 public:
 	void Reload();
@@ -101,7 +103,7 @@ public:
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
 	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
-	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { return m_mWeaponInfo[_eTag]; }
+	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { auto iter_find = m_mWeaponInfo.find(_eTag); if (m_mWeaponInfo.end() == iter_find) return nullptr; return m_mWeaponInfo[_eTag]; }
 	ENGINE::WEAPON_TAG	Get_WState() { return m_eWeaponState; }
 	int Get_GrenadeCount() { return m_iGrenadeCount; }
 
@@ -171,6 +173,10 @@ private:
 
 	int m_iWaypoint_Index;
 	
+	float	m_fWalkSoundDelay;
+	int		m_iWalkSoundIndex;
+
+	bool	m_bPlaySlideSound;
 
 };
 

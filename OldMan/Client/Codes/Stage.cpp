@@ -16,6 +16,10 @@
 
 #include "Camera.h"
 #include "Monster.h"
+#include "PigMan.h"
+#include "OctaBrain.h"
+#include "Trooper.h"
+#include "Boss_Overload.h"
 
 #include "UI.h"
 #include "Number.h"
@@ -29,7 +33,6 @@
 #include "Weapon_SMG.h"
 #include "Weapon_Pump.h"
 #include "Weapon_Rocket.h"
-#include "Boss_Overload.h"
 
 #include "Player_Hand.h"
 
@@ -49,13 +52,6 @@ CStage::~CStage()
 
 void CStage::Update()
 {
-	if (ENGINE::CKeyMgr::GetInstance()->KeyDown(ENGINE::KEY_Q))
-	{
-		ENGINE::CGameObject* pObj = CHittedCircle::Create(ENGINE::GetGraphicDev()->GetDevice(), CHittedCircle::SIZE_XL);
-		static_cast<CHittedCircle*>(pObj)->SetAngle(rand() % 360);
-		m_mapLayer[ENGINE::CLayer::UI]->AddObject(ENGINE::OBJECT_TYPE::UI, pObj);
-	}
-
 	ENGINE::CScene::Update();
 }
 
@@ -93,7 +89,7 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
-	pTransform->SetPos({0,4,0});
+	pTransform->SetPos({3,6,0});
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -138,11 +134,11 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject->Set_MapLayer(m_mapLayer);
 	
 	////// Monster
-	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
-	//octabrain
+	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
+	////octabrain
 	
 	// Skybox
 	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_ufo.dds", pObject_Layer->Get_Player());
@@ -171,13 +167,16 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 
+	float fUITop = 280.f;
+	float fUIBottom = -330.f;
+
 	// HP Number
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_HP);
 	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_HP Create Failed", E_FAIL);
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -330.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, fUITop, 0.f));
 
 	// Shield Number
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_SHIELD);
@@ -185,7 +184,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, -295.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, fUITop + 35.f, 0.f));
 	
 	// HP Icon
 	pObject = CUI::Create(m_pGraphicDev, L"HpIcon.png");
@@ -193,7 +192,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(10.f, 10.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -330.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, fUITop, 0.f));
 
 	// Shield Icon
 	pObject = CUI::Create(m_pGraphicDev, L"ArmorIcon.png");
@@ -201,7 +200,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(10.f, 13.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, -295.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, fUITop + 35.f, 0.f));
 	
 	// Bullet
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
@@ -209,7 +208,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -280.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, fUITop + 50.f, 0.f));
 
 	
 	// Grenade
@@ -218,7 +217,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, -230.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, fUITop + 100.f, 0.f));
 
 	
 	// Buller Line
@@ -227,7 +226,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(600.f, -310.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(600.f, fUITop + 20.f, 0.f));
 	
 	// HP Bar
 	pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_HP);
@@ -235,7 +234,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -330.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, fUITop, 0.f));
 	
 	// Shield Bar
 	pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_SHIELD);
@@ -243,7 +242,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, -295.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, fUITop + 35.f, 0.f));
 	
 	// Weapon Icon
 	pObject = CWeaponIcon::Create(m_pGraphicDev);
@@ -251,7 +250,7 @@ HRESULT CStage::Add_UI_Layer()
 	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
-	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(530.f, -330.f, 0.f));
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(530.f, fUITop, 0.f));
 
 	return S_OK;
 }
@@ -367,7 +366,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/Map_Desert.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/Map_Desert_test.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -437,25 +436,80 @@ void CStage::LoadMapObj()
 			pObject = pDoor;
 			pDoor = nullptr;
 		}
+		else if (!lstrcmp(szType, L"Door_Left"))
+		{
+			CDoor* pDoor = CDoor::Create(ENGINE::GetGraphicDev()->GetDevice(), CDoor::DOOR_LEFT);
+			pDoor->ChangeTex(szName);
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			pObject = pDoor;
+			pDoor = nullptr;
+		}
+		else if (!lstrcmp(szType, L"Door_Right"))
+		{
+			CDoor* pDoor = CDoor::Create(ENGINE::GetGraphicDev()->GetDevice(), CDoor::DOOR_RIGHT);
+			pDoor->ChangeTex(szName);
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			pObject = pDoor;
+			pDoor = nullptr;
+		}
 		else if (!lstrcmp(szType, L"Stair"))
 		{
 			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
 			pStair->ChangeTex(szName);
 
-			//eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
-			tmpTag = ENGINE::OBJECT_TYPE::STAIR;
+			tmpTag = ENGINE::OBJECT_TYPE::TERRAIN;
 			pObject = pStair;
 			pStair = nullptr;
 		}
+
+
+		else if (!lstrcmp(szType, L"Box_Wood"))
+		{
+			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pStair->ChangeTex(szName);
+		
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			tmpTag = ENGINE::OBJECT_TYPE::WOOD_BOX;
+			pObject = pStair;
+			pStair = nullptr;
+		}
+		
+		else if (!lstrcmp(szType, L"Box_Metal"))
+		{
+			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pStair->ChangeTex(szName);
+		
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			tmpTag = ENGINE::OBJECT_TYPE::METAL_BOX;
+			pObject = pStair;
+			pStair = nullptr;
+		}
+		
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
 			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
+		else if (!lstrcmp(szType, L"Octabrain"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
+		else if (!lstrcmp(szType, L"Trooper"))
+		{
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
+		else if (!lstrcmp(szType, L"Overload"))
+		{
+			pObject = CBoss_Overload::Create(m_pGraphicDev);
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
 		// Trigger
-
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{
 			CTrigger* pTrigger = nullptr;
@@ -522,7 +576,7 @@ void CStage::LoadMapObj()
 		// Weapon
 		else if (!lstrcmp(szType, L"Waepon_0"))
 		{
-			pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{ 0, 0, 0 });
+			pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{0, 0, 0});
 			eObjType = ENGINE::OBJECT_TYPE::EQUIPMENT;
 		}
 		else if (!lstrcmp(szType, L"Waepon_1"))
@@ -572,7 +626,14 @@ void CStage::LoadMapObj()
 			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
 		}
 
-		if (pObject != nullptr) {
+		else if (!lstrcmp(szType, L"AmmoBox_4"))
+		{
+			pObject = CPickupItem::Create(m_pGraphicDev, CPickupItem::ITEM_AMMOBOX_ROCKET);
+			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
+		}
+
+		if (pObject != nullptr)
+		{
 			ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
 			pTransform->SetPos(vPos);
 
@@ -595,8 +656,15 @@ void CStage::LoadMapObj()
 
 			if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
 				pObject->Set_Tag(ENGINE::OBJECT_TYPE::STAIR);
+
+			if (tmpTag == ENGINE::OBJECT_TYPE::METAL_BOX)
+				pObject->Set_Tag(ENGINE::OBJECT_TYPE::METAL_BOX);
+
+			if (tmpTag == ENGINE::OBJECT_TYPE::WOOD_BOX)
+				pObject->Set_Tag(ENGINE::OBJECT_TYPE::WOOD_BOX);
 		}
 	}
+
 	CloseHandle(hFile);
 }
 

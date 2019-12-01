@@ -1,2 +1,4 @@
-Pigman|Pigman|Walk_Front_0.png|1|..\Client\Texture\Monster\PigMan\PigMan_Walk_Front\Walk_Front_0.png
-Octabrain|Octabrain|Walk_Front_0.png|1|..\Client\Texture\Monster\PigMan\PigMan_Walk_Front\Walk_Front_0.png
+Pigman|Pigman|PigMan_WalkFront_0.png|1|..\Client\Texture\Monster\PigMan\PigMan_WalkFront\PigMan_WalkFront_0.png
+Octabrain|Octabrain|OctaBrain_Idle_0.png|1|..\Client\Texture\Monster\OctaBrain\OctaBrain_Idle\OctaBrain_Idle_0.png
+Trooper|Trooper|Trooper_WalkFront_0.png|1|..\Client\Texture\Monster\Trooper\Trooper_WalkFront\Trooper_WalkFront_0.png
+Overload|Overload|Overload_WalkFront_0.png|1|..\Client\Texture\Monster\Overload\Overload_WalkFront\Overload_WalkFront_0.png

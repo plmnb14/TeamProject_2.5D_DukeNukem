@@ -28,6 +28,7 @@ public:
 	void Set_IsLanding(bool _Land);
 	void Set_IsBound(bool _Bound);
 	void Set_IsPush(bool _Push);
+	void Set_IsPushForUI(bool _Push);
 
 public:
 	void Set_fMass(float _Mass);
@@ -42,6 +43,7 @@ public:
 	void Set_MaxAccel(D3DXVECTOR3 _MaxAccel = { 0.1f, 0.1f, 0.1f });
 	void Set_MaxSpeed(D3DXVECTOR3 _MaxSpeed = { 1.f, 1.f, 1.f });
 	void Set_PushDir(D3DXVECTOR3 _PushDir = { 0,0,1 });
+	void Set_PushDirForUI(D3DXVECTOR3 _PushDir = { 0,0,1 });
 
 public:
 	D3DXVECTOR3 Get_Accel() { return m_tRigid.vAccel; }
@@ -55,8 +57,10 @@ public:
 	bool Get_IsHit() { return m_tRigid.bIsHit; }
 	bool Get_IsLanding() { return m_tRigid.bIsLanding; }
 	bool Get_IsPush() { return m_tRigid.bIsPush; };
+	bool Get_IsPushForUI() { return m_tRigid.bIsPushForUI; };
 	float Get_Distance() { return m_tRigid.fDistance; }
 	D3DXVECTOR3 Get_PushDir() { return m_tRigid.vPushDir; }
+	D3DXVECTOR3 Get_PushDirForUI() { return m_tRigid.vPushDirForUI; }
 public:
 	float Get_Force() { return m_tRigid.fForce; }
 	

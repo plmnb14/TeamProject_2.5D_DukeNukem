@@ -152,7 +152,7 @@ void CTrigger::CheckTriggerActive()
 		}
 		case CTrigger::TRIGGER_WAYPOINT:
 		{
-			cout << "웨이포인트 번호 : " << m_iIndex << endl;
+			//cout << "웨이포인트 번호 : " << m_iIndex << endl;
 
 			break;
 		}

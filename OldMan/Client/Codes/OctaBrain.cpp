@@ -42,13 +42,15 @@ int COctaBrain::Update()
 
 void COctaBrain::LateUpdate()
 {
+
 	ENGINE::CGameObject::LateUpdate();
 	D3DXMatrixIdentity(&m_matView);
 
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
 	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+	if (m_pObserver != nullptr)
+		Cameramatrix = m_pObserver->GetViewMatrix();
 	vSize = m_pTransform->GetSize();
 
 	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
@@ -590,6 +592,31 @@ void COctaBrain::Object_Collison()
 	// 그래서 그 각도에 겹치는게 없는지 판단하는게 맞다. 
 	// 벽 판단하기 
 	// 텍스처 넣기 
+<<<<<<< HEAD
+=======
+
+
+}
+
+void COctaBrain::ChangeTex(wstring _wstrTex)
+{
+	if (m_wstrTex.compare(_wstrTex) == 0)
+		return;
+
+	m_wstrTex = _wstrTex;
+
+	m_mapComponent.erase(L"Texture");
+	ENGINE::CComponent* pComponent = nullptr;
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
+	NULL_CHECK(pComponent);
+	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK(m_pTexture);
+
+>>>>>>> origin/MERGE_BRANCH
 }
 
 void COctaBrain::Monster_State_Set()

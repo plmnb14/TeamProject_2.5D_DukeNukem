@@ -115,6 +115,8 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
+				cout << rSrc->Get_Tag() << endl;
+
 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
 
@@ -194,6 +196,8 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			if (Check_AABB(rDst, (*rSrc), rDstCol, rSrcCol))
 			{
+				cout << (*rSrc)->Get_Tag() << endl;
+
 				if (rDstRigid->Get_IsJump())
 					return;
 
@@ -253,14 +257,36 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 
 			if (Check_AABB_Bullet(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				if (rSrc->Get_Tag() != ENGINE::TERRAIN)
+				if (rSrc->Get_Tag() != ENGINE::TERRAIN && rSrc->Get_Tag() != ENGINE::STAIR && rSrc->Get_Tag() != ENGINE::METAL_BOX && rSrc->Get_Tag() != ENGINE::WOOD_BOX)
 				{
 					ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
 					ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
 
 					if (rSrcCon != nullptr)
 					{
-						rSrcCon->Add_Hp(-rDstCon->Get_Damage());
+						if (rSrcCon->Get_Armor() > 0)
+							rSrcCon->Add_Armor(-rDstCon->Get_Damage());
+
+						if (rSrcCon->Get_Armor() <= 0)
+						{
+							float fDamage = rDstCon->Get_Damage() + rSrcCon->Get_Armor();
+							rSrcCon->Add_Hp(-fDamage);
+						}
+					}
+				}
+
+				if (rDst->Get_Tag() == ENGINE::BULLET_MONSTER &&
+					rSrc->Get_Tag() == ENGINE::PLAYER)
+				{
+					ENGINE::CRigidBody* rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
+
+					if (rSrcRigid != nullptr)
+					{
+						D3DXVECTOR3 vDirection = { 0, 0, 0 };
+						D3DXVec3Normalize(&vDirection, &rDstTrans->GetDir());
+
+						rSrcRigid->Set_IsPushForUI(true);
+						rSrcRigid->Set_PushDirForUI(vDirection);
 					}
 				}
 
@@ -318,6 +344,15 @@ void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CG
 				rSrcRigid->Set_Distance(D3DXVec3Length(&(vSrcPos - vDstPos)));
 				rSrcRigid->Set_IsPush(true);
 				rSrcRigid->Set_PushDir(vTmpDir);
+
+				if (rSrc->Get_Tag() == ENGINE::PLAYER)
+				{
+					if (rSrcRigid != nullptr)
+					{
+						rSrcRigid->Set_IsPushForUI(true);
+						rSrcRigid->Set_PushDirForUI(vTmpDir);
+					}
+				}
 			}
 		}
 

@@ -60,21 +60,6 @@ namespace ENGINE
 		D3DXMATRIX matWorld;
 	}INFO;
 
-	typedef struct tagAbility	// 능력치, [ 가능 / 불가능 ] 여부
-	{
-		float fHitPoint;		// HP ( HitPoint)	 체력 수치
-		float fShieldPoint;		// SP ( ShieldPoint) 쉴드 수치
-
-		bool bCanAttack;		// 공격 가능 여부
-		bool bCanHit;			// 피격 가능 여부
-		bool bCanMove;			// 이동 가능 여부
-
-		bool bIsDead;
-		bool bIsAttack;
-		bool bIsHit;
-
-	}ABILITY;
-
 	typedef struct tagPhysic
 	{
 		float fDistance;		// 거리
@@ -137,8 +122,10 @@ namespace ENGINE
 		D3DXVECTOR3 vSpeed;
 		D3DXVECTOR3 vMaxSpeed;
 		D3DXVECTOR3 vPushDir;
+		D3DXVECTOR3 vPushDirForUI;
 
 		bool bIsPush;
+		bool bIsPushForUI; // for 피격 UI체크
 		bool bIsGravity; // 중력 영향력을 체크합니다.
 
 		bool bIsGround;	 // 땅인지 체크 합니다.

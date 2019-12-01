@@ -65,6 +65,11 @@ void CRigidBody::Set_IsPush(bool _Push)
 	m_tRigid.bIsPush = _Push;
 }
 
+void CRigidBody::Set_IsPushForUI(bool _Push)
+{
+	m_tRigid.bIsPushForUI = _Push;
+}
+
 void CRigidBody::Set_fMass(float _Mass)
 {
 	m_tRigid.fMass = _Mass;
@@ -113,6 +118,11 @@ void CRigidBody::Set_MaxSpeed(D3DXVECTOR3 _MaxSpeed)
 void CRigidBody::Set_PushDir(D3DXVECTOR3 _PushDir)
 {
 	m_tRigid.vPushDir = _PushDir;
+}
+
+void CRigidBody::Set_PushDirForUI(D3DXVECTOR3 _PushDir)
+{
+	m_tRigid.vPushDirForUI = _PushDir;
 }
 
 float CRigidBody::Set_Jump(D3DXVECTOR3 _TransForm , float _Time)

@@ -45,22 +45,22 @@ int CBullet::Update()
 
 			if (m_eTag == ENGINE::TERRAIN)
 			{
-				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
-				CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_DEAD, 1.0f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_DEAD);
 
-				int iSound = rand() % 3;
+				int iSound = rand() % 2;
 
 				switch (iSound)
 				{
 				case 0:
-					CSoundMgr::GetInstance()->MyPlaySound(L"RICOCHE4.ogg", CSoundMgr::UI);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Hit_4.ogg", CSoundMgr::BULLET_DEAD);
 					break;
 				case 1:
-					CSoundMgr::GetInstance()->MyPlaySound(L"RICOCHE5.ogg", CSoundMgr::UI);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Hit_5.ogg", CSoundMgr::BULLET_DEAD);
 					break;
-				case 2:
-					CSoundMgr::GetInstance()->MyPlaySound(L"RICOCHE3.ogg", CSoundMgr::UI);
-					break;
+				//case 2:
+				//	CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Hit_3.ogg", CSoundMgr::BULLET_DEAD);
+				//	break;
 				}
 
 				pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
@@ -71,6 +71,51 @@ int CBullet::Update()
 			{
 				pInstance = CEffect_BloodSplit::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
+				int iSound = rand() % 3;
+
+				switch (iSound)
+				{
+				case 0:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Monster_Hitted_1.ogg", CSoundMgr::MONSTER);
+					break;
+				case 1:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Monster_Hitted_2.ogg", CSoundMgr::MONSTER);
+					break;
+				case 2:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Monster_Hitted_3.ogg", CSoundMgr::MONSTER);
+					break;
+				}
+			}
+
+			if (m_eTag == ENGINE::PLAYER)
+			{
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER_VOICE, 1.0f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER_VOICE);
+				int iSound = rand() % 4;
+
+				switch (iSound)
+				{
+				case 0:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_1.wav", CSoundMgr::PLAYER_VOICE);
+					break;
+				case 1:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_2.ogg", CSoundMgr::PLAYER_VOICE);
+					break;
+				case 2:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_3.ogg", CSoundMgr::PLAYER_VOICE);
+					break;
+				case 3:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_4.ogg", CSoundMgr::PLAYER_VOICE);
+					break;
+				}
+
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 1.0f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_BloodSound_1.ogg", CSoundMgr::PLAYER);
+								
 			}
 
 			if (m_eWeaponTag == ENGINE::LUNCHER)
@@ -91,6 +136,10 @@ int CBullet::Update()
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX_HIT, pInstance);
 					pInstance->Set_MapLayer(m_mapLayer);
 				}
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_DEAD, 1.0f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_DEAD);
+				CSoundMgr::GetInstance()->MyPlaySound(L"RocketBullet_Hit_1.ogg", CSoundMgr::BULLET_DEAD);
+				
 			}
 
 			else

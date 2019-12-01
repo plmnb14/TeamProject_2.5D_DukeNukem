@@ -10,6 +10,7 @@
 #include "Condition.h"
 #include "SoundMgr.h"
 #include "Grenade.h"
+#include "HittedCircle.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -25,7 +26,8 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pObserver(nullptr), m_bZoom(false), m_fMaxZoom(0), m_fMinZoom(0), m_bSpecial(0),
 	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0) ,m_bCanLedge(0), m_fLength_Y(0),
 	m_eActState(W_IDLE), m_vLedgeUpVec({0,0,0}), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0),
-	m_iGrenadeCount(0), m_iMaxGrenadeCount(0), m_iWaypoint_Index(0)
+	m_iGrenadeCount(0), m_iMaxGrenadeCount(0), m_iWaypoint_Index(0),
+	m_fWalkSoundDelay(0.f), m_iWalkSoundIndex(0), m_bPlaySlideSound(false)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -49,6 +51,7 @@ int CPlayer::Update()
 	Check_Physic();
 	Check_Ledge();
 	Check_Grenade();
+	//Check_Hitted();
 	
 	UpdateObserverData();
 
@@ -112,10 +115,10 @@ HRESULT CPlayer::Initialize()
 
 	D3DXVec3Cross(&tmpRight, &tmpDir, &D3DXVECTOR3{0,1,0});
 
-	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y + 1 , m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
+	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y, m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
 
 	// 렛지 콜라이더
-	m_pColliderLedge->Set_Radius({ 0.3f , 1.5f, 0.3f });	
+	m_pColliderLedge->Set_Radius({ 0.3f , 2.0f, 0.3f });	
 	m_pColliderLedge->Set_Dynamic(true);					
 	m_pColliderLedge->Set_Trigger(true);					
 	m_pColliderLedge->Set_CenterPos(tmpPos);
@@ -326,7 +329,7 @@ void CPlayer::KeyInput()
 		m_pCondition->Set_MoveAccel(2.5f);
 		m_pCondition->Set_Slide(true);
 
-		m_pCondition->Set_MoveSpeed(30.f);
+		m_pCondition->Set_MoveSpeed(25.f);
 		D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
 		dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 
@@ -384,6 +387,12 @@ void CPlayer::KeyInput()
 		m_pTransform->Move_AdvancedPos(D3DXVECTOR3(vDir.x, 0.f, vDir.z), -fMoveSpeed);
 	}
 
+	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_W) || m_pKeyMgr->KeyPressing(ENGINE::KEY_A)||
+		m_pKeyMgr->KeyPressing(ENGINE::KEY_S) || (m_pKeyMgr->KeyPressing(ENGINE::KEY_D)))
+	{
+		Check_WalkSound();
+	}
+
 	if (m_pKeyMgr->KeyPressing(ENGINE::KEY_LEFT))
 	{
 		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, -fAngleSpeed);
@@ -413,6 +422,20 @@ void CPlayer::KeyInput()
 		{
 			m_eActState = W_LEDGE;
 		}
+
+		if (m_iJumpCount == 1)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Player_Jump.ogg", CSoundMgr::PLAYER);
+		}
+		else if (m_iJumpCount == 2)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER_VOICE, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER_VOICE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Player_DBJump.wav", CSoundMgr::PLAYER_VOICE);
+		}
+
 	}
 
 	if (m_bGrenade)
@@ -638,26 +661,77 @@ void CPlayer::Shoot()
 				m_eActState = W_ZOOMFIRE;
 		}
 
-
-		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 0.5f);
-
-		int iSound = rand() % 4;
-
-		switch (iSound)
+		switch (m_pWInfo.eWeaponTag)
 		{
-			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+		case ENGINE::WEAPON_TAG::MELLE:
+		{
+			break;
+		}
+		case ENGINE::WEAPON_TAG::LUNCHER:
+		{
+			int iSound = rand() % 3;
 
-		case 0:
-			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR1.wav", CSoundMgr::WEAPON);
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_SHOOT, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
+			switch (iSound)
+			{
+			case 0:
+				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_1.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			case 1:
+				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_2.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			case 2:
+				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_3.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			}
 			break;
-		case 1:
-			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR2.wav", CSoundMgr::WEAPON);
+		}
+		case ENGINE::WEAPON_TAG::REVOLVER:
+		case ENGINE::WEAPON_TAG::RIFLE:
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_SHOOT, 0.3f);
+
+			int iSound = rand() % 4;
+
+			switch (iSound)
+			{
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
+
+			case 0:
+				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_1.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			case 1:
+				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_2.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			case 2:
+				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_3.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			case 3:
+				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_4.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			}
 			break;
-		case 2:
-			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR3.wav", CSoundMgr::WEAPON);
+		}
+		case ENGINE::WEAPON_TAG::SMG:
+		{
+
+			int iSound = rand() % 2;
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_SHOOT, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
+			switch (iSound)
+			{
+			case 0:
+				CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Shoot_1.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			case 1:
+				CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Shoot_2.wav", CSoundMgr::BULLET_SHOOT);
+				break;
+			}
 			break;
-		case 4:
-			CSoundMgr::GetInstance()->MyPlaySound(L"REVOFR4.wav", CSoundMgr::WEAPON);
+		}
+		default:
 			break;
 		}
 
@@ -726,7 +800,7 @@ void CPlayer::Shoot()
 	{
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
-		CSoundMgr::GetInstance()->MyPlaySound(L"REVCLK1.wav", CSoundMgr::PLAYER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_AmountZero.wav", CSoundMgr::PLAYER);
 
 		m_pCondition->Set_RangeAttack(false);
 
@@ -828,6 +902,31 @@ void CPlayer::Shoot_Shotgun()
 		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;
 
 		cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_SHOOT, 0.5f);
+
+		int iSound = rand() % 5;
+
+		switch (iSound)
+		{
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
+
+		case 0:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_1.ogg", CSoundMgr::BULLET_SHOOT);
+			break;
+		case 1:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_2.ogg", CSoundMgr::BULLET_SHOOT);
+			break;
+		case 2:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_3.ogg", CSoundMgr::BULLET_SHOOT);
+			break;
+		case 3:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_4.ogg", CSoundMgr::BULLET_SHOOT);
+			break;
+		case 4:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_5.ogg", CSoundMgr::BULLET_SHOOT);
+			break;
+		}
 	}
 
 	if (m_pWInfo.wMagazineBullet <= 0)
@@ -839,6 +938,10 @@ void CPlayer::Shoot_Shotgun()
 
 		if (m_bZoom == true)
 			m_eActState = W_ZOOMOUT;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_AmountZero.wav", CSoundMgr::PLAYER);
 	}
 }
 
@@ -1015,6 +1118,16 @@ void CPlayer::Check_Slide()
 
 			else
 				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-3);
+
+
+			if (!m_bPlaySlideSound)
+			{
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Slide.ogg", CSoundMgr::PLAYER);
+
+				m_bPlaySlideSound = true;
+			}
 		}
 
 		else if (m_pCondition->Get_MoveAccel() <= 0)
@@ -1044,6 +1157,8 @@ void CPlayer::Check_Slide()
 			}
 		}
 	}
+	else
+		m_bPlaySlideSound = false;
 }
 
 void CPlayer::Check_Run()
@@ -1068,6 +1183,9 @@ void CPlayer::Check_Run()
 			D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
 			dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 		}
+
+		Check_WalkSound(true);
+		
 	}
 }
 
@@ -1079,8 +1197,11 @@ void CPlayer::Check_Ledge()
 		{
 			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(-35);
 
+<<<<<<< HEAD
 		//	cout << "매달리지 아낫스" << endl;
 
+=======
+>>>>>>> origin/MERGE_BRANCH
 			float fLength_x = m_pTransform->GetPos().x - m_vLedgeVec.x;
 			float fLength_z = m_pTransform->GetPos().z - m_vLedgeVec.z;
 
@@ -1146,19 +1267,86 @@ void CPlayer::Check_Ledge()
 
 	else
 	{
+<<<<<<< HEAD
 
 		//cout << " 여 탑니다" << endl;
+=======
+>>>>>>> origin/MERGE_BRANCH
 		m_bCanLedge = false;
 		m_bIsLedge = false;
 		m_pRigid->Set_UseGravity(true);
 	}
 }
 
+
 void CPlayer::Check_Grenade()
 {
 	if (m_iGrenadeCount > m_iMaxGrenadeCount)
 	{
 		m_iGrenadeCount = m_iMaxGrenadeCount;
+	}
+}
+
+void CPlayer::Check_Hitted()
+{
+	if (m_pRigid->Get_IsPushForUI())
+	{
+		CHittedCircle* pCircle = CHittedCircle::Create(m_pGraphicDev, CHittedCircle::SIZE_XL);
+
+		float fAngle = 0.f;
+		D3DXVECTOR3 vPlayerDir = {0, 0, 0};
+		D3DXVec3Normalize(&vPlayerDir, &m_pTransform->GetDir());
+		//fAngle = D3DXVec3Dot(&m_pRigid->Get_PushDirForUI(), &D3DXVECTOR3(0, 0, -1));
+		fAngle = D3DXVec3Dot(&m_pRigid->Get_PushDirForUI(), &vPlayerDir);
+		
+		if (m_pTransform->GetDir().x < 0)
+		{
+			fAngle *= -1.f;
+			fAngle += D3DXToRadian(180.f);
+		}
+
+		static_cast<CHittedCircle*>(pCircle)->SetAngle(fAngle);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::UI, pCircle);
+
+		m_pRigid->Set_IsPushForUI(false);
+	}
+}
+
+void CPlayer::Check_WalkSound(bool _bIsRun)
+{
+	if (!m_pRigid->Get_IsGround())
+		return;
+
+	float fDelay = 0.f;
+	if (_bIsRun)
+		fDelay = 0.34f;
+	else
+		fDelay = 0.4f;
+
+	if (m_fWalkSoundDelay >= fDelay)
+	{
+		m_fWalkSoundDelay = 0.f;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER_WALK, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER_WALK);
+
+		if (m_iWalkSoundIndex == 0)
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_1.wav", CSoundMgr::PLAYER_WALK);
+		else if (m_iWalkSoundIndex == 1)
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_2.wav", CSoundMgr::PLAYER_WALK);
+		else if (m_iWalkSoundIndex == 2)
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_3.wav", CSoundMgr::PLAYER_WALK);
+		else if (m_iWalkSoundIndex == 3)
+		{
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_4.wav", CSoundMgr::PLAYER_WALK);
+			m_iWalkSoundIndex = -1;
+		}
+
+		m_iWalkSoundIndex++;
+	}
+	else
+	{
+		m_fWalkSoundDelay += m_pTimeMgr->GetDelta();
 	}
 }
 
