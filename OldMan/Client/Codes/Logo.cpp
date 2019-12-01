@@ -3,6 +3,9 @@
 #include "SceneSelector.h"
 
 #include "LogoBack.h"
+#include "UI.h"
+#include "Number.h"
+#include "SoundMgr.h"
 
 CLogo::CLogo(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
@@ -60,6 +63,27 @@ HRESULT CLogo::Add_Object_Layer()
 
 HRESULT CLogo::Add_UI_Layer()
 {
+	// Object Layer
+	ENGINE::CLayer* pUILayer = ENGINE::CLayer::Create(m_pGraphicDev);
+	NULL_CHECK_MSG_RETURN(pUILayer, L"UI Layer Create Failed", E_FAIL);
+	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
+
+	// Title Background
+	ENGINE::CGameObject* pObject = CUI::Create(m_pGraphicDev, L"Title.png");
+	NULL_CHECK_MSG_RETURN(pObject, L"BG Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	static_cast<CUI*>(pObject)->SetSize(640,360);
+	pObject->Set_MapLayer(m_mapLayer);
+
+	// Loading Number
+	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_LOADING);
+	NULL_CHECK_MSG_RETURN(pObject, L"Number Create Failed", E_FAIL);
+	pUILayer->AddObject(ENGINE::OBJECT_TYPE::UI, pObject);
+	static_cast<CUI*>(pObject)->SetSize(6.f, 10.f);
+	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(555.f, -330.f, 0.f));
+	pObject->Set_MapLayer(m_mapLayer);
+	m_pLoadingPercent = pObject;
+
 	return S_OK;
 }
 
@@ -75,8 +99,33 @@ HRESULT CLogo::Initialize()
 
 	PipeLineSetUp();
 
+	// Add Texture
+	HRESULT hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
+		ENGINE::GetGraphicDev()->GetDevice(),
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::TEX_NORMAL,
+		L"Title.png",
+		L"../Texture/UI/No_Animation/Title/Title.png", 1);
+	FAILED_CHECK_MSG(hr, L"Title.png");
+
+	hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
+		ENGINE::GetGraphicDev()->GetDevice(),
+		ENGINE::RESOURCE_STATIC,
+		ENGINE::TEX_NORMAL,
+		L"Number",
+		L"../Texture/UI/Animation/Unusable/Number/Number_%d.png", 12);
+	FAILED_CHECK_MSG(hr, L"Number.png");
+	
+	// Add Buffer
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_RCTEX,
+		L"Buffer_RcTex");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
+
 	// Environment Layer
-	HRESULT hr = Add_Environment_Layer();
+	hr = Add_Environment_Layer();
 	FAILED_CHECK_RETURN(hr, E_FAIL);
 
 	// Object Layer
@@ -86,6 +135,11 @@ HRESULT CLogo::Initialize()
 	// UI Layer
 	hr = Add_UI_Layer();
 	FAILED_CHECK_RETURN(hr, E_FAIL);
+
+	// PlaySound
+	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 1.0f);
+	CSoundMgr::GetInstance()->StopAll();
+	CSoundMgr::GetInstance()->MyPlayBGM(L"Title Theme.mp3");
 
 	return S_OK;
 }
@@ -116,8 +170,11 @@ bool CLogo::Loading()
 		if ((ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount()) == 100)
 		{
 			cout << "Complete !!" << endl;
+			static_cast<CNumber*>(m_pLoadingPercent)->UpdateNumber(100);
 			return true;
 		}
+		else
+			static_cast<CNumber*>(m_pLoadingPercent)->UpdateNumber(ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount());
 
 		if ((ENGINE::GetResourceMgr()->Get_TextureCount() * 100 / ENGINE::GetTextureMgr()->Get_MaxTextureCount()) < 100)
 		{
