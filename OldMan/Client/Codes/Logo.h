@@ -47,6 +47,8 @@ private:
 private:
 	ENGINE::CManagement*	m_pManagement;
 	ENGINE::CResourceMgr*	m_pResourceMgr;
+
+	ENGINE::CGameObject*	m_pLoadingPercent;
 };
 
 #define __LOGO_H__

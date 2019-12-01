@@ -48,11 +48,10 @@ HRESULT CMainApp::Initialize()
 		m_pDeviceMgr->GetDevice());
 	FAILED_CHECK_MSG_RETURN(hr, L"InitManagement Failed", E_FAIL);
 
+	CSoundMgr::GetInstance()->Initialize();
+	
 	hr = m_pManagement->SceneChange(CSceneSelector(CSceneSelector::LOGO));
 	FAILED_CHECK_MSG_RETURN(hr, L"Logo Scene Change Failed", E_FAIL);	
-
-	CSoundMgr::GetInstance()->Initialize();
-
 
 	return S_OK;
 }

@@ -35,6 +35,7 @@
 #include "Weapon_Rocket.h"
 
 #include "Player_Hand.h"
+#include "SoundMgr.h"
 
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -294,13 +295,13 @@ HRESULT CStage::Initialize()
 		L"Buffer_CubeTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
 
-	//
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_RCTEX,
-		L"Buffer_RcTex");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
+	////
+	//hr = m_pResourceMgr->AddBuffer(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::CVIBuffer::BUFFER_RCTEX,
+	//	L"Buffer_RcTex");
+	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
 
 	// Environment Layer
 	hr = Add_Environment_Layer();
@@ -315,6 +316,11 @@ HRESULT CStage::Initialize()
 	FAILED_CHECK_RETURN(hr, E_FAIL);
 
 	LoadMapObj();
+
+	// PlayBGM
+	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 0.5f);
+	CSoundMgr::GetInstance()->StopAll();
+	CSoundMgr::GetInstance()->MyPlayBGM(L"Rip & Tear.mp3");
 
 	return S_OK;
 }
