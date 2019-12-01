@@ -80,6 +80,8 @@ namespace ENGINE
 		EQUIPMENT,
 		TRIGGER,
 		EXPLOSION,
+		METAL_BOX,
+		WOOD_BOX,
 		VFX,
 		CAMERA,
 		UI

@@ -115,6 +115,8 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
+				cout << rSrc->Get_Tag() << endl;
+
 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
 
@@ -194,6 +196,8 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			if (Check_AABB(rDst, (*rSrc), rDstCol, rSrcCol))
 			{
+				cout << (*rSrc)->Get_Tag() << endl;
+
 				if (rDstRigid->Get_IsJump())
 					return;
 
@@ -253,7 +257,7 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 
 			if (Check_AABB_Bullet(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				if (rSrc->Get_Tag() != ENGINE::TERRAIN)
+				if (rSrc->Get_Tag() != ENGINE::TERRAIN && rSrc->Get_Tag() != ENGINE::STAIR && rSrc->Get_Tag() != ENGINE::METAL_BOX && rSrc->Get_Tag() != ENGINE::WOOD_BOX)
 				{
 					ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
 					ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));

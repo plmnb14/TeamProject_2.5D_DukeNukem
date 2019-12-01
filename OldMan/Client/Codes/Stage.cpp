@@ -93,7 +93,7 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
-	pTransform->SetPos({0,4,0});
+	pTransform->SetPos({3,4,0});
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -448,6 +448,30 @@ void CStage::LoadMapObj()
 			pObject = pStair;
 			pStair = nullptr;
 		}
+
+
+		//else if (!lstrcmp(szType, L"Box_Wood"))
+		//{
+		//	CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+		//	pStair->ChangeTex(szName);
+		//
+		//	eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+		//	tmpTag = ENGINE::OBJECT_TYPE::WOOD_BOX;
+		//	pObject = pStair;
+		//	pStair = nullptr;
+		//}
+		//
+		//else if (!lstrcmp(szType, L"Box_Metal"))
+		//{
+		//	CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+		//	pStair->ChangeTex(szName);
+		//
+		//	eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+		//	tmpTag = ENGINE::OBJECT_TYPE::METAL_BOX;
+		//	pObject = pStair;
+		//	pStair = nullptr;
+		//}
+		
 		// Monster
 		//else if (!lstrcmp(szType, L"Pigman"))
 		//{
@@ -572,29 +596,43 @@ void CStage::LoadMapObj()
 			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
 		}
 
-
-		ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
-		pTransform->SetPos(vPos);
-
-		if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN
-			|| eObjType == ENGINE::OBJECT_TYPE::STAIR)
+		else if (!lstrcmp(szType, L"AmmoBox_4"))
 		{
-			pTransform->SetSize(vSize);
-			pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
-			pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
-			pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+			pObject = CPickupItem::Create(m_pGraphicDev, CPickupItem::ITEM_AMMOBOX_ROCKET);
+			eObjType = ENGINE::OBJECT_TYPE::PICKUP;
 		}
 
-		else if (eObjType == ENGINE::OBJECT_TYPE::TRIGGER)
+		if (pObject != nullptr)
 		{
-			pTransform->SetSize(vSize);
+			ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
+			pTransform->SetPos(vPos);
+
+			if (eObjType == ENGINE::OBJECT_TYPE::TERRAIN
+				|| eObjType == ENGINE::OBJECT_TYPE::STAIR)
+			{
+				pTransform->SetSize(vSize);
+				pTransform->SetAngle(vAngle.x, ENGINE::ANGLE_X);
+				pTransform->SetAngle(vAngle.y, ENGINE::ANGLE_Y);
+				pTransform->SetAngle(vAngle.z, ENGINE::ANGLE_Z);
+			}
+
+			else if (eObjType == ENGINE::OBJECT_TYPE::TRIGGER)
+			{
+				pTransform->SetSize(vSize);
+			}
+
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
+			pObject->Set_MapLayer(m_mapLayer);
+
+			if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
+				pObject->Set_Tag(ENGINE::OBJECT_TYPE::STAIR);
+
+			if (tmpTag == ENGINE::OBJECT_TYPE::METAL_BOX)
+				pObject->Set_Tag(ENGINE::OBJECT_TYPE::METAL_BOX);
+
+			if (tmpTag == ENGINE::OBJECT_TYPE::WOOD_BOX)
+				pObject->Set_Tag(ENGINE::OBJECT_TYPE::WOOD_BOX);
 		}
-
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
-		pObject->Set_MapLayer(m_mapLayer);
-
-		if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
-			pObject->Set_Tag(ENGINE::OBJECT_TYPE::STAIR);
 	}
 
 	CloseHandle(hFile);

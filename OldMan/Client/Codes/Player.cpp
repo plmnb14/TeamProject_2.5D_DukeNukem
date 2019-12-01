@@ -112,10 +112,10 @@ HRESULT CPlayer::Initialize()
 
 	D3DXVec3Cross(&tmpRight, &tmpDir, &D3DXVECTOR3{0,1,0});
 
-	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y + 1 , m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
+	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y, m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
 
 	// 렛지 콜라이더
-	m_pColliderLedge->Set_Radius({ 0.3f , 1.5f, 0.3f });	
+	m_pColliderLedge->Set_Radius({ 0.3f , 2.0f, 0.3f });	
 	m_pColliderLedge->Set_Dynamic(true);					
 	m_pColliderLedge->Set_Trigger(true);					
 	m_pColliderLedge->Set_CenterPos(tmpPos);
@@ -326,7 +326,7 @@ void CPlayer::KeyInput()
 		m_pCondition->Set_MoveAccel(2.5f);
 		m_pCondition->Set_Slide(true);
 
-		m_pCondition->Set_MoveSpeed(30.f);
+		m_pCondition->Set_MoveSpeed(25.f);
 		D3DXVECTOR3 vTemp = { 0 , 0 , 0 };
 		dynamic_cast<CCamera*>(m_pCamera)->Set_CamShakePos(vTemp);
 
@@ -1079,8 +1079,6 @@ void CPlayer::Check_Ledge()
 		{
 			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(-35);
 
-			cout << "매달리지 아낫스" << endl;
-
 			float fLength_x = m_pTransform->GetPos().x - m_vLedgeVec.x;
 			float fLength_z = m_pTransform->GetPos().z - m_vLedgeVec.z;
 
@@ -1146,8 +1144,6 @@ void CPlayer::Check_Ledge()
 
 	else
 	{
-
-		cout << " 여 탑니다" << endl;
 		m_bCanLedge = false;
 		m_bIsLedge = false;
 		m_pRigid->Set_UseGravity(true);
