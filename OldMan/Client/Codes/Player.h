@@ -103,7 +103,7 @@ public:
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
 	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
-	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { return m_mWeaponInfo[_eTag]; }
+	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { auto iter_find = m_mWeaponInfo.find(_eTag); if (m_mWeaponInfo.end() == iter_find) return nullptr; return m_mWeaponInfo[_eTag]; }
 	ENGINE::WEAPON_TAG	Get_WState() { return m_eWeaponState; }
 	int Get_GrenadeCount() { return m_iGrenadeCount; }
 

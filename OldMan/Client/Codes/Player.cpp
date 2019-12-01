@@ -53,7 +53,7 @@ int CPlayer::Update()
 	Check_Physic();
 	Check_Ledge();
 	Check_Grenade();
-	Check_Hitted();
+	//Check_Hitted();
 	
 	UpdateObserverData();
 
