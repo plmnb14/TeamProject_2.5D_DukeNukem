@@ -2,6 +2,7 @@
 #include "Elevator.h"
 #include "Trasform.h"
 #include "Collider.h"
+#include "SoundMgr.h"
 
 CElevator::CElevator(LPDIRECT3DDEVICE9 pGraphicDev)
 	:ENGINE::CGameObject(pGraphicDev),
@@ -183,7 +184,22 @@ void CElevator::CheckMove()
 
 	if (bIsCanOpen &&
 		m_pKeyMgr->KeyDown(ENGINE::KEY_F))
+	{
+		if (!m_bIsUp)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::VEHICLE, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::VEHICLE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Elevator_Start.wav", CSoundMgr::VEHICLE);
+		}
+		else
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::VEHICLE, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::VEHICLE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Elevator_Stop.wav", CSoundMgr::VEHICLE);
+		}
+
 		m_bIsUp = !m_bIsUp;
+	}
 
 }
 

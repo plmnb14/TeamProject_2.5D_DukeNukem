@@ -2,6 +2,7 @@
 #include "Door.h"
 #include "Trasform.h"
 #include "Collider.h"
+#include "SoundMgr.h"
 
 CDoor::CDoor(LPDIRECT3DDEVICE9 pGraphicDev)
 	:ENGINE::CGameObject(pGraphicDev),
@@ -183,7 +184,13 @@ void CDoor::CheckOpen()
 
 	if (bIsCanOpen &&
 		m_pKeyMgr->KeyDown(ENGINE::KEY_F))
+	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::VEHICLE, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::VEHICLE);
+		CSoundMgr::GetInstance()->MyPlaySound(L"DoorOpen.wav", CSoundMgr::VEHICLE);
+
 		m_bIsOpened = !m_bIsOpened;
+	}
 }
 
 CDoor* CDoor::Create(LPDIRECT3DDEVICE9 pGraphicDev)

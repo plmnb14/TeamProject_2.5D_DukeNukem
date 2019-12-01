@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "CameraObserver.h"
 #include "CameraSubject.h"
+#include "SoundMgr.h"
 
 CPickupItem::CPickupItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	:ENGINE::CGameObject(pGraphicDev),
@@ -178,6 +179,9 @@ void CPickupItem::Hitted()
 		if (pPlayerCondition->Get_Hp() > 100)
 			pPlayerCondition->Set_Hp(100);
 
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_HealthPack.wav", CSoundMgr::UI);
 		break;
 	}
 	case CPickupItem::ITEM_ARMORPACK:
@@ -189,6 +193,10 @@ void CPickupItem::Hitted()
 		pPlayerCondition->Set_Armor(pPlayerCondition->Get_Armor() + iAmount);
 		if (pPlayerCondition->Get_Armor() > 100)
 			pPlayerCondition->Set_Armor(100);
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_ArmorPack.wav", CSoundMgr::UI);
 		break;
 	}
 	case CPickupItem::ITEM_AMMOBOX_SHORT: // for SMG, Revolver
@@ -225,6 +233,10 @@ void CPickupItem::Hitted()
 			pPlayer->Set_WeaponInfo(ENGINE::WEAPON_TAG::REVOLVER, pWInfo);
 		}
 
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.wav", CSoundMgr::UI);
+
 		break;
 	}
 	case CPickupItem::ITEM_AMMOBOX_LONG: // for Rifle, Sniper Rifle
@@ -237,6 +249,11 @@ void CPickupItem::Hitted()
 		//if (pWInfo->wMaxBullet < pWInfo->wCurBullet)
 		//	pWInfo->wCurBullet = pWInfo->wMaxBullet;
 		//pPlayer->Set_WeaponInfo(pWInfo);
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.wav", CSoundMgr::UI);
+
 		break;
 	}
 	case CPickupItem::ITEM_AMMOBOX_SHOTGUN:
@@ -262,6 +279,11 @@ void CPickupItem::Hitted()
 				pWInfo->wCurBullet = pWInfo->wMaxBullet;
 			pPlayer->Set_WeaponInfo(ENGINE::WEAPON_TAG::SHOTGUN, pWInfo);
 		}
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.wav", CSoundMgr::UI);
+
 		break;
 	}
 	case CPickupItem::ITEM_AMMOBOX_ROCKET:
@@ -288,6 +310,11 @@ void CPickupItem::Hitted()
 				pWInfo->wCurBullet = pWInfo->wMaxBullet;
 			pPlayer->Set_WeaponInfo(ENGINE::WEAPON_TAG::LUNCHER, pWInfo);
 		}
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.wav", CSoundMgr::UI);
+
 		break;
 	}
 	}

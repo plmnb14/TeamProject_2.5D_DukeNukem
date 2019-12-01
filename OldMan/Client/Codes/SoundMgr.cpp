@@ -57,7 +57,8 @@ void CSoundMgr::MyPlaySound(TCHAR * pSoundKey, CHANNELID eID, bool bIsCanMulti)
 	}
 	else
 		FMOD_System_PlaySound(m_pSystem, FMOD_CHANNEL_FREE, iter->second, FALSE, &m_pChannelArr[eID]);
-	
+
+	FMOD_Channel_SetMode(m_pChannelArr[eID], FMOD_LOOP_OFF);
 	FMOD_System_Update(m_pSystem);
 }
 

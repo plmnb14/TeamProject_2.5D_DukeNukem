@@ -122,8 +122,10 @@ namespace ENGINE
 		D3DXVECTOR3 vSpeed;
 		D3DXVECTOR3 vMaxSpeed;
 		D3DXVECTOR3 vPushDir;
+		D3DXVECTOR3 vPushDirForUI;
 
 		bool bIsPush;
+		bool bIsPushForUI; // for 피격 UI체크
 		bool bIsGravity; // 중력 영향력을 체크합니다.
 
 		bool bIsGround;	 // 땅인지 체크 합니다.
