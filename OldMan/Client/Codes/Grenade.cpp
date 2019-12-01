@@ -65,7 +65,7 @@ int CGrenade::Update()
 		m_pTransform->SetAngle(m_pTransform->GetAngle(ENGINE::ANGLE_X) - m_pTimeMgr->GetDelta() * fabs(m_fOrigin_YAngle) * 4.f, ENGINE::ANGLE_X);
 	}
 
-	CGameObject* pInstance = CEffect_Guide::Create(m_pGraphicDev, m_pCollider->Get_CenterPos(), {0.2f,0.2f,0.2f});
+	CGameObject* pInstance = CEffect_Guide::Create(m_pGraphicDev, m_pCollider->Get_CenterPos(), {0.3f,0.3f,0.3f});
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
 
 	return NO_EVENT;
@@ -153,9 +153,9 @@ HRESULT CGrenade::Initialize()
 	m_pRigid->Set_fMass(1.f);								// 물체의 무게
 	m_pRigid->Set_fPower(5.f);								// 점프 파워
 
-	m_pRigid->Set_Speed({ 1.f , 1.f , 1.f });				// 각 축에 해당하는 속도
-	m_pRigid->Set_Accel({ 0.f, -1.f, 0.f });					// 각 축에 해당하는 Accel 값
-	m_pRigid->Set_MaxAccel({ 1.f , 1.f , 1.f });			// 각 축에 해당하는 MaxAccel 값
+	m_pRigid->Set_Speed({ 1.f , 1.2f , 1.f });				// 각 축에 해당하는 속도
+	m_pRigid->Set_Accel({ 0.f, -1.2f, 0.f });					// 각 축에 해당하는 Accel 값
+	m_pRigid->Set_MaxAccel({ 1.f , 1.2f , 1.f });			// 각 축에 해당하는 MaxAccel 값
 
 	m_fLifetime = 2.f;
 

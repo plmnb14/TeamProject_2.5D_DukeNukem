@@ -18,7 +18,7 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pSubject(ENGINE::GetCameraSubject()),
 	m_pObserver(nullptr), m_pBillborad(nullptr), m_bShot(false), m_pRigid(nullptr),
 	m_pMelleCollider(nullptr), m_pCondition(nullptr), m_pGroundChekCollider(nullptr), m_pAnimator(nullptr)
-	, m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_bAttack(false)
+	, m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_bAttack(false), m_fDeadTimer(0)
 {
 }
 CMonster::~CMonster()
@@ -543,9 +543,16 @@ void CMonster::Monster_Fire2()
 void CMonster::Monster_Dead()
 {
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
-		ChangeTex(L"PigMan_Dead");
-		m_pAnimator->Set_FrameAmp(1.f);
-		m_pAnimator->Set_Frame(5);
+	ChangeTex(L"PigMan_Dead");
+	m_pAnimator->Set_FrameAmp(1.f);
+	m_pAnimator->Set_Frame(5);
+
+	m_fDeadTimer += m_pTimeMgr->GetDelta();
+
+	if (m_fDeadTimer > 3)
+	{
+		m_bIsDead = true;
+	}
 
 }
 
@@ -690,6 +697,11 @@ void CMonster::Monster_State_Set()
 	
 }
 
+void CMonster::Set_Pos(D3DXVECTOR3 _Pos)
+{
+	m_pTransform->SetPos(_Pos);
+}
+
 CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
 {
 
@@ -703,6 +715,24 @@ CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
 		return nullptr;
 	}
 	pInstance->Set_Target(_Target);
+
+	return pInstance;
+}
+
+CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3DXVECTOR3 _Pos)
+{
+
+	NULL_CHECK_RETURN(pGraphicDev, nullptr);
+
+	CMonster* pInstance = new CMonster(pGraphicDev);
+
+	if (FAILED(pInstance->Initialize()))
+	{
+		ENGINE::Safe_Delete(pInstance);
+		return nullptr;
+	}
+	pInstance->Set_Target(_Target);
+	pInstance->Set_Pos(_Pos);
 
 	return pInstance;
 }

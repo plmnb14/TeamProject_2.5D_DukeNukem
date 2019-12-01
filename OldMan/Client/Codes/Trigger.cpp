@@ -3,13 +3,16 @@
 #include "Trasform.h"
 #include "Collider.h"
 #include "Player.h"
+#include "Monster.h"
+#include "SceneSelector.h"
 
 CTrigger::CTrigger(LPDIRECT3DDEVICE9 pGraphicDev)
 	:ENGINE::CGameObject(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
-	m_iIndex(0)
+	m_bNextStage(false),
+	m_iIndex(0), m_fTriggerTimer(0)
 {
 }
 
@@ -24,7 +27,6 @@ int CTrigger::Update()
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
-	CheckTriggerActive();
 
 	return NO_EVENT;
 }
@@ -33,13 +35,14 @@ void CTrigger::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
+	CheckTriggerActive();
 }
 
 void CTrigger::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &(m_pTransform->GetWorldMatrix()));
 
-	m_pBuffer->Render();
+	//m_pBuffer->Render();
 
 	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
@@ -115,9 +118,21 @@ void CTrigger::CheckTriggerActive()
 		{
 		case CTrigger::TRIGGER_NEXTSTAGE:
 		{
-			cout << "Next Stage Trigger ON!!!!!" << endl;
+			switch (m_iIndex)
+			{
+			case 0:
+			{
+				m_bNextStage = true;
+				CPlayer* TmpPlayer = static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+				TmpPlayer->Set_NextStage(true);
+				
+
+				//HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
+				//FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
+			}
 			m_bIsDead = true;
 			break;
+			}
 		}
 		case CTrigger::TRIGGER_LEDGE:
 		{
@@ -148,12 +163,402 @@ void CTrigger::CheckTriggerActive()
 		}
 		case CTrigger::TRIGGER_MONSTER_SPAWNER:
 		{
+			switch (m_iIndex)
+			{
+			case 0:
+			{
+				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 14,8,5 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 20,10,-4 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				m_bIsDead = true;
+				break;
+			}
+			case 1:
+			{
+				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 160,-2,33 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 155,2,18 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				m_bIsDead = true;
+				break;
+			}
+			case 2:
+			{
+				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 196,38,241 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 192,38,198 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 210,38,171 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 211,38,175 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 213,38,148 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				m_bIsDead = true;
+				break;
+			}
+			case 3:
+			{
+				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 74,8,208 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				m_bIsDead = true;
+				break;
+			}
+			case 4:
+			{
+				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 54,8,184 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 30,20,181 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 78,0,299 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 71,0,309 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 74,0,326 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 30,0,303 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 32,0,319 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+
+
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 2,0,325 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 10,0,361 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 30,0,371 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 35,0,391 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 34,0,397 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 74,0,388 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 118,0,364 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 133,0,331 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 165,8,319 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 132,8,247 });
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+
+				m_bIsDead = true;
+				break;
+			}
+
+			case 20:
+			{
+				m_fTriggerTimer += 60 * m_pTimeMgr->GetDelta();
+
+				CGameObject* pObject = nullptr;
+
+				if (int(m_fTriggerTimer) == 20)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -24,-6,12 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 40)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -22,-6,37 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 50)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 28,-6,22 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 70)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -53,-6,32 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					m_bIsDead = true;
+				}
+
+				break;
+			}
+
+			case 21:
+			{
+				m_fTriggerTimer += 60 * m_pTimeMgr->GetDelta();
+
+				CGameObject* pObject = nullptr;
+
+				if (int(m_fTriggerTimer) == 20)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 67,-17,121 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 30)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 86,-17,102 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 60)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 61,-9,89 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 70)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), {41,-17,159 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 100)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 41,-33,148 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					m_bIsDead = true;
+				}
+
+				break;
+			}
+
+			case 22:
+			{
+				m_fTriggerTimer += 60 * m_pTimeMgr->GetDelta();
+
+				CGameObject* pObject = nullptr;
+
+				if (int(m_fTriggerTimer) == 0)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 2,-56,121 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 10)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -29,-54,138 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 0,-54,173 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 60)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 42,-35,134 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 22,-35,99 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 90)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 34,-59,165 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 24,-58,180 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 25,-50,130 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 150)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -57,-58,116 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -65,-52,106 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -88,-44,156 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -109,-28,147 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 100)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 41,-33,148 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					m_bIsDead = true;
+				}
+
+				break;
+			}
+
+			case 23:
+			{
+				m_fTriggerTimer += 60 * m_pTimeMgr->GetDelta();
+
+				CGameObject* pObject = nullptr;
+
+				if (int(m_fTriggerTimer) == 10)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 29,-47,240 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 30)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 17,-35, 226 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					m_bIsDead = true;
+				}
+
+				break;
+			}
+
+			case 24:
+			{
+				m_fTriggerTimer += 60 * m_pTimeMgr->GetDelta();
+
+				CGameObject* pObject = nullptr;
+
+				if (int(m_fTriggerTimer) == 10)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 48,-49,353 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 20)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 30,-49, 364 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 50)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 7,-49, 367 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 60)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -16,-46, 348 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 70)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -13,-48, 308 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+
+				if (int(m_fTriggerTimer) == 120)
+				{
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -21,-42, 264 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 2,-44, 255 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { -32,-38, 290 });
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				break;
+			}
+
 			break;
-		}
+			}
 		case CTrigger::TRIGGER_WAYPOINT:
 		{
-			//cout << "웨이포인트 번호 : " << m_iIndex << endl;
-
 			break;
 		}
 
@@ -165,6 +570,7 @@ void CTrigger::CheckTriggerActive()
 		}
 		default:
 			break;
+		}
 		}
 	}
 }

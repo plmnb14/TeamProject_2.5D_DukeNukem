@@ -16,9 +16,6 @@
     <Filter Include="01.Scene\00.Logo">
       <UniqueIdentifier>{0620ad4e-74e4-49ef-b59c-4026602883da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Scene\01.Stage">
-      <UniqueIdentifier>{e330d9d5-f46a-428e-8beb-5a23c0483f80}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject">
       <UniqueIdentifier>{7df75f38-a6b3-4ed4-898b-0577fec2ef96}</UniqueIdentifier>
     </Filter>
@@ -175,6 +172,12 @@
     <Filter Include="02.GameObject\04.Bullet\00. Grenade">
       <UniqueIdentifier>{13415ceb-6ff5-4575-b22f-b180d75d890a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\02.Stage_02">
+      <UniqueIdentifier>{6de1d695-119a-4cfb-ba6e-8b12628dc027}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\01.Stage_01">
+      <UniqueIdentifier>{e330d9d5-f46a-428e-8beb-5a23c0483f80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -208,7 +211,7 @@
       <Filter>01.Scene\00.Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Stage.h">
-      <Filter>01.Scene\01.Stage</Filter>
+      <Filter>01.Scene\01.Stage_01</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\SceneSelector.h">
       <Filter>01.Scene</Filter>
@@ -345,6 +348,9 @@
     <ClInclude Include="..\Codes\Grenade.h">
       <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Stage_02.h">
+      <Filter>01.Scene\02.Stage_02</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -360,7 +366,7 @@
       <Filter>01.Scene\00.Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Stage.cpp">
-      <Filter>01.Scene\01.Stage</Filter>
+      <Filter>01.Scene\01.Stage_01</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Player.cpp">
       <Filter>02.GameObject\00.Player</Filter>
@@ -490,6 +496,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Grenade.cpp">
       <Filter>02.GameObject\04.Bullet\00. Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage_02.cpp">
+      <Filter>01.Scene\02.Stage_02</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -90,7 +90,7 @@ HRESULT CWeapon_SMG::Initialize()
 
 	m_pWInfo.fBullet_Speed = 200.f;
 
-	m_pWInfo.wWeaponDamage = 2;				// 무기 데미지
+	m_pWInfo.wWeaponDamage = 15;				// 무기 데미지
 	m_pWInfo.eWeaponTag = ENGINE::SMG;
 
 

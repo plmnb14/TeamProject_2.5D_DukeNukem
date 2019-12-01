@@ -24,10 +24,11 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE), m_fZoomAccel(0),
 	m_pObserver(nullptr), m_bZoom(false), m_fMaxZoom(0), m_fMinZoom(0), m_bSpecial(0),
-	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0) ,m_bCanLedge(0), m_fLength_Y(0),
-	m_eActState(W_IDLE), m_vLedgeUpVec({0,0,0}), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0),
+	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0), m_bCanLedge(0), m_fLength_Y(0),
+	m_eActState(W_IDLE), m_vLedgeUpVec({ 0,0,0 }), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0),
 	m_iGrenadeCount(0), m_iMaxGrenadeCount(0), m_iWaypoint_Index(0),
-	m_fWalkSoundDelay(0.f), m_iWalkSoundIndex(0), m_bPlaySlideSound(false)
+	m_fWalkSoundDelay(0.f), m_iWalkSoundIndex(0), m_bPlaySlideSound(false),
+	m_bOnNextStage(false)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -39,8 +40,6 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
-	cout << m_eTag << endl;
-
 	if (m_bIsDead)
 		return DEAD_OBJ;
 	
@@ -53,7 +52,8 @@ int CPlayer::Update()
 	Check_Physic();
 	Check_Ledge();
 	Check_Grenade();
-	//Check_Hitted();
+	Check_Dead();
+	Check_Hitted();
 	
 	UpdateObserverData();
 
@@ -499,6 +499,7 @@ void CPlayer::Check_Weapon()
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				m_bCanAttack = true;
 			}
 		}
 	}
@@ -539,6 +540,7 @@ void CPlayer::Check_Weapon()
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				m_bCanAttack = true;
 			}
 		}
 	}
@@ -552,8 +554,6 @@ void CPlayer::Check_Weapon()
 
 		else
 		{
-			cout << "여까진 옵니다" << endl;
-
 			if (m_eWeaponState == iter_find->second->eWeaponTag)
 			{
 				cout << "Pump_Shotgun already selected" << endl;
@@ -563,8 +563,6 @@ void CPlayer::Check_Weapon()
 
 			else
 			{
-				cout << "Is here?" << endl;
-
 				if (m_eWeaponState != ENGINE::NO_WEAPON)
 				{
 					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
@@ -581,6 +579,7 @@ void CPlayer::Check_Weapon()
 				m_eActState = W_DRAW;
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				m_bCanAttack = true;
 			}
 		}
 	}
@@ -619,6 +618,7 @@ void CPlayer::Check_Weapon()
 				m_eActState = W_DRAW;
 				m_eWeaponState = iter_find->second->eWeaponTag;
 				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				m_bCanAttack = true;
 			}
 		}
 	}
@@ -792,7 +792,7 @@ void CPlayer::Shoot()
 			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) + yRand;
 			fAngle[2] = 0;
 
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag , 10);
+			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag, m_pWInfo.wWeaponDamage);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 			pInstance->Set_MapLayer(m_mapLayer);
 
@@ -812,7 +812,7 @@ void CPlayer::Shoot()
 			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
 			fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
 
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle , m_pWInfo.fBullet_Speed, m_pWInfo.eWeaponTag);
+			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle , m_pWInfo.fBullet_Speed, m_pWInfo.eWeaponTag, m_pWInfo.wWeaponDamage);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 		}
 	}
@@ -893,7 +893,7 @@ void CPlayer::Shoot_Shotgun()
 				fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) - 6 + yRand;
 				fAngle[2] = 0;
 
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
+				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag , m_pWInfo.wWeaponDamage);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 				pInstance->Set_MapLayer(m_mapLayer);
 
@@ -913,7 +913,7 @@ void CPlayer::Shoot_Shotgun()
 				fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
 				fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
 
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag);
+				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag, m_pWInfo.wWeaponDamage);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 				pInstance->Set_MapLayer(m_mapLayer);
 			}
@@ -1348,6 +1348,14 @@ void CPlayer::Check_WalkSound(bool _bIsRun)
 	else
 	{
 		m_fWalkSoundDelay += m_pTimeMgr->GetDelta();
+	}
+}
+
+void CPlayer::Check_Dead()
+{
+	if (m_pTransform->GetPos().y <= -70)
+	{
+		m_bIsDead = true;
 	}
 }
 

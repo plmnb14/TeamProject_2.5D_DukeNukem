@@ -70,6 +70,8 @@ public:
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev ,CGameObject* _Target);
+	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3DXVECTOR3 _Pos);
+
 protected:
 	CGameObject*			m_pTarget;
 	CCameraObserver*		m_pObserver;
@@ -116,6 +118,8 @@ protected:
 	bool					m_bObject;
 	bool					m_bShot;
 	bool					m_bAttack;
+
+	float					m_fDeadTimer;
 
 
 };

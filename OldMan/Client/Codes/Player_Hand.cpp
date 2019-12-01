@@ -686,6 +686,11 @@ void CPlayer_Hand::Weapon_Shotgun()
 
 		if(m_bPump)
 		{
+			//if (m_bPump == true && m_bPumpIn == false && m_bPumpOut == false)
+			//{
+			//	m_bPumpIn = true;
+			//}
+
 			if (m_bPumpOut)
 			{
 				if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
@@ -700,7 +705,6 @@ void CPlayer_Hand::Weapon_Shotgun()
 					m_bPumpOut = false;
 					m_pAnimator->Set_Frame(0);
 					m_pAnimator->Set_FrameAmp(0);
-
 				}
 			}
 		
@@ -708,7 +712,6 @@ void CPlayer_Hand::Weapon_Shotgun()
 			{
 				m_pAnimator->Set_FrameAmp(50.f);
 				ChangeTex(L"PumpShot_PumpIn");
-				//m_pAnimator->Stop_Animation(false);
 
 				if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
 				{

@@ -195,6 +195,7 @@
     <ClInclude Include="..\Codes\Skybox.h" />
     <ClInclude Include="..\Codes\SoundMgr.h" />
     <ClInclude Include="..\Codes\Stage.h" />
+    <ClInclude Include="..\Codes\Stage_02.h" />
     <ClInclude Include="..\Codes\Terrain.h" />
     <ClInclude Include="..\Codes\TerrainCube.h" />
     <ClInclude Include="..\Codes\TerrainRect.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="..\Codes\Skybox.cpp" />
     <ClCompile Include="..\Codes\SoundMgr.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
+    <ClCompile Include="..\Codes\Stage_02.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainCube.cpp" />
     <ClCompile Include="..\Codes\TerrainRect.cpp" />

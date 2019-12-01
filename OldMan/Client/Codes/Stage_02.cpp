@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Stage.h"
+#include "Stage_02.h"
 
 #include "Player.h"
 
@@ -13,7 +13,6 @@
 #include "Skybox.h"
 #include "Trigger.h"
 #include "PickupItem.h"
-#include "Player.h"
 
 #include "Camera.h"
 #include "Monster.h"
@@ -40,7 +39,7 @@
 #include "SceneSelector.h"
 
 
-CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
+CStage_02::CStage_02(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pManagement(ENGINE::GetManagement()),
@@ -48,31 +47,21 @@ CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 }
 
-CStage::~CStage()
+CStage_02::~CStage_02()
 {
 	Release();
 }
 
-void CStage::Update()
+void CStage_02::Update()
 {
 	ENGINE::CScene::Update();
-}
 
-void CStage::LateUpdate()
-{
-	ENGINE::CScene::LateUpdate();
 
 	if (!m_mapLayer.empty())
 	{
 		if (static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Get_NextStage())
 		{
 			if (static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->GetDead())
-			{
-				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
-				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
-			}
-
-			else
 			{
 				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
 				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
@@ -81,23 +70,31 @@ void CStage::LateUpdate()
 	}
 }
 
-void CStage::Render()
+void CStage_02::LateUpdate()
+{
+	ENGINE::CScene::LateUpdate();
+}
+
+void CStage_02::Render()
 {
 	ENGINE::CScene::Render();
 }
 
-map<WORD, ENGINE::CLayer*> CStage::Get_MapLayer()
+map<WORD, ENGINE::CLayer*> CStage_02::Get_MapLayer()
 {
 	return m_mapLayer;
 }
 
-HRESULT CStage::Add_Environment_Layer()
+HRESULT CStage_02::Add_Environment_Layer()
 {
 	return S_OK;
 }
 
-HRESULT CStage::Add_Object_Layer()
+HRESULT CStage_02::Add_Object_Layer()
 {
+	// 스테이지 2
+
+
 	// Object Layer
 	ENGINE::CLayer* pObject_Layer = ENGINE::CLayer::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject_Layer, L"Object Layer Create Failed", E_FAIL);
@@ -110,7 +107,7 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
-	pTransform->SetPos({8,6,0});
+	pTransform->SetPos({ 8,6,0 });
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -141,7 +138,7 @@ HRESULT CStage::Add_Object_Layer()
 	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
-	
+
 	//// PumpShotgun
 	//pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,8 });
 	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
@@ -153,16 +150,16 @@ HRESULT CStage::Add_Object_Layer()
 	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
-	
+
 	////// Monster
 	//pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
 	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
 	////octabrain
-	
+
 	// Skybox
-	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_ufo.dds", pObject_Layer->Get_Player());
+	pObject = CSkybox::Create(m_pGraphicDev, L"skybox_desert.dds", pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Skybox Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::PROPS, pObject);
 
@@ -175,13 +172,13 @@ HRESULT CStage::Add_Object_Layer()
 	return S_OK;
 }
 
-HRESULT CStage::Add_UI_Layer()
+HRESULT CStage_02::Add_UI_Layer()
 {
 	// Object Layer
 	ENGINE::CLayer* pUILayer = ENGINE::CLayer::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pUILayer, L"UI Layer Create Failed", E_FAIL);
 	m_mapLayer.insert({ ENGINE::CLayer::UI, pUILayer });
-	
+
 	// Aim
 	ENGINE::CGameObject* pObject = CAim::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Aim Create Failed", E_FAIL);
@@ -206,7 +203,7 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(6.f, 12.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-580.f, fUITop + 35.f, 0.f));
-	
+
 	// HP Icon
 	pObject = CUI::Create(m_pGraphicDev, L"HpIcon.png");
 	NULL_CHECK_MSG_RETURN(pObject, L"HpIcon Create Failed", E_FAIL);
@@ -222,7 +219,7 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(10.f, 13.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-555.f, fUITop + 35.f, 0.f));
-	
+
 	// Bullet
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_BULLET);
 	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
@@ -231,7 +228,7 @@ HRESULT CStage::Add_UI_Layer()
 	static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, fUITop + 50.f, 0.f));
 
-	
+
 	// Grenade
 	pObject = CNumber::Create(m_pGraphicDev, CNumber::NUMBER_GRENADE);
 	NULL_CHECK_MSG_RETURN(pObject, L"NUMBER_CURBULLET Create Failed", E_FAIL);
@@ -240,7 +237,7 @@ HRESULT CStage::Add_UI_Layer()
 	static_cast<CUI*>(pObject)->SetSize(10.f, 15.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(580.f, fUITop + 100.f, 0.f));
 
-	
+
 	// Buller Line
 	pObject = CUI::Create(m_pGraphicDev, L"WeaponRightLine.png");
 	NULL_CHECK_MSG_RETURN(pObject, L"WeaponRightLine Create Failed", E_FAIL);
@@ -248,7 +245,7 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(50.f, 50.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(600.f, fUITop + 20.f, 0.f));
-	
+
 	// HP Bar
 	pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_HP);
 	NULL_CHECK_MSG_RETURN(pObject, L"BAR_HP Create Failed", E_FAIL);
@@ -256,7 +253,7 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, fUITop, 0.f));
-	
+
 	// Shield Bar
 	pObject = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_SHIELD);
 	NULL_CHECK_MSG_RETURN(pObject, L"BAR_SHIELD Create Failed", E_FAIL);
@@ -264,7 +261,7 @@ HRESULT CStage::Add_UI_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 	static_cast<CUI*>(pObject)->SetSize(30.f, 30.f);
 	static_cast<CUI*>(pObject)->SetPos(D3DXVECTOR3(-525.f, fUITop + 35.f, 0.f));
-	
+
 	// Weapon Icon
 	pObject = CWeaponIcon::Create(m_pGraphicDev);
 	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Icon Create Failed", E_FAIL);
@@ -276,45 +273,47 @@ HRESULT CStage::Add_UI_Layer()
 	return S_OK;
 }
 
-HRESULT CStage::Initialize()
+HRESULT CStage_02::Initialize()
 {
 	PipeLineSetUp();
-	
+
+	HRESULT hr = 0;
+
 	// Player Buffer
-	HRESULT hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_RCTEX,
-		L"Buffer_Player");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
-
-	// Terrain Buffer
-
-
-	// 
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_CUBECOL,
-		L"Buffer_CubeCol");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
-
+	//HRESULT hr = m_pResourceMgr->AddBuffer(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::CVIBuffer::BUFFER_RCTEX,
+	//	L"Buffer_Player");
+	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
 	//
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
-		L"Buffer_WallCubeCol");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
-
+	//// Terrain Buffer
 	//
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_CUBETEX,
-		L"Buffer_CubeTex");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
-
+	//
+	//// 
+	//hr = m_pResourceMgr->AddBuffer(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::CVIBuffer::BUFFER_CUBECOL,
+	//	L"Buffer_CubeCol");
+	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
+	//
+	////
+	//hr = m_pResourceMgr->AddBuffer(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
+	//	L"Buffer_WallCubeCol");
+	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
+	//
+	////
+	//hr = m_pResourceMgr->AddBuffer(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::CVIBuffer::BUFFER_CUBETEX,
+	//	L"Buffer_CubeTex");
+	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
+	//
 	////
 	//hr = m_pResourceMgr->AddBuffer(
 	//	m_pGraphicDev,
@@ -345,12 +344,12 @@ HRESULT CStage::Initialize()
 	return S_OK;
 }
 
-void CStage::Release()
+void CStage_02::Release()
 {
-	//m_pResourceMgr->ResetDynamicResource();
+	m_pResourceMgr->ResetDynamicResource();
 }
 
-void CStage::PipeLineSetUp()
+void CStage_02::PipeLineSetUp()
 {
 	// 조명 off
 	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -390,9 +389,9 @@ void CStage::PipeLineSetUp()
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 }
 
-void CStage::LoadMapObj()
+void CStage_02::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/Map_Desert.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -514,7 +513,7 @@ void CStage::LoadMapObj()
 			pObject = pStair;
 			pStair = nullptr;
 		}
-		
+
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
@@ -604,7 +603,7 @@ void CStage::LoadMapObj()
 		// Weapon
 		else if (!lstrcmp(szType, L"Waepon_0"))
 		{
-			pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{0, 0, 0});
+			pObject = CWeapon_Revolver::Create(m_pGraphicDev, D3DXVECTOR3{ 0, 0, 0 });
 			eObjType = ENGINE::OBJECT_TYPE::EQUIPMENT;
 		}
 		else if (!lstrcmp(szType, L"Waepon_1"))
@@ -699,11 +698,11 @@ void CStage::LoadMapObj()
 	CloseHandle(hFile);
 }
 
-CStage* CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CStage_02* CStage_02::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CStage* pInstance = new CStage(pGraphicDev);
+	CStage_02* pInstance = new CStage_02(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

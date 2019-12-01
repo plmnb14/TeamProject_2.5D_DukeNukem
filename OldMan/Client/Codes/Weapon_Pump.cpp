@@ -91,7 +91,7 @@ HRESULT CWeapon_Pump::Initialize()
 
 	m_pWInfo.fBullet_Speed = 100.f;
 
-	m_pWInfo.wWeaponDamage = 0.5f;				// 무기 데미지
+	m_pWInfo.wWeaponDamage = 3.f;				// 무기 데미지
 	m_pWInfo.eWeaponTag = ENGINE::SHOTGUN;
 
 

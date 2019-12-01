@@ -78,6 +78,7 @@ private:
 	void Check_Grenade();
 	void Check_Hitted();
 	void Check_WalkSound(bool _bIsRun = false);
+	void Check_Dead();
 
 public:
 	void Reload();
@@ -96,6 +97,7 @@ public:
 	void Set_Grenade(bool _Grenade) { m_bGrenade = _Grenade; }
 	void Set_GrenadeCount(int _iCount) { m_iGrenadeCount = _iCount; }
 	void Set_WayPoint(int _Index) { m_iWaypoint_Index = _Index; }
+	void Set_NextStage(bool _bool) { m_bOnNextStage = _bool; }
 
 public:
 	bool Get_CanLedge() { return m_bCanLedge; }
@@ -107,6 +109,7 @@ public:
 	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { auto iter_find = m_mWeaponInfo.find(_eTag); if (m_mWeaponInfo.end() == iter_find) return nullptr; return m_mWeaponInfo[_eTag]; }
 	ENGINE::WEAPON_TAG	Get_WState() { return m_eWeaponState; }
 	int Get_GrenadeCount() { return m_iGrenadeCount; }
+	bool Get_NextStage() { return m_bOnNextStage; }
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -178,6 +181,7 @@ private:
 	int		m_iWalkSoundIndex;
 
 	bool	m_bPlaySlideSound;
+	bool	m_bOnNextStage;
 
 };
 
