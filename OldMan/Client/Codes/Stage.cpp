@@ -86,7 +86,7 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
-	pTransform->SetPos({3,6,0});
+	pTransform->SetPos({8,6,0});
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -112,12 +112,12 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
 	//
-	//// SMG
-	//pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -5,2,8 });
-	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
-	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
-	//pObject->Set_MapLayer(m_mapLayer);
-	//
+	// SMG
+	pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ 8,0,0 });
+	NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
+	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
+	pObject->Set_MapLayer(m_mapLayer);
+	
 	//// PumpShotgun
 	//pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,8 });
 	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
@@ -371,7 +371,7 @@ void CStage::LoadMapObj()
 	D3DXVECTOR3 vPos, vSize, vAngle;
 	ENGINE::TERRAIN_TYPE eTerrainType;
 	int iIndex;
-	ENGINE::OBJECT_TYPE	tmpTag;
+	ENGINE::OBJECT_TYPE	tmpTag = ENGINE::OBJECT_TYPE::OBJ_TYPE_END;
 
 	while (true)
 	{
@@ -409,6 +409,7 @@ void CStage::LoadMapObj()
 			}
 
 			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			tmpTag = ENGINE::OBJECT_TYPE::TERRAIN;
 			pObject = pTerrain;
 			pTerrain = nullptr;
 		}
@@ -461,33 +462,34 @@ void CStage::LoadMapObj()
 		}
 
 
-		//else if (!lstrcmp(szType, L"Box_Wood"))
-		//{
-		//	CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
-		//	pStair->ChangeTex(szName);
-		//
-		//	eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
-		//	tmpTag = ENGINE::OBJECT_TYPE::WOOD_BOX;
-		//	pObject = pStair;
-		//	pStair = nullptr;
-		//}
-		//
-		//else if (!lstrcmp(szType, L"Box_Metal"))
-		//{
-		//	CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
-		//	pStair->ChangeTex(szName);
-		//
-		//	eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
-		//	tmpTag = ENGINE::OBJECT_TYPE::METAL_BOX;
-		//	pObject = pStair;
-		//	pStair = nullptr;
-		//}
+		else if (!lstrcmp(szType, L"Box_Wood"))
+		{
+			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pStair->ChangeTex(szName);
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			tmpTag = ENGINE::OBJECT_TYPE::WOOD_BOX;
+			pObject = pStair;
+			pStair = nullptr;
+		}
+
+		else if (!lstrcmp(szType, L"Box_Metal"))
+		{
+			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
+			pStair->ChangeTex(szName);
+
+			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			tmpTag = ENGINE::OBJECT_TYPE::METAL_BOX;
+			pObject = pStair;
+			pStair = nullptr;
+		}
 		
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
 			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger
 
@@ -635,14 +637,17 @@ void CStage::LoadMapObj()
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
 			pObject->Set_MapLayer(m_mapLayer);
 
-			if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
-				pObject->Set_Tag(ENGINE::OBJECT_TYPE::STAIR);
+			if (tmpTag != ENGINE::OBJECT_TYPE::OBJ_TYPE_END)
+			{
+				if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
+					pObject->Set_Tag(ENGINE::OBJECT_TYPE::TERRAIN);
 
-			if (tmpTag == ENGINE::OBJECT_TYPE::METAL_BOX)
-				pObject->Set_Tag(ENGINE::OBJECT_TYPE::METAL_BOX);
+				else if (tmpTag == ENGINE::OBJECT_TYPE::METAL_BOX)
+					pObject->Set_Tag(ENGINE::OBJECT_TYPE::METAL_BOX);
 
-			if (tmpTag == ENGINE::OBJECT_TYPE::WOOD_BOX)
-				pObject->Set_Tag(ENGINE::OBJECT_TYPE::WOOD_BOX);
+				else if (tmpTag == ENGINE::OBJECT_TYPE::WOOD_BOX)
+					pObject->Set_Tag(ENGINE::OBJECT_TYPE::WOOD_BOX);
+			}
 		}
 	}
 

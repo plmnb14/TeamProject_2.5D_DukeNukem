@@ -39,6 +39,8 @@ CPlayer::~CPlayer()
 
 int CPlayer::Update() 
 {
+	cout << m_eTag << endl;
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 	
@@ -115,7 +117,7 @@ HRESULT CPlayer::Initialize()
 
 	D3DXVec3Cross(&tmpRight, &tmpDir, &D3DXVECTOR3{0,1,0});
 
-	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y, m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
+	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y + 0.5f, m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
 
 	// 렛지 콜라이더
 	m_pColliderLedge->Set_Radius({ 0.3f , 2.0f, 0.3f });	
@@ -324,6 +326,15 @@ void CPlayer::KeyInput()
 		if (m_pCondition->Get_Run() == false || m_pCondition->Get_Slide())
 			return;
 
+		if (!m_bPlaySlideSound)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Player_Slide.ogg", CSoundMgr::PLAYER);
+
+			m_bPlaySlideSound = true;
+		}
+
 		//dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-2);
 
 		m_pCondition->Set_MoveAccel(2.5f);
@@ -496,16 +507,19 @@ void CPlayer::KeyInput()
 
 		else
 		{
-			if (m_eWeaponState == iter_find->second->eWeaponTag)
+			if (m_eWeaponState != ENGINE::NO_WEAPON && m_eWeaponState != ENGINE::MELLE)
 			{
-				cout << "SMG already selected" << endl;
+				if (m_eWeaponState == iter_find->second->eWeaponTag)
+				{
+					cout << "SMG already selected" << endl;
 
-				return;
+					return;
+				}
 			}
 
 			else
 			{
-				if (m_eWeaponState != ENGINE::NO_WEAPON)
+				if (m_eWeaponState != ENGINE::MELLE && m_eWeaponState != ENGINE::NO_WEAPON)
 				{
 					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
 
@@ -535,11 +549,15 @@ void CPlayer::KeyInput()
 
 		else
 		{
-			if (m_eWeaponState == iter_find->second->eWeaponTag)
-			{
-				cout << "Pump_Shotgun already selected" << endl;
 
-				return;
+			if (m_eWeaponState != ENGINE::NO_WEAPON && m_eWeaponState != ENGINE::MELLE)
+			{
+				if (m_eWeaponState == iter_find->second->eWeaponTag)
+				{
+					cout << "Pump_Shotgun already selected" << endl;
+
+					return;
+				}
 			}
 
 			else
@@ -1118,16 +1136,6 @@ void CPlayer::Check_Slide()
 
 			else
 				dynamic_cast<CCamera*>(m_pCamera)->Set_CamYPos(-3);
-
-
-			if (!m_bPlaySlideSound)
-			{
-				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
-				CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
-				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Slide.ogg", CSoundMgr::PLAYER);
-
-				m_bPlaySlideSound = true;
-			}
 		}
 
 		else if (m_pCondition->Get_MoveAccel() <= 0)
@@ -1309,9 +1317,9 @@ void CPlayer::Check_WalkSound(bool _bIsRun)
 
 	float fDelay = 0.f;
 	if (_bIsRun)
-		fDelay = 0.34f;
+		fDelay = 0.45f;
 	else
-		fDelay = 0.4f;
+		fDelay = 0.5f;
 
 	if (m_fWalkSoundDelay >= fDelay)
 	{

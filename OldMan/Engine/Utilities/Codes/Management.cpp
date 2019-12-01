@@ -65,7 +65,6 @@ void CManagement::Render()
 	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::GRENADE), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
 	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::GRENADE), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
 	
-	
 	//CCollisionMgr::CollisionTarget_To_Monstr(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET_PLAYER));
 	//CCollisionMgr::CollisionTarget_To_Monstr_Mele(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER));
 

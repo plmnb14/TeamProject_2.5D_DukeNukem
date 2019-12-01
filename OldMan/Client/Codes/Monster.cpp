@@ -28,13 +28,14 @@ CMonster::~CMonster()
 
 int CMonster::Update()
 {
+	Check_Push();
+	Check_Physic();
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
-	Check_Physic();
-	Check_Push();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	//Monster_Foward();
 	
@@ -644,10 +645,10 @@ void CMonster::Check_Push()
 	if(m_pRigid->Get_IsPush())
 	{ 
 		float m_fSpeed = m_pRigid->Get_Distance() * m_pRigid->Get_Distance() * m_pTimeMgr->GetDelta();
-		D3DXVECTOR3 vTmpDir = m_pRigid->Get_PushDir();
+		D3DXVECTOR3 vTmpDir = { m_pRigid->Get_PushDir().x , m_pRigid->Get_PushDir().y , m_pRigid->Get_PushDir().z };
 
 		m_pTransform->Move_AdvancedPos(vTmpDir, m_fSpeed);
-		m_pRigid->Set_Distance(m_pRigid->Get_Distance() - m_pTimeMgr->GetDelta());
+		m_pRigid->Set_Distance(m_pRigid->Get_Distance() - (m_pRigid->Get_Distance() * m_pRigid->Get_Distance() *m_pTimeMgr->GetDelta()));
 
 		if (m_pRigid->Get_Distance() <= 0.2f)
 		{
