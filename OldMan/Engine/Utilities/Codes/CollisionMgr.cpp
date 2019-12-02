@@ -115,7 +115,7 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				cout << rSrc->Get_Tag() << endl;
+			//	cout << rSrc->Get_Tag() << endl;
 
 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
@@ -196,7 +196,7 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			if (Check_AABB(rDst, (*rSrc), rDstCol, rSrcCol))
 			{
-				cout << (*rSrc)->Get_Tag() << endl;
+				//cout << (*rSrc)->Get_Tag() << endl;
 
 				if (rDstRigid->Get_IsJump())
 					return;
@@ -338,7 +338,7 @@ void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CG
 				D3DXVECTOR3 vTmpDir = vSrcPos - vDstPos;
 				D3DXVec3Normalize(&vTmpDir , &vTmpDir);
 
-				cout << "오냐" << endl;
+				//cout << "오냐" << endl;
 
 				ENGINE::CRigidBody*	rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
 				rSrcRigid->Set_Distance(D3DXVec3Length(&(vSrcPos - vDstPos)));

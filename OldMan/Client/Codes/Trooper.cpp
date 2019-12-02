@@ -348,8 +348,7 @@ void CTrooper::Monster_Foward()
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
 	//cout << acos(fDot_Monster_Right)*90 << endl;
-	cout << acos(fDot_Player_Monster_Forward) * 90 << endl;
-	//cout << vMonster_Player_Dir.x <<"X"<< endl;
+//	//cout << vMonster_Player_Dir.x <<"X"<< endl;
 	//cout << vMonster_Player_Dir.y <<"Y"<< endl;
 	//cout << vMonster_Player_Dir.z <<"Z"<<endl;
 	//m_pTransform->SetDir(vMonster_Player_Dir);

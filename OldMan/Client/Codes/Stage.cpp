@@ -135,7 +135,7 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject->Set_MapLayer(m_mapLayer);
 	
 	////// Monster
-	pObject = CTrooper::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
 	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
 	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 	pObject->Set_MapLayer(m_mapLayer);

@@ -994,7 +994,7 @@ void CPlayer::Reload()
 		}
 	}
 
-	cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;
+	//cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;
 }
 
 void CPlayer::SpecialShot()

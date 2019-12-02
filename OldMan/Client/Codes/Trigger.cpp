@@ -115,7 +115,7 @@ void CTrigger::CheckTriggerActive()
 		{
 		case CTrigger::TRIGGER_NEXTSTAGE:
 		{
-			cout << "Next Stage Trigger ON!!!!!" << endl;
+			//cout << "Next Stage Trigger ON!!!!!" << endl;
 			m_bIsDead = true;
 			break;
 		}

@@ -121,7 +121,7 @@ HRESULT CMonster::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(5.f, 5.f, 8.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
-	m_fMaxRange = 19.0f;//최대사거리
+	m_fMaxRange = 30.f;//최대사거리
 	m_fRange = 0.f;
 	m_fMinRange = 11.0f;
 	m_fAttack = 5.0f;
@@ -389,8 +389,8 @@ void CMonster::Monster_Foward()
 	//cout << "좌향 " << endl;
 	m_fFowardDealy = 0;
 	}
-	
-	
+
+
 	if (67.5 < fDot_Monster_Right * 180 && fDot_Monster_Right * 180 <90 )            // 좌- 좌측면
 	{
 	m_pAnimator->Stop_Animation(false);
@@ -403,56 +403,156 @@ void CMonster::Monster_Foward()
 	*/
 	//cout << fDot_Monster_Right * 90<<"좌우 "<< endl;
 	//cout << fDot_Player_Monster_Forward *90<<"앞뒤"<< endl;
-/*	if (m_fFowardDealy > 0.1)
+	if (m_fFowardDealy > 0.3)
 	{
-		if (fDot_Player_Monster_Forward * 90 > 0 && fDot_Player_Monster_Forward * 90 < 22.5)
+		if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 &&fDot_Monster_Right>0)
 		{//2개
-					
-		  if (67.5< fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 90)            // 좌- 좌측면 
-		 {
-			 m_pAnimator->Stop_Animation(false);
-			 ChangeTex(L"PigMan_WalkFront");
-			 m_pAnimator->Set_FrameAmp(5.f);
-			 cout << "전좌- 좌측면1 " << endl;
-			 //	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
-			 m_fFowardDealy = 0;
-		 }
-		  else if (-90<fDot_Monster_Right * 90 && fDot_Monster_Right * 90<-67.5)              // 우 - 우측면
-		  {
-			  m_pAnimator->Stop_Animation(false);
-			  ChangeTex(L"PigMan_WalkFront");
-			  m_pAnimator->Set_FrameAmp(5.f);
-			  cout << "전우 -우측면2" << endl;
-			  //	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
-			  m_fFowardDealy = 0;
-		  }
+
+			if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)            // 좌- 정면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"PigMan_WalkFront");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "전좌- 좌측면1 " << endl;
+				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+				m_fFowardDealy = 0;
+			}
+			
 		}
-	else if (fDot_Player_Monster_Forward * 90 >22.5&& fDot_Player_Monster_Forward*90<67.5)
+		else if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90&&fDot_Monster_Right<0)
 		{
-			if (-67.5<fDot_Monster_Right * 180 && fDot_Monster_Right * 180<-22.5)                          //우 - 정면
+			if (-22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 180 < 0)                          //우 - 정면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"PigMan_WalkFront");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면2 " << endl;
+					m_pTransform->MoveAngle(ENGINE::ANGLE_Y,5.f);
+					m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+
+				m_fFowardDealy = 0;
+			}
+		
+		}
+		else if (fDot_Player_Monster_Forward * 90 > 22.5 && fDot_Player_Monster_Forward * 90 < 67.5&& fDot_Monster_Right > 0)
+		{
+			if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <67.5)                          //좌 - 측면
 			{
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"PigMan_WalkSideFrontRight");
 				m_pAnimator->Set_FrameAmp(5.f);
 				cout << "우 -측면3 " << endl;
-				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				m_fFowardDealy = 0;
 			}
-			else if (22.5<fDot_Monster_Right * 90 && fDot_Monster_Right * 90<67.5)              // 우 - 우측면
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > 22.5 && fDot_Player_Monster_Forward * 90 < 67.5&& fDot_Monster_Right < 0)
+		{
+			if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측면
 			{
 				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkSideFrontRight");
+				ChangeTex(L"PigMan_WalkSideFrontLeft");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "좌 -측면4" << endl;
+				cout << "우 -측면4 " << endl;
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -22.5 && fDot_Player_Monster_Forward * 90 < 0&& fDot_Monster_Right < 0)
+		{
+			if (-90 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -67.5)                          //우 - 측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"PigMan_WalkSideLeft");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면5 " << endl;
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);		
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -22.5 && fDot_Player_Monster_Forward * 90 < 0 && fDot_Monster_Right > 0)
+		{
+			if (67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <90)                          //좌- 측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"PigMan_WalkSideRight");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면6 " << endl;
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -67.5 && fDot_Player_Monster_Forward * 90 < -22.5 && fDot_Monster_Right < 0)
+		{
+			if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"PigMan_WalkSideBack");
+			
+				m_pAnimator->Set_FrameAmp(5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				cout << "우 -측면7 " << endl;
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -67.5 && fDot_Player_Monster_Forward * 90 < -22.5 && fDot_Monster_Right >  0)
+		{
+			if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 67.5)                          //좌 - 측측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"PigMan_WalkSideBackRigt");
+
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면8 " << endl;
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
 				m_fFowardDealy = 0;
 			}
-			
-			
-		}
-	*/
 
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -90 && fDot_Player_Monster_Forward * 90 < -67.5 && fDot_Monster_Right >  0)
+		{
+			if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)                          //좌 - 후정면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"PigMan_WalkBack");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면9 " << endl;
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -90 && fDot_Player_Monster_Forward * 90 < -67.5 && fDot_Monster_Right < 0)
+		{
+			if (-22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 0)                          //우 - 후정면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"PigMan_WalkBack");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면10 " << endl;
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
+				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+				m_fFowardDealy = 0;
+			}
+
+		}
 	}
+}
 	
 
 	
