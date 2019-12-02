@@ -13,6 +13,7 @@
 #include "Skybox.h"
 #include "Trigger.h"
 #include "PickupItem.h"
+#include "Player.h"
 
 #include "Camera.h"
 #include "Monster.h"
@@ -36,6 +37,8 @@
 #include "Weapon_Rocket.h"
 
 #include "Player_Hand.h"
+#include "SoundMgr.h"
+#include "SceneSelector.h"
 
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -59,6 +62,24 @@ void CStage::Update()
 void CStage::LateUpdate()
 {
 	ENGINE::CScene::LateUpdate();
+
+	if (!m_mapLayer.empty())
+	{
+		if (static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Get_NextStage())
+		{
+			if (static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->GetDead())
+			{
+				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
+				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
+			}
+
+			else
+			{
+				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
+				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
+			}
+		}
+	}
 }
 
 void CStage::Render()
@@ -90,7 +111,7 @@ HRESULT CStage::Add_Object_Layer()
 	pObject->Set_MapLayer(m_mapLayer);
 
 	ENGINE::CTransform* pTransform = static_cast<ENGINE::CTransform*>(pObject->Get_Component(L"Transform"));
-	pTransform->SetPos({3,6,0});
+	pTransform->SetPos({8,6,0});
 
 	// Camera
 	pObject = CCamera::Create(m_pGraphicDev, pObject_Layer->Get_Player());
@@ -116,12 +137,12 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
 	//
-	//// SMG
-	//pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ -5,2,8 });
+	// SMG
+	//pObject = CWeapon_SMG::Create(m_pGraphicDev, D3DXVECTOR3{ 8,0,0 });
 	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
 	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::WEAPON, pObject);
 	//pObject->Set_MapLayer(m_mapLayer);
-	//
+	
 	//// PumpShotgun
 	//pObject = CWeapon_Pump::Create(m_pGraphicDev, D3DXVECTOR3{ -3,2,8 });
 	//NULL_CHECK_MSG_RETURN(pObject, L"Weapon Create Failed", E_FAIL);
@@ -295,13 +316,13 @@ HRESULT CStage::Initialize()
 		L"Buffer_CubeTex");
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
 
-	//
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_RCTEX,
-		L"Buffer_RcTex");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
+	////
+	//hr = m_pResourceMgr->AddBuffer(
+	//	m_pGraphicDev,
+	//	ENGINE::RESOURCE_DYNAMIC,
+	//	ENGINE::CVIBuffer::BUFFER_RCTEX,
+	//	L"Buffer_RcTex");
+	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
 
 	// Environment Layer
 	hr = Add_Environment_Layer();
@@ -317,12 +338,17 @@ HRESULT CStage::Initialize()
 
 	LoadMapObj();
 
+	// PlayBGM
+	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 0.1f);
+	CSoundMgr::GetInstance()->StopAll();
+	CSoundMgr::GetInstance()->MyPlayBGM(L"Rip & Tear.mp3");
+
 	return S_OK;
 }
 
 void CStage::Release()
 {
-	m_pResourceMgr->ResetDynamicResource();
+	//m_pResourceMgr->ResetDynamicResource();
 }
 
 void CStage::PipeLineSetUp()
@@ -367,7 +393,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/Map_Desert_test.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -378,7 +404,7 @@ void CStage::LoadMapObj()
 	D3DXVECTOR3 vPos, vSize, vAngle;
 	ENGINE::TERRAIN_TYPE eTerrainType;
 	int iIndex;
-	ENGINE::OBJECT_TYPE	tmpTag;
+	ENGINE::OBJECT_TYPE	tmpTag = ENGINE::OBJECT_TYPE::OBJ_TYPE_END;
 
 	while (true)
 	{
@@ -416,6 +442,7 @@ void CStage::LoadMapObj()
 			}
 
 			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
+			tmpTag = ENGINE::OBJECT_TYPE::TERRAIN;
 			pObject = pTerrain;
 			pTerrain = nullptr;
 		}
@@ -446,6 +473,7 @@ void CStage::LoadMapObj()
 			pObject = pDoor;
 			pDoor = nullptr;
 		}
+
 		else if (!lstrcmp(szType, L"Door_Right"))
 		{
 			CDoor* pDoor = CDoor::Create(ENGINE::GetGraphicDev()->GetDevice(), CDoor::DOOR_RIGHT);
@@ -455,6 +483,7 @@ void CStage::LoadMapObj()
 			pObject = pDoor;
 			pDoor = nullptr;
 		}
+
 		else if (!lstrcmp(szType, L"Stair"))
 		{
 			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
@@ -466,23 +495,21 @@ void CStage::LoadMapObj()
 			pStair = nullptr;
 		}
 
-
 		else if (!lstrcmp(szType, L"Box_Wood"))
 		{
 			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
 			pStair->ChangeTex(szName);
-		
 			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 			tmpTag = ENGINE::OBJECT_TYPE::WOOD_BOX;
 			pObject = pStair;
 			pStair = nullptr;
 		}
-		
+
 		else if (!lstrcmp(szType, L"Box_Metal"))
 		{
 			CTerrainCube* pStair = CTerrainCube::Create(ENGINE::GetGraphicDev()->GetDevice());
 			pStair->ChangeTex(szName);
-		
+
 			eObjType = ENGINE::OBJECT_TYPE::TERRAIN;
 			tmpTag = ENGINE::OBJECT_TYPE::METAL_BOX;
 			pObject = pStair;
@@ -494,6 +521,7 @@ void CStage::LoadMapObj()
 		{
 			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Octabrain"))
 		{
@@ -655,14 +683,17 @@ void CStage::LoadMapObj()
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(eObjType, pObject);
 			pObject->Set_MapLayer(m_mapLayer);
 
-			if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
-				pObject->Set_Tag(ENGINE::OBJECT_TYPE::STAIR);
+			if (tmpTag != ENGINE::OBJECT_TYPE::OBJ_TYPE_END)
+			{
+				if (tmpTag == ENGINE::OBJECT_TYPE::STAIR)
+					pObject->Set_Tag(ENGINE::OBJECT_TYPE::TERRAIN);
 
-			if (tmpTag == ENGINE::OBJECT_TYPE::METAL_BOX)
-				pObject->Set_Tag(ENGINE::OBJECT_TYPE::METAL_BOX);
+				else if (tmpTag == ENGINE::OBJECT_TYPE::METAL_BOX)
+					pObject->Set_Tag(ENGINE::OBJECT_TYPE::METAL_BOX);
 
-			if (tmpTag == ENGINE::OBJECT_TYPE::WOOD_BOX)
-				pObject->Set_Tag(ENGINE::OBJECT_TYPE::WOOD_BOX);
+				else if (tmpTag == ENGINE::OBJECT_TYPE::WOOD_BOX)
+					pObject->Set_Tag(ENGINE::OBJECT_TYPE::WOOD_BOX);
+			}
 		}
 	}
 

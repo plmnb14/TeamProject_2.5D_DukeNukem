@@ -45,6 +45,7 @@ protected:
 	virtual void Release() override;
 
 public:
+	bool Get_NextStage(int _Index) {return m_bNextStage;}
 	//void SetEvent(void(*_fpClickEvent)());
 
 protected:
@@ -67,6 +68,8 @@ protected:
 
 	TRIGGER_TYPE			m_eTriggerType;
 	int						m_iIndex;
+	bool					m_bNextStage;
+	float					m_fTriggerTimer;
 	
 	//void(*m_fpTriggerEvent)();
 };

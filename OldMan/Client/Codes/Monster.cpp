@@ -18,7 +18,7 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pSubject(ENGINE::GetCameraSubject()),
 	m_pObserver(nullptr), m_pBillborad(nullptr), m_bShot(false), m_pRigid(nullptr),
 	m_pMelleCollider(nullptr), m_pCondition(nullptr), m_pGroundChekCollider(nullptr), m_pAnimator(nullptr)
-	, m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_bAttack(false)
+	, m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_bAttack(false), m_fDeadTimer(0)
 {
 }
 CMonster::~CMonster()
@@ -28,13 +28,14 @@ CMonster::~CMonster()
 
 int CMonster::Update()
 {
+	Check_Push();
+	Check_Physic();
+
 	if (m_bIsDead)
 		return DEAD_OBJ;
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
-	Check_Physic();
-	Check_Push();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	Monster_Foward();
 
@@ -699,6 +700,16 @@ void CMonster::Monster_Dead()
 	ChangeTex(L"PigMan_Dead");
 	m_pAnimator->Set_FrameAmp(1.f);
 	m_pAnimator->Set_Frame(5);
+<<<<<<< HEAD
+=======
+
+	m_fDeadTimer += m_pTimeMgr->GetDelta();
+
+	if (m_fDeadTimer > 3)
+	{
+		m_bIsDead = true;
+	}
+>>>>>>> origin/MERGE_BRANCH
 
 }
 
@@ -809,10 +820,10 @@ void CMonster::Check_Push()
 	if (m_pRigid->Get_IsPush())
 	{
 		float m_fSpeed = m_pRigid->Get_Distance() * m_pRigid->Get_Distance() * m_pTimeMgr->GetDelta();
-		D3DXVECTOR3 vTmpDir = m_pRigid->Get_PushDir();
+		D3DXVECTOR3 vTmpDir = { m_pRigid->Get_PushDir().x , m_pRigid->Get_PushDir().y , m_pRigid->Get_PushDir().z };
 
 		m_pTransform->Move_AdvancedPos(vTmpDir, m_fSpeed);
-		m_pRigid->Set_Distance(m_pRigid->Get_Distance() - m_pTimeMgr->GetDelta());
+		m_pRigid->Set_Distance(m_pRigid->Get_Distance() - (m_pRigid->Get_Distance() * m_pRigid->Get_Distance() *m_pTimeMgr->GetDelta()));
 
 		if (m_pRigid->Get_Distance() <= 0.2f)
 		{
@@ -851,6 +862,11 @@ void CMonster::Monster_State_Set()
 
 }
 
+void CMonster::Set_Pos(D3DXVECTOR3 _Pos)
+{
+	m_pTransform->SetPos(_Pos);
+}
+
 CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
 {
 
@@ -864,6 +880,24 @@ CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
 		return nullptr;
 	}
 	pInstance->Set_Target(_Target);
+
+	return pInstance;
+}
+
+CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3DXVECTOR3 _Pos)
+{
+
+	NULL_CHECK_RETURN(pGraphicDev, nullptr);
+
+	CMonster* pInstance = new CMonster(pGraphicDev);
+
+	if (FAILED(pInstance->Initialize()))
+	{
+		ENGINE::Safe_Delete(pInstance);
+		return nullptr;
+	}
+	pInstance->Set_Target(_Target);
+	pInstance->Set_Pos(_Pos);
 
 	return pInstance;
 }

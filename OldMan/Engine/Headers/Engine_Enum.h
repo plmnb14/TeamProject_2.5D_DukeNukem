@@ -84,7 +84,8 @@ namespace ENGINE
 		WOOD_BOX,
 		VFX,
 		CAMERA,
-		UI
+		UI,
+		OBJ_TYPE_END
 	};
 
 	enum TERRAIN_TYPE 

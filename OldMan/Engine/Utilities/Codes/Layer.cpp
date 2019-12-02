@@ -25,6 +25,11 @@ HRESULT CLayer::AddObject(ENGINE::OBJECT_TYPE _ObjType, CGameObject* pObject)
 	return S_OK;
 }
 
+CGameObject * CLayer::Get_SceneChange()
+{
+	return nullptr;
+}
+
 CGameObject * CLayer::Get_Target(ENGINE::OBJECT_TYPE _ObjType)
 {
 	return m_mapGameObject[_ObjType].back();

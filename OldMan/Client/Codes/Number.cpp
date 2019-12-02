@@ -49,8 +49,12 @@ int CNumber::Update()
 	case CNumber::NUMBER_GRENADE:
 	{
 		GetNumberArr((int)m_pPlayerObserver->GetGrenadeCount(), m_iNumArr, m_iArrCount);
+		break;
 	}
-
+	case CNumber::NUMBER_LOADING:
+	{
+		break;
+	}
 	case CNumber::NUMBER_END:
 		break;
 	}
@@ -130,12 +134,18 @@ void CNumber::Release()
 	ENGINE::Safe_Delete_Array(m_iNumArr);
 }
 
+void CNumber::UpdateNumber(int _iNumber)
+{
+	GetNumberArr(_iNumber, m_iNumArr, m_iArrCount);
+}
+
 HRESULT CNumber::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 
 	// Texture
 	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Tile256x256_0.png");
+	if (!pComponent) pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Title.png");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 

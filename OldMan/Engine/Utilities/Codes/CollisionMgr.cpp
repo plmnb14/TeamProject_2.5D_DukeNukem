@@ -115,8 +115,11 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
+<<<<<<< HEAD
 			//	cout << rSrc->Get_Tag() << endl;
 
+=======
+>>>>>>> origin/MERGE_BRANCH
 				rDstTrans->SetPos(rDstTrans->GetPos() + rDstCol->Get_Length());
 				rSrcTrans->SetPos(rSrcTrans->GetPos() + rSrcCol->Get_Length());
 
@@ -196,8 +199,11 @@ void CCollisionMgr::CollisionTarget_To_Ground(list<CGameObject*>& rDstList, list
 
 			if (Check_AABB(rDst, (*rSrc), rDstCol, rSrcCol))
 			{
+<<<<<<< HEAD
 				//cout << (*rSrc)->Get_Tag() << endl;
 
+=======
+>>>>>>> origin/MERGE_BRANCH
 				if (rDstRigid->Get_IsJump())
 					return;
 
@@ -280,6 +286,17 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 				{
 					ENGINE::CRigidBody* rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
 
+					if (rSrc->Get_Tag() == ENGINE::MONSTER)
+					{
+						ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+						ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
+
+						if (rSrcCon != nullptr)
+						{
+							rSrcCon->Add_Hp(-rDstCon->Get_Damage());
+						}
+					}
+
 					if (rSrcRigid != nullptr)
 					{
 						D3DXVECTOR3 vDirection = { 0, 0, 0 };
@@ -338,8 +355,11 @@ void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CG
 				D3DXVECTOR3 vTmpDir = vSrcPos - vDstPos;
 				D3DXVec3Normalize(&vTmpDir , &vTmpDir);
 
+<<<<<<< HEAD
 				//cout << "¿À³Ä" << endl;
 
+=======
+>>>>>>> origin/MERGE_BRANCH
 				ENGINE::CRigidBody*	rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
 				rSrcRigid->Set_Distance(D3DXVec3Length(&(vSrcPos - vDstPos)));
 				rSrcRigid->Set_IsPush(true);

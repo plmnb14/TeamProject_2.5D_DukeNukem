@@ -52,7 +52,6 @@ Trooper|Trooper_WalkSideBackRight|Trooper_WalkSideBackRight%d.png|4|..\Texture\M
 Trooper|Trooper_WalkSideRight|Trooper_WalkSideRight%d.png|4|..\Texture\Monster\Trooper\Trooper_WalkSideRight\Trooper_WalkSideRight%d.png
 PickUp|Equip|Equip_%d.png|6|..\Texture\PickUp\Equip\Equip_%d.png
 Animation|Lava|Lava_%d.png|6|..\Texture\Tiles\Animation\Lava\Lava_%d.png
-Animation|Number|Number_%d.png|12|..\Texture\UI\Animation\Number\Number_%d.png
 Animation|Number_Blue|Number_Blue_%d.png|10|..\Texture\UI\Animation\Number_Blue\Number_Blue_%d.png
 BloodSplit|BloodSplit_01|BloodSplit_01_%d.png|19|..\Texture\VFX\BloodSplit\BloodSplit_01\BloodSplit_01_%d.png
 BloodSplit|BloodSplit_02|BloodSplit_02_%d.png|18|..\Texture\VFX\BloodSplit\BloodSplit_02\BloodSplit_02_%d.png
@@ -549,3 +548,4 @@ No_Animation|HittedCircle|Hitted_UI_M.png|1|..\Texture\UI\No_Animation\HittedCir
 No_Animation|HittedCircle|Hitted_UI_S.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_S.png
 No_Animation|HittedCircle|Hitted_UI_XL.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_XL.png
 No_Animation|HittedCircle|Hitted_UI_XS.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_XS.png
+No_Animation|Title|Title.png|1|..\Texture\UI\No_Animation\Title\Title.png

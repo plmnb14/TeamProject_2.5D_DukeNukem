@@ -4,11 +4,12 @@
 
 #include "Logo.h"
 #include "Stage.h"
+#include "Stage_02.h"
 
 class CSceneSelector
 {
 public:
-	enum SCENE_TYPE { LOGO, STAGE, SCENE_END };
+	enum SCENE_TYPE { LOGO, STAGE, STAGE_02, SCENE_END };
 
 public:
 	explicit CSceneSelector(SCENE_TYPE eType)
@@ -25,6 +26,9 @@ public:
 			break;
 		case STAGE:
 			*ppScene = CStage::Create(pGraphicDev);
+			break;
+		case STAGE_02:
+			*ppScene = CStage_02::Create(pGraphicDev);
 			break;
 		}
 

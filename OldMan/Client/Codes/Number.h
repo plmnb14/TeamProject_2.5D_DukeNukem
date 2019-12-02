@@ -19,7 +19,7 @@ class CPlayerObserver;
 class CNumber : public CUI
 {
 public:
-	enum NUMBER_TYPE { NUMBER_HP, NUMBER_SHIELD, NUMBER_BULLET, NUMBER_GRENADE , NUMBER_END };
+	enum NUMBER_TYPE { NUMBER_HP, NUMBER_SHIELD, NUMBER_BULLET, NUMBER_GRENADE, NUMBER_LOADING , NUMBER_END };
 
 protected:
 	explicit CNumber(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -36,6 +36,9 @@ protected:
 	virtual HRESULT Initialize() override;
 	virtual HRESULT LateInit() override;
 	virtual void Release() override;
+
+public:
+	void UpdateNumber(int _iNumber);
 
 protected:
 	HRESULT AddComponent();

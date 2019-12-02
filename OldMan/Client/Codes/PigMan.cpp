@@ -21,6 +21,7 @@ CPigMan::~CPigMan()
 
 int CPigMan::Update()
 {
+	Check_Push();
 
 	if (m_bIsDead)
 		return DEAD_OBJ;

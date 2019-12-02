@@ -137,6 +137,7 @@ void CUI::ChangeTex(wstring _wstrTex)
 
 	ENGINE::CComponent* pComponent = nullptr;
 	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
+	if(!pComponent) pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
 	NULL_CHECK(pComponent);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -232,6 +233,7 @@ HRESULT CUI::AddComponent()
 
 	// Texture
 	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Tile256x256_0.png");
+	if(!pComponent) pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, L"Title.png");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
