@@ -48,8 +48,10 @@ public:
 	void Set_Pos(D3DXVECTOR3 _Pos);
 
 public:
-	static CAlien* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
+	static CAlien* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3DXVECTOR3 _Pos);
 
+private:
+	float fJump;
 };
 
 #define __ALIEN_H__

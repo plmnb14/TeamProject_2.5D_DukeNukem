@@ -48,7 +48,7 @@ public:
 	void Set_Pos(D3DXVECTOR3 _Pos);
 
 public:
-	static CTrooper* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
+	static CTrooper* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3DXVECTOR3 _Pos);
 
 };
 

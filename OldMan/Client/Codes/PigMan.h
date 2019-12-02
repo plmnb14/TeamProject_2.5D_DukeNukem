@@ -39,7 +39,6 @@ private:
 public:											//¹°¸® 
 	virtual void Check_Physic()override;
 	virtual void Object_Collison()override;
-	void Monster_Jump();
 
 
 
@@ -48,7 +47,7 @@ public:
 	void Set_Pos(D3DXVECTOR3 _Pos);
 
 public:
-	static CPigMan* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target);
+	static CPigMan* Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3DXVECTOR3 _Pos);
 
 };
 

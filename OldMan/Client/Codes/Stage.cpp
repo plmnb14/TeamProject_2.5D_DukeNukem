@@ -156,10 +156,10 @@ HRESULT CStage::Add_Object_Layer()
 	//pObject->Set_MapLayer(m_mapLayer);
 	
 	////// Monster
-	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
-	NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
-	pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
-	pObject->Set_MapLayer(m_mapLayer);
+//	pObject = CMonster::Create(m_pGraphicDev, pObject_Layer->Get_Player());
+	//NULL_CHECK_MSG_RETURN(pObject, L"Monster Create Failed", E_FAIL);
+	//pObject_Layer->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+	//pObject->Set_MapLayer(m_mapLayer);
 	//octabrain
 	
 	// Skybox
@@ -519,24 +519,24 @@ void CStage::LoadMapObj()
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-			tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
+		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//	tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Octabrain"))
 		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Trooper"))
 		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Overload"))
 		{
-			pObject = CBoss_Overload::Create(m_pGraphicDev);
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//	pObject = CBoss_Overload::Create(m_pGraphicDev);
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))

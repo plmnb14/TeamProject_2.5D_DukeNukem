@@ -517,24 +517,24 @@ void CStage_02::LoadMapObj()
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-			tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
+		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+		//;	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//	tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Octabrain"))
 		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Trooper"))
 		{
-			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Overload"))
 		{
-			pObject = CBoss_Overload::Create(m_pGraphicDev);
-			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		//	pObject = CBoss_Overload::Create(m_pGraphicDev);
+		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))

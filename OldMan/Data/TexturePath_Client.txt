@@ -129,6 +129,7 @@ No_Animation|Pack|Pack_1.dds|1|..\Texture\PickUp\No_Animation\Pack\Pack_1.dds
 No_Animation|Pack|Pack_1.png|1|..\Texture\PickUp\No_Animation\Pack\Pack_1.png
 No_Animation|Pack|Pack_2.dds|1|..\Texture\PickUp\No_Animation\Pack\Pack_2.dds
 No_Animation|Pack|Pack_2.png|1|..\Texture\PickUp\No_Animation\Pack\Pack_2.png
+No_Animation|dds|skybox_desert.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_desert.dds
 No_Animation|dds|skybox_ufo.dds|1|..\Texture\Skybox\No_Animation\dds\skybox_ufo.dds
 No_Animation|128 x 128|Tile128x128_10.dds|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_10.dds
 No_Animation|128 x 128|Tile128x128_10.png|1|..\Texture\Tiles\No_Animation\128 x 128\Tile128x128_10.png
@@ -522,6 +523,8 @@ No_Animation|64 x 64|Tile64x64_6.png|1|..\Texture\Tiles\No_Animation\64 x 64\Til
 No_Animation|64 x 64|Tile64x64_7.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_7.png
 No_Animation|64 x 64|Tile64x64_8.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_8.png
 No_Animation|64 x 64|Tile64x64_9.png|1|..\Texture\Tiles\No_Animation\64 x 64\Tile64x64_9.png
+No_Animation|TRIGGER|TRIGGER_MONSTER.dds|1|..\Texture\Tiles\No_Animation\TRIGGER\TRIGGER_MONSTER.dds
+No_Animation|TRIGGER|TRIGGER_MONSTER.png|1|..\Texture\Tiles\No_Animation\TRIGGER\TRIGGER_MONSTER.png
 No_Animation|Aim|AimHitMark_L.png|1|..\Texture\UI\No_Animation\Aim\AimHitMark_L.png
 No_Animation|Aim|AimHitMark_S.png|1|..\Texture\UI\No_Animation\Aim\AimHitMark_S.png
 No_Animation|Aim|Aim_1.png|1|..\Texture\UI\No_Animation\Aim\Aim_1.png
