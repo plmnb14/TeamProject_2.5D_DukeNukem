@@ -1157,7 +1157,6 @@ void CPlayer::Reload()
 			m_pWInfo.wMagazineBullet = m_pWInfo.wCurBullet;
 			m_pWInfo.wCurBullet = 0;
 		}
-
 		else
 		{
 			if (m_pWInfo.wMagazineBullet != 0 && m_pWInfo.wMagazineBullet > 0)

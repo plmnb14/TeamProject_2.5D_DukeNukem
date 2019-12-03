@@ -16,6 +16,7 @@ namespace ENGINE
 	class CBillborad;
 	class CCameraSubject;
 	class CCondition;
+	class CAnimator;
 
 
 }
@@ -48,6 +49,8 @@ private:
 	HRESULT AddComponent();
 	void KeyInput();
 	void BulletType();
+	void ChangeTex(wstring _wstrTex);
+
 
 private:
 	void Set_Target(CGameObject* _Target);
@@ -82,7 +85,9 @@ private:
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCollider*		m_pCollider;
 	D3DXMATRIX              m_matView;
-
+	ENGINE::CAnimator*		m_pAnimator;
+	wstring					m_wstrTex;      //≈ÿΩ∫√≥
+	wstring					m_OldwstrTex;
 
 
 	float m_fLifetime;
