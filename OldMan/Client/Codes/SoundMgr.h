@@ -12,7 +12,7 @@ public:
 	enum CHANNELID{
 		BGM,
 		PLAYER_WALK, PLAYER, PLAYER_VOICE,
-		MONSTER,
+		MONSTER, MONSTER_VOICE,
 		WEAPON, WEAPON_AFTER , BULLET_SHOOT, BULLET_DEAD,
 		ENVIRONMENT, WOOD_BOX,
 		VEHICLE,
@@ -34,6 +34,10 @@ public:
 	void StopAll();
 	void SetVolume(CHANNELID eID, float _fVolume);
 
+public:
+	void Set_MasterVolume(float _Value);
+
+
 private:
 	void LoadSouneFile();
 
@@ -46,6 +50,9 @@ private:
 
 	//사운드, 채널 객체 및 장치를 관리할 객체. 
 	FMOD_SYSTEM* m_pSystem; 
+
+	float m_fVolumeAmp;
+	float m_fVolumeValue;
 
 
 };

@@ -15,7 +15,7 @@ namespace ENGINE
 	class CPlayerSubject;
 }
 
-class CPlayerObserver;
+class CBossObserver;
 class CGaugeBar : public CUI
 {
 public:
@@ -53,6 +53,8 @@ private:
 	float					m_fHP;
 	float					m_fShield;
 
+	ENGINE::CBossSubject*	m_pBossSubject;
+	CBossObserver*			m_pBossObserver;
 	float					m_fBossHp;
 
 	GAUGEBAR_TYPE			m_eBarType;

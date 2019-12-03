@@ -279,7 +279,7 @@ void CTrigger::CheckTriggerActive()
 				}
 
 
-				if (int(m_fTriggerTimer) == 80)
+				if (int(m_fTriggerTimer) == 180)
 				{
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,0,325 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
@@ -294,7 +294,7 @@ void CTrigger::CheckTriggerActive()
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 110)
+				if (int(m_fTriggerTimer) == 210)
 				{
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 35,0,391 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
@@ -310,7 +310,7 @@ void CTrigger::CheckTriggerActive()
 				}
 
 
-				if (int(m_fTriggerTimer) == 150)
+				if (int(m_fTriggerTimer) == 250)
 				{
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 118,0,364 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);

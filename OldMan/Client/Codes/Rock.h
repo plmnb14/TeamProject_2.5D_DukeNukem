@@ -38,13 +38,14 @@ public:
 
 public:
 	void SetMoveDist(float _fDist);
+	void Set_DelayTime(float _DelayTime) { m_fDelayTime = _DelayTime; };
 
 protected:
 	HRESULT AddComponent();
 	void Move();
 
 public:
-	static CRock* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CRock* Create(LPDIRECT3DDEVICE9 pGraphicDev , float _DelayTime);
 
 protected:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -66,6 +67,8 @@ protected:
 	CGameObject*			m_pPlayer;
 
 	float					m_fLifeTime;
+	float					m_fDelayTime;
+	float					m_fAccel;
 };
 
 #define __ROCK_H__

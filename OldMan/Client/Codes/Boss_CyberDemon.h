@@ -26,7 +26,7 @@ class CBoss_CyberDemon : public ENGINE::CGameObject
 public:
 	enum CYBERDEMON_STATE
 	{
-		CYBER_MET, CYBER_WALK, CYBER_DASH, CYBER_SLASH, CYBER_FIRE, CYBER_JUMP, CYBER_DEAD
+		CYBER_MET, CYBER_WALK, CYBER_SLASH ,CYBER_DASH, CYBER_FIRE, CYBER_JUMP, CYBER_DEAD
 	};
 
 private:
@@ -55,6 +55,7 @@ private:
 private:
 	void Check_Physic();
 	void State();
+	void HittedSound();
 
 private:
 	void Walk();
@@ -77,8 +78,10 @@ private:
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
 	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CCollider*		m_pMelleCollider;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCondition*		m_pCondition;
+	ENGINE::CONDITION		m_tCondition;
 	ENGINE::CBillborad*		m_pBillboard;
 	ENGINE::CAnimator*		m_pAnimator;
 
@@ -87,10 +90,13 @@ private:
 	ENGINE::CCameraSubject*	m_pSubject;
 	CCameraObserver*		m_pObserver;
 	ENGINE::CPlayerSubject*	m_pPlayerSubject;
+	ENGINE::CBossSubject*	m_pBossSubject;
 
 	D3DXMATRIX				m_matView;
 	CYBERDEMON_STATE		m_eState;
 	wstring					m_wstrTex;
+
+	CGameObject*			m_pHpBar;
 
 	float					m_fLifeTime;
 	float					m_fFowardDealy;
@@ -113,12 +119,17 @@ private:
 	D3DXVECTOR3				m_vDashDir;
 	float					m_fChargeDelay;
 	bool					m_bIsCharging;
+	bool					m_bIsChargeHitted;
 
 	float					m_fSlashDelay;
 	float					m_fFireDelay;
 
 	bool					m_bIsJump;
 	float					m_fJumpDelay;
+	float					m_fAccel;
+
+	float					m_fHittedSoundDelay;
+	float					m_fOldHp;
 };
 
 #define __BOSS_CYBERDEMON_H__

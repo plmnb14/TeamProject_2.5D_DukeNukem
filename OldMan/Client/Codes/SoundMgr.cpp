@@ -4,6 +4,7 @@
 IMPLEMENT_SINGLETON(CSoundMgr)
 
 CSoundMgr::CSoundMgr()
+	: m_fVolumeAmp(1) , m_fVolumeValue(0)
 {
 	m_pSystem = nullptr;
 }
@@ -99,6 +100,18 @@ void CSoundMgr::SetVolume(CHANNELID eID, float _fVolume)
 {
 	if (_fVolume <= 0)_fVolume = 0;
 	FMOD_Channel_SetVolume(m_pChannelArr[eID], _fVolume);
+}
+
+void CSoundMgr::Set_MasterVolume(float _Value)
+{
+	m_fVolumeAmp = _Value;
+
+	for (int i = 0; i < MAXCHANNEL; ++i)
+	{
+		FMOD_Channel_GetVolume(m_pChannelArr[i], &m_fVolumeValue);
+		FMOD_Channel_SetVolume();
+	}
+
 }
 
 void CSoundMgr::LoadSouneFile()
