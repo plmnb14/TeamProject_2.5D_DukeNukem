@@ -399,38 +399,31 @@ void CBoss_CyberDemon::State()
 
 void CBoss_CyberDemon::HittedSound()
 {
-	cout << "OldHp : " << m_fOldHp << endl;
-	cout << "NowHp : " << m_pCondition->Get_Hp() << endl;
-
-	if (m_fHittedSoundDelay > 2.f && (m_fOldHp > m_pCondition->Get_Hp()))
+	if (m_fHittedSoundDelay > 1.f && (m_fOldHp > m_pCondition->Get_Hp()))
 	{
-		if (m_eTag == ENGINE::BULLET_PLAYER)
+		m_fHittedSoundDelay = 0.f;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_VOICE, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_VOICE);
+
+		int iRand = rand() % 4;
+		switch (iRand)
 		{
-			m_fHittedSoundDelay = 0.f;
-
-			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_VOICE, 1.0f);
-			CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_VOICE);
-
-			int iRand = rand() % 4;
-			switch (iRand)
-			{
-			case 0:
-				CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_1.ogg", CSoundMgr::MONSTER_VOICE);
-				break;
-			case 1:
-				CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_2.ogg", CSoundMgr::MONSTER_VOICE);
-				break;
-			case 2:
-				CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_3.ogg", CSoundMgr::MONSTER_VOICE);
-				break;
-			case 3:
-				CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_4.ogg", CSoundMgr::MONSTER_VOICE);
-				break;
-			}
-
-			m_fOldHp = m_pCondition->Get_Hp();
-
+		case 0:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_1.ogg", CSoundMgr::MONSTER_VOICE);
+			break;
+		case 1:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_2.ogg", CSoundMgr::MONSTER_VOICE);
+			break;
+		case 2:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_3.ogg", CSoundMgr::MONSTER_VOICE);
+			break;
+		case 3:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_4.ogg", CSoundMgr::MONSTER_VOICE);
+			break;
 		}
+
+		m_fOldHp = m_pCondition->Get_Hp();
 	}
 	else
 		m_fHittedSoundDelay += m_pTimeMgr->GetDelta();
@@ -471,6 +464,37 @@ void CBoss_CyberDemon::Walk()
 		m_pTransform->Move_AdvancedPos(vTempDir, fSpeed);
 		m_pTransform->SetDir(vTempDir);
 	}
+
+
+	if (m_fWalkSoundDelay > 1.f)
+	{
+		m_fWalkSoundDelay = 0.f;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_EFF, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_EFF);
+
+		int iRand = rand() % 5;
+		switch (iRand)
+		{
+		case 0:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_1.ogg", CSoundMgr::MONSTER_EFF);
+			break;
+		case 1:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_2.ogg", CSoundMgr::MONSTER_EFF);
+			break;
+		case 2:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_3.ogg", CSoundMgr::MONSTER_EFF);
+			break;
+		case 3:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_4.ogg", CSoundMgr::MONSTER_EFF);
+			break;
+		case 4:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_4.ogg", CSoundMgr::MONSTER_EFF);
+			break;
+		}
+	}
+	else
+		m_fWalkSoundDelay += m_pTimeMgr->GetDelta();
 }
 
 void CBoss_CyberDemon::Dash()
@@ -482,20 +506,20 @@ void CBoss_CyberDemon::Dash()
 		m_fAccel = 3.f;
 		m_bIsCharging = true;
 
-		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_VOICE, 1.0f);
-		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_VOICE);
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_EFF, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_EFF);
 
 		int iRand = rand() % 3;
 		switch (iRand)
 		{
 		case 0:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_1.wav", CSoundMgr::MONSTER_VOICE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_1.wav", CSoundMgr::MONSTER_EFF);
 			break;
 		case 1:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_2.wav", CSoundMgr::MONSTER_VOICE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_2.wav", CSoundMgr::MONSTER_EFF);
 			break;
 		case 2:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_3.wav", CSoundMgr::MONSTER_VOICE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_3.wav", CSoundMgr::MONSTER_EFF);
 			break;
 		}
 
@@ -530,11 +554,32 @@ void CBoss_CyberDemon::Dash()
 		else if (m_fAccel < 1)
 			m_fAccel = 1;
 
+		// 플레이어 피격
 		float fDashDmg = 30.f;
 		if (!m_bIsChargeHitted && m_pMelleCollider->Get_IsCollision())
 		{
 			static_cast<ENGINE::CCondition*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player()->Get_Component(L"Condition"))->Add_Hp(-fDashDmg);
 			m_bIsChargeHitted = false;
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER_VOICE, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER_VOICE);
+			int iSound = rand() % 4;
+
+			switch (iSound)
+			{
+			case 0:
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_1.wav", CSoundMgr::PLAYER_VOICE);
+				break;
+			case 1:
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_2.ogg", CSoundMgr::PLAYER_VOICE);
+				break;
+			case 2:
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_3.ogg", CSoundMgr::PLAYER_VOICE);
+				break;
+			case 3:
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_4.ogg", CSoundMgr::PLAYER_VOICE);
+				break;
+			}
 		}
 
 		m_pTransform->Move_AdvancedPos(m_vDashDir, fSpeed);
@@ -689,6 +734,7 @@ void CBoss_CyberDemon::Fire()
 			ENGINE::MONSTER_REVOLVER);
 		pInstance->Set_MapLayer(m_mapLayer);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+		static_cast<ENGINE::CTransform*>(pInstance->Get_Component(L"Transform"))->SetSize(D3DXVECTOR3(3, 3, 3));
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
@@ -765,9 +811,9 @@ void CBoss_CyberDemon::Jump()
 		m_bIsJump = false;
 		m_fPatternChangeDelay = 5.f;
 
-		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_VOICE, 1.0f);
-		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_VOICE);
-		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Jump.ogg", CSoundMgr::MONSTER_VOICE);
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_EFF, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_EFF);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Jump.ogg", CSoundMgr::MONSTER_EFF);
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);

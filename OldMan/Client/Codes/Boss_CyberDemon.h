@@ -130,6 +130,8 @@ private:
 
 	float					m_fHittedSoundDelay;
 	float					m_fOldHp;
+
+	float					m_fWalkSoundDelay;
 };
 
 #define __BOSS_CYBERDEMON_H__
