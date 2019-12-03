@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "Effect_RocketSmoke.h"
 #include "Effect_Explosion_Rocket.h"
+#include "GaugeBar.h"
 
 
 CBoss_CyberDemon::CBoss_CyberDemon(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -291,10 +292,10 @@ void CBoss_CyberDemon::Check_Physic()
 
 void CBoss_CyberDemon::State()
 {
-	if (D3DXVec3Length(&(m_vPlayer_Pos - m_pTransform->GetPos())) < 35.f)
+	if (!m_bIsFindPlayer && D3DXVec3Length(&(m_vPlayer_Pos - m_pTransform->GetPos())) < 35.f)
 	{
 		m_bIsFindPlayer = true;
-		cout << "Find Target!!!!!!!" << endl;
+		m_mapLayer[ENGINE::CLayer::UI]->AddObject(ENGINE::OBJECT_TYPE::UI, CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_BOSSHP));
 	}
 
 	if (m_fPatternChangeDelay > 7.f)

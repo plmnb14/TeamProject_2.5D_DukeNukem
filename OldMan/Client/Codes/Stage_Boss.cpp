@@ -63,13 +63,13 @@ void CStage_Boss::Update()
 		{
 			if (static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->GetDead())
 			{
-				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
+				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_BOSS));
 				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 			}
 
 			else
 			{
-				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
+				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
 				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 			}
 

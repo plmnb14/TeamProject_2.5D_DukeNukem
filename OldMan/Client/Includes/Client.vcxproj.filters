@@ -190,13 +190,11 @@
     <Filter Include="02.GameObject\07.VFX\00. Effect\08. Summon_Effect">
       <UniqueIdentifier>{15e84c99-58e0-4091-855f-0c9254758ed8}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
     <Filter Include="03.Observer\02.BossObserver">
       <UniqueIdentifier>{cc836a7d-269a-4c81-b988-ed9149317f12}</UniqueIdentifier>
-=======
+    </Filter>
     <Filter Include="01.Scene\03.Stage_Boss">
       <UniqueIdentifier>{de196fb3-9bba-4e13-b8ab-3ee9ba53ca82}</UniqueIdentifier>
->>>>>>> 0ba21d40818d05505faf6cc43711a075bf108ecd
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -393,13 +391,11 @@
     <ClInclude Include="..\Codes\Summon_Effect.h">
       <Filter>02.GameObject\07.VFX\00. Effect\08. Summon_Effect</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\Codes\BossObserver.h">
       <Filter>03.Observer\02.BossObserver</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="..\Codes\Stage_Boss.h">
       <Filter>01.Scene\03.Stage_Boss</Filter>
->>>>>>> 0ba21d40818d05505faf6cc43711a075bf108ecd
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -572,13 +568,11 @@
     <ClCompile Include="..\Codes\Summon_Effect.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\08. Summon_Effect</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="..\Codes\BossObserver.cpp">
       <Filter>03.Observer\02.BossObserver</Filter>
-=======
+    </ClCompile>
     <ClCompile Include="..\Codes\Stage_Boss.cpp">
       <Filter>01.Scene\03.Stage_Boss</Filter>
->>>>>>> 0ba21d40818d05505faf6cc43711a075bf108ecd
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
