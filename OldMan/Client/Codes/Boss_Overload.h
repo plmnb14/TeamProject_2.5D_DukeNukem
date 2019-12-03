@@ -61,9 +61,10 @@ private:
 	void Shot_Direct();
 	void Shot_Homing();
 	void Shot_Rain();
+	void Set_Pos(D3DXVECTOR3 _Pos);
 
 public:
-	static CBoss_Overload* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CBoss_Overload* Create(LPDIRECT3DDEVICE9 pGraphicDev , D3DXVECTOR3 _Pos);
 
 private:
 	ENGINE::CResourceMgr*	m_pResourceMgr;
@@ -90,6 +91,12 @@ private:
 	wstring	m_wstrTex;
 
 	float m_fLifeTime;
+
+	bool m_bRight;
+	bool m_bLeft;
+
+	int m_iMissileCount;
+	float m_fMissileTime;
 
 };
 

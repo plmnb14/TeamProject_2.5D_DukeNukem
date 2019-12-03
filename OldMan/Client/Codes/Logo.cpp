@@ -29,7 +29,7 @@ void CLogo::Update()
 		{
 			WaitForSingleObject(m_hLoadingThread, INFINITE);
 
-			HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
+			HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
 			FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 		}
 	}

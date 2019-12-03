@@ -9,6 +9,7 @@
 #include "PigMan.h"
 #include "OctaBrain.h"
 #include "SceneSelector.h"
+#include "Boss_Overload.h"
 
 #include "Summon_Effect.h"
 
@@ -426,7 +427,9 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 0)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,-56,121 }, CSummon_Effect::MONSTER);
+					cout << "여도 오냐" << endl;
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,-50,121 }, CSummon_Effect::OVERLOAD);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
