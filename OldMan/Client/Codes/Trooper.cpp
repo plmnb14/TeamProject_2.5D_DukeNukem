@@ -47,8 +47,9 @@ void CTrooper::LateUpdate()
 
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
-	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+	if (m_pObserver != nullptr)                                                                    //체크 
+		Cameramatrix = m_pObserver->GetViewMatrix();
+
 	vSize = m_pTransform->GetSize();
 
 	m_pBillborad->Billborad_Yagnle(Localmatrix, Cameramatrix, vSize);                          // 빌보드 설정
@@ -209,7 +210,7 @@ HRESULT CTrooper::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"PigMan_Fire");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Trooper_WalkFront");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -308,7 +309,9 @@ void CTrooper::Player_Pursue(float _move)
 
 	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
 	m_MoveSpeed = 2.f* _move * m_pTimeMgr->GetDelta();   // 속도
-
+	ChangeTex(L"Trooper_WalkFront");
+	m_pAnimator->Set_FrameAmp(5.f);
+	m_pAnimator->Stop_Animation(false);
 	m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, m_MoveSpeed);
 
 }
@@ -340,38 +343,19 @@ void CTrooper::Monster_Foward()
 	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
 
-	if (m_fFowardDealy > 0.1) {
-		if (acos(fDot_Player_Monster_Forward) * 90 < 250)
-		{
-			m_pAnimator->Stop_Animation(false);
-			ChangeTex(L"OctaBrain_Idle");
-			m_pAnimator->Set_FrameAmp(5.f);
-			m_fFowardDealy = 0;
-			Player_Pursue(1.f);
-		}
-		else if (acos(fDot_Player_Monster_Forward) * 90 > 250)
-		{
-			m_pAnimator->Stop_Animation(false);
-			ChangeTex(L"OctaBrain_Idle");
-			m_pAnimator->Set_FrameAmp(5.f);
-			m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 10.f);
-			Player_Pursue(0.f);
-			m_fFowardDealy = 0;
-		}
-	}
+
 	//	cout<<m_pTransform->GetAngle(ENGINE::ANGLE_X)*180 <<"X"<<endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
 	//cout << acos(fDot_Monster_Right)*90 << endl;
-	cout << acos(fDot_Player_Monster_Forward) * 90 << endl;
-	//cout << vMonster_Player_Dir.x <<"X"<< endl;
+//	//cout << vMonster_Player_Dir.x <<"X"<< endl;
 	//cout << vMonster_Player_Dir.y <<"Y"<< endl;
 	//cout << vMonster_Player_Dir.z <<"Z"<<endl;
 	//m_pTransform->SetDir(vMonster_Player_Dir);
 	//cout << test <<"좌우"<< endl;  
 	//cout << Dot2 <<"앞뒤"<< endl;
-
 }
+
 
 void CTrooper::Monster_Range()
 {
@@ -423,7 +407,7 @@ void CTrooper::Monster_Shot()
 
 	//딜레이 만들기 
 	m_pTransform->MovePos(0.f);
-	ChangeTex(L"PigMan_Dead");
+	ChangeTex(L"Trooper_DeadFall");
 	m_pAnimator->Set_Frame(0.f);
 	m_pAnimator->Stop_Animation(true);
 	//m_pCondition->Add_Hp(-1);
@@ -495,27 +479,13 @@ void CTrooper::Monster_Fire2()
 	float fDot_Player_Monster_Forward;                        // 몬스터의 정면을 구하기 위한 내적값 -> +정면 -후면 이다. 
 	fDot_Player_Monster_Forward = D3DXVec3Dot(&vMonster_Player_Dir, &vMonsterDir_Fowrd_Get);
 
-	//cout << Mon_RIght_Dir.x << "x" << endl;
-	//cout << Mon_RIght_Dir.y << "y" << endl;
-	//cout << Mon_RIght_Dir.z <<"z"<< endl;
-	//cout << vMonsterDir_Fowrd2.x<<"몬" << endl;
-	//	cout << vMonsterDir_Fowrd2.y << "몬" << endl;
-	//cout << vMonsterDir_Fowrd2.z << "몬" << endl;
-	//	cout << <<"y"<< endl;
-	//cout << Mon_RIght_Dir.z	<<"z"<< endl;
-	//cout << vMonsterPos.x<<"x2" << endl;
-	//cout << vMonsterPos.y<<"y2" << endl;
-	m_pAnimator->Stop_Animation(false);
 
-	ChangeTex(L"PigMan_PreFire");
-	m_pAnimator->Set_FrameAmp(0.5f);
 
 	//cout << fDot_Player_Monster_Forward << endl;
-	if (acos(fDot_Player_Monster_Forward) * 90 < 250)                                         // 정면일 경우만 사격한다. 
-	{
+
 		if (m_fTime > 1.8f)
 		{
-			ChangeTex(L"PigMan_Fire");
+			ChangeTex(L"Trooper_FireFront");
 			m_pAnimator->Set_FrameAmp(1.f);
 			m_pAnimator->Stop_Animation(false);
 
@@ -523,16 +493,18 @@ void CTrooper::Monster_Fire2()
 		if (m_fTime > 2)
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+			pInstance->Set_MapLayer(m_mapLayer);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+
 			m_fTime = 0;
 		}
-	}
 }
+
 
 void CTrooper::Monster_Dead()
 {
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
-	ChangeTex(L"PigMan_Dead");
+	ChangeTex(L"Trooper_DeadFall");
 	m_pAnimator->Set_FrameAmp(1.f);
 	m_pAnimator->Set_Frame(5.f);
 
@@ -604,25 +576,6 @@ void CTrooper::Object_Collison()
 
 }
 
-void CTrooper::ChangeTex(wstring _wstrTex)
-{
-	if (m_wstrTex.compare(_wstrTex) == 0)
-		return;
-
-	m_wstrTex = _wstrTex;
-
-	m_mapComponent.erase(L"Texture");
-	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_DYNAMIC, _wstrTex);
-	NULL_CHECK(pComponent);
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
-
-	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK(m_pTexture);
-
-}
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CTrooper::Monster_State_Set()
@@ -633,7 +586,7 @@ void CTrooper::Monster_State_Set()
 			Monster_Idle();
 			break;
 		case MONSTER_PURSUE:
-			Monster_Foward();
+			Player_Pursue(0.9f);
 			break;
 		case MONSTER_SHOT:
 			Monster_Shot();
@@ -648,11 +601,10 @@ void CTrooper::Monster_State_Set()
 			Monster_Attack();
 			break;
 		}
-	
 
 }
 
-CTrooper * CTrooper::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
+CTrooper * CTrooper::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3DXVECTOR3 _Pos)
 {
 
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);

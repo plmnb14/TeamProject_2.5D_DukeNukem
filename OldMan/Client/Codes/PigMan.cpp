@@ -61,7 +61,7 @@ void CPigMan::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	cout << m_pCondition->Get_Hp() << endl;
+//	cout << m_pCondition->Get_Hp() << endl;
 
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
@@ -162,16 +162,7 @@ HRESULT CPigMan::Initialize()
 	m_pMelleCollider->Set_Enabled(false);
 	m_pMelleCollider->Set_Type(ENGINE::COLLISION_AABB);
 
-	//일단 트리거 설정은 되었지만 -> 의문점 충돌을 판정하지만 
-	// 밀리 공격 상태는 어떤식으로 설정해야 하지? 
-	// 1. 물리 공격의 사거리가 되었을때까지 이동한후 플레이어를 공격한다. 
-	// 2. 여기서 공격은? 더 이동했다가 멈추는것을 말하는가?
-	// 3. 그럼 피격시 플레이어가 뒤로 밀리는 것인가 ? 
-	// 4.  다시 근접공격 가능한 거리까지 추적을 하는것 우선시 해야함 
-	// 5. 근접 가능한 공격 사거리까지 도달했을때 
-
-	//공중으로 안쫓게 해야한다. 
-
+	
 	//컨디션 
 	m_pCondition->Set_Hp(100.f);
 
@@ -375,7 +366,7 @@ void CPigMan::Monster_Foward()
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
 	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
 	//cout << acos(fDot_Monster_Right)*90 << endl;
-	cout << acos(fDot_Player_Monster_Forward) * 90 << endl;
+	//cout << acos(fDot_Player_Monster_Forward) * 90 << endl;
 	//cout << vMonster_Player_Dir.x <<"X"<< endl;
 	//cout << vMonster_Player_Dir.y <<"Y"<< endl;
 	//cout << vMonster_Player_Dir.z <<"Z"<<endl;
@@ -535,6 +526,7 @@ void CPigMan::Monster_Fire2()
 		if (m_fTime > 2)
 		{
 			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+			pInstance->Set_MapLayer(m_mapLayer);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
 			m_fTime = 0;
 		}
@@ -617,41 +609,21 @@ void CPigMan::Object_Collison()
 	// 그래서 그 각도에 겹치는게 없는지 판단하는게 맞다. 
 	// 벽 판단하기 
 	// 텍스처 넣기 
-
-
+	
 }
 
-void CPigMan::ChangeTex(wstring _wstrTex)
-{
-	if (m_wstrTex.compare(_wstrTex) == 0)
-		return;
 
-	m_wstrTex = _wstrTex;
-
-	m_mapComponent.erase(L"Texture");
-	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
-	NULL_CHECK(pComponent);
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
-
-	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK(m_pTexture);
-
-}
 
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CPigMan::Monster_State_Set()
 {
-	
 		switch (m_eNextState)
 		{
 		case MONSTER_IDLE:
 			Monster_Idle();
 			break;
 		case MONSTER_PURSUE:
-			Monster_Foward();
+			Player_Pursue(1.f);
 			break;
 		case MONSTER_SHOT:
 			Monster_Shot();
@@ -671,7 +643,7 @@ void CPigMan::Monster_State_Set()
 
 }
 
-CPigMan * CPigMan::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target)
+CPigMan * CPigMan::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3DXVECTOR3 _Pos)
 {
 
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);

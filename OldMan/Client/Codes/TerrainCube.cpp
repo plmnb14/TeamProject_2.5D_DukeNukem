@@ -2,6 +2,8 @@
 #include "TerrainCube.h"
 #include "Trasform.h"
 #include "Collider.h"
+#include "Condition.h"
+#include "SoundMgr.h"
 
 CTerrainCube::CTerrainCube(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CTerrain(pGraphicDev)
@@ -15,7 +17,29 @@ CTerrainCube::~CTerrainCube()
 int CTerrainCube::Update()
 {
 	if (m_bIsDead)
+	{
+		if (m_eTag == ENGINE::WOOD_BOX)
+		{
+			int iSound = rand() % 3;
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WOOD_BOX, 5.f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WOOD_BOX);
+			switch (iSound)
+			{
+			case 0:
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_1.ogg", CSoundMgr::WOOD_BOX);
+				break;
+			case 1:
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_2.ogg", CSoundMgr::WOOD_BOX);
+				break;
+			case 2:
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_3.ogg", CSoundMgr::WOOD_BOX);
+				break;
+			}
+		}
+
 		return DEAD_OBJ;
+	}
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
@@ -27,6 +51,17 @@ void CTerrainCube::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate(); 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
+
+	if (m_eTag == ENGINE::WOOD_BOX)
+	{
+		if (m_pCondition != nullptr)
+		{
+			if (m_pCondition->Get_Hp() <= 0)
+			{
+				m_bIsDead = true;
+			}
+		}
+	}
 }
 
 void CTerrainCube::Render()
@@ -83,6 +118,7 @@ HRESULT CTerrainCube::LateInit()
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
 
+
 	return S_OK;
 }
 
@@ -127,6 +163,15 @@ HRESULT CTerrainCube::AddComponent()
 
 	m_pCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
+
+	pComponent = ENGINE::CCondition::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Condition", pComponent });
+
+	m_pCondition = dynamic_cast<ENGINE::CCondition*>(pComponent);
+	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
+
+	m_pCondition->Set_Hp(30);
 
 	return S_OK;
 }

@@ -82,6 +82,7 @@ private:
 	bool					m_bPumpIn;
 	bool					m_bPumpOut;
 	bool					m_bPump;
+	int						m_iHand;
 };
 
 #define __PLAYER_HAND__
