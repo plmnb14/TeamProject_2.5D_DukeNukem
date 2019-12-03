@@ -508,6 +508,10 @@ No_Animation|Arrow|Arrow_0.png|1|..\Client\Texture\UI\No_Animation\Arrow\Arrow_0
 No_Animation|ETC|ArmorIcon.png|1|..\Client\Texture\UI\No_Animation\ETC\ArmorIcon.png
 No_Animation|ETC|HpIcon.png|1|..\Client\Texture\UI\No_Animation\ETC\HpIcon.png
 No_Animation|ETC|WeaponRightLine.png|1|..\Client\Texture\UI\No_Animation\ETC\WeaponRightLine.png
+No_Animation|GaugeBar|BossHpGauge.png|1|..\Client\Texture\UI\No_Animation\GaugeBar\BossHpGauge.png
+No_Animation|GaugeBar|BossHPGauge_2.png|1|..\Client\Texture\UI\No_Animation\GaugeBar\BossHPGauge_2.png
+No_Animation|GaugeBar|BossHpProgress.png|1|..\Client\Texture\UI\No_Animation\GaugeBar\BossHpProgress.png
+No_Animation|GaugeBar|BossHpProgress_Bg.png|1|..\Client\Texture\UI\No_Animation\GaugeBar\BossHpProgress_Bg.png
 No_Animation|GaugeBar|HpGauge.png|1|..\Client\Texture\UI\No_Animation\GaugeBar\HpGauge.png
 No_Animation|GaugeBar|ShieldGauge.png|1|..\Client\Texture\UI\No_Animation\GaugeBar\ShieldGauge.png
 No_Animation|HittedCircle|Hitted_UI_L.png|1|..\Client\Texture\UI\No_Animation\HittedCircle\Hitted_UI_L.png

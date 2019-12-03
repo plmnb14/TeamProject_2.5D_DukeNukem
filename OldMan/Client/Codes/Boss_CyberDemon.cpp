@@ -5,6 +5,7 @@
 #include "Camera_Component.h"
 #include "Bullet.h"
 #include "FlameBullet.h"
+#include "MonsterBullet.h"
 #include "Rock.h"
 #include "Collider.h"
 #include "CameraObserver.h"
@@ -26,9 +27,11 @@ CBoss_CyberDemon::CBoss_CyberDemon(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTexture(nullptr), m_pBuffer(nullptr),
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
 	m_pRigid(nullptr), m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
+	m_pBossSubject(ENGINE::GetBossSubject()),
 	m_pObserver(nullptr), m_pCondition(nullptr), m_pBillboard(nullptr), m_pAnimator(nullptr),
 	m_eState(CYBER_WALK), m_fLifeTime(0), m_fFowardDealy(0), m_bIsFindPlayer(false),
-	m_bIsCharging(false), m_vDashDir(0, 0, 0), m_bIsJump(false) , m_fAccel(1)
+	m_bIsCharging(false), m_vDashDir(0, 0, 0), m_bIsJump(false), m_fAccel(1), m_pHpBar(nullptr),
+	m_bIsChargeHitted(false), m_fOldHp(0.f), m_fHittedSoundDelay(0.f)
 {
 }
 
@@ -47,6 +50,10 @@ int CBoss_CyberDemon::Update()
 
 	State();
 	Monster_Foward();
+	HittedSound();
+
+	m_tCondition.fHp = m_pCondition->Get_Hp();
+	m_pBossSubject->AddData(ENGINE::CBossSubject::BOSS_INFO, &(m_tCondition));
 
 	return NO_EVENT;
 }
@@ -71,6 +78,7 @@ void CBoss_CyberDemon::LateUpdate()
 	m_matView = m_pBillboard->GetWorldMatrix_Billborad();
 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
+	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
 	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
@@ -116,6 +124,18 @@ HRESULT CBoss_CyberDemon::Initialize()
 	m_pGroundChekCollider->Set_UnderPos();
 	m_pGroundChekCollider->SetUp_Box();
 
+	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
+	m_pMelleCollider->Set_Radius(m_pCollider->Get_Radius() * 1.2);
+	m_pMelleCollider->Set_Dynamic(true);
+	m_pMelleCollider->Set_Trigger(true);
+	m_pMelleCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
+		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+		m_pTransform->GetPos().z });
+	m_pMelleCollider->Set_UnderPos();
+	m_pMelleCollider->SetUp_Box();
+	m_pMelleCollider->Set_Enabled(false);
+	m_pMelleCollider->Set_Type(ENGINE::COLLISION_AABB);
+
 
 	// 리지드 바디 세팅
 	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
@@ -132,9 +152,8 @@ HRESULT CBoss_CyberDemon::Initialize()
 	m_pRigid->Set_Accel({ 1.f, 0.f, 0.f });					// 각 축에 해당하는 Accel 값
 	m_pRigid->Set_MaxAccel({ 2.f , 4.f , 2.f });			// 각 축에 해당하는 MaxAccel 값
 
-
-															// 컨디션
-	m_pCondition->Set_Hp(100.f);
+	// 컨디션
+	m_pCondition->Set_Hp(5000.f);
 	m_pCondition->Set_Armor(0.f);
 	m_pCondition->Set_Shield(0.f);
 	m_pCondition->Set_Fuel(0.f);
@@ -153,6 +172,8 @@ HRESULT CBoss_CyberDemon::Initialize()
 	m_pCondition->Set_Run(false);
 	m_pCondition->Set_MoveSpeed(10.f);
 	m_pCondition->Set_MoveAccel(1.f);
+
+	m_fOldHp = 5000.f;
 
 	m_pAnimator->Set_FrameAmp(8.f);
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
@@ -227,6 +248,13 @@ HRESULT CBoss_CyberDemon::AddComponent()
 	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
 
+	// MEELE
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Monster_Mell", pComponent });
+
+	m_pMelleCollider = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pCollider, E_FAIL);
 
 	// Rigid
 	pComponent = ENGINE::CRigidBody::Create();
@@ -292,17 +320,28 @@ void CBoss_CyberDemon::Check_Physic()
 
 void CBoss_CyberDemon::State()
 {
+	if (m_eState == CYBER_DEAD)
+	{
+		static_cast<CGaugeBar*>(m_pHpBar)->SetVisible(false);
+		return;
+	}
+
 	if (!m_bIsFindPlayer && D3DXVec3Length(&(m_vPlayer_Pos - m_pTransform->GetPos())) < 35.f)
 	{
 		m_bIsFindPlayer = true;
-		//m_mapLayer[ENGINE::CLayer::UI]->AddObject(ENGINE::OBJECT_TYPE::UI, CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_BOSSHP));
+
+		m_pHpBar = CGaugeBar::Create(m_pGraphicDev, CGaugeBar::BAR_BOSSHP);
+		m_mapLayer[ENGINE::CLayer::UI]->AddObject(ENGINE::OBJECT_TYPE::UI, m_pHpBar);
+		m_pHpBar->Set_MapLayer(m_mapLayer);
+		static_cast<CUI*>(m_pHpBar)->SetSize(30.f, 30.f);
+		static_cast<CUI*>(m_pHpBar)->SetPos(D3DXVECTOR3(0.f, 280.f, 0.f));
 	}
 
 	if (m_fPatternChangeDelay > 3.f)
 	{
 		m_fPatternChangeDelay = 0.f;
 		m_eState = (CBoss_CyberDemon::CYBERDEMON_STATE)(m_eState + 1);
-		if (m_eState == CYBER_DEAD)
+		if (m_pCondition->Get_Hp() > 0 && m_eState == CYBER_DEAD)
 			m_eState = CYBER_WALK;
 	}
 	else
@@ -310,9 +349,14 @@ void CBoss_CyberDemon::State()
 
 	if (!m_bIsFindPlayer)
 		m_eState = CYBER_WALK;
-	//else
-	//	//test
-	//	m_eState = CYBER_JUMP;
+
+	if (m_pCondition->Get_Hp() <= 0)
+		m_eState = CYBER_DEAD;
+
+	if (m_eState == CYBER_DEAD)
+	{
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+	}
 
 	switch (m_eState)
 	{
@@ -323,6 +367,7 @@ void CBoss_CyberDemon::State()
 	}
 	case CBoss_CyberDemon::CYBER_DASH:
 	{
+		m_pMelleCollider->Set_Enabled(true);
 		Dash();
 		break;
 	}
@@ -350,6 +395,45 @@ void CBoss_CyberDemon::State()
 		break;
 	}
 
+}
+
+void CBoss_CyberDemon::HittedSound()
+{
+	cout << "OldHp : " << m_fOldHp << endl;
+	cout << "NowHp : " << m_pCondition->Get_Hp() << endl;
+
+	if (m_fHittedSoundDelay > 2.f && (m_fOldHp > m_pCondition->Get_Hp()))
+	{
+		if (m_eTag == ENGINE::BULLET_PLAYER)
+		{
+			m_fHittedSoundDelay = 0.f;
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_VOICE, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_VOICE);
+
+			int iRand = rand() % 4;
+			switch (iRand)
+			{
+			case 0:
+				CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_1.ogg", CSoundMgr::MONSTER_VOICE);
+				break;
+			case 1:
+				CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_2.ogg", CSoundMgr::MONSTER_VOICE);
+				break;
+			case 2:
+				CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_3.ogg", CSoundMgr::MONSTER_VOICE);
+				break;
+			case 3:
+				CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_4.ogg", CSoundMgr::MONSTER_VOICE);
+				break;
+			}
+
+			m_fOldHp = m_pCondition->Get_Hp();
+
+		}
+	}
+	else
+		m_fHittedSoundDelay += m_pTimeMgr->GetDelta();
 }
 
 void CBoss_CyberDemon::Walk()
@@ -397,11 +481,34 @@ void CBoss_CyberDemon::Dash()
 	{
 		m_fAccel = 3.f;
 		m_bIsCharging = true;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_VOICE, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_VOICE);
+
+		int iRand = rand() % 3;
+		switch (iRand)
+		{
+		case 0:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_1.wav", CSoundMgr::MONSTER_VOICE);
+			break;
+		case 1:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_2.wav", CSoundMgr::MONSTER_VOICE);
+			break;
+		case 2:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_3.wav", CSoundMgr::MONSTER_VOICE);
+			break;
+		}
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_DashEff.ogg", CSoundMgr::MONSTER);
+
 	}
 	else if (m_bIsCharging && m_fChargeDelay > 2.5f)
 	{
 		m_bIsCharging = false;
 		m_fChargeDelay = 0.f;
+		m_pMelleCollider->Set_Enabled(false);
 	}
 	else
 	{
@@ -422,6 +529,13 @@ void CBoss_CyberDemon::Dash()
 
 		else if (m_fAccel < 1)
 			m_fAccel = 1;
+
+		float fDashDmg = 30.f;
+		if (!m_bIsChargeHitted && m_pMelleCollider->Get_IsCollision())
+		{
+			static_cast<ENGINE::CCondition*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player()->Get_Component(L"Condition"))->Add_Hp(-fDashDmg);
+			m_bIsChargeHitted = false;
+		}
 
 		m_pTransform->Move_AdvancedPos(m_vDashDir, fSpeed);
 		m_pTransform->SetDir(m_vDashDir);
@@ -528,6 +642,21 @@ void CBoss_CyberDemon::Slash()
 			ENGINE::CTransform* pBulletTr = static_cast<ENGINE::CTransform*>(pInstance->Get_Component(L"Transform"));
 			pBulletTr->SetSize(vSize);
 		}
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
+
+		int iRand = rand() % 2;
+		switch (iRand)
+		{
+		case 0:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Slash_1.ogg", CSoundMgr::MONSTER);
+			break;
+		case 1:
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Slash_2.ogg", CSoundMgr::MONSTER);
+			break;
+		}
+
 	}
 	else
 		m_fSlashDelay += m_pTimeMgr->GetDelta() * 3;
@@ -551,7 +680,7 @@ void CBoss_CyberDemon::Fire()
 	{
 		m_fFireDelay = 0.f;
 
-		CGameObject* pInstance = CBullet::Create(
+		CGameObject* pInstance = CMonsterBullet::Create(
 			m_pGraphicDev,
 			m_pTransform->GetPos(),
 			m_vPlayer_Pos - m_pTransform->GetPos(),
@@ -560,6 +689,10 @@ void CBoss_CyberDemon::Fire()
 			ENGINE::MONSTER_REVOLVER);
 		pInstance->Set_MapLayer(m_mapLayer);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Fire_1.ogg", CSoundMgr::MONSTER);
 	}
 	else
 		m_fFireDelay += m_pTimeMgr->GetDelta();
@@ -575,6 +708,12 @@ void CBoss_CyberDemon::Jump()
 		m_pRigid->Set_IsGround(false);
 
 		m_bIsJump = true;
+
+		D3DXVECTOR3 vTempDir = m_vRandomPos - m_pTransform->GetPos();
+		D3DXVec3Normalize(&vTempDir, &vTempDir);
+		vTempDir.y = 0;
+
+		m_pTransform->SetDir(vTempDir);
 	}
 
 	if (m_bIsJump && m_pRigid->Get_IsGround())
@@ -622,10 +761,17 @@ void CBoss_CyberDemon::Jump()
 			pTransform = static_cast<ENGINE::CTransform*>(pInstance->Get_Component(L"Transform"));
 			pTransform->SetPos(D3DXVECTOR3(vTmpPos_Minus_2.x, m_pTransform->GetPos().y - 24.f, vTmpPos_Minus_2.z));
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::TERRAIN, pInstance);
-
 		}
 		m_bIsJump = false;
 		m_fPatternChangeDelay = 5.f;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_VOICE, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_VOICE);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Jump.ogg", CSoundMgr::MONSTER_VOICE);
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_RockCreate.ogg", CSoundMgr::MONSTER);
 	}
 
 	

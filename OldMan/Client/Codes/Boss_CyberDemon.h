@@ -55,6 +55,7 @@ private:
 private:
 	void Check_Physic();
 	void State();
+	void HittedSound();
 
 private:
 	void Walk();
@@ -77,8 +78,10 @@ private:
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
 	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CCollider*		m_pMelleCollider;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCondition*		m_pCondition;
+	ENGINE::CONDITION		m_tCondition;
 	ENGINE::CBillborad*		m_pBillboard;
 	ENGINE::CAnimator*		m_pAnimator;
 
@@ -87,10 +90,13 @@ private:
 	ENGINE::CCameraSubject*	m_pSubject;
 	CCameraObserver*		m_pObserver;
 	ENGINE::CPlayerSubject*	m_pPlayerSubject;
+	ENGINE::CBossSubject*	m_pBossSubject;
 
 	D3DXMATRIX				m_matView;
 	CYBERDEMON_STATE		m_eState;
 	wstring					m_wstrTex;
+
+	CGameObject*			m_pHpBar;
 
 	float					m_fLifeTime;
 	float					m_fFowardDealy;
@@ -113,6 +119,7 @@ private:
 	D3DXVECTOR3				m_vDashDir;
 	float					m_fChargeDelay;
 	bool					m_bIsCharging;
+	bool					m_bIsChargeHitted;
 
 	float					m_fSlashDelay;
 	float					m_fFireDelay;
@@ -120,6 +127,9 @@ private:
 	bool					m_bIsJump;
 	float					m_fJumpDelay;
 	float					m_fAccel;
+
+	float					m_fHittedSoundDelay;
+	float					m_fOldHp;
 };
 
 #define __BOSS_CYBERDEMON_H__

@@ -196,6 +196,9 @@
     <Filter Include="01.Scene\03.Stage_Boss">
       <UniqueIdentifier>{de196fb3-9bba-4e13-b8ab-3ee9ba53ca82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\04.Bullet\02. MonsterBullet">
+      <UniqueIdentifier>{4bae5b7a-b843-4b0c-8458-1e1f2e260f0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -397,6 +400,9 @@
     <ClInclude Include="..\Codes\Stage_Boss.h">
       <Filter>01.Scene\03.Stage_Boss</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\MonsterBullet.h">
+      <Filter>02.GameObject\04.Bullet\02. MonsterBullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -573,6 +579,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stage_Boss.cpp">
       <Filter>01.Scene\03.Stage_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MonsterBullet.cpp">
+      <Filter>02.GameObject\04.Bullet\02. MonsterBullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

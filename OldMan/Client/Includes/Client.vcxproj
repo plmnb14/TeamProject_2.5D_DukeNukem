@@ -187,6 +187,7 @@
     <ClInclude Include="..\Codes\LogoBack.h" />
     <ClInclude Include="..\Codes\MainApp.h" />
     <ClInclude Include="..\Codes\Monster.h" />
+    <ClInclude Include="..\Codes\MonsterBullet.h" />
     <ClInclude Include="..\Codes\Number.h" />
     <ClInclude Include="..\Codes\OctaBrain.h" />
     <ClInclude Include="..\Codes\OneUseObject.h" />
@@ -261,6 +262,7 @@
     <ClCompile Include="..\Codes\LogoBack.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\Monster.cpp" />
+    <ClCompile Include="..\Codes\MonsterBullet.cpp" />
     <ClCompile Include="..\Codes\Number.cpp" />
     <ClCompile Include="..\Codes\OctaBrain.cpp" />
     <ClCompile Include="..\Codes\OneUseObject.cpp" />

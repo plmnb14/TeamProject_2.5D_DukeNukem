@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include "GaugeBar.h"
 #include "PlayerObserver.h"
+#include "BossObserver.h"
 #include "Trasform.h"
 #include "Condition.h"
 
 CGaugeBar::CGaugeBar(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CUI(pGraphicDev)
+	:CUI(pGraphicDev),
+	m_pBossSubject(ENGINE::GetBossSubject()),
+	m_pBossObserver(nullptr)
 {
 }
 
@@ -31,7 +34,7 @@ int CGaugeBar::Update()
 		m_fShield = m_pPlayerObserver->GetPlayerInfo().fArmor;
 		break;
 	case CGaugeBar::BAR_BOSSHP:
-		m_fBossHp = m_pPlayerObserver->GetPlayerInfo().fArmor;
+		m_fBossHp = m_pBossObserver->GetBossInfo().fHp;
 		break;
 	case CGaugeBar::BAR_END:
 		break;
@@ -54,17 +57,23 @@ void CGaugeBar::LateUpdate()
 
 void CGaugeBar::Render()
 {
-	for (int i = 0; i < m_iBarMaxCount; i++)
+	if (m_eBarType != BAR_BOSSHP)
 	{
-		if (m_vecBarUI.size() == 0)
-			break;
+		for (int i = 0; i < m_iBarMaxCount; i++)
+		{
+			if (m_vecBarUI.size() == 0)
+				break;
 
-		float fPadding = m_fSizeX * 0.3f;
-		float fIdxPos = 0.f;
-		fIdxPos += (i * m_fSizeX) - (fPadding * i);
-		m_vecBarUI[i]->SetPos(D3DXVECTOR3(m_vPos.x + fIdxPos, m_vPos.y, m_vPos.z));
-		m_vecBarUI[i]->SetSize(m_fSizeX, m_fSizeY);
+			float fPadding = m_fSizeX * 0.3f;
+			float fIdxPos = 0.f;
+			fIdxPos += (i * m_fSizeX) - (fPadding * i);
+			m_vecBarUI[i]->SetPos(D3DXVECTOR3(m_vPos.x + fIdxPos, m_vPos.y, m_vPos.z));
+			m_vecBarUI[i]->SetSize(m_fSizeX, m_fSizeY);
+		}
 	}
+
+	if (!m_bVisible)
+		return;
 
 	for (auto& iter : m_vecBarUI)
 	{
@@ -93,6 +102,11 @@ HRESULT CGaugeBar::LateInit()
 	CUI::LateInit();
 	InitBar();
 
+	m_pBossObserver = CBossObserver::Create();
+	NULL_CHECK_RETURN(m_pBossObserver, E_FAIL);
+
+	m_pBossSubject->Subscribe(m_pBossObserver);
+
 	return S_OK;
 }
 
@@ -102,6 +116,9 @@ void CGaugeBar::Release()
 	{
 		ENGINE::Safe_Delete(iter);
 	}
+
+	m_pBossSubject->UnSubscribe(m_pBossObserver);
+	ENGINE::Safe_Delete(m_pBossObserver);
 }
 
 HRESULT CGaugeBar::AddComponent()
@@ -150,6 +167,19 @@ void CGaugeBar::InitBar()
 			m_vecBarUI.push_back(CUI::Create(m_pGraphicDev, L"ShieldGauge.png"));
 		break;
 	}
+	case CGaugeBar::BAR_BOSSHP:
+	{
+		m_iBarMaxCount = 1;
+		m_iBarCurCount = m_iBarMaxCount;
+
+		m_vecBarUI.push_back(CUI::Create(m_pGraphicDev, L"BossHpProgress_Bg.png"));
+		m_vecBarUI.push_back(CUI::Create(m_pGraphicDev, L"BossHpProgress.png"));
+
+		for (int i = 0; i < 2; i++)
+			m_vecBarUI[i]->SetPos(m_vPos);
+
+		break;
+	}
 	case CGaugeBar::BAR_END:
 		break;
 	}
@@ -185,12 +215,16 @@ void CGaugeBar::UpdateBar()
 	}
 	case CGaugeBar::BAR_BOSSHP:
 	{
-		int iIdx = (int)m_fBossHp / m_iBarMaxCount;
-		if (m_fShield < 0) iIdx = 0;
-		if (iIdx > 10) iIdx = 10;
-		if (m_fShield > 0 && m_fShield < 10) iIdx = 1;
-		for (int i = 0; i < m_iBarMaxCount - iIdx; i++)
-			m_vecBarUI[m_iBarMaxCount - 1 - i]->SetVisible(false);
+		float fBossMaxHP = 5000;
+		float fPercent = m_fBossHp / fBossMaxHP;
+		if (fPercent < 0)
+			fPercent = 0.f;
+
+		int iBarSizeX = 300;
+
+		m_vecBarUI.back()->SetSize(iBarSizeX * fPercent, 30);
+		m_vecBarUI.back()->SetPos(D3DXVECTOR3((m_vecBarUI.back()->GetPos().x - (iBarSizeX * (1 - fPercent))) * 0.5f, m_vecBarUI.back()->GetPos().y, m_vecBarUI.back()->GetPos().z));
+		m_vecBarUI.front()->SetSize(iBarSizeX, 30);
 		break;
 	}
 	case CGaugeBar::BAR_END:
