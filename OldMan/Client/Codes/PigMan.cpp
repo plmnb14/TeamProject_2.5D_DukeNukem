@@ -105,10 +105,10 @@ HRESULT CPigMan::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
-	m_fMaxRange = 19.0f;//최대사거리
+	m_fMaxRange = 61.0f;//최대사거리
 	m_fRange = 0.f;
-	m_fMinRange = 11.0f;
-	m_fAttack = 5.0f;
+	m_fMinRange = 35.0f;
+	m_fAttack = 19.0f;
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);						// 동적, 정적 Collider 유무
@@ -355,11 +355,11 @@ void CPigMan::Monster_Range()
 	{
 		m_eNextState = MONSTER_FIRE;
 	}
-	else if (fRange<m_fAttack)
+	else 
 	{
-		m_eNextState = MONSTER_MILL;
-
+		m_eNextState = MONSTER_IDLE;
 	}
+	
 }
 void CPigMan::Monster_Idle()
 {

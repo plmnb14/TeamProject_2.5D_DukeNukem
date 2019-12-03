@@ -175,11 +175,11 @@ void CTrigger::CheckTriggerActive()
 			{
 			case 0:
 			{
-				CGameObject* pObject = CAlien::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 14,8,5 });
+				CGameObject* pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 14,8,5 });
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CAlien::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 20,10,-4 });
+				pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 20,10,-4 });
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -188,11 +188,11 @@ void CTrigger::CheckTriggerActive()
 			}
 			case 1:
 			{
-				CGameObject* pObject = CAlien::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 160,-2,33 });
+				CGameObject* pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 160,-2,33 });
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CAlien::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 155,2,18 });
+				pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 155,2,18 });
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -201,11 +201,11 @@ void CTrigger::CheckTriggerActive()
 			}
 			case 2:
 			{
-				CGameObject* pObject = CAlien::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 196,38,241 });
+				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 196,38,241 });
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CAlien::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 192,38,198 });
+				pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), { 192,38,198 });
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
