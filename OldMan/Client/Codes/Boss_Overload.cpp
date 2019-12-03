@@ -22,7 +22,7 @@ CBoss_Overload::CBoss_Overload(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
 	m_pRigid(nullptr), m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_pObserver(nullptr), m_pCondition(nullptr), m_pBillboard(nullptr), m_pAnimator(nullptr),
-	m_eOverState(OVER_IDLE), m_fLifeTime(0)
+	m_eOverState(OVER_IDLE), m_fLifeTime(0), m_bRight(true) , m_bLeft(false) , m_iMissileCount(0) , m_fMissileTime(0)
 {
 }
 
@@ -127,11 +127,12 @@ HRESULT CBoss_Overload::Initialize()
 
 
 															// 컨디션
-	m_pCondition->Set_Hp(100.f);
+	m_pCondition->Set_Hp(500.f);
 	m_pCondition->Set_Armor(0.f);
 	m_pCondition->Set_Shield(0.f);
 	m_pCondition->Set_Fuel(0.f);
 	m_pCondition->Set_Stamina(100.f);
+	m_pCondition->Set_Damage(30.f);
 
 	m_pCondition->Set_Dodge(false);
 	m_pCondition->Set_Cinematic(false);
@@ -295,7 +296,6 @@ void CBoss_Overload::State()
 	case OVER_IDLE:
 	{
 		Direct_Missile();
-		ChangeTex(L"Overload_WalkFront");
 		break;
 	}
 	case OVER_WALK:
@@ -339,8 +339,28 @@ void CBoss_Overload::Walk()
 
 void CBoss_Overload::Direct_Missile()
 {
+	//if (m_iMissileCount > 10)
+	//{
+	//	ChangeTex(L"Overload_Idle");
+	//
+	//	m_fMissileTime += m_pTimeMgr->GetDelta();
+	//
+	//	if (m_fMissileTime >= 5.f)
+	//	{
+	//		m_fMissileTime = 0;
+	//		m_iMissileCount = 0;
+	//	}
+	//
+	//	return;
+	//}
+	//
+	//else
+	{ 
+		ChangeTex(L"Overload_Fire");
+
 	m_fLifeTime += m_pTimeMgr->GetDelta();
 
+	D3DXVECTOR3 vMyDir = m_pTransform->GetDir();
 	D3DXVECTOR3 vTmpPos = m_pTransform->GetPos();
 	D3DXVECTOR3 vTmpDir = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos() - m_pTransform->GetPos();
 
@@ -352,20 +372,78 @@ void CBoss_Overload::Direct_Missile()
 
 		D3DXVec3Cross(&vTmpRight, &vTmpDir, &D3DXVECTOR3{ 0,1,0 });
 
-		D3DXVECTOR3 vTmpPos_Plus = { vTmpPos.x + vTmpRight.x * 2, vTmpPos.y - 0.2f , vTmpPos.z + vTmpRight.z * 2 };
-		D3DXVECTOR3 vTmpPos_Minus{ vTmpPos.x - vTmpRight.x * 2, vTmpPos.y - 0.2f , vTmpPos.z - vTmpRight.z * 2 };
+		//if (vMyDir.x < 0)
+		//	vMyDir.x *= -1;
+		//
+		//if (vMyDir.z < 0)
+		//	vMyDir.z *= -1;
+
+		// 가로 발사
+		D3DXVECTOR3 vTmpPos_Plus1 = { vTmpPos.x + vTmpRight.x * 2 - vTmpDir.x * 0.5f, vTmpPos.y - 0.2f , vTmpPos.z + vTmpRight.z * 2 - vTmpDir.z * 0.5f};
+		D3DXVECTOR3 vTmpPos_Plus2 = { vTmpPos.x + vTmpRight.x * 3 - vTmpDir.x * 1.0f, vTmpPos.y - 0.2f , vTmpPos.z + vTmpRight.z * 3 - vTmpDir.z  * 1.0f};
+		D3DXVECTOR3 vTmpPos_Plus3 = { vTmpPos.x + vTmpRight.x * 4 - vTmpDir.x * 1.5f , vTmpPos.y - 0.2f , vTmpPos.z + vTmpRight.z * 4 - vTmpDir.z  * 1.5f};
+		D3DXVECTOR3 vTmpPos_Minus1{ vTmpPos.x - vTmpRight.x * 2 - vTmpDir.x * 0.5f,  vTmpPos.y - 0.2f , vTmpPos.z - vTmpRight.z * 2 - vTmpDir.z * 0.5f };
+		D3DXVECTOR3 vTmpPos_Minus2{ vTmpPos.x - vTmpRight.x * 3 - vTmpDir.x * 1.0f,  vTmpPos.y - 0.2f , vTmpPos.z - vTmpRight.z * 3 - vTmpDir.z * 1.0f };
+		D3DXVECTOR3 vTmpPos_Minus3{ vTmpPos.x - vTmpRight.x * 4 - vTmpDir.x * 1.5f,  vTmpPos.y - 0.2f , vTmpPos.z - vTmpRight.z * 4 - vTmpDir.z * 1.5f };
+
+		// 세로
+		//D3DXVECTOR3 vTmpPos_Plus1 = { vTmpPos.x - vTmpDir.x * 1.f, vTmpPos.y - 0.5f , vTmpPos.z - vTmpDir.z * 1.f };
+		//D3DXVECTOR3 vTmpPos_Plus2 = { vTmpPos.x - vTmpDir.x * 2.f, vTmpPos.y - 1.0f , vTmpPos. z- vTmpDir.z  * 2.f };
+		//D3DXVECTOR3 vTmpPos_Plus3 = { vTmpPos.x - vTmpDir.x * 3.f , vTmpPos.y - 1.5f , vTmpPos.z - vTmpDir.z  * 3.f };
+		//D3DXVECTOR3 vTmpPos_Minus1{ vTmpPos.x - vTmpDir.x * 3.f,  vTmpPos.y + 1.5f , vTmpPos.z - vTmpDir.z * 3.f };
+		//D3DXVECTOR3 vTmpPos_Minus2{ vTmpPos.x - vTmpDir.x * 2.f,  vTmpPos.y + 1.0f , vTmpPos.z - vTmpDir.z * 2.f };
+		//D3DXVECTOR3 vTmpPos_Minus3{ vTmpPos.x - vTmpDir.x * 1.f,  vTmpPos.y + 0.5f , vTmpPos.z - vTmpDir.z * 1.f };
 
 		float a[3] = { 0,0,0 };
 
-		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Plus, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-		pInstance->Set_MapLayer(m_mapLayer);
+		CGameObject* pInstance = nullptr;
 
-		pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Minus, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
-		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-		pInstance->Set_MapLayer(m_mapLayer);
+		if (m_bRight)
+		{
+			pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Plus1, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
+
+			//pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Plus2, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
+			//m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			//pInstance->Set_MapLayer(m_mapLayer);
+
+			pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Plus3, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
+
+			pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Minus2, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
+
+			//pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Minus3, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
+			//m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			//pInstance->Set_MapLayer(m_mapLayer);
+
+			pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Plus3, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			pInstance->Set_MapLayer(m_mapLayer);
+
+			m_bRight = false;
+			m_bLeft = true;
+
+			++m_iMissileCount;
+		}
+
+		else if (m_bLeft)
+		{
+			//pInstance = CBullet::Create(m_pGraphicDev, vTmpPos_Minus, vTmpDir, a, 30.f, ENGINE::MONSTER_LUNCHER);
+			//m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			//pInstance->Set_MapLayer(m_mapLayer);
+
+			m_bRight = true;
+			m_bLeft = false;
+
+			++m_iMissileCount;
+		}
 
 		m_fLifeTime = 0.f;
+	}
 	}
 }
 
@@ -379,6 +457,11 @@ void CBoss_Overload::Shot_Homing()
 
 void CBoss_Overload::Shot_Rain()
 {
+}
+
+void CBoss_Overload::Set_Pos(D3DXVECTOR3 _Pos)
+{
+	m_pTransform->SetPos(_Pos);
 }
 
 void CBoss_Overload::ChangeTex(wstring _wstrTex)
@@ -401,7 +484,7 @@ void CBoss_Overload::ChangeTex(wstring _wstrTex)
 	NULL_CHECK(m_pTexture);
 }
 
-CBoss_Overload* CBoss_Overload::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CBoss_Overload* CBoss_Overload::Create(LPDIRECT3DDEVICE9 pGraphicDev , D3DXVECTOR3 _Pos)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
@@ -412,6 +495,8 @@ CBoss_Overload* CBoss_Overload::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 		ENGINE::Safe_Delete(pInstance);
 		return nullptr;
 	}
+
+	pInstance->Set_Pos(_Pos);
 
 	return pInstance;
 }

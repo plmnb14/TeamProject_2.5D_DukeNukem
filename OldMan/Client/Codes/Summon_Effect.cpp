@@ -10,6 +10,7 @@
 #include "OctaBrain.h"
 #include "Trooper.h"
 #include "Monster.h"
+#include "Boss_Overload.h"
 
 CSummon_Effect::CSummon_Effect(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CVfx(pGraphicDev), m_wFrame(0), m_bSummon(false)
@@ -65,6 +66,14 @@ int CSummon_Effect::Update()
 				pObject->Set_MapLayer(m_mapLayer);
 				break;
 			}
+			case OVERLOAD:
+			{
+				CGameObject* pObject = CBoss_Overload::Create(m_pGraphicDev, m_pTransform->GetPos());
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
+				pObject->Set_MapLayer(m_mapLayer);
+				break;
+			}
+
 			case MONSTER:
 			{
 				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), m_pTransform->GetPos());

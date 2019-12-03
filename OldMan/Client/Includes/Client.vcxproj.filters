@@ -178,17 +178,23 @@
     <Filter Include="01.Scene\01.Stage_01">
       <UniqueIdentifier>{e330d9d5-f46a-428e-8beb-5a23c0483f80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.Monster\01.Trooper">
-      <UniqueIdentifier>{9db34712-7cdc-481b-9c23-9520adce31c2}</UniqueIdentifier>
+    <Filter Include="02.GameObject\09.Boss\01.CyberDemon">
+      <UniqueIdentifier>{a34cfc9f-341d-494d-8ef7-5c0af89cc346}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.Monster\02.PigMan">
-      <UniqueIdentifier>{2748a600-7b68-441a-8028-0cf6570caba0}</UniqueIdentifier>
+    <Filter Include="02.GameObject\07.VFX\00. Effect\08.FlameBall">
+      <UniqueIdentifier>{0fa277cc-8613-43d0-82e6-d14489230b08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.Monster\03.Alien">
-      <UniqueIdentifier>{b2929936-2e56-4e99-9daf-03a233e9809d}</UniqueIdentifier>
+    <Filter Include="02.GameObject\04.Bullet\01. FlameBullet">
+      <UniqueIdentifier>{334ffaf0-9078-42ed-8c92-2604dbef47f6}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\07.VFX\00. Effect\08. Summon_Effect">
       <UniqueIdentifier>{15e84c99-58e0-4091-855f-0c9254758ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Observer\02.BossObserver">
+      <UniqueIdentifier>{cc836a7d-269a-4c81-b988-ed9149317f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\03.Stage_Boss">
+      <UniqueIdentifier>{de196fb3-9bba-4e13-b8ab-3ee9ba53ca82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -361,17 +367,35 @@
     <ClInclude Include="..\Codes\Stage_02.h">
       <Filter>01.Scene\02.Stage_02</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Alien.h">
-      <Filter>02.GameObject\05.Monster\03.Alien</Filter>
+    <ClInclude Include="..\Codes\Boss_CyberDemon.h">
+      <Filter>02.GameObject\09.Boss\01.CyberDemon</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Trooper.h">
-      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    <ClInclude Include="..\Codes\Alien.h">
+      <Filter>02.GameObject\05.Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\PigMan.h">
-      <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
+      <Filter>02.GameObject\05.Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Trooper.h">
+      <Filter>02.GameObject\05.Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\FlameBall.h">
+      <Filter>02.GameObject\07.VFX\00. Effect\08.FlameBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\FlameBullet.h">
+      <Filter>02.GameObject\04.Bullet\01. FlameBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Rock.h">
+      <Filter>02.GameObject\01.MapObject\01.Object\03.Rock</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Summon_Effect.h">
       <Filter>02.GameObject\07.VFX\00. Effect\08. Summon_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\BossObserver.h">
+      <Filter>03.Observer\02.BossObserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Stage_Boss.h">
+      <Filter>01.Scene\03.Stage_Boss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -520,17 +544,35 @@
     <ClCompile Include="..\Codes\Stage_02.cpp">
       <Filter>01.Scene\02.Stage_02</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Alien.cpp">
-      <Filter>02.GameObject\05.Monster\03.Alien</Filter>
+    <ClCompile Include="..\Codes\Boss_CyberDemon.cpp">
+      <Filter>02.GameObject\09.Boss\01.CyberDemon</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Trooper.cpp">
-      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    <ClCompile Include="..\Codes\Alien.cpp">
+      <Filter>02.GameObject\05.Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\PigMan.cpp">
-      <Filter>02.GameObject\05.Monster\02.PigMan</Filter>
+      <Filter>02.GameObject\05.Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Trooper.cpp">
+      <Filter>02.GameObject\05.Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FlameBall.cpp">
+      <Filter>02.GameObject\07.VFX\00. Effect\08.FlameBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FlameBullet.cpp">
+      <Filter>02.GameObject\04.Bullet\01. FlameBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Rock.cpp">
+      <Filter>02.GameObject\01.MapObject\01.Object\03.Rock</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Summon_Effect.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\08. Summon_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BossObserver.cpp">
+      <Filter>03.Observer\02.BossObserver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage_Boss.cpp">
+      <Filter>01.Scene\03.Stage_Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

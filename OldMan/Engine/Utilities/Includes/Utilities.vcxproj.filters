@@ -67,6 +67,9 @@
     <Filter Include="02.SuperClass\02.Component\05. Animator">
       <UniqueIdentifier>{a84fdc89-5189-4459-990c-7fdba78aeca7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Design\00.Observer\00.Subject\02. BossSubject">
+      <UniqueIdentifier>{6e286251-0048-4afa-9d4f-23421e8957a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -126,6 +129,9 @@
     <ClInclude Include="..\Codes\Animator.h">
       <Filter>02.SuperClass\02.Component\05. Animator</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\BossSubject.h">
+      <Filter>03.Design\00.Observer\00.Subject\02. BossSubject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -181,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Animator.cpp">
       <Filter>02.SuperClass\02.Component\05. Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BossSubject.cpp">
+      <Filter>03.Design\00.Observer\00.Subject\02. BossSubject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

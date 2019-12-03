@@ -19,7 +19,7 @@ class CPlayerObserver;
 class CGaugeBar : public CUI
 {
 public:
-	enum GAUGEBAR_TYPE { BAR_HP, BAR_SHIELD, BAR_END };
+	enum GAUGEBAR_TYPE { BAR_HP, BAR_SHIELD, BAR_BOSSHP, BAR_END };
 
 protected:
 	explicit CGaugeBar(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -52,6 +52,8 @@ private:
 
 	float					m_fHP;
 	float					m_fShield;
+
+	float					m_fBossHp;
 
 	GAUGEBAR_TYPE			m_eBarType;
 };

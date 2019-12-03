@@ -14,3 +14,8 @@ inline CPlayerSubject* GetPlayerSubject()
 {
 	return CPlayerSubject::GetInstance();
 }
+
+inline CBossSubject * GetBossSubject()
+{
+	return GetBossSubject::GetInstance();
+}

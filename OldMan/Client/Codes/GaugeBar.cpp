@@ -30,6 +30,9 @@ int CGaugeBar::Update()
 	case CGaugeBar::BAR_SHIELD:
 		m_fShield = m_pPlayerObserver->GetPlayerInfo().fArmor;
 		break;
+	case CGaugeBar::BAR_BOSSHP:
+		m_fBossHp = m_pPlayerObserver->GetPlayerInfo().fArmor;
+		break;
 	case CGaugeBar::BAR_END:
 		break;
 	}
@@ -173,6 +176,16 @@ void CGaugeBar::UpdateBar()
 	case CGaugeBar::BAR_SHIELD:
 	{
 		int iIdx = (int)m_fShield / m_iBarMaxCount;
+		if (m_fShield < 0) iIdx = 0;
+		if (iIdx > 10) iIdx = 10;
+		if (m_fShield > 0 && m_fShield < 10) iIdx = 1;
+		for (int i = 0; i < m_iBarMaxCount - iIdx; i++)
+			m_vecBarUI[m_iBarMaxCount - 1 - i]->SetVisible(false);
+		break;
+	}
+	case CGaugeBar::BAR_BOSSHP:
+	{
+		int iIdx = (int)m_fBossHp / m_iBarMaxCount;
 		if (m_fShield < 0) iIdx = 0;
 		if (iIdx > 10) iIdx = 10;
 		if (m_fShield > 0 && m_fShield < 10) iIdx = 1;
