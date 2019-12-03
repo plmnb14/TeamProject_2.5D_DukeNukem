@@ -6,7 +6,7 @@ Alien|Alien_Run|Alien_Run%d.png|9|..\Texture\Monster\Alien\Alien_Run\Alien_Run%d
 Alien|Alien_RunSide|Alien_RunSide%d.png|3|..\Texture\Monster\Alien\Alien_RunSide\Alien_RunSide%d.png
 OctaBrain|OctaBrain_Dead|OctaBrain_Dead%d.png|6|..\Texture\Monster\OctaBrain\OctaBrain_Dead\OctaBrain_Dead%d.png
 OctaBrain|OctaBrain_DeadFall|OctaBrain_DeadFall%d.png|2|..\Texture\Monster\OctaBrain\OctaBrain_DeadFall\OctaBrain_DeadFall%d.png
-OctaBrain|OctaBrain_Fire|OctaBrain_Fire4.png|5|..\Texture\Monster\OctaBrain\OctaBrain_Fire\OctaBrain_Fire4.png
+OctaBrain|OctaBrain_Fire|OctaBrain_Fire_%d.png|5|..\Texture\Monster\OctaBrain\OctaBrain_Fire\OctaBrain_Fire_%d.png
 OctaBrain|OctaBrain_Idle|OctaBrain_Idle%d.png|9|..\Texture\Monster\OctaBrain\OctaBrain_Idle\OctaBrain_Idle%d.png
 Overload|Overload_Dead|Overload_Dead_%d.png|11|..\Texture\Monster\Overload\Overload_Dead\Overload_Dead_%d.png
 Overload|Overload_Fire|Overload_Fire_%d.png|3|..\Texture\Monster\Overload\Overload_Fire\Overload_Fire_%d.png
@@ -21,7 +21,7 @@ PigMan|PigMan_Fire|PigMan_Fire%d.png|2|..\Texture\Monster\PigMan\PigMan_Fire\Pig
 PigMan|PigMan_Lay|PigMan_Lay%d.png|2|..\Texture\Monster\PigMan\PigMan_Lay\PigMan_Lay%d.png
 PigMan|PigMan_LayFire|PigMan_LayFire%d.png|2|..\Texture\Monster\PigMan\PigMan_LayFire\PigMan_LayFire%d.png
 PigMan|PigMan_PreFire|PigMan_PreFire%d.png|3|..\Texture\Monster\PigMan\PigMan_PreFire\PigMan_PreFire%d.png
-PigMan|PigMan_WalkBack|PigMan_WalkBack4.png|5|..\Texture\Monster\PigMan\PigMan_WalkBack\PigMan_WalkBack4.png
+PigMan|PigMan_WalkBack|PigMan_WalkBack_%d.png|5|..\Texture\Monster\PigMan\PigMan_WalkBack\PigMan_WalkBack_%d.png
 PigMan|PigMan_WalkFront|PigMan_WalkFront%d.png|5|..\Texture\Monster\PigMan\PigMan_WalkFront\PigMan_WalkFront%d.png
 PigMan|PigMan_WalkSideBack|PigMan_WalkSideBack%d.png|5|..\Texture\Monster\PigMan\PigMan_WalkSideBack\PigMan_WalkSideBack%d.png
 PigMan|PigMan_WalkSideBackRigt|PigMan_WalkSideBackRigt%d.png|5|..\Texture\Monster\PigMan\PigMan_WalkSideBackRigt\PigMan_WalkSideBackRigt%d.png
@@ -63,7 +63,7 @@ Fire|Fire_Small|Fire_Small_%d.png|12|..\Texture\VFX\Fire\Fire_Small\Fire_Small_%
 VFX|Flare|Flare_%d.png|1|..\Texture\VFX\Flare\Flare_%d.png
 VFX|Grenade_Guide|Grenade_Guide_%d.png|1|..\Texture\VFX\Grenade_Guide\Grenade_Guide_%d.png
 VFX|Monster_Bullet|Monster_Bullet%d.png|6|..\Texture\VFX\Monster_Bullet\Monster_Bullet%d.png
-VFX|Monster_Create|Monster_Create%d.png|25|..\Texture\VFX\Monster_Create\Monster_Create%d.png
+VFX|Monster_Create|Monster_Create_%d.png|25|..\Texture\VFX\Monster_Create\Monster_Create_%d.png
 VFX|Smoke_Big|SmokeBig_%d.png|4|..\Texture\VFX\Smoke_Big\SmokeBig_%d.png
 VFX|Smoke_Gun|Smoke_Gun_%d.png|1|..\Texture\VFX\Smoke_Gun\Smoke_Gun_%d.png
 VFX|Smoke_Small|SmokeSmall_%d.png|4|..\Texture\VFX\Smoke_Small\SmokeSmall_%d.png
@@ -75,6 +75,14 @@ Grenade|Grenade_Pin|Grenade_Pin_%d.png|15|..\Texture\Weapon\Grenade\Grenade_Pin\
 Grenade|Grenade_Throw|Grenade_Throw_%d.png|6|..\Texture\Weapon\Grenade\Grenade_Throw\Grenade_Throw_%d.png
 Melee|Hand_Draw|Hand_Draw_%d.png|5|..\Texture\Weapon\Melee\Hand_Draw\Hand_Draw_%d.png
 Melee|Hand_Idle|Hand_Idle_%d.png|20|..\Texture\Weapon\Melee\Hand_Idle\Hand_Idle_%d.png
+Melee|Hand_LeftBack|Hand_LeftBack_%d.png|20|..\Texture\Weapon\Melee\Hand_LeftBack\Hand_LeftBack_%d.png
+Melee|Hand_LeftHook|Hand_LeftHook_%d.png|24|..\Texture\Weapon\Melee\Hand_LeftHook\Hand_LeftHook_%d.png
+Melee|Hand_LeftJab|Hand_LeftJab_%d.png|8|..\Texture\Weapon\Melee\Hand_LeftJab\Hand_LeftJab_%d.png
+Melee|Hand_LeftUpper|Hand_LeftUpper_%d.png|13|..\Texture\Weapon\Melee\Hand_LeftUpper\Hand_LeftUpper_%d.png
+Melee|Hand_RightBack|Hand_RightBack_%d.png|20|..\Texture\Weapon\Melee\Hand_RightBack\Hand_RightBack_%d.png
+Melee|Hand_RightHook|Hand_RightHook_%d.png|23|..\Texture\Weapon\Melee\Hand_RightHook\Hand_RightHook_%d.png
+Melee|Hand_RightJab|Hand_RightJab_%d.png|8|..\Texture\Weapon\Melee\Hand_RightJab\Hand_RightJab_%d.png
+Melee|Hand_RightUpper|Hand_RightUpper_%d.png|13|..\Texture\Weapon\Melee\Hand_RightUpper\Hand_RightUpper_%d.png
 Melee|Ledge_Hand|Ledge_Hand_%d.png|11|..\Texture\Weapon\Melee\Ledge_Hand\Ledge_Hand_%d.png
 PumpShot|PumpShot_Draw|PumpShot_Draw_%d.png|6|..\Texture\Weapon\PumpShot\PumpShot_Draw\PumpShot_Draw_%d.png
 PumpShot|PumpShot_Fire|PumpShot_Fire_%d.png|7|..\Texture\Weapon\PumpShot\PumpShot_Fire\PumpShot_Fire_%d.png

@@ -200,9 +200,19 @@ void CBullet::LateUpdate()
 
 void CBullet::Render()
 {
+	
+
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	m_pTexture->Render(0);
+	if (m_eWeaponTag == ENGINE::MONSTER_WAVE)
+	{
+		m_pAnimator->RenderSet(m_pTimeMgr->GetDelta());
+		m_pTexture->Render(m_pAnimator->Get_Frame());
+	}
 	m_pBuffer->Render();
+	
+
+
 }
 
 HRESULT CBullet::Initialize()
@@ -378,8 +388,13 @@ void CBullet::BulletType()
 	}
 	case ENGINE::MONSTER_WAVE:
 	{
+		
+		m_pTransform->SetSize({ 3.f,3.f,3.f });
+		m_pCollider->Set_Radius({ 3.f,3.f,3.f });
 		ChangeTex(L"Monster_Bullet");
+		m_pAnimator->Set_FrameAmp(2.f);
 		m_pTransform->Move_AdvancedPos(m_dir, m_fSpeed * m_pTimeMgr->GetDelta());
+		
 		break;
 	}
 	}

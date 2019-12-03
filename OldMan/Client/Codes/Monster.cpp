@@ -71,13 +71,15 @@ void CMonster::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	//cout << m_pCondition->Get_Hp() << endl;
 
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
 	{
-		m_eNextState = MONSTER_DEAD;
-
+		if (m_eNextState != MONSTER_DEAD)
+		{
+			m_eNextState = MONSTER_DEAD;
+			m_pCollider->Set_MaxY(2.f);
+		}
 	}
 	else
 	{
@@ -134,6 +136,7 @@ HRESULT CMonster::Initialize()
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
+	
 
 	//리지드 바디 세팅 
 	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
@@ -316,8 +319,6 @@ void CMonster::Player_Pursue(float _move)
 	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
 	m_MoveSpeed = 1.f* _move * m_pTimeMgr->GetDelta();   // 속도
 	m_pAnimator->Stop_Animation(false);
-	ChangeTex(L"PigMan_WalkFront");
-	m_pAnimator->Set_FrameAmp(5.f);
 	m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, m_MoveSpeed);
 
 }
@@ -370,7 +371,7 @@ void CMonster::Monster_Foward()
 				ChangeTex(L"PigMan_WalkFront");
 				m_pAnimator->Set_FrameAmp(5.f);
 				cout << "우 -측면2 " << endl;
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 			//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 			
 				m_fFowardDealy = 0;

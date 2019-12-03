@@ -128,7 +128,7 @@ HRESULT COctaBrain::Initialize()
 	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
 
 	//리지드 바디 세팅 
-	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
+	m_pRigid->Set_UseGravity(false);							// 중력의 영향 유무
 
 	m_pRigid->Set_IsGround(false);							// 지상인지 체크
 	m_pRigid->Set_IsAir(true);								// 공중인지 체크
@@ -367,7 +367,7 @@ void COctaBrain::Monster_Foward()
 	{
 		m_pAnimator->Set_Frame(2.f);
 		cout << "우 -측면3 " << endl;
-	m_fFowardDealy = 0;
+		m_fFowardDealy = 0;
 	}
 
 	}
@@ -376,10 +376,8 @@ void COctaBrain::Monster_Foward()
 	if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측면
 	{
 		m_pAnimator->Set_Frame(1.f);
-
-	cout << "우 -측면4 " << endl;
-	
-	m_fFowardDealy = 0;
+		cout << "우 -측면4 " << endl;
+		m_fFowardDealy = 0;
 	}
 
 	}
@@ -388,10 +386,8 @@ void COctaBrain::Monster_Foward()
 	if (-90 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -67.5)                          //우 - 측면
 	{
 		m_pAnimator->Set_Frame(5.f);
-
-	cout << "우 -측면5 " << endl;
-
-	m_fFowardDealy = 0;
+		cout << "우 -측면5 " << endl;
+		m_fFowardDealy = 0;
 	}
 
 	}
@@ -400,10 +396,8 @@ void COctaBrain::Monster_Foward()
 	if (67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <90)                          //좌- 측면
 	{
 		m_pAnimator->Set_Frame(4.f);
-
-	cout << "우 -측면6 " << endl;
-	
-	m_fFowardDealy = 0;
+		cout << "우 -측면6 " << endl;
+		m_fFowardDealy = 0;
 	}
 
 	}
@@ -411,7 +405,7 @@ void COctaBrain::Monster_Foward()
 	{
 	if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측측면
 	{
-	m_pAnimator->Set_Frame(5.f);
+	m_pAnimator->Set_Frame(6.f);
 	cout << "우 -측면7 " << endl;
 	m_fFowardDealy = 0;
 	}
@@ -421,9 +415,8 @@ void COctaBrain::Monster_Foward()
 	{
 	if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 67.5)                          //좌 - 측측면
 	{
-	
+	m_pAnimator->Set_Frame(7.f);
 	cout << "우 -측면8 " << endl;
-
 	m_fFowardDealy = 0;
 	}
 
@@ -432,10 +425,8 @@ void COctaBrain::Monster_Foward()
 	{
 	if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)                          //좌 - 후정면
 	{
-		
 	m_pAnimator->Set_FrameAmp(8.f);
 	cout << "우 -측면9 " << endl;
-	
 	m_fFowardDealy = 0;
 	}
 
@@ -446,14 +437,13 @@ void COctaBrain::Monster_Foward()
 		{
 		m_pAnimator->Set_FrameAmp(8.f);
 		cout << "우 -측면10 " << endl;
-		
 		m_fFowardDealy = 0;
 	
 		}
 		}
 	}
 	m_pAnimator->Stop_Animation(false);
-
+	Player_Pursue(1.f);
 }
 
 void COctaBrain::Monster_Range()
@@ -568,7 +558,7 @@ void COctaBrain::Monster_Fire2()
 
 	ChangeTex(L"OctaBrain_Fire");
 	m_pAnimator->Set_FrameAmp(0.7f);
-	if (m_fTime > 3.4f)
+	if (m_fTime > 2.4f)
 	{
 		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_WAVE);
 		pInstance->Set_MapLayer(m_mapLayer);
