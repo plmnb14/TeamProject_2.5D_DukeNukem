@@ -494,14 +494,28 @@ void CCollisionMgr::CollisionTarget_To_Monstr_Mele(list<CGameObject*>& rDstList,
 
 			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
 			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
-
+		
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+					
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
 			//	cout << "충돌체크 됩니다" << endl;
 
 				rDstCol->Set_IsCollision(true);
-				//rSrcCol->Set_IsCollision(true);
+				ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+				ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
+			
+				if (rSrcCon->Get_Armor() > 0)
+					rSrcCon->Add_Armor(-rDstCon->Get_Damage());
+
+				if (rSrcCon->Get_Armor() <= 0)
+				{
+					float fDamage = rDstCon->Get_Damage() + rSrcCon->Get_Armor();
+					rSrcCon->Add_Hp(-fDamage);
+				}
+
+
 				return;
 			}
 			else
@@ -515,6 +529,61 @@ void CCollisionMgr::CollisionTarget_To_Monstr_Mele(list<CGameObject*>& rDstList,
 
 	}
 	
+
+}
+
+void CCollisionMgr::CollisionTarget_To_OcatabrainBullet(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		for (auto& rSrc : rSrcList)
+		{
+			
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				//	cout << "충돌체크 됩니다" << endl;
+
+				rDstCol->Set_IsCollision(true);
+				ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+				ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
+
+				if (rSrcCon->Get_Armor() > 0)
+					rSrcCon->Add_Armor(-rDstCon->Get_Damage());
+
+				if (rSrcCon->Get_Armor() <= 0)
+				{
+					float fDamage = rDstCon->Get_Damage() + rSrcCon->Get_Armor();
+					rSrcCon->Add_Hp(-fDamage);
+				}
+				rSrcTrans->MovePos(-1.f);
+				
+				return;
+			}
+			else
+			{
+				//	cout << "충돌 안함" << endl;
+				rDstCol->Set_IsCollision(false);
+
+			}
+		}
+
+
+	}
+
+
+
+
+
+
 
 }
 
@@ -535,7 +604,8 @@ void CCollisionMgr::CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				//cout << "충돌체크 됩니다" << endl;
+				ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+
 
 				static_cast<CCondition*>(rDst->Get_Component(L"Condition"))->Set_Hit(true);
 				rSrcCol->Set_IsCollision(true);

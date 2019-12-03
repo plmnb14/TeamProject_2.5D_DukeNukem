@@ -33,9 +33,7 @@ int COctaBrain::Update()
 	//Monster_Foward();
 	Monster_Foward();
 	Monster_State_Set();
-	//cout << m_pMelleCollider->Get_IsCollision() << endl;
 	//Player_Pursue();
-	//cout << m_pCondition->Get_Hp() << endl;
 
 	Check_Push();
 
@@ -64,7 +62,6 @@ void COctaBrain::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	//cout << m_pCondition->Get_Hp() << endl;
 
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
@@ -339,11 +336,9 @@ void COctaBrain::Monster_Foward()
 
 	if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)            // 좌- 정면
 	{
-		
 	m_pAnimator->Set_Frame(0.f);
-	cout << "전좌- 좌측면1 " << endl;
+	m_pTransform->SetDir(vMonster_Player_Dir_Free);
 
-	//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
 	m_fFowardDealy = 0;
 	}
 
@@ -354,9 +349,7 @@ void COctaBrain::Monster_Foward()
 	{
 
 	m_pAnimator->Set_Frame(0.f);
-	cout << "우 -측면2 " << endl;
-	
-
+	m_pTransform->SetDir(vMonster_Player_Dir_Free);
 	m_fFowardDealy = 0;
 	}
 
@@ -366,7 +359,7 @@ void COctaBrain::Monster_Foward()
 	if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <67.5)                          //좌 - 측면
 	{
 		m_pAnimator->Set_Frame(2.f);
-		cout << "우 -측면3 " << endl;
+		m_pTransform->SetDir(vMonster_Player_Dir_Free);
 		m_fFowardDealy = 0;
 	}
 
@@ -376,7 +369,8 @@ void COctaBrain::Monster_Foward()
 	if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측면
 	{
 		m_pAnimator->Set_Frame(1.f);
-		cout << "우 -측면4 " << endl;
+		m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 		m_fFowardDealy = 0;
 	}
 
@@ -386,7 +380,8 @@ void COctaBrain::Monster_Foward()
 	if (-90 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -67.5)                          //우 - 측면
 	{
 		m_pAnimator->Set_Frame(5.f);
-		cout << "우 -측면5 " << endl;
+		m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 		m_fFowardDealy = 0;
 	}
 
@@ -396,7 +391,8 @@ void COctaBrain::Monster_Foward()
 	if (67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <90)                          //좌- 측면
 	{
 		m_pAnimator->Set_Frame(4.f);
-		cout << "우 -측면6 " << endl;
+		m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 		m_fFowardDealy = 0;
 	}
 
@@ -406,7 +402,8 @@ void COctaBrain::Monster_Foward()
 	if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측측면
 	{
 	m_pAnimator->Set_Frame(6.f);
-	cout << "우 -측면7 " << endl;
+	m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 	m_fFowardDealy = 0;
 	}
 
@@ -416,7 +413,8 @@ void COctaBrain::Monster_Foward()
 	if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 67.5)                          //좌 - 측측면
 	{
 	m_pAnimator->Set_Frame(7.f);
-	cout << "우 -측면8 " << endl;
+	m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 	m_fFowardDealy = 0;
 	}
 
@@ -426,7 +424,8 @@ void COctaBrain::Monster_Foward()
 	if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)                          //좌 - 후정면
 	{
 	m_pAnimator->Set_FrameAmp(8.f);
-	cout << "우 -측면9 " << endl;
+	m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 	m_fFowardDealy = 0;
 	}
 
@@ -436,14 +435,14 @@ void COctaBrain::Monster_Foward()
 		if (-22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 0)                          //우 - 후정면
 		{
 		m_pAnimator->Set_FrameAmp(8.f);
-		cout << "우 -측면10 " << endl;
+		m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 		m_fFowardDealy = 0;
 	
 		}
 		}
 	}
 	m_pAnimator->Stop_Animation(false);
-	Player_Pursue(1.f);
 }
 
 void COctaBrain::Monster_Range()
@@ -575,6 +574,12 @@ void COctaBrain::Monster_Dead()
 	m_pAnimator->Set_FrameAmp(1.f);
 	m_pAnimator->Set_Frame(5.f);
 
+	m_fDeadTimer += m_pTimeMgr->GetDelta();
+	if (m_fDeadTimer > 3)
+	{
+		m_bIsDead = true;
+	}
+
 }
 
 void COctaBrain::Monster_Attack()
@@ -642,27 +647,6 @@ void COctaBrain::Object_Collison()
 
 
 }
-
-void COctaBrain::ChangeTex(wstring _wstrTex)
-{
-	if (m_wstrTex.compare(_wstrTex) == 0)
-		return;
-
-	m_wstrTex = _wstrTex;
-
-	m_mapComponent.erase(L"Texture");
-	ENGINE::CComponent* pComponent = nullptr;
-	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
-	NULL_CHECK(pComponent);
-	m_mapComponent.insert({ L"Texture", pComponent });
-
-	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
-
-	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
-	NULL_CHECK(m_pTexture);
-}
-
-
 
 void COctaBrain::Monster_State_Set()
 {

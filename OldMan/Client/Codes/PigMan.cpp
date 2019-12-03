@@ -552,6 +552,12 @@ void CPigMan::Monster_Dead()
 	m_pAnimator->Set_FrameAmp(1.f);
 	m_pAnimator->Set_Frame(5.f);
 
+	m_fDeadTimer += m_pTimeMgr->GetDelta();
+	if (m_fDeadTimer > 3)
+	{
+		m_bIsDead = true;
+	}
+
 }
 
 void CPigMan::Monster_Attack()

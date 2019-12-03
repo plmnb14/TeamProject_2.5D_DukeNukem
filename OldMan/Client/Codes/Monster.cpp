@@ -37,13 +37,8 @@ int CMonster::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
-	//Monster_Foward();
-
+	Monster_Foward();
 	Monster_State_Set();
-
-	//Player_Pursue();
-	//cout << m_pCondition->Get_Hp() << endl;
-
 
 
 	return NO_EVENT;
@@ -83,7 +78,6 @@ void CMonster::LateUpdate()
 	}
 	else
 	{
-
 		if (m_bShot)
 		{
 			m_eNextState = MONSTER_SHOT;
@@ -349,7 +343,6 @@ void CMonster::Monster_Foward()
 
 	if (m_fFowardDealy > 0.3)
 	{
-		Player_Pursue(0.4f);
 		if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 && fDot_Monster_Right>0)
 		{//2개
 
@@ -520,11 +513,6 @@ void CMonster::Monster_Foward()
 	}
 	
 }
-	
-
-	
-
-
 
 void CMonster::Monster_Range()
 {
@@ -638,8 +626,7 @@ void CMonster::Monster_Fire2()
 	m_pAnimator->Set_FrameAmp(0.5f);
 
 	//cout << fDot_Player_Monster_Forward << endl;
-	                                       // 정면일 경우만 사격한다. 
-	
+	                                      // 정면일 경우만 사격한다. 
 		if (m_fTime > 0.9f)
 		{
 			ChangeTex(L"PigMan_Fire");
@@ -810,7 +797,7 @@ void CMonster::Monster_State_Set()
 		Monster_Idle();
 		break;
 	case MONSTER_PURSUE:
-		Monster_Foward();
+		Player_Pursue(0.4f);
 		break;
 	case MONSTER_SHOT:
 		Monster_Shot();

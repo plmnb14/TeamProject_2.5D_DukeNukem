@@ -31,6 +31,7 @@ public:
 	static void CollisionVFX_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 
 	static void CollisionTarget_To_Monstr_Mele(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
+	static void CollisionTarget_To_OcatabrainBullet(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 
 public:
 	static bool Check_AABB(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc , CCollider* _rDstCol, CCollider* _rSrcCol);
