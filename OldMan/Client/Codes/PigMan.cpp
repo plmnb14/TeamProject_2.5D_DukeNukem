@@ -33,6 +33,10 @@ int CPigMan::Update()
 
 	Monster_State_Set();
 
+	//Player_Pursue();
+	//cout << m_pCondition->Get_Hp() << endl;
+
+
 
 	return NO_EVENT;
 }
@@ -57,6 +61,9 @@ void CPigMan::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
+//	cout << m_pCondition->Get_Hp() << endl;
+
+	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
 	{
 		m_eNextState = MONSTER_DEAD;
@@ -138,8 +145,8 @@ HRESULT CPigMan::Initialize()
 	m_pGroundChekCollider->Set_Dynamic(true);
 	m_pGroundChekCollider->Set_Trigger(true);
 	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
-		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-		m_pTransform->GetPos().z });
+											m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+											m_pTransform->GetPos().z });
 	m_pGroundChekCollider->Set_UnderPos();
 	m_pGroundChekCollider->SetUp_Box();
 
@@ -155,7 +162,7 @@ HRESULT CPigMan::Initialize()
 	m_pMelleCollider->Set_Enabled(false);
 	m_pMelleCollider->Set_Type(ENGINE::COLLISION_AABB);
 
-
+	
 	//컨디션 
 	m_pCondition->Set_Hp(100.f);
 
@@ -299,6 +306,8 @@ void CPigMan::Player_Pursue(float _move)
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
+	//좌우 방향벡터로 내적을 구하고  그것으로 도는 방향을 결정하는 값을 구해서 그쪽으로 돌게만드는게 핵심 
+	// 플레이어의 중점을 받아서 가면 몬스터가 점점 가라앉는 문제가 생겨서 top으로 위치를 다르게 줌 
 
 	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
 	m_MoveSpeed = 2.f* _move * m_pTimeMgr->GetDelta();   // 속도
@@ -334,9 +343,38 @@ void CPigMan::Monster_Foward()
 	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
 
+	if (m_fFowardDealy > 0.1) {
+		if (acos(fDot_Player_Monster_Forward) * 90 < 250)
+		{
+			m_pAnimator->Stop_Animation(false);
+			ChangeTex(L"OctaBrain_Idle");
+			m_pAnimator->Set_FrameAmp(5.f);
+			m_fFowardDealy = 0;
+			Player_Pursue(1.f);
+		}
+		else if (acos(fDot_Player_Monster_Forward) * 90 > 250)
+		{
+			m_pAnimator->Stop_Animation(false);
+			ChangeTex(L"OctaBrain_Idle");
+			m_pAnimator->Set_FrameAmp(5.f);
+			m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 10.f);
+			Player_Pursue(0.f);
+			m_fFowardDealy = 0;
+		}
+	}
+	//	cout<<m_pTransform->GetAngle(ENGINE::ANGLE_X)*180 <<"X"<<endl;
+	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
+	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
+	//cout << acos(fDot_Monster_Right)*90 << endl;
+	//cout << acos(fDot_Player_Monster_Forward) * 90 << endl;
+	//cout << vMonster_Player_Dir.x <<"X"<< endl;
+	//cout << vMonster_Player_Dir.y <<"Y"<< endl;
+	//cout << vMonster_Player_Dir.z <<"Z"<<endl;
+	//m_pTransform->SetDir(vMonster_Player_Dir);
+	//cout << test <<"좌우"<< endl;  
+	//cout << Dot2 <<"앞뒤"<< endl;
+
 }
-
-
 
 void CPigMan::Monster_Range()
 {
@@ -370,7 +408,7 @@ void CPigMan::Monster_Shot()
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
-	D3DXVECTOR3 vPlayer_Pos_Top_Top = { 0, vMonster_Pos.y + 10,0 };
+	D3DXVECTOR3 vPlayer_Pos_Top_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 15,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
 	D3DXVECTOR3 vMonster_Dir_Top = vPlayer_Pos_Top_Top - vMonster_Pos;
 	D3DXVECTOR3 vMonsterDir_Forward = { 1.f, 0.f,0.f };                // 몬스터의 룩 벡터 X축 기준 룩 벡터 
@@ -394,8 +432,6 @@ void CPigMan::Monster_Shot()
 	//m_pCondition->Add_Hp(-1);
 
 
-	//사격도중 -> 피격했을 경우에는 총알위로 발사되게 만든다.  
-
 	D3DXVECTOR3 vMonsterPos_ShotPoint = { vMonster_Pos.x - vMonster_RIght_Dir.x, vMonster_Pos.y - vMonster_RIght_Dir.y  ,vMonster_Pos.z - vMonster_RIght_Dir.z };
 
 	D3DXVECTOR3 vMonster = vPlayer_Pos_Top - vMonsterPos_ShotPoint;
@@ -406,7 +442,6 @@ void CPigMan::Monster_Shot()
 
 	float fMove;
 	fMove = 100.f * m_pTimeMgr->GetDelta();
-
 	if (m_fHitTime > 0.3)
 	{
 		m_bShot = false;
@@ -433,30 +468,25 @@ void CPigMan::Monster_Shot()
 		}
 	}
 }
-void CPigMan::Set_Pos(D3DXVECTOR3 _Pos)
-{
-	m_pTransform->SetPos(_Pos);
-}
+
 
 
 void CPigMan::Monster_Fire2()
 {
-
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
 	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
 	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
 	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
 	D3DXVECTOR3 vMonsterDir_Fowrd_Get = m_pTransform->GetDir();
 	D3DXVECTOR3 vMonsterDir_Forward = { 1.f, 0.f,0.f };                // 몬스터의 룩 벡터 X축 기준 룩 벡터 
-	D3DXVECTOR3 vMonsterDir_Right = { vMonsterDir_Fowrd_Get.x, vMonsterDir_Fowrd_Get.y + 1.0f,vMonsterDir_Fowrd_Get.z };      																   //m_pTransform->SetDir(vMonster_Player_Dir);
 
 	D3DXVECTOR3 vMonster_RIght_Dir, Mon_Left_Dir, cross;
 	D3DXVec3Normalize(&vMonsterDir_Forward, &vMonsterDir_Forward);
 	D3DXVec3Normalize(&vMonsterDir_Fowrd_Get, &vMonsterDir_Fowrd_Get);
 	D3DXVec3Normalize(&vMonster_Player_Dir, &vMonster_Player_Dir);
 
-	D3DXVec3Cross(&vMonster_RIght_Dir, &vMonster_Player_Dir, &vMonsterDir_Right);        //우향벡터를 구하기 위한 식 
-	float fDot_Player_Monster_Forward, fDot_Monster_Right, fMonster_Get_Angle;
+	D3DXVec3Cross(&vMonster_RIght_Dir, &vMonster_Player_Dir, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));        //우향벡터를 구하기 위한 식 
+
 	D3DXVECTOR3 vMonsterPos_ShotPoint = { vMonster_Pos.x - vMonster_RIght_Dir.x, vMonster_Pos.y - vMonster_RIght_Dir.y  ,vMonster_Pos.z - vMonster_RIght_Dir.z };
 	D3DXVECTOR3 vMonster = vPlayer_Pos_Top - vMonsterPos_ShotPoint;
 
@@ -465,85 +495,43 @@ void CPigMan::Monster_Fire2()
 	float fAngle[3] = { 0.f };                      //각도 0도로 줘야함 안주면 총알 빌보드 문제 있음 
 	m_fTime += m_pTimeMgr->GetDelta();
 
+	float fDot_Player_Monster_Forward;                        // 몬스터의 정면을 구하기 위한 내적값 -> +정면 -후면 이다. 
 	fDot_Player_Monster_Forward = D3DXVec3Dot(&vMonster_Player_Dir, &vMonsterDir_Fowrd_Get);
-	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
 
+	//cout << Mon_RIght_Dir.x << "x" << endl;
+	//cout << Mon_RIght_Dir.y << "y" << endl;
+	//cout << Mon_RIght_Dir.z <<"z"<< endl;
+	//cout << vMonsterDir_Fowrd2.x<<"몬" << endl;
+	//	cout << vMonsterDir_Fowrd2.y << "몬" << endl;
+	//cout << vMonsterDir_Fowrd2.z << "몬" << endl;
+	//	cout << <<"y"<< endl;
+	//cout << Mon_RIght_Dir.z	<<"z"<< endl;
+	//cout << vMonsterPos.x<<"x2" << endl;
+	//cout << vMonsterPos.y<<"y2" << endl;
 	m_pAnimator->Stop_Animation(false);
 
 	ChangeTex(L"PigMan_PreFire");
 	m_pAnimator->Set_FrameAmp(0.5f);
-	// 이값 당장 수정 
 
-	//애도 정면일때만 사격하게 하자. 
-	if (m_fTime > 0.5)
+	//cout << fDot_Player_Monster_Forward << endl;
+	if (acos(fDot_Player_Monster_Forward) * 90 < 250)                                         // 정면일 경우만 사격한다. 
 	{
-		if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 && fDot_Monster_Right > 0)
-		{//2개
-
-			if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)            // 좌- 정면
-			{
-				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkFront");
-				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "전좌- 좌측면1 " << endl;
-				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
-				if (m_fTime > 1.8f)
-				{
-					ChangeTex(L"PigMan_Fire");
-					m_pAnimator->Set_FrameAmp(1.f);
-					m_pAnimator->Stop_Animation(false);
-
-				}
-				if (m_fTime > 2)
-				{
-					CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
-					pInstance->Set_MapLayer(m_mapLayer);
-					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-					m_fTime = 0;
-				}
-			}
+		if (m_fTime > 1.8f)
+		{
+			ChangeTex(L"PigMan_Fire");
+			m_pAnimator->Set_FrameAmp(1.f);
+			m_pAnimator->Stop_Animation(false);
 
 		}
-		else if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 && fDot_Monster_Right < 0)
+		if (m_fTime > 2)
 		{
-			if (-22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 180 < 0)                          //우 - 정면
-			{
-				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkFront");
-				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면2 " << endl;
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
-				if (m_fTime > 1.8f)
-				{
-					ChangeTex(L"PigMan_Fire");
-					m_pAnimator->Set_FrameAmp(1.f);
-					m_pAnimator->Stop_Animation(false);
-
-				}
-				if (m_fTime > 2)
-				{
-					CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
-					pInstance->Set_MapLayer(m_mapLayer);
-					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-					m_fTime = 0;
-				}
-			}
-			else
-			{
-				if (m_fTime > 1.8f)
-				{
-					ChangeTex(L"PigMan_Fire");
-					m_pAnimator->Set_FrameAmp(1.f);
-					m_pAnimator->Stop_Animation(false);
-
-				}
-
-			}
+			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+			pInstance->Set_MapLayer(m_mapLayer);
+			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			m_fTime = 0;
 		}
 	}
 }
-
 
 void CPigMan::Monster_Dead()
 {
@@ -621,7 +609,7 @@ void CPigMan::Object_Collison()
 	// 그래서 그 각도에 겹치는게 없는지 판단하는게 맞다. 
 	// 벽 판단하기 
 	// 텍스처 넣기 
-
+	
 }
 
 
@@ -629,27 +617,27 @@ void CPigMan::Object_Collison()
 // 상태기계 오류 피격 당했을때 피격을 여러번 해버려서 문제가 생김 
 void CPigMan::Monster_State_Set()
 {
-	switch (m_eNextState)
-	{
-	case MONSTER_IDLE:
-		Monster_Idle();
-		break;
-	case MONSTER_PURSUE:
-		Player_Pursue(1.f);
-		break;
-	case MONSTER_SHOT:
-		Monster_Shot();
-		break;
-	case MONSTER_FIRE:
-		Monster_Fire2();
-		break;
-	case MONSTER_DEAD:
-		Monster_Dead();
-		break;
-	case MONSTER_MILL:
-		Monster_Attack();
-		break;
-	}
+		switch (m_eNextState)
+		{
+		case MONSTER_IDLE:
+			Monster_Idle();
+			break;
+		case MONSTER_PURSUE:
+			Player_Pursue(1.f);
+			break;
+		case MONSTER_SHOT:
+			Monster_Shot();
+			break;
+		case MONSTER_FIRE:
+			Monster_Fire2();
+			break;
+		case MONSTER_DEAD:
+			Monster_Dead();
+			break;
+		case MONSTER_MILL:
+			Monster_Attack();
+			break;
+		}
 
 	// 맞았을 경우 탐색이 켜진다. 
 

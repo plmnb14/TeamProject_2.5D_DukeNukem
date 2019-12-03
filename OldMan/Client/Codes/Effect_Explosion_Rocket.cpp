@@ -63,7 +63,7 @@ HRESULT CEffect_Explosion_Rocket::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(10.f, 10.f, 10.f));
+	m_pTransform->SetSize(D3DXVECTOR3(20.f, 20.f, 20.f));
 
 	int Frame = dynamic_cast<ENGINE::CResources*>(m_pTexture)->Get_MaxFrame();
 	m_pAnimator->Set_MaxFrame(Frame);
@@ -71,7 +71,7 @@ HRESULT CEffect_Explosion_Rocket::Initialize()
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	m_pAnimator->Stop_Animation(false);
 
-	m_pBombCollider->Set_Radius({ 6.f , 6.f, 6.f });			// 각 축에 해당하는 반지름을 설정
+	m_pBombCollider->Set_Radius({ 15.f , 15.f, 15.f });			// 각 축에 해당하는 반지름을 설정
 	m_pBombCollider->Set_Dynamic(false);						// 동적, 정적 Collider 유무
 	m_pBombCollider->Set_Trigger(true);						// 트리거 유무
 	m_pBombCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표

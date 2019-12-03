@@ -33,7 +33,8 @@ public:
 		W_FIRST, W_DRAW, W_FIRE, W_RELOAD,
 		W_SPECIAL_READY, W_SPECIAL_SHOT , W_SPECIAL_END,
 		W_ZOOMIN, W_ZOOMOUT, W_ZOOMFIRE,
-		W_LEDGE, W_GRENADE
+		W_LEDGE, W_GRENADE,
+		W_R_FIST, W_L_FIST
 	};
 
 private:
@@ -98,6 +99,7 @@ public:
 	void Set_GrenadeCount(int _iCount) { m_iGrenadeCount = _iCount; }
 	void Set_WayPoint(int _Index) { m_iWaypoint_Index = _Index; }
 	void Set_NextStage(bool _bool) { m_bOnNextStage = _bool; }
+	void Set_MeleeTrigger(bool _bool);
 
 public:
 	bool Get_CanLedge() { return m_bCanLedge; }
@@ -127,6 +129,7 @@ private:
 	ENGINE::CCollider*		m_pCollider;
 	ENGINE::CCollider*		m_pGroundChekCollider;
 	ENGINE::CCollider*		m_pColliderLedge;
+	ENGINE::CCollider*		m_pMeleeCollider;
 
 	ENGINE::VTX_TEX*		m_myVtx;
 
@@ -182,6 +185,8 @@ private:
 
 	bool	m_bPlaySlideSound;
 	bool	m_bOnNextStage;
+
+	float	m_DeathTimer;
 
 };
 

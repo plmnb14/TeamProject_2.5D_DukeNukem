@@ -88,7 +88,58 @@ void CCollisionMgr::CollisionPlayer_To_Trigger(list<CGameObject*>& rDstList, lis
 			}
 
 			else
-				rSrcCol->Set_IsCollision(false);
+			{
+				if(rSrc->Get_Tag() != SPAWN_TRIGGER)
+					rSrcCol->Set_IsCollision(false);
+			}
+		}
+	}
+}
+
+void CCollisionMgr::CollisionPlayer_Fist_To_Target(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+{
+	for (auto& rDst : rDstList)
+	{
+		ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Melee_Collider"));
+
+		if (rDstCol->Get_Enabled() == false)
+			return;
+
+		for (auto& rSrc : rSrcList)
+		{
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+
+
+			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
+			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+
+			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
+
+			if (a > 5)
+				continue;
+
+			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
+			{
+				if (rSrc->Get_Tag() == MONSTER || rSrc->Get_Tag() == ENGINE::WOOD_BOX)
+				{
+					ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+					ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
+
+					if (rSrcCon != nullptr)
+					{
+						rSrcCon->Add_Hp(-rDstCon->Get_Damage());
+						rDstCol->Set_IsCollision(true);
+					}
+				}
+
+				rDstCol->Set_Enabled(false);
+			}
+		}
+
+		if (rDstCol->Get_Enabled() == true)
+		{
+			rDstCol->Set_IsCollision(false);
+			rDstCol->Set_Enabled(false);
 		}
 	}
 }
@@ -279,6 +330,18 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 					}
 				}
 
+				else if (rSrc->Get_Tag() == ENGINE::WOOD_BOX)
+				{
+					ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+					ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
+
+					if (rDstCon != nullptr && rSrcCon != nullptr)
+					{
+						rSrcCon->Add_Hp(-rDstCon->Get_Damage());
+						rSrcCol->Set_IsCollision(true);
+					}
+				}
+
 				if (rDst->Get_Tag() == ENGINE::BULLET_MONSTER &&
 					rSrc->Get_Tag() == ENGINE::PLAYER)
 				{
@@ -337,7 +400,7 @@ void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CG
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				if (rSrc->Get_Tag() != ENGINE::TERRAIN)
+				if (rSrc->Get_Tag() == PLAYER || rSrc->Get_Tag() == MONSTER)
 				{
 					ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
 					ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
@@ -346,29 +409,40 @@ void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CG
 					{
 						rSrcCon->Add_Hp(-rDstCon->Get_Damage());
 					}
+
+					D3DXVECTOR3 vDstPos = rDstTrans->GetPos();
+					D3DXVECTOR3 vSrcPos = rSrcTrans->GetPos();
+					D3DXVECTOR3 vTmpDir = vSrcPos - vDstPos;
+					D3DXVec3Normalize(&vTmpDir, &vTmpDir);
+
+					ENGINE::CRigidBody*	rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
+
+					//if (rSrcRigid != nullptr)
+					//{
+						rSrcRigid->Set_Distance(D3DXVec3Length(&(vSrcPos - vDstPos)));
+						rSrcRigid->Set_IsPush(true);
+						rSrcRigid->Set_PushDir(vTmpDir);
+					//}
+
+					if (rSrc->Get_Tag() == ENGINE::PLAYER)
+					{
+						if (rSrcRigid != nullptr)
+						{
+							rSrcRigid->Set_IsPushForUI(true);
+							rSrcRigid->Set_PushDirForUI(vTmpDir);
+						}
+					}
 				}
 
-				D3DXVECTOR3 vDstPos = rDstTrans->GetPos();
-				D3DXVECTOR3 vSrcPos = rSrcTrans->GetPos();
-				D3DXVECTOR3 vTmpDir = vSrcPos - vDstPos;
-				D3DXVec3Normalize(&vTmpDir , &vTmpDir);
-
-
-				//cout << "¿À³Ä" << endl;
-
-
-
-				ENGINE::CRigidBody*	rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
-				rSrcRigid->Set_Distance(D3DXVec3Length(&(vSrcPos - vDstPos)));
-				rSrcRigid->Set_IsPush(true);
-				rSrcRigid->Set_PushDir(vTmpDir);
-
-				if (rSrc->Get_Tag() == ENGINE::PLAYER)
+				else if (rSrc->Get_Tag() == ENGINE::WOOD_BOX)
 				{
-					if (rSrcRigid != nullptr)
+					ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
+					ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
+
+					if (rDstCon != nullptr && rSrcCon != nullptr)
 					{
-						rSrcRigid->Set_IsPushForUI(true);
-						rSrcRigid->Set_PushDirForUI(vTmpDir);
+						rSrcCon->Add_Hp(-rDstCon->Get_Damage());
+						rSrcCol->Set_IsCollision(true);
 					}
 				}
 			}

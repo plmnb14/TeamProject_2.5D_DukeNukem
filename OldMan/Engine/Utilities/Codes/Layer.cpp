@@ -1,6 +1,7 @@
 #include "Layer.h"
 #include "GameObject.h"
 #include "Camera_Component.h"
+#include "Trasform.h"
 
 USING(ENGINE)
 
@@ -102,7 +103,17 @@ void CLayer::LateUpdate()
 	for (; iter_begin != iter_end; ++iter_begin)
 	{
 		for (auto& pObject : iter_begin->second)
+		{
 			pObject->LateUpdate();
+
+			if (pObject->Get_Component(L"Transform") != nullptr)
+			{
+				if (static_cast<CTransform*>(pObject->Get_Component(L"Transform"))->GetPos().y <= -100)
+				{
+					pObject->SetDead();
+				}
+			}
+		}
 	}
 }
 

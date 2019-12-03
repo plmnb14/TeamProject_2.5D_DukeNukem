@@ -11,6 +11,7 @@
 #include "SoundMgr.h"
 #include "Grenade.h"
 #include "HittedCircle.h"
+#include "Effect_BloodSplit.h"
 
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -25,10 +26,10 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE), m_fZoomAccel(0),
 	m_pObserver(nullptr), m_bZoom(false), m_fMaxZoom(0), m_fMinZoom(0), m_bSpecial(0),
 	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0), m_bCanLedge(0), m_fLength_Y(0),
-	m_eActState(W_IDLE), m_vLedgeUpVec({ 0,0,0 }), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0),
+	m_eActState(W_DRAW), m_vLedgeUpVec({ 0,0,0 }), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0),
 	m_iGrenadeCount(0), m_iMaxGrenadeCount(0), m_iWaypoint_Index(0),
-	m_fWalkSoundDelay(0.f), m_iWalkSoundIndex(0), m_bPlaySlideSound(false),
-	m_bOnNextStage(false)
+	m_fWalkSoundDelay(0.f), m_iWalkSoundIndex(0), m_bPlaySlideSound(false), m_pMeleeCollider(nullptr),
+	m_bOnNextStage(false), m_DeathTimer(0)
 {	
 	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
 }
@@ -41,8 +42,64 @@ CPlayer::~CPlayer()
 int CPlayer::Update() 
 {
 	if (m_bIsDead)
-		return DEAD_OBJ;
+	{
+		m_DeathTimer += m_pTimeMgr->GetDelta();
+
+		if (m_DeathTimer >= 3.f)
+		{
+			m_bOnNextStage = true;
+		}
+
+		return NO_EVENT;
+	}
 	
+	if (m_pMeleeCollider->Get_IsCollision())
+	{
+		//D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+		//D3DXVECTOR3 tmpRight = {};
+		//
+		//D3DXVec3Cross(&tmpRight, &tmpDir, &D3DXVECTOR3{ 0,1,0 });
+		//
+		//D3DXVECTOR3 tmpPos_Melee = { m_pTransform->GetPos().x + tmpRight.x * 2
+		//	, m_pTransform->GetPos().y + 1,
+		//	m_pTransform->GetPos().z + tmpRight.z * 2};
+
+		int iSound = rand() % 6;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON_AFTER, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON_AFTER);
+		switch (iSound)
+		{
+		case 0:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_01.ogg", CSoundMgr::WEAPON_AFTER);
+			break;
+		case 1:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_02.ogg", CSoundMgr::WEAPON_AFTER);
+			break;
+		case 2:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_03.ogg", CSoundMgr::WEAPON_AFTER);
+			break;
+		case 3:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_04.ogg", CSoundMgr::WEAPON_AFTER);
+			break;
+		case 4:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_05.ogg", CSoundMgr::WEAPON_AFTER);
+			break;
+		case 5:
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_06.ogg", CSoundMgr::WEAPON_AFTER);
+			break;
+		}
+
+
+		D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+		D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x * 3 , m_pTransform->GetPos().y + tmpDir.y * 3 , m_pTransform->GetPos().z + tmpDir.z * 3 };
+
+		CGameObject* pInstance = CEffect_BloodSplit::Create(m_pGraphicDev, tmpPos);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+
+		m_pMeleeCollider->Set_IsCollision(false);
+	}
+
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	KeyInput();
@@ -75,6 +132,15 @@ void CPlayer::LateUpdate()
 	D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x , m_pTransform->GetPos().y + 1 , m_pTransform->GetPos().z + tmpDir.z };
 
 	m_pColliderLedge->LateUpdate(tmpPos);
+
+	//D3DXVECTOR3 tmpRight = {};
+	//D3DXVec3Cross(&tmpRight, &tmpDir, &D3DXVECTOR3{ 0,1,0 });
+	//
+	//D3DXVECTOR3 tmpPos_Melee = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) 
+	//							, m_pTransform->GetPos().y,
+	//							m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
+	//
+	m_pMeleeCollider->LateUpdate(tmpPos);
 }
 
 void CPlayer::Render()
@@ -94,7 +160,7 @@ HRESULT CPlayer::Initialize()
 	
 	
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 0.9f , 2.0f, 0.9f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 0.9f , 2.5f, 0.9f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
@@ -125,7 +191,18 @@ HRESULT CPlayer::Initialize()
 	m_pColliderLedge->Set_Trigger(true);					
 	m_pColliderLedge->Set_CenterPos(tmpPos);
 	m_pColliderLedge->Set_UnderPos();						
-	m_pColliderLedge->SetUp_Box();							
+	m_pColliderLedge->SetUp_Box();				
+
+	D3DXVECTOR3 tmpPos_Melee = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y, m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
+
+	// 밀리 콜라이더
+	m_pMeleeCollider->Set_Radius({ 2 , 2, 2 });
+	m_pMeleeCollider->Set_Dynamic(true);
+	m_pMeleeCollider->Set_Trigger(true);
+	m_pMeleeCollider->Set_CenterPos(tmpPos_Melee);
+	m_pMeleeCollider->Set_UnderPos();
+	m_pMeleeCollider->SetUp_Box();
+	m_pMeleeCollider->Set_Enabled(false);
 
 
 	// 리지드 바디 세팅
@@ -164,6 +241,7 @@ HRESULT CPlayer::Initialize()
 	m_pCondition->Set_Run(false);
 	m_pCondition->Set_MoveSpeed(20.f);
 	m_pCondition->Set_MoveAccel(1.f);
+	m_pCondition->Set_Damage(15.f);
 	
 	
 	m_fZoomAccel	= 0.f;
@@ -173,13 +251,21 @@ HRESULT CPlayer::Initialize()
 	m_iGrenadeCount = 3;
 	m_iMaxGrenadeCount = 5;
 
-	
+	m_pWInfo.wWeaponDamage = 15;
+
 	m_tCondition.fHp = m_pCondition->Get_Hp();
 	m_tCondition.fArmor = m_pCondition->Get_Armor();
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(m_tCondition));
 	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
 	m_pWInfo.wCurBullet = 0;
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
+
+	ENGINE::W_INFO* pTag = new ENGINE::W_INFO;
+
+	memcpy(pTag, &m_pWInfo, sizeof(ENGINE::W_INFO));
+
+	m_mWeaponInfo.insert(make_pair(ENGINE::MELLE, pTag));
+	m_mWeaponInfo[m_pWInfo.eWeaponTag];
 
 	return S_OK;
 }
@@ -261,6 +347,14 @@ HRESULT CPlayer::AddComponent()
 
 	m_pColliderLedge = dynamic_cast<ENGINE::CCollider*>(pComponent);
 	NULL_CHECK_RETURN(m_pColliderLedge, E_FAIL);
+
+	// Melee Collider
+	pComponent = ENGINE::CCollider::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Melee_Collider", pComponent });
+
+	m_pMeleeCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pMeleeCollider, E_FAIL);
 
 
 	// Rigid
@@ -427,26 +521,61 @@ void CPlayer::KeyInput()
 			m_pRigid->Set_Accel({ 1, 1.5f, 1 });
 			m_pRigid->Set_IsJump(true);
 			m_pRigid->Set_IsGround(false);
+
+			int a = rand() % 4;
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 1.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
+
+			switch (a)
+			{
+			case 0:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_01.ogg", CSoundMgr::PLAYER);
+				break;
+			}
+			case 1:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_02.ogg", CSoundMgr::PLAYER);
+				break;
+			}
+			case 2:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_03.ogg", CSoundMgr::PLAYER);
+				break;
+			}
+
+			case 3:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_04.ogg", CSoundMgr::PLAYER);
+				break;
+			}
+			}
 		}
 
 		if (m_bCanLedge && !m_bIsLedge)
 		{
 			m_eActState = W_LEDGE;
-		}
 
-		if (m_iJumpCount == 1)
-		{
-			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 1.0f);
+			int a = rand() % 2;
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 1.5f);
 			CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
-			CSoundMgr::GetInstance()->MyPlaySound(L"Player_Jump.ogg", CSoundMgr::PLAYER);
-		}
-		else if (m_iJumpCount == 2)
-		{
-			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER_VOICE, 1.0f);
-			CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER_VOICE);
-			CSoundMgr::GetInstance()->MyPlaySound(L"Player_DBJump.wav", CSoundMgr::PLAYER_VOICE);
-		}
 
+			switch (a)
+			{
+			case 0:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Ledge_01.ogg", CSoundMgr::PLAYER);
+				break;
+			}
+			case 1:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Ledge_02.ogg", CSoundMgr::PLAYER);
+				break;
+			}
+			}
+		}
 	}
 
 	if (m_bGrenade)
@@ -459,8 +588,43 @@ void CPlayer::Check_Weapon()
 {
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_1))
 	{
-		// 근접 무기
-		//m_eWeaponState = m_mWeaponInfo[]
+		auto iter_find = m_mWeaponInfo.find(ENGINE::WEAPON_TAG::MELLE);
+
+		if (m_mWeaponInfo.end() == iter_find)
+			return;
+
+		else
+		{
+			if (m_eWeaponState == iter_find->second->eWeaponTag)
+			{
+				cout << "Fist already selected" << endl;
+
+				return;
+			}
+
+			else
+			{
+				if (m_eWeaponState != ENGINE::NO_WEAPON)
+				{
+					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+
+					if (m_mWeaponInfo.end() != iter_find_old)
+					{
+						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+					}
+				}
+
+				m_eActState = W_DRAW;
+
+				cout << "Select Fist" << endl;
+
+
+				m_eWeaponState = iter_find->second->eWeaponTag;
+				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				m_bCanAttack = true;
+			}
+		}
 	}
 
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_2))
@@ -1372,6 +1536,58 @@ void CPlayer::ShootType()
 	switch (m_eWeaponState)
 	{
 	case ENGINE::MELLE:
+	{
+		if (m_eActState != W_IDLE)
+			return;
+
+			if (m_pKeyMgr->KeyDown(ENGINE::KEY_LBUTTON))
+			{
+				m_eActState = W_L_FIST;
+				//m_bCanAttack = false;
+
+				int iSound = rand() % 3;
+
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 1.0f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+				switch (iSound)
+				{
+				case 0:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_01.wav", CSoundMgr::WEAPON);
+					break;
+				case 1:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_02.wav", CSoundMgr::WEAPON);
+					break;
+				case 2:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_03.wav", CSoundMgr::WEAPON);
+					break;
+				}
+			}
+
+			else if (m_pKeyMgr->KeyDown(ENGINE::KEY_RBUTTON))
+			{
+				m_eActState = W_R_FIST;
+				//m_bCanAttack = false;
+
+				int iSound = rand() % 3;
+
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 1.0f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+				switch (iSound)
+				{
+				case 0:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_01.wav", CSoundMgr::WEAPON);
+					break;
+				case 1:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_02.wav", CSoundMgr::WEAPON);
+					break;
+				case 2:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_03.wav", CSoundMgr::WEAPON);
+					break;
+				}
+
+			}
+		//}
+	}
 	case ENGINE::REVOLVER:
 	{
 		if (m_pKeyMgr->KeyDown(ENGINE::KEY_LBUTTON))
@@ -1523,6 +1739,11 @@ void CPlayer::Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo)
 void CPlayer::Set_WeaponInfo(ENGINE::WEAPON_TAG _eTag, ENGINE::W_INFO * _WeaponInfo)
 {
 	m_mWeaponInfo[_eTag] = _WeaponInfo;
+}
+
+void CPlayer::Set_MeleeTrigger(bool _bool)
+{
+	m_pMeleeCollider->Set_Enabled(_bool);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)

@@ -12,6 +12,7 @@ namespace ENGINE
 	class CTexture;
 	class CTransform;
 	class CCollider;
+	class CCondition;
 }
 
 class CTerrain : public ENGINE::CGameObject
@@ -50,6 +51,7 @@ protected:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
+	ENGINE::CCondition*		m_pCondition;
 
 	ENGINE::TERRAIN_TYPE	m_eTerrainType;
 	ENGINE::VTX_TEX*		m_myVtx;

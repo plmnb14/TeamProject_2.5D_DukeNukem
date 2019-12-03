@@ -29,7 +29,7 @@ void CLogo::Update()
 		{
 			WaitForSingleObject(m_hLoadingThread, INFINITE);
 
-			HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
+			HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
 			FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 		}
 	}
@@ -99,8 +99,44 @@ HRESULT CLogo::Initialize()
 
 	PipeLineSetUp();
 
+	HRESULT hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_RCTEX,
+		L"Buffer_Player");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
+
+	// Terrain Buffer
+
+
+	// 
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_CUBECOL,
+		L"Buffer_CubeCol");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
+
+	//
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
+		L"Buffer_WallCubeCol");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
+
+	//
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_CUBETEX,
+		L"Buffer_CubeTex");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
+
+
+
 	// Add Texture
-	HRESULT hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
+	hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
 		ENGINE::GetGraphicDev()->GetDevice(),
 		ENGINE::RESOURCE_DYNAMIC,
 		ENGINE::TEX_NORMAL,

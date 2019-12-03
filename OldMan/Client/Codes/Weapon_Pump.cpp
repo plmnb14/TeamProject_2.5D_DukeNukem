@@ -7,6 +7,7 @@
 #include "CameraSubject.h"
 #include "Billborad.h"
 #include "Player.h"
+#include "SoundMgr.h"
 
 CWeapon_Pump::CWeapon_Pump(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CWeapon(pGraphicDev)
@@ -22,6 +23,10 @@ int CWeapon_Pump::Update()
 {
 	if (m_bIsDead)
 	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Gun_PickUp.ogg", CSoundMgr::UI);
+
 		dynamic_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Set_WeaponInfo(&m_pWInfo);
 		return DEAD_OBJ;
 	}

@@ -35,7 +35,8 @@ void CEffect_BloodSplit::LateUpdate()
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
 	Localmatrix = m_pTransform->GetWorldMatrix();
-	Cameramatrix = m_pObserver->GetViewMatrix();
+	if(m_pObserver != nullptr)
+		Cameramatrix = m_pObserver->GetViewMatrix();
 
 	vSize = m_pTransform->GetSize();
 
