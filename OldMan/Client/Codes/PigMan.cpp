@@ -197,8 +197,10 @@ HRESULT CPigMan::LateInit()
 
 void CPigMan::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
+	if (m_pObserver != nullptr) {
+		m_pSubject->UnSubscribe(m_pObserver);
+		ENGINE::Safe_Delete(m_pObserver);
+	}
 }
 
 HRESULT CPigMan::AddComponent()
@@ -551,6 +553,12 @@ void CPigMan::Monster_Dead()
 	ChangeTex(L"PigMan_Dead");
 	m_pAnimator->Set_FrameAmp(1.f);
 	m_pAnimator->Set_Frame(5.f);
+
+	m_fDeadTimer += m_pTimeMgr->GetDelta();
+	if (m_fDeadTimer > 3)
+	{
+		m_bIsDead = true;
+	}
 
 }
 

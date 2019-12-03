@@ -178,11 +178,11 @@ void CTrigger::CheckTriggerActive()
 			{
 			case 0:
 			{
-				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 14,8,5 } , CSummon_Effect::MONSTER);
+				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 14,8,5 } , CSummon_Effect::TROPPER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 20,10,-4 } , CSummon_Effect::MONSTER);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 20,10,-4 } , CSummon_Effect::OCTABRAIN);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 

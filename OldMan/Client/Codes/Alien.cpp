@@ -106,8 +106,8 @@ HRESULT CAlien::Initialize()
 
 	m_fMaxRange = 20.0f;//최대사거리
 	m_fRange = 0.f;
-	m_fMinRange = 15.f
-		;
+	m_fMinRange = 15.f;
+	
 	m_fAttack = 5.0f;
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 2.f , 8.f, 2.f });			// 각 축에 해당하는 반지름을 설정
@@ -144,7 +144,7 @@ HRESULT CAlien::Initialize()
 	m_pGroundChekCollider->SetUp_Box();
 	//점프 트리거 콜라이더 필요함
 	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
-	m_pMelleCollider->Set_Radius({ 5.6f , 5.6f, 5.6f });
+	m_pMelleCollider->Set_Radius({ 10.f , 10.f, 10.f });
 	m_pMelleCollider->Set_Dynamic(true);
 	m_pMelleCollider->Set_Trigger(true);
 	m_pMelleCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
@@ -197,8 +197,10 @@ HRESULT CAlien::LateInit()
 
 void CAlien::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
+	if (m_pObserver != nullptr) {
+		m_pSubject->UnSubscribe(m_pObserver);
+		ENGINE::Safe_Delete(m_pObserver);
+	}
 }
 
 HRESULT CAlien::AddComponent()
@@ -353,7 +355,6 @@ void CAlien::Monster_Range()
 			m_pRigid->Set_IsGround(false);
 			m_eNextState = MONSTER_JUMP;
 			fJumpTime++;
-			cout << "점프" << endl;
 		}
 	}
 	fJump += m_pTimeMgr->GetDelta();
@@ -361,7 +362,6 @@ void CAlien::Monster_Range()
 		if (fJump > 5)
 		{
 			fJumpTime = 0;
-			cout << "점프초기화" << endl;
 
 		}
 	}
@@ -453,6 +453,12 @@ void CAlien::Monster_Dead()
 	m_pAnimator->Set_FrameAmp(1.f);
 	m_pAnimator->Set_Frame(9.f);
 
+	m_fDeadTimer += m_pTimeMgr->GetDelta();
+	if (m_fDeadTimer > 3)
+	{
+		m_bIsDead = true;
+	}
+
 }
 
 void CAlien::Monster_Attack()
@@ -466,9 +472,8 @@ void CAlien::Monster_Attack()
 	float fMove;
 	fMove = 100.f * m_pTimeMgr->GetDelta();
 	m_pMelleCollider->Set_Enabled(true);
+	//텍스처 입히기 
 
-
-	//m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, fMove);
 	if (m_pMelleCollider->Get_IsCollision())
 	{
 		m_pCondition->Add_Hp(+1);
@@ -604,6 +609,7 @@ CAlien * CAlien::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target, D3D
 		return nullptr;
 	}
 	pInstance->Set_Target(_Target);
+	pInstance->Set_Pos(_Pos);
 
 	return pInstance;
 }

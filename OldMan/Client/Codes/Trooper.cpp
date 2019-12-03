@@ -28,11 +28,11 @@ int CTrooper::Update()
 	ENGINE::CGameObject::Update();
 	Check_Physic();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
-	//Monster_Foward();
+	Monster_Foward();
 	Check_Push();
 
 	Monster_State_Set();
-	Player_Pursue(0.5f);
+	//Player_Pursue(0.5f);
 
 
 	return NO_EVENT;
@@ -45,6 +45,8 @@ void CTrooper::LateUpdate()
 
 	D3DXMATRIX Localmatrix, Cameramatrix;													  //  로컬, 카메라 행렬 
 	D3DXVECTOR3 vSize;																		  // 대상의 사이즈 
+	Localmatrix = m_pTransform->GetWorldMatrix();
+
 	if (m_pObserver != nullptr)                                                                    //체크 
 		Cameramatrix = m_pObserver->GetViewMatrix();
 
@@ -58,7 +60,6 @@ void CTrooper::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	cout << m_pCondition->Get_Hp() << endl;
 
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
@@ -70,7 +71,11 @@ void CTrooper::LateUpdate()
 
 		if (m_bShot)
 		{
-			m_eNextState = MONSTER_SHOT;
+			if (m_eNextState != MONSTER_DEAD)
+			{
+				m_eNextState = MONSTER_DEAD;
+				m_pCollider->Set_MaxY(2.f);
+			}
 		}
 		else
 		{
@@ -91,7 +96,6 @@ void CTrooper::LateUpdate()
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
 }
-
 void CTrooper::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
@@ -203,15 +207,17 @@ void CTrooper::Set_Pos(D3DXVECTOR3 _Pos)
 
 void CTrooper::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
+	if (m_pObserver != nullptr) {
+		m_pSubject->UnSubscribe(m_pObserver);
+		ENGINE::Safe_Delete(m_pObserver);
+	}
 }
 
 HRESULT CTrooper::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Trooper_WalkFront");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"Trooper_WalkBack");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -291,14 +297,7 @@ HRESULT CTrooper::AddComponent()
 	return S_OK;
 }
 
-
-//정면 보는지 안보는지 하나 만들긴 해야됨 -> 각도에 따라서 렌더가 다르게 되야되기 때문이다. 
-// 360/ 8 /45 간격으로 그림을 출력하게 만들어야 됨 사격이 되는 각도는 
-// 4방향 에서는 사격이 가능해야 함 -> 45, 90,135,180 
-// 뒤를 볼 경우 사격을 안한다 -> 인지범위 도달 했을시 뒤이면 앞으로 돌게 설정 
-// 뒤일경우 데미지 더 받는 몬스터 하나 있음 
-//도는 순서를 정해야 한다. -> 왼쪽 -> 오른쪽 판단후 돌게 만들면된다. 
-// 
+ 
 void CTrooper::Player_Pursue(float _move)
 {
 	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
@@ -336,7 +335,6 @@ void CTrooper::Monster_Foward()
 
 	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &m_vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
-	Player_Pursue(0.4f);
 
 	if (m_fFowardDealy > 0.3)
 	{
@@ -527,6 +525,11 @@ void CTrooper::Monster_Range()
 	{
 		m_eNextState = MONSTER_FIRE;
 	}
+	else
+	{
+		m_eNextState = MONSTER_IDLE;
+
+	}
 
 }
 void CTrooper::Monster_Idle()
@@ -575,29 +578,15 @@ void CTrooper::Monster_Shot()
 	if (m_fHitTime > 0.3)
 	{
 		m_bShot = false;
-
-		//	if (acos(fDot_Player_Monster_Forward) * 90 > 250)
-		{
-			m_pAnimator->Stop_Animation(false);
-			m_pCondition->Set_Hit(false);
+		m_pAnimator->Stop_Animation(false);
+		m_pCondition->Set_Hit(false);
 			m_eNextState = MONSTER_PURSUE;
 			m_fHitTime = 0;
-
-			//if (fRange > 7)                                       //5 사거리 안에서 피격당할경우 위로 사격을 하게 만들어 논것이다. 착각하지마라
-			{
-				/*if (m_fDelayTime > 0.2)
-				{
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster_Dir_Top, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-				m_fHitTime = 0;
-				m_fDelayTime = 0;
-				m_eNextState = MONSTER_PURSUE;
-
-				}*/
+					
 			}
-		}
-	}
 }
+
+
 
 
 
@@ -651,7 +640,14 @@ void CTrooper::Monster_Dead()
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"Trooper_DeadFall");
 	m_pAnimator->Set_FrameAmp(1.f);
-	m_pAnimator->Set_Frame(5.f);
+	ChangeTex(L"Trooper_Dead");
+	m_pAnimator->Set_Frame(1.f);
+	m_fDeadTimer += m_pTimeMgr->GetDelta();
+	if (m_fDeadTimer > 3)
+	{
+		m_bIsDead = true;
+	}
+
 
 }
 
@@ -731,7 +727,7 @@ void CTrooper::Monster_State_Set()
 		Monster_Idle();
 		break;
 	case MONSTER_PURSUE:
-		Monster_Foward();
+		Player_Pursue(0.4f);
 		break;
 	case MONSTER_SHOT:
 		Monster_Shot();
@@ -762,6 +758,7 @@ CTrooper * CTrooper::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* _Target,
 		return nullptr;
 	}
 	pInstance->Set_Target(_Target);
+	pInstance->Set_Pos(_Pos);
 
 	return pInstance;
 }

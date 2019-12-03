@@ -47,21 +47,21 @@ int CSummon_Effect::Update()
 			}
 			case TROPPER:
 			{
-				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), m_pTransform->GetPos());
+				CGameObject* pObject = CTrooper::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), m_pTransform->GetPos());
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 				break;
 			}
 			case OCTABRAIN:
 			{
-				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), m_pTransform->GetPos());
+				CGameObject* pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), m_pTransform->GetPos());
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 				break;
 			}
 			case ALIEN:
 			{
-				CGameObject* pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), m_pTransform->GetPos());
+				CGameObject* pObject = CAlien::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), m_pTransform->GetPos());
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::MONSTER, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 				break;
