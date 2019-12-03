@@ -69,7 +69,7 @@ void CStage_02::Update()
 
 			else
 			{
-				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
+				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_BOSS));
 				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 			}
 
@@ -353,7 +353,7 @@ HRESULT CStage_02::Initialize()
 
 void CStage_02::Release()
 {
-	m_pResourceMgr->ResetDynamicResource();
+	//m_pResourceMgr->ResetDynamicResource();
 }
 
 void CStage_02::PipeLineSetUp()

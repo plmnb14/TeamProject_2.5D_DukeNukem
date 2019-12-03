@@ -75,22 +75,22 @@ void CWeaponIcon::CheckWeapon()
 	switch (m_eWeaponType)
 	{
 	case ENGINE::WEAPON_TAG::MELLE:
-		m_bVisible = false;
+		ChangeTex(L"weaponIcon_fist.png");
 		break;
 	case ENGINE::WEAPON_TAG::REVOLVER:
-		ChangeTex(L"weaponIcon.png");
+		ChangeTex(L"weaponIcon_revolver.png");
 		break;
 	case ENGINE::WEAPON_TAG::RIFLE:
-		ChangeTex(L"weaponIcon.png");
+		ChangeTex(L"weaponIcon_smg.png");
 		break;
 	case ENGINE::WEAPON_TAG::SHOTGUN:
-		ChangeTex(L"weaponIcon.png");
+		ChangeTex(L"weaponIcon_shotgun.png");
 		break;
 	case ENGINE::WEAPON_TAG::SMG:
-		ChangeTex(L"weaponIcon.png");
+		ChangeTex(L"weaponIcon_smg.png");
 		break;
 	case ENGINE::WEAPON_TAG::LUNCHER:
-		ChangeTex(L"weaponIcon.png");
+		ChangeTex(L"weaponIcon_launcher.png");
 		break;
 	default:
 		break;

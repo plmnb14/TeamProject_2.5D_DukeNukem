@@ -15,6 +15,7 @@
 #include "Effect_Explosion_Rocket.h"
 #include "Effect_Fireball.h"
 #include "SoundMgr.h"
+#include "Animator.h"
 
 
 CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -199,9 +200,19 @@ void CBullet::LateUpdate()
 
 void CBullet::Render()
 {
+	
+
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);
 	m_pTexture->Render(0);
+	if (m_eWeaponTag == ENGINE::MONSTER_WAVE)
+	{
+		m_pAnimator->RenderSet(m_pTimeMgr->GetDelta());
+		m_pTexture->Render(m_pAnimator->Get_Frame());
+	}
 	m_pBuffer->Render();
+	
+
+
 }
 
 HRESULT CBullet::Initialize()
@@ -236,6 +247,12 @@ HRESULT CBullet::Initialize()
 	m_pRigid->Set_MaxAccel({ 1.f , 1.f , 1.f });			// 각 축에 해당하는 MaxAccel 값
 
 	m_fLifetime = 2.f;
+
+	m_pAnimator->Set_FrameAmp(1.f);									// 배속재생
+	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_ZERO);
+	m_pAnimator->Set_Reverse(false);
+	m_pAnimator->Set_MaxFrame(0);
+	m_pAnimator->Stop_Animation(false);
 
 	return S_OK;
 }
@@ -315,6 +332,17 @@ HRESULT CBullet::AddComponent()
 
 	m_pCondition = static_cast<ENGINE::CCondition*>(pComponent);
 	NULL_CHECK_RETURN(m_pCondition, E_FAIL);
+	
+	//animator
+	pComponent = ENGINE::CAnimator::Create();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent.insert({ L"Animator", pComponent });
+
+	m_pAnimator = static_cast<ENGINE::CAnimator*>(pComponent);
+	NULL_CHECK_RETURN(m_pAnimator, E_FAIL);
+
+
+
 
 	return S_OK;
 }
@@ -358,7 +386,38 @@ void CBullet::BulletType()
 		m_pTransform->Move_AdvancedPos(m_dir,m_fSpeed * m_pTimeMgr->GetDelta());
 		break;
 	}
+	case ENGINE::MONSTER_WAVE:
+	{
+		
+		m_pTransform->SetSize({ 3.f,3.f,3.f });
+		m_pCollider->Set_Radius({ 3.f,3.f,3.f });
+		ChangeTex(L"Monster_Bullet");
+		m_pAnimator->Set_FrameAmp(2.f);
+		m_pTransform->Move_AdvancedPos(m_dir, m_fSpeed * m_pTimeMgr->GetDelta());
+		
+		break;
 	}
+	}
+}
+
+void CBullet::ChangeTex(wstring _wstrTex)
+{
+	if (m_wstrTex.compare(_wstrTex) == 0)
+		return;
+
+	m_wstrTex = _wstrTex;
+
+	m_mapComponent.erase(L"Texture");
+	ENGINE::CComponent* pComponent = nullptr;
+	pComponent = ENGINE::GetResourceMgr()->CloneResource(ENGINE::RESOURCE_STATIC, _wstrTex);
+	NULL_CHECK(pComponent);
+	m_mapComponent.insert({ L"Texture", pComponent });
+
+	m_pAnimator->Set_MaxFrame(static_cast<ENGINE::CResources*>(pComponent)->Get_MaxFrame());
+
+	m_pTexture = static_cast<ENGINE::CTexture*>(pComponent);
+	NULL_CHECK(m_pTexture);
+
 }
 
 void CBullet::Set_Target(CGameObject * _Target)

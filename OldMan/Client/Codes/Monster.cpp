@@ -37,7 +37,7 @@ int CMonster::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
-	Monster_Foward();
+	//Monster_Foward();
 
 	Monster_State_Set();
 
@@ -71,13 +71,15 @@ void CMonster::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	//cout << m_pCondition->Get_Hp() << endl;
 
 	// 이러한 구조를 가지는 이유는 총격을 1순위 로 두기 때문이다. 피격시 모든 행동은 중지된다. 그리고 피격후 0.5 초후 범위탐색을 진행시킨다. 
 	if (m_pCondition->Get_Hp() <= 0)
 	{
-		m_eNextState = MONSTER_DEAD;
-
+		if (m_eNextState != MONSTER_DEAD)
+		{
+			m_eNextState = MONSTER_DEAD;
+			m_pCollider->Set_MaxY(2.f);
+		}
 	}
 	else
 	{
@@ -120,12 +122,12 @@ HRESULT CMonster::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(5.f, 5.f, 8.f));
-	m_pTransform->SetSize(D3DXVECTOR3(5.f, 5.f, 5.f));
+	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
-	m_fMaxRange = 60.f;//최대사거리
+	m_fMaxRange = 61.0f;//최대사거리
 	m_fRange = 0.f;
-	m_fMinRange = 15.0f;
-	m_fAttack = 8.0f;
+	m_fMinRange = 35.0f;
+	m_fAttack = 19.0f;
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);						// 동적, 정적 Collider 유무
@@ -134,6 +136,7 @@ HRESULT CMonster::Initialize()
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
+	
 
 	//리지드 바디 세팅 
 	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
@@ -214,18 +217,15 @@ HRESULT CMonster::LateInit()
 
 void CMonster::Release()
 {
-	if (m_pSubject != nullptr && m_pObserver != nullptr)
-	{
-		m_pSubject->UnSubscribe(m_pObserver);
-		ENGINE::Safe_Delete(m_pObserver);
-	}
+	m_pSubject->UnSubscribe(m_pObserver);
+	ENGINE::Safe_Delete(m_pObserver);
 }
 
 HRESULT CMonster::AddComponent()
 {
 	ENGINE::CComponent* pComponent = nullptr;
 	//texture
-	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"PigMan_Fire");
+	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_STATIC, L"PigMan_WalkFront");
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });
 
@@ -317,10 +317,8 @@ void CMonster::Player_Pursue(float _move)
 	// 플레이어의 중점을 받아서 가면 몬스터가 점점 가라앉는 문제가 생겨서 top으로 위치를 다르게 줌 
 
 	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
-	m_MoveSpeed = 0.5f * _move * m_pTimeMgr->GetDelta();   // 속도
+	m_MoveSpeed = 1.f* _move * m_pTimeMgr->GetDelta();   // 속도
 	m_pAnimator->Stop_Animation(false);
-	ChangeTex(L"PigMan_WalkFront");
-	m_pAnimator->Set_FrameAmp(5.f);
 	m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, m_MoveSpeed);
 
 }
@@ -348,10 +346,11 @@ void CMonster::Monster_Foward()
 
 	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &m_vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
-		
+
 	if (m_fFowardDealy > 0.3)
 	{
-		if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 &&fDot_Monster_Right>0)
+		Player_Pursue(0.4f);
+		if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 && fDot_Monster_Right>0)
 		{//2개
 
 			if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)            // 좌- 정면
@@ -359,37 +358,37 @@ void CMonster::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"PigMan_WalkFront");
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "전좌- 좌측면1 " << endl;
-				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+				cout << "전좌- 좌측면1 " << endl;
 				m_fFowardDealy = 0;
 			}
-			
+
 		}
-		else if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90&&fDot_Monster_Right<0)
+		else if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 && fDot_Monster_Right<0)
 		{
 			if (-22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 180 < 0)                          //우 - 정면
 			{
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"PigMan_WalkFront");
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "우 -측면2 " << endl;
-					m_pTransform->MoveAngle(ENGINE::ANGLE_Y,5.f);
-					m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
-
+				cout << "우 -측면2 " << endl;
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+			
 				m_fFowardDealy = 0;
 			}
-		
+
 		}
 		else if (fDot_Player_Monster_Forward * 90 > 22.5 && fDot_Player_Monster_Forward * 90 < 67.5&& fDot_Monster_Right > 0)
 		{
 			if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <67.5)                          //좌 - 측면
 			{
 				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkSideFrontRight");
+				ChangeTex(L"PigMan_WalkSideFrontLeft");
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "우 -측면3 " << endl;
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				cout << "우 -측면3 " << endl;
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+	//		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				m_fFowardDealy = 0;
 			}
 
@@ -399,25 +398,31 @@ void CMonster::Monster_Foward()
 			if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측면
 			{
 				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkSideFrontLeft");
+				ChangeTex(L"PigMan_WalkSideFrontRight");
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "우 -측면4 " << endl;
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				cout << "우 -측면4 " << endl;
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+
 				m_fFowardDealy = 0;
 			}
 
 		}
-		else if (fDot_Player_Monster_Forward * 90 > -22.5 && fDot_Player_Monster_Forward * 90 < 0&& fDot_Monster_Right < 0)
+		else if (fDot_Player_Monster_Forward * 90 > -22.5 && fDot_Player_Monster_Forward * 90 < 0 && fDot_Monster_Right < 0)
 		{
 			if (-90 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -67.5)                          //우 - 측면
 			{
 				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkSideLeft");
+				ChangeTex(L"PigMan_WalkSideRight");
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "우 -측면5 " << endl;
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);		
+				cout << "우 -측면5 " << endl;
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+
 				m_fFowardDealy = 0;
 			}
 
@@ -427,11 +432,14 @@ void CMonster::Monster_Foward()
 			if (67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <90)                          //좌- 측면
 			{
 				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkSideRight");
+				ChangeTex(L"PigMan_WalkSideLeft");
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "우 -측면6 " << endl;
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				cout << "우 -측면6 " << endl;
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+
 				m_fFowardDealy = 0;
 			}
 
@@ -441,12 +449,15 @@ void CMonster::Monster_Foward()
 			if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측측면
 			{
 				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkSideBack");
-			
+				ChangeTex(L"PigMan_WalkSideBackRigt");
+
 				m_pAnimator->Set_FrameAmp(5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
-				//cout << "우 -측면7 " << endl;
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+
+				cout << "우 -측면7 " << endl;
 				m_fFowardDealy = 0;
 			}
 
@@ -456,13 +467,16 @@ void CMonster::Monster_Foward()
 			if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 67.5)                          //좌 - 측측면
 			{
 				m_pAnimator->Stop_Animation(false);
-				ChangeTex(L"PigMan_WalkSideBackRigt");
+				ChangeTex(L"PigMan_WalkSideBack");
 
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "우 -측면8 " << endl;
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				cout << "우 -측면8 " << endl;
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+			//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 				m_fFowardDealy = 0;
 			}
 
@@ -474,10 +488,13 @@ void CMonster::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"PigMan_WalkBack");
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "우 -측면9 " << endl;
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				cout << "우 -측면9 " << endl;
+		//		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
 				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+
 				m_fFowardDealy = 0;
 			}
 
@@ -489,15 +506,19 @@ void CMonster::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"PigMan_WalkBack");
 				m_pAnimator->Set_FrameAmp(5.f);
-				//cout << "우 -측면10 " << endl;
-				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 5.f);
-				m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				cout << "우 -측면10 " << endl;
+		//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+			m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+
 				m_fFowardDealy = 0;
 			}
 
 		}
 	}
+	
 }
 	
 
@@ -522,10 +543,8 @@ void CMonster::Monster_Range()
 	{
 		m_eNextState = MONSTER_FIRE;
 	}
-	else if (fRange<m_fAttack)
-	{
-		m_eNextState = MONSTER_MILL;
-
+	else {
+		m_eNextState = MONSTER_IDLE;
 	}
 }
 void CMonster::Monster_Idle()
@@ -606,7 +625,7 @@ void CMonster::Monster_Fire2()
 	D3DXVECTOR3 vMonster = vPlayer_Pos_Top - vMonsterPos_ShotPoint;
 
 	float fMove;
-	fMove = 100.f * m_pTimeMgr->GetDelta();			 // 속도
+	fMove = 180.f * m_pTimeMgr->GetDelta();			 // 속도
 	float fAngle[3] = { 0.f };                      //각도 0도로 줘야함 안주면 총알 빌보드 문제 있음 
 	m_fTime += m_pTimeMgr->GetDelta();
 
@@ -621,19 +640,27 @@ void CMonster::Monster_Fire2()
 	//cout << fDot_Player_Monster_Forward << endl;
 	                                       // 정면일 경우만 사격한다. 
 	
-		if (m_fTime > 1.8f)
+		if (m_fTime > 0.9f)
 		{
 			ChangeTex(L"PigMan_Fire");
-			m_pAnimator->Set_FrameAmp(1.f);
+			m_pAnimator->Set_FrameAmp(2.f);
 			m_pAnimator->Stop_Animation(false);
 
 		}
-		if (m_fTime > 2)
+		if (m_fTime > 1)
 		{
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
-			pInstance->Set_MapLayer(m_mapLayer);
+			for (int i = 0; i < 5;i++) 
+			{
+				float xRand = rand() % 500 * 0.01f;
+				float yRand = rand() % 500 * 0.01f;
+				float zRand = rand() % 500 * 0.01f;
+				D3DXVECTOR3 vMonster_Shot{ vMonster.x + xRand,vMonster.y+ yRand,vMonster.z+ zRand };
 
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+
+				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster_Shot, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+				pInstance->Set_MapLayer(m_mapLayer);
+				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
+			}
 			m_fTime = 0;
 		}
 }
@@ -661,10 +688,6 @@ void CMonster::Monster_Dead()
 void CMonster::Monster_Attack()
 {
 
-	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();
-	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
-	D3DXVECTOR3 vPlayer_Pos_Top = { vPlayer_Pos.x, vPlayer_Pos.y + 1,vPlayer_Pos.z };
-	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos_Top - vMonster_Pos;
 	float fMove;
 	fMove = 100.f * m_pTimeMgr->GetDelta();
 	m_pMelleCollider->Set_Enabled(true);
@@ -787,7 +810,7 @@ void CMonster::Monster_State_Set()
 		Monster_Idle();
 		break;
 	case MONSTER_PURSUE:
-		Player_Pursue(2.f);
+		Monster_Foward();
 		break;
 	case MONSTER_SHOT:
 		Monster_Shot();

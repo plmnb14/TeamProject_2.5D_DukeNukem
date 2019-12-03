@@ -8,7 +8,7 @@
 #include "Bullet.h"
 #include "Condition.h"
 #include "Animator.h"
-
+// 트루퍼 빨강색-> 이용해서 -> 체력이 깍이면 도망가는 패턴 하나 넣기 -> 체력 절반일경우 -> 도망친다. 
 
 CTrooper::CTrooper(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
@@ -29,12 +29,10 @@ int CTrooper::Update()
 	Check_Physic();
 	// 근접공격 만들기 1. 때리기 2. 물어뜯기 
 	//Monster_Foward();
+	Check_Push();
 
 	Monster_State_Set();
-
-	//Player_Pursue();
-	//cout << m_pCondition->Get_Hp() << endl;
-
+	Player_Pursue(0.5f);
 
 
 	return NO_EVENT;
@@ -66,7 +64,6 @@ void CTrooper::LateUpdate()
 	if (m_pCondition->Get_Hp() <= 0)
 	{
 		m_eNextState = MONSTER_DEAD;
-
 	}
 	else
 	{
@@ -111,9 +108,9 @@ HRESULT CTrooper::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
 
-	m_fMaxRange = 19.0f;//최대사거리
+	m_fMaxRange = 35.0f;//최대사거리
 	m_fRange = 0.f;
-	m_fMinRange = 11.0f;
+	m_fMinRange = 18.0f;
 	m_fAttack = 5.0f;
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
@@ -162,7 +159,7 @@ HRESULT CTrooper::Initialize()
 	m_pMelleCollider->Set_Type(ENGINE::COLLISION_AABB);
 
 	//컨디션 
-	m_pCondition->Set_Hp(100.f);
+	m_pCondition->Set_Hp(60.f);
 
 	m_pCondition->Set_Dodge(false);         //회피 
 	m_pCondition->Set_Cinematic(false);     // 연출 
@@ -198,6 +195,10 @@ HRESULT CTrooper::LateInit()
 	m_pSubject->Subscribe(m_pObserver);
 
 	return S_OK;
+}
+void CTrooper::Set_Pos(D3DXVECTOR3 _Pos)
+{
+	m_pTransform->SetPos(_Pos);
 }
 
 void CTrooper::Release()
@@ -308,52 +309,204 @@ void CTrooper::Player_Pursue(float _move)
 	// 플레이어의 중점을 받아서 가면 몬스터가 점점 가라앉는 문제가 생겨서 top으로 위치를 다르게 줌 
 
 	//DXVECTOR3 vMonster2 = { vMonster.x,m_pTransform->GetPos().y,vMonster.z };  //   통통이-> 통통 튀면서 오는 경우 와이값이 들어가서 그런듯 
-	m_MoveSpeed = 2.f* _move * m_pTimeMgr->GetDelta();   // 속도
-	ChangeTex(L"Trooper_WalkFront");
-	m_pAnimator->Set_FrameAmp(5.f);
-	m_pAnimator->Stop_Animation(false);
+	m_MoveSpeed = 1.f* _move * m_pTimeMgr->GetDelta();   // 속도
 	m_pTransform->Move_AdvancedPos(vMonster_Player_Dir, m_MoveSpeed);
 
 }
 
 void CTrooper::Monster_Foward()
 {
+	Monster_Callcul();
 
-	D3DXVECTOR3 vPlayer_Pos = static_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->GetPos();  // 플레이어위치
-	D3DXVECTOR3 vMonster_Pos = m_pTransform->GetPos();
-
-	D3DXVECTOR3 vMonster_Player_Dir = vPlayer_Pos - vMonster_Pos;
-	D3DXVECTOR3 vMonster_Player_Dir_Free = vPlayer_Pos - vMonster_Pos;
-
-	D3DXVECTOR3 vMonsterDir_Get = m_pTransform->GetDir();              // 몬스터가 보는 방향 
+	D3DXVECTOR3 vMonster_Player_Dir_Free = m_vPlayer_Pos - m_vMonster_Pos;    //왜필요하더라?
 
 	D3DXVECTOR3 vMonsterDir_Forward = { 1.f, 0.f,0.f };                // 몬스터의 룩 벡터 X축 기준 룩 벡터 
 																	   //m_pTransform->SetDir(vMonster_Player_Dir);
-
-	D3DXVec3Normalize(&vMonster_Player_Dir, &vMonster_Player_Dir);
+	D3DXVec3Normalize(&m_vMonster_Player_Dir, &m_vMonster_Player_Dir);
 	D3DXVec3Normalize(&vMonsterDir_Forward, &vMonsterDir_Forward);
-	D3DXVec3Normalize(&vMonsterDir_Get, &vMonsterDir_Get);
+	D3DXVec3Normalize(&m_vMonsterDir_Fowrd_Get, &m_vMonsterDir_Fowrd_Get);
+
 	float fDot_Player_Monster_Forward, fDot_Monster_Right, fMonster_Get_Angle;
-	fDot_Player_Monster_Forward = D3DXVec3Dot(&vMonster_Player_Dir, &vMonsterDir_Get);
+	fDot_Player_Monster_Forward = D3DXVec3Dot(&m_vMonster_Player_Dir, &m_vMonsterDir_Fowrd_Get);
+	D3DXVECTOR3 vMonsterDir_Right = { m_vMonsterDir_Fowrd_Get.x, m_vMonsterDir_Fowrd_Get.y + 1.0f,m_vMonsterDir_Fowrd_Get.z };      																   //m_pTransform->SetDir(vMonster_Player_Dir);
 
 	D3DXVECTOR3 vMonster_RIght_Dir, Mon_Left_Dir, cross;
-	D3DXVec3Cross(&vMonster_RIght_Dir, &vMonsterDir_Forward, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); // 우향 벡터를 구하기 위한 외적 
-																							  //D3DXVec3Cross(&Mon_Left_Dir, &vMonsterDir_Fowrd2, &D3DXVECTOR3(0.0f, -1.0f, 0.0f)); // 좌향 벡터를 구하기 위한 외적 
 
-	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
+	D3DXVec3Cross(&vMonster_RIght_Dir, &m_vMonsterDir_Fowrd_Get, &vMonsterDir_Right); // 우향 벡터를 구하기 위한 외적 ECTOR3(0.0f, -1.0f, 0.0f)); // 좌향 벡터를 구하기 위한 외적 
+
+	fDot_Monster_Right = D3DXVec3Dot(&vMonster_RIght_Dir, &m_vMonster_Player_Dir);                 // - 일때 오른쪽 +왼쪽이다. 
 	m_fFowardDealy += m_pTimeMgr->GetDelta();
+	Player_Pursue(0.4f);
+
+	if (m_fFowardDealy > 0.3)
+	{
+		if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 && fDot_Monster_Right>0)
+		{//2개
+
+			if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)            // 좌- 정면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkFront");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "전좌- 좌측면1 " << endl;
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > 67.5 && fDot_Player_Monster_Forward * 90 < 90 && fDot_Monster_Right<0)
+		{
+			if (-22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 180 < 0)                          //우 - 정면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkFront");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면2 " << endl;
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > 22.5 && fDot_Player_Monster_Forward * 90 < 67.5&& fDot_Monster_Right > 0)
+		{
+			if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <67.5)                          //좌 - 측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkFrontSide");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면3 " << endl;
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+				//		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > 22.5 && fDot_Player_Monster_Forward * 90 < 67.5&& fDot_Monster_Right < 0)
+		{
+			if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkFrontSideRight");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면4 " << endl;
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
 
 
-	//	cout<<m_pTransform->GetAngle(ENGINE::ANGLE_X)*180 <<"X"<<endl;
-	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Y) << "Y" << endl;
-	//	cout << m_pTransform->GetAngle(ENGINE::ANGLE_Z)*180<<"Z" << endl;
-	//cout << acos(fDot_Monster_Right)*90 << endl;
-//	//cout << vMonster_Player_Dir.x <<"X"<< endl;
-	//cout << vMonster_Player_Dir.y <<"Y"<< endl;
-	//cout << vMonster_Player_Dir.z <<"Z"<<endl;
-	//m_pTransform->SetDir(vMonster_Player_Dir);
-	//cout << test <<"좌우"<< endl;  
-	//cout << Dot2 <<"앞뒤"<< endl;
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -22.5 && fDot_Player_Monster_Forward * 90 < 0 && fDot_Monster_Right < 0)
+		{
+			if (-90 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -67.5)                          //우 - 측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkSideRight");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면5 " << endl;
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -22.5 && fDot_Player_Monster_Forward * 90 < 0 && fDot_Monster_Right > 0)
+		{
+			if (67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 <90)                          //좌- 측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkSide");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면6 " << endl;
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -67.5 && fDot_Player_Monster_Forward * 90 < -22.5 && fDot_Monster_Right < 0)
+		{
+			if (-67.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < -22.5)                          //우 - 측측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkSideBackRight");
+
+				m_pAnimator->Set_FrameAmp(5.f);
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+
+				cout << "우 -측면7 " << endl;
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -67.5 && fDot_Player_Monster_Forward * 90 < -22.5 && fDot_Monster_Right >  0)
+		{
+			if (22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 67.5)                          //좌 - 측측면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkSideBackLeft");
+
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면8 " << endl;
+				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -90 && fDot_Player_Monster_Forward * 90 < -67.5 && fDot_Monster_Right >  0)
+		{
+			if (0 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 22.5)                          //좌 - 후정면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkBack");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면9 " << endl;
+				//		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+
+				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+
+				m_fFowardDealy = 0;
+			}
+
+		}
+		else if (fDot_Player_Monster_Forward * 90 > -90 && fDot_Player_Monster_Forward * 90 < -67.5 && fDot_Monster_Right < 0)
+		{
+			if (-22.5 < fDot_Monster_Right * 90 && fDot_Monster_Right * 90 < 0)                          //우 - 후정면
+			{
+				m_pAnimator->Stop_Animation(false);
+				ChangeTex(L"Trooper_WalkBack");
+				m_pAnimator->Set_FrameAmp(5.f);
+				cout << "우 -측면10 " << endl;
+				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
+				//m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
+				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
+				m_pTransform->SetDir(vMonster_Player_Dir_Free);
+				m_fFowardDealy = 0;
+			}
+
+		}
+	}
+
 }
 
 
@@ -374,11 +527,7 @@ void CTrooper::Monster_Range()
 	{
 		m_eNextState = MONSTER_FIRE;
 	}
-	else if (fRange<m_fAttack)
-	{
-		m_eNextState = MONSTER_MILL;
 
-	}
 }
 void CTrooper::Monster_Idle()
 {
@@ -479,25 +628,21 @@ void CTrooper::Monster_Fire2()
 	float fDot_Player_Monster_Forward;                        // 몬스터의 정면을 구하기 위한 내적값 -> +정면 -후면 이다. 
 	fDot_Player_Monster_Forward = D3DXVec3Dot(&vMonster_Player_Dir, &vMonsterDir_Fowrd_Get);
 
+	if (m_fTime > 0.8f)
+	{
+		ChangeTex(L"Trooper_FireFront");
+		m_pAnimator->Set_FrameAmp(1.f);
+		m_pAnimator->Stop_Animation(false);
 
+	}
+	if (m_fTime > 1)
+	{
+		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+		pInstance->Set_MapLayer(m_mapLayer);
+		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
 
-	//cout << fDot_Player_Monster_Forward << endl;
-
-		if (m_fTime > 1.8f)
-		{
-			ChangeTex(L"Trooper_FireFront");
-			m_pAnimator->Set_FrameAmp(1.f);
-			m_pAnimator->Stop_Animation(false);
-
-		}
-		if (m_fTime > 2)
-		{
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
-			pInstance->Set_MapLayer(m_mapLayer);
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
-
-			m_fTime = 0;
-		}
+		m_fTime = 0;
+	}
 }
 
 
@@ -581,26 +726,26 @@ void CTrooper::Object_Collison()
 void CTrooper::Monster_State_Set()
 {
 	switch (m_eNextState)
-		{
-		case MONSTER_IDLE:
-			Monster_Idle();
-			break;
-		case MONSTER_PURSUE:
-			Player_Pursue(0.9f);
-			break;
-		case MONSTER_SHOT:
-			Monster_Shot();
-			break;
-		case MONSTER_FIRE:
-			Monster_Fire2();
-			break;
-		case MONSTER_DEAD:
-			Monster_Dead();
-			break;
-		case MONSTER_MILL:
-			Monster_Attack();
-			break;
-		}
+	{
+	case MONSTER_IDLE:
+		Monster_Idle();
+		break;
+	case MONSTER_PURSUE:
+		Monster_Foward();
+		break;
+	case MONSTER_SHOT:
+		Monster_Shot();
+		break;
+	case MONSTER_FIRE:
+		Monster_Fire2();
+		break;
+	case MONSTER_DEAD:
+		Monster_Dead();
+		break;
+	case MONSTER_MILL:
+		Monster_Attack();
+		break;
+	}
 
 }
 
