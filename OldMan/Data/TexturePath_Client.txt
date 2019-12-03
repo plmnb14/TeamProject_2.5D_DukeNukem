@@ -1,7 +1,14 @@
 MapObject|GlassBottle|Bottle_%d.png|12|..\Texture\MapObject\GlassBottle\Bottle_%d.png
 Alien|Ailen_AttackSide|Ailen_AttackSide%d.png|5|..\Texture\Monster\Alien\Ailen_AttackSide\Ailen_AttackSide%d.png
+Alien|Alien_Attack|Alien_Attack%d.png|5|..\Texture\Monster\Alien\Alien_Attack\Alien_Attack%d.png
+Alien|Alien_BackRun|Alien_BackRun%d.png|4|..\Texture\Monster\Alien\Alien_BackRun\Alien_BackRun%d.png
+Alien|Alien_Dead|Alien_Dead%d.png|9|..\Texture\Monster\Alien\Alien_Dead\Alien_Dead%d.png
+Alien|Alien_Idle|Alien_Idle%d.png|5|..\Texture\Monster\Alien\Alien_Idle\Alien_Idle%d.png
+Alien|Alien_JumpBack|Alien_JumpBack%d.png|3|..\Texture\Monster\Alien\Alien_JumpBack\Alien_JumpBack%d.png
+Alien|Alien_JumpFront|Alien_Jump%d.png|3|..\Texture\Monster\Alien\Alien_JumpFront\Alien_Jump%d.png
 Alien|Alien_JumpSide|Alien_JumpSide%d.png|8|..\Texture\Monster\Alien\Alien_JumpSide\Alien_JumpSide%d.png
 Alien|Alien_Run|Alien_Run%d.png|9|..\Texture\Monster\Alien\Alien_Run\Alien_Run%d.png
+Alien|Alien_RunFront|Alien_RunFront%d.png|4|..\Texture\Monster\Alien\Alien_RunFront\Alien_RunFront%d.png
 Alien|Alien_RunSide|Alien_RunSide%d.png|3|..\Texture\Monster\Alien\Alien_RunSide\Alien_RunSide%d.png
 Cyber_Demon|Cyber_Back|Cyber_Back_%d.png|2|..\Texture\Monster\Cyber_Demon\Cyber_Back\Cyber_Back_%d.png
 Cyber_Demon|Cyber_Dash_Back|Cyber_Dash_Back_%d.png|1|..\Texture\Monster\Cyber_Demon\Cyber_Dash_Back\Cyber_Dash_Back_%d.png
@@ -350,6 +357,7 @@ No_Animation|Arrow|Arrow_0.png|1|..\Texture\UI\No_Animation\Arrow\Arrow_0.png
 No_Animation|ETC|ArmorIcon.png|1|..\Texture\UI\No_Animation\ETC\ArmorIcon.png
 No_Animation|ETC|HpIcon.png|1|..\Texture\UI\No_Animation\ETC\HpIcon.png
 No_Animation|ETC|WeaponRightLine.png|1|..\Texture\UI\No_Animation\ETC\WeaponRightLine.png
+No_Animation|GaugeBar|BossHpGauge.png|1|..\Texture\UI\No_Animation\GaugeBar\BossHpGauge.png
 No_Animation|GaugeBar|HpGauge.png|1|..\Texture\UI\No_Animation\GaugeBar\HpGauge.png
 No_Animation|GaugeBar|ShieldGauge.png|1|..\Texture\UI\No_Animation\GaugeBar\ShieldGauge.png
 No_Animation|HittedCircle|Hitted_UI_L.png|1|..\Texture\UI\No_Animation\HittedCircle\Hitted_UI_L.png

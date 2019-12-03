@@ -96,7 +96,6 @@ void CTrooper::LateUpdate()
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
 }
-
 void CTrooper::Render()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matView);

@@ -32,7 +32,6 @@ private:
 	virtual void Monster_Range()override;                           // ¹üÀ§
 	virtual void Monster_Idle()override;
 	virtual void Monster_Shot()override;
-	//	void Object_Serch();
 	virtual void Monster_Fire2()override;
 	virtual void Monster_Dead()override;
 	virtual void Monster_Attack()override;

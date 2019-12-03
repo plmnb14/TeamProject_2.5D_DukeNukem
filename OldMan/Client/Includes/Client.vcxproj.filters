@@ -196,6 +196,15 @@
     <Filter Include="01.Scene\03.Stage_Boss">
       <UniqueIdentifier>{de196fb3-9bba-4e13-b8ab-3ee9ba53ca82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster\01.Trooper">
+      <UniqueIdentifier>{3f9d34d8-4089-4f1d-95ff-caa4ea689996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\02.Alien">
+      <UniqueIdentifier>{c43968d4-1ba9-461e-a456-11ed3ced2eed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.PigMan">
+      <UniqueIdentifier>{833844fa-c700-485b-a4fe-09e604a0c0ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -370,15 +379,6 @@
     <ClInclude Include="..\Codes\Boss_CyberDemon.h">
       <Filter>02.GameObject\09.Boss\01.CyberDemon</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Alien.h">
-      <Filter>02.GameObject\05.Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Codes\PigMan.h">
-      <Filter>02.GameObject\05.Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Codes\Trooper.h">
-      <Filter>02.GameObject\05.Monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\Codes\FlameBall.h">
       <Filter>02.GameObject\07.VFX\00. Effect\08.FlameBall</Filter>
     </ClInclude>
@@ -396,6 +396,15 @@
     </ClInclude>
     <ClInclude Include="..\Codes\Stage_Boss.h">
       <Filter>01.Scene\03.Stage_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Trooper.h">
+      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Alien.h">
+      <Filter>02.GameObject\05.Monster\02.Alien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\PigMan.h">
+      <Filter>02.GameObject\05.Monster\03.PigMan</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -547,15 +556,6 @@
     <ClCompile Include="..\Codes\Boss_CyberDemon.cpp">
       <Filter>02.GameObject\09.Boss\01.CyberDemon</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Alien.cpp">
-      <Filter>02.GameObject\05.Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\PigMan.cpp">
-      <Filter>02.GameObject\05.Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Trooper.cpp">
-      <Filter>02.GameObject\05.Monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\FlameBall.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\08.FlameBall</Filter>
     </ClCompile>
@@ -573,6 +573,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stage_Boss.cpp">
       <Filter>01.Scene\03.Stage_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Trooper.cpp">
+      <Filter>02.GameObject\05.Monster\01.Trooper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Alien.cpp">
+      <Filter>02.GameObject\05.Monster\02.Alien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PigMan.cpp">
+      <Filter>02.GameObject\05.Monster\03.PigMan</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

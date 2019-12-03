@@ -39,8 +39,6 @@ public:											//¹°¸®
 	virtual void Check_Physic()override;
 	virtual void Object_Collison()override;
 
-
-
 public:
 	void Set_Target(CGameObject* _Target) { m_pTarget = _Target; };
 	void Set_Pos(D3DXVECTOR3 _Pos);

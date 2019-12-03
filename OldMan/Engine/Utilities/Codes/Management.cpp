@@ -69,7 +69,6 @@ void CManagement::Render()
 	
 	//CCollisionMgr::CollisionTarget_To_Monstr(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET_PLAYER));
 	CCollisionMgr::CollisionTarget_To_Monstr_Mele(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER));
-	CCollisionMgr::CollisionTarget_To_OcatabrainBullet(MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET_WAVE), MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER));
 
 	CCollisionMgr::CollisionPlayer_To_Trigger(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::TRIGGER));
 	CCollisionMgr::CollisionPlayer_To_Item(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::EQUIPMENT));
