@@ -10,7 +10,7 @@ CRock::CRock(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_eTerrainType(ENGINE::TERRAIN_END),
-	m_bIsOpened(true), m_pPlayer(nullptr), m_fLifeTime(0.f)
+	m_bIsOpened(true), m_pPlayer(nullptr), m_fLifeTime(0.f), m_fAccel(4)
 {
 }
 
@@ -27,7 +27,13 @@ int CRock::Update()
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();
 
-	Move();
+	if(m_fDelayTime <= 0)
+		Move();
+
+	else if (m_fDelayTime > 0)
+	{
+		m_fDelayTime -= m_pTimeMgr->GetDelta();
+	}
 
 	return NO_EVENT;
 }
@@ -57,7 +63,7 @@ HRESULT CRock::Initialize()
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pTransform->SetSize(D3DXVECTOR3(3.f, 10.f, 3.f));
 	m_eTerrainType = ENGINE::TERRAIN_RECT;
-	m_fMoveSpeed = 15.f;
+	m_fMoveSpeed = 10;
 	m_fMoveDistY = 10.f;
 	m_fActiveDist = 3.f;
 
@@ -67,7 +73,7 @@ HRESULT CRock::Initialize()
 HRESULT CRock::LateInit()
 {
 	m_pPlayer = m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player();
-	m_vOriPos = m_pTransform->GetPos();
+	m_vOriPos = { m_pTransform->GetPos().x ,m_pTransform->GetPos().y + 5, m_pTransform->GetPos().z };
 
 	D3DXVECTOR3 vSize = m_pTransform->GetSize();
 
@@ -153,13 +159,21 @@ void CRock::Move()
 	// Up
 	if (m_bIsOpened && m_pTransform->GetPos().y <= m_vOriPos.y + (m_fMoveDistY))
 	{
+		if (m_fAccel > 1)
+			m_fAccel -= 0.07f;
+
+		else if (m_fAccel <= 1)
+			m_fAccel = 1.f;
+
 		D3DXVECTOR3 vMovePos =
 		{
 			m_pTransform->GetPos().x,
-			m_pTransform->GetPos().y + (m_fMoveSpeed * m_pTimeMgr->GetDelta()),
+			m_pTransform->GetPos().y + (m_fMoveSpeed * m_pTimeMgr->GetDelta() * m_fAccel * m_fAccel),
 			m_pTransform->GetPos().z };
 		m_pTransform->SetPos(vMovePos);
 	}
+
+	// Down
 	else if (!m_bIsOpened && m_pTransform->GetPos().y > m_vOriPos.y - 11.f)
 	{
 		D3DXVECTOR3 vMovePos =
@@ -174,16 +188,17 @@ void CRock::Move()
 		m_bIsDead = true;
 	}
 
-	if (m_fLifeTime > 10.f)
+	if (m_fLifeTime > 5.f)
 	{
 		m_fLifeTime = 0.f;
 		m_bIsOpened = false;
+		m_fAccel = 2.f;
 	}
 	else
 		m_fLifeTime += m_pTimeMgr->GetDelta();
 }
 
-CRock* CRock::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CRock* CRock::Create(LPDIRECT3DDEVICE9 pGraphicDev, float _DelayTime)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
@@ -194,6 +209,8 @@ CRock* CRock::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 		ENGINE::Safe_Delete(pInstance);
 		return nullptr;
 	}
+
+	pInstance->Set_DelayTime(_DelayTime);
 
 	return pInstance;
 }

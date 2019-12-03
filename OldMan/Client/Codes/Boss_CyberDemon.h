@@ -26,7 +26,7 @@ class CBoss_CyberDemon : public ENGINE::CGameObject
 public:
 	enum CYBERDEMON_STATE
 	{
-		CYBER_MET, CYBER_WALK, CYBER_DASH, CYBER_SLASH, CYBER_FIRE, CYBER_JUMP, CYBER_DEAD
+		CYBER_MET, CYBER_WALK, CYBER_SLASH ,CYBER_DASH, CYBER_FIRE, CYBER_JUMP, CYBER_DEAD
 	};
 
 private:
@@ -119,6 +119,7 @@ private:
 
 	bool					m_bIsJump;
 	float					m_fJumpDelay;
+	float					m_fAccel;
 };
 
 #define __BOSS_CYBERDEMON_H__

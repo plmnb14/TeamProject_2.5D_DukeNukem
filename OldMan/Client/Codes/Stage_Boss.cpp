@@ -37,6 +37,7 @@
 #include "Player_Hand.h"
 #include "SoundMgr.h"
 #include "SceneSelector.h"
+#include "Boss_CyberDemon.h"
 
 
 CStage_Boss::CStage_Boss(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -542,6 +543,12 @@ void CStage_Boss::LoadMapObj()
 		{
 			//	pObject = CBoss_Overload::Create(m_pGraphicDev);
 			//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
+
+		else if (!lstrcmp(szType, L"CyberDemon"))
+		{
+			pObject = CBoss_CyberDemon::Create(m_pGraphicDev);
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
