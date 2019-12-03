@@ -92,7 +92,7 @@ int CPlayer::Update()
 
 
 		D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
-		D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x * 3 , m_pTransform->GetPos().y + tmpDir.y * 3 , m_pTransform->GetPos().z + tmpDir.z * 3 };
+		D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x * 3 , m_pTransform->GetPos().y + tmpDir.y * 3 + 1, m_pTransform->GetPos().z + tmpDir.z * 3 };
 
 		CGameObject* pInstance = CEffect_BloodSplit::Create(m_pGraphicDev, tmpPos);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);

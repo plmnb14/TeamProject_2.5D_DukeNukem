@@ -41,7 +41,7 @@ void CMainApp::Render()
 HRESULT CMainApp::Initialize()
 {
 	HRESULT hr = m_pDeviceMgr->InitDevice(
-		g_hWnd, WINCX, WINCY, ENGINE::CGraphicDev::MODE_WIN);
+		g_hWnd, WINCX, WINCY, ENGINE::CGraphicDev::MODE_FULL);
 	FAILED_CHECK_MSG_RETURN(hr, L"InitDevice Failed", E_FAIL);
 
 	hr = m_pManagement->InitManagement(
@@ -51,7 +51,7 @@ HRESULT CMainApp::Initialize()
 	CSoundMgr::GetInstance()->Initialize();
 	
 	hr = m_pManagement->SceneChange(CSceneSelector(CSceneSelector::LOGO));
-	FAILED_CHECK_MSG_RETURN(hr, L"Logo Scene Change Failed", E_FAIL);	
+	FAILED_CHECK_MSG_RETURN(hr, L"Logo Scene Change Failed", E_FAIL);
 
 	return S_OK;
 }
