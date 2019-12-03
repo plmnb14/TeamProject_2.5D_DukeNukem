@@ -80,10 +80,10 @@ HRESULT CTextureMgr::LoadTextureFromImgPath( const wstring& wstrImgPath)
 		{
 			++iTextureCount;
 
-			HRESULT hr = LoadTexture(
-				SINGLE_TEXTURE, szImgPath,
-				szFileName);
-			FAILED_CHECK_MSG_RETURN(hr, szImgPath, E_FAIL);
+			//HRESULT hr = LoadTexture(
+			//	SINGLE_TEXTURE, szImgPath,
+			//	szFileName);
+			//FAILED_CHECK_MSG_RETURN(hr, szImgPath, E_FAIL);
 
 			ENGINE::PATH_INFO* pPathInfo = new ENGINE::PATH_INFO;
 			pPathInfo->iImgCount = 1;
@@ -97,10 +97,10 @@ HRESULT CTextureMgr::LoadTextureFromImgPath( const wstring& wstrImgPath)
 		{
 			++iTextureCount;
 
-			HRESULT hr = LoadTexture(
-				MULTI_TEXTURE, szImgPath,
-				szObjectKey, szStateKey, _ttoi(szImgCount));
-			FAILED_CHECK_MSG_RETURN(hr, szImgPath, E_FAIL);
+			//HRESULT hr = LoadTexture(
+			//	MULTI_TEXTURE, szImgPath,
+			//	szObjectKey, szStateKey, _ttoi(szImgCount));
+			//FAILED_CHECK_MSG_RETURN(hr, szImgPath, E_FAIL);
 
 			ENGINE::PATH_INFO* pPathInfo = new ENGINE::PATH_INFO;
 			pPathInfo->iImgCount = _ttoi(szImgCount);

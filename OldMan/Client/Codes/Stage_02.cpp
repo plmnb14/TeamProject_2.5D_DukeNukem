@@ -66,6 +66,13 @@ void CStage_02::Update()
 				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
 				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 			}
+
+			else
+			{
+				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
+				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
+			}
+
 		}
 	}
 }

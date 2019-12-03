@@ -280,49 +280,8 @@ HRESULT CStage::Add_UI_Layer()
 HRESULT CStage::Initialize()
 {
 	PipeLineSetUp();
-	
-	// Player Buffer
-	HRESULT hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_RCTEX,
-		L"Buffer_Player");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
 
-	// Terrain Buffer
-
-
-	// 
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_CUBECOL,
-		L"Buffer_CubeCol");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
-
-	//
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
-		L"Buffer_WallCubeCol");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
-
-	//
-	hr = m_pResourceMgr->AddBuffer(
-		m_pGraphicDev,
-		ENGINE::RESOURCE_DYNAMIC,
-		ENGINE::CVIBuffer::BUFFER_CUBETEX,
-		L"Buffer_CubeTex");
-	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
-
-	////
-	//hr = m_pResourceMgr->AddBuffer(
-	//	m_pGraphicDev,
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::CVIBuffer::BUFFER_RCTEX,
-	//	L"Buffer_RcTex");
-	//FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
+	HRESULT hr = 0;
 
 	// Environment Layer
 	hr = Add_Environment_Layer();
@@ -517,28 +476,29 @@ void CStage::LoadMapObj()
 		}
 		
 		// Monster
-		else if (!lstrcmp(szType, L"Pigman"))
-		{
+		//else if (!lstrcmp(szType, L"Pigman"))
+		//{
 		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		//	tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
-		}
-		else if (!lstrcmp(szType, L"Octabrain"))
-		{
+		//}
+		//else if (!lstrcmp(szType, L"Octabrain"))
+		//{
 		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		}
-		else if (!lstrcmp(szType, L"Trooper"))
-		{
+		//}
+		//else if (!lstrcmp(szType, L"Trooper"))
+		//{
 		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		}
-		else if (!lstrcmp(szType, L"Overload"))
-		{
+		//}
+		//else if (!lstrcmp(szType, L"Overload"))
+		//{
 		//	pObject = CBoss_Overload::Create(m_pGraphicDev);
 		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		}
+		//}
 		// Trigger
+
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
 		{
 			CTrigger* pTrigger = nullptr;
@@ -571,6 +531,7 @@ void CStage::LoadMapObj()
 			CTrigger* pTrigger = nullptr;
 			pTrigger = CTrigger::Create(m_pGraphicDev, CTrigger::TRIGGER_MONSTER_SPAWNER, iIndex);
 			eObjType = ENGINE::OBJECT_TYPE::TRIGGER;
+			tmpTag = ENGINE::SPAWN_TRIGGER;
 			pObject = pTrigger;
 			pTrigger = nullptr;
 		}
@@ -693,6 +654,9 @@ void CStage::LoadMapObj()
 
 				else if (tmpTag == ENGINE::OBJECT_TYPE::WOOD_BOX)
 					pObject->Set_Tag(ENGINE::OBJECT_TYPE::WOOD_BOX);
+
+				else if (tmpTag == ENGINE::OBJECT_TYPE::SPAWN_TRIGGER)
+					pObject->Set_Tag(ENGINE::OBJECT_TYPE::SPAWN_TRIGGER);
 			}
 		}
 	}

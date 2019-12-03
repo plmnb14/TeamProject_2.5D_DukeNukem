@@ -21,7 +21,7 @@ CPlayer_Hand::CPlayer_Hand(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pCameraSubject(ENGINE::GetCameraSubject()),
 	m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_eWeapon(ENGINE::MELLE),
 	m_eActState(CPlayer::W_DRAW), m_eOldAcState(CPlayer::W_WALK),
-	m_bPump(false), m_bPumpIn(false), m_bPumpOut(false)
+	m_bPump(false), m_bPumpIn(false), m_bPumpOut(false), m_iHand(0)
 {
 
 }
@@ -307,6 +307,31 @@ void CPlayer_Hand::Weapon_Revolver()
 		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
 		{
 			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+
+			int a = rand() % 3;
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON_AFTER, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON_AFTER);
+
+			switch (a)
+			{
+			case 0:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Shell_01.ogg", CSoundMgr::WEAPON_AFTER);
+				break;
+			}
+			case 1:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Shell_02.ogg", CSoundMgr::WEAPON_AFTER);
+				break;
+			}
+			case 2:
+			{
+				CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Shell_03.ogg", CSoundMgr::WEAPON_AFTER);
+				break;
+			}
+			}
+
 		}
 
 		break;
@@ -478,11 +503,188 @@ void CPlayer_Hand::Weapon_Melee()
 		if (m_pAnimator->Get_MaxFrame() - 1 <= m_pAnimator->Get_Frame())
 		{
 			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			static_cast<CPlayer*>(m_pTarget)->Set_CanAttack(true);
 			m_pAnimator->Stop_Animation(false);
 		}
 
 		break;
 	}
+
+	case CPlayer::W_R_FIST:
+	{
+		if (m_pAnimator->Get_Frame() == 0)
+		{
+			int value = rand() % 4;
+
+			switch (value)
+			{
+			case 0:
+			{
+				m_pAnimator->Set_FrameAmp(40.f);
+				ChangeTex(L"Hand_RightJab");
+				m_iHand = 0;
+				break;
+			}
+			case 1:
+			{
+				m_pAnimator->Set_FrameAmp(50.f);
+				ChangeTex(L"Hand_RightUpper");
+				m_iHand = 1;
+				break;
+			}
+			case 2:
+			{
+				m_pAnimator->Set_FrameAmp(50.f);
+				ChangeTex(L"Hand_RightBack");
+				m_iHand = 2;
+				break;
+			}
+			case 3:
+			{
+				m_pAnimator->Set_FrameAmp(40.f);
+				ChangeTex(L"Hand_RightHook");
+				m_iHand = 3;
+				break;
+			}
+			}
+		}
+
+		switch (m_iHand)
+		{
+		case 0:
+		{
+			if (m_pAnimator->Get_Frame() == 1)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_MeleeTrigger(true);
+			}
+			break;
+		}
+		case 1:
+		{
+			if (m_pAnimator->Get_Frame() == 5)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_MeleeTrigger(true);
+			}
+			break;
+		}
+		case 2:
+		{
+			if (m_pAnimator->Get_Frame() == 7)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_MeleeTrigger(true);
+			}
+			break;
+		}
+		case 3:
+		{
+			if (m_pAnimator->Get_Frame() == 8)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_MeleeTrigger(true);
+			}
+			break;
+		}
+		}
+
+		m_pAnimator->Stop_Animation(false);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+
+		if (m_pAnimator->Get_MaxFrame() - 3 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			static_cast<CPlayer*>(m_pTarget)->Set_CanAttack(true);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		break;
+	}
+
+	case CPlayer::W_L_FIST:
+	{
+		if (m_pAnimator->Get_Frame() == 0)
+		{
+			int value = rand() % 4;
+
+			switch (value)
+			{
+			case 0:
+			{
+				m_pAnimator->Set_FrameAmp(40.f);
+				ChangeTex(L"Hand_LeftJab");
+				m_iHand = 0;
+				break;
+			}
+			case 1:
+			{
+				m_pAnimator->Set_FrameAmp(50.f);
+				ChangeTex(L"Hand_LeftUpper");
+				m_iHand = 1;
+				break;
+			}
+			case 2:
+			{
+				m_pAnimator->Set_FrameAmp(50.f);
+				ChangeTex(L"Hand_LeftBack");
+				m_iHand = 2; 
+				break;
+			}
+			case 3:
+			{
+				m_pAnimator->Set_FrameAmp(50.f);
+				ChangeTex(L"Hand_LeftHook");
+				m_iHand = 3;
+				break;
+			}
+			}
+		}
+
+		switch (m_iHand)
+		{
+		case 0:
+		{
+			if (m_pAnimator->Get_Frame() == 1)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_MeleeTrigger(true);
+			}
+			break;
+		}
+		case 1:
+		{
+			if (m_pAnimator->Get_Frame() == 5)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_MeleeTrigger(true);
+			}
+			break;
+		}
+		case 2:
+		{
+			if (m_pAnimator->Get_Frame() == 7)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_MeleeTrigger(true);
+			}
+			break;
+		}
+		case 3:
+		{
+			if (m_pAnimator->Get_Frame() == 8)
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_MeleeTrigger(true);
+			}
+			break;
+		}
+		}
+
+		m_pAnimator->Stop_Animation(false);
+		m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
+	
+		if (m_pAnimator->Get_MaxFrame() - 3 <= m_pAnimator->Get_Frame())
+		{
+			static_cast<CPlayer*>(m_pTarget)->Set_WaponAct(CPlayer::W_IDLE);
+			m_pAnimator->Stop_Animation(false);
+		}
+
+		break;
+	}
+
 	}
 
 }
@@ -571,11 +773,45 @@ void CPlayer_Hand::Weapon_SMG()
 			m_pAnimator->Stop_Animation(false);
 		}
 
+
+		if (m_pAnimator->Get_Frame() == 3)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+			CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Out.wav", CSoundMgr::WEAPON);
+		}
+
+		if (m_pAnimator->Get_Frame() == 14)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+			CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Magazine.wav", CSoundMgr::WEAPON);
+		}
+
+		if (m_pAnimator->Get_Frame() == 17)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+			CSoundMgr::GetInstance()->MyPlaySound(L"SMG_In.wav", CSoundMgr::WEAPON);
+		}
+
+		if (m_pAnimator->Get_Frame() == 31)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+			CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Reload.wav", CSoundMgr::WEAPON);
+		}
+
+
 		break;
 	}
 
 	case CPlayer::W_DRAW:
 	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON, 1.0f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON);
+		CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Draw.wav", CSoundMgr::WEAPON);
+
 		m_pAnimator->Stop_Animation(false);
 		ChangeTex(L"SMG_Draw");
 		m_pAnimator->Set_FrameAmp(10.f);

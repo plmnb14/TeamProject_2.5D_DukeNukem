@@ -99,25 +99,61 @@ HRESULT CLogo::Initialize()
 
 	PipeLineSetUp();
 
-	//// Add Texture
-	//HRESULT hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
-	//	ENGINE::GetGraphicDev()->GetDevice(),
-	//	ENGINE::RESOURCE_DYNAMIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"Title.png",
-	//	L"../Texture/UI/No_Animation/Title/Title.png", 1);
-	//FAILED_CHECK_MSG(hr, L"Title.png");
-	//
-	//HRESULT hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
-	//	ENGINE::GetGraphicDev()->GetDevice(),
-	//	ENGINE::RESOURCE_STATIC,
-	//	ENGINE::TEX_NORMAL,
-	//	L"Number",
-	//	L"../Texture/UI/Animation/Unusable/Number/Number_%d.png", 12);
-	//FAILED_CHECK_MSG(hr, L"Number.png");
-	//
-	 //Add Buffer
 	HRESULT hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_RCTEX,
+		L"Buffer_Player");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_Player Add Failed", E_FAIL);
+
+	// Terrain Buffer
+
+
+	// 
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_CUBECOL,
+		L"Buffer_CubeCol");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeCol Add Failed", E_FAIL);
+
+	//
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_WALLCUBECOL,
+		L"Buffer_WallCubeCol");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_WallCubeCol Add Failed", E_FAIL);
+
+	//
+	hr = m_pResourceMgr->AddBuffer(
+		m_pGraphicDev,
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::CVIBuffer::BUFFER_CUBETEX,
+		L"Buffer_CubeTex");
+	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_CubeTex Add Failed", E_FAIL);
+
+
+
+	// Add Texture
+	hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
+		ENGINE::GetGraphicDev()->GetDevice(),
+		ENGINE::RESOURCE_DYNAMIC,
+		ENGINE::TEX_NORMAL,
+		L"Title.png",
+		L"../Texture/UI/No_Animation/Title/Title.png", 1);
+	FAILED_CHECK_MSG(hr, L"Title.png");
+
+	hr = ENGINE::CResourceMgr::GetInstance()->AddTexture(
+		ENGINE::GetGraphicDev()->GetDevice(),
+		ENGINE::RESOURCE_STATIC,
+		ENGINE::TEX_NORMAL,
+		L"Number",
+		L"../Texture/UI/Animation/Unusable/Number/Number_%d.png", 12);
+	FAILED_CHECK_MSG(hr, L"Number.png");
+	
+	// Add Buffer
+	hr = m_pResourceMgr->AddBuffer(
 		m_pGraphicDev,
 		ENGINE::RESOURCE_DYNAMIC,
 		ENGINE::CVIBuffer::BUFFER_RCTEX,
@@ -125,7 +161,7 @@ HRESULT CLogo::Initialize()
 	FAILED_CHECK_MSG_RETURN(hr, L"Buffer_RcTex Add Failed", E_FAIL);
 
 	// Environment Layer
-	 hr = Add_Environment_Layer();
+	hr = Add_Environment_Layer();
 	FAILED_CHECK_RETURN(hr, E_FAIL);
 
 	// Object Layer
@@ -133,8 +169,8 @@ HRESULT CLogo::Initialize()
 	FAILED_CHECK_RETURN(hr, E_FAIL);
 
 	// UI Layer
-	//hr = Add_UI_Layer();
-	//FAILED_CHECK_RETURN(hr, E_FAIL);
+	hr = Add_UI_Layer();
+	FAILED_CHECK_RETURN(hr, E_FAIL);
 
 	// PlaySound
 	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 1.0f);
