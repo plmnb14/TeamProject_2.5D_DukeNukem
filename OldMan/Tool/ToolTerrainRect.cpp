@@ -123,7 +123,7 @@ HRESULT CToolTerrainRect::AddComponent()
 	ENGINE::CComponent* pComponent = nullptr;
 
 	//Texture
-	m_wstrTex = L"Tile64x64_0.png";
+	m_wstrTex = L"Tile256x256_0.png";
 	pComponent = m_pResourceMgr->CloneResource(ENGINE::RESOURCE_DYNAMIC, m_wstrTex);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"Texture", pComponent });

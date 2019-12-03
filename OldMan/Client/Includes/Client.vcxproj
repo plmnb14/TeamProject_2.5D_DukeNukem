@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="..\Codes\Aim.h" />
     <ClInclude Include="..\Codes\Alien.h" />
+    <ClInclude Include="..\Codes\Boss_CyberDemon.h" />
     <ClInclude Include="..\Codes\Boss_Overload.h" />
     <ClInclude Include="..\Codes\Bullet.h" />
     <ClInclude Include="..\Codes\Camera.h" />
@@ -175,6 +176,8 @@
     <ClInclude Include="..\Codes\Effect_RocketSmoke.h" />
     <ClInclude Include="..\Codes\Elevator.h" />
     <ClInclude Include="..\Codes\Effect_Fireball.h" />
+    <ClInclude Include="..\Codes\FlameBall.h" />
+    <ClInclude Include="..\Codes\FlameBullet.h" />
     <ClInclude Include="..\Codes\GaugeBar.h" />
     <ClInclude Include="..\Codes\Grenade.h" />
     <ClInclude Include="..\Codes\Effect_Guide.h" />
@@ -192,6 +195,7 @@
     <ClInclude Include="..\Codes\PlayerObserver.h" />
     <ClInclude Include="..\Codes\Player_Hand.h" />
     <ClInclude Include="..\Codes\Raycast.h" />
+    <ClInclude Include="..\Codes\Rock.h" />
     <ClInclude Include="..\Codes\SceneSelector.h" />
     <ClInclude Include="..\Codes\Skybox.h" />
     <ClInclude Include="..\Codes\SoundMgr.h" />
@@ -227,6 +231,7 @@
   <ItemGroup>
     <ClCompile Include="..\Codes\Aim.cpp" />
     <ClCompile Include="..\Codes\Alien.cpp" />
+    <ClCompile Include="..\Codes\Boss_CyberDemon.cpp" />
     <ClCompile Include="..\Codes\Boss_Overload.cpp" />
     <ClCompile Include="..\Codes\Bullet.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp" />
@@ -242,6 +247,8 @@
     <ClCompile Include="..\Codes\Effect_RocketSmoke.cpp" />
     <ClCompile Include="..\Codes\Elevator.cpp" />
     <ClCompile Include="..\Codes\Effect_Fireball.cpp" />
+    <ClCompile Include="..\Codes\FlameBall.cpp" />
+    <ClCompile Include="..\Codes\FlameBullet.cpp" />
     <ClCompile Include="..\Codes\GaugeBar.cpp" />
     <ClCompile Include="..\Codes\Grenade.cpp" />
     <ClCompile Include="..\Codes\Effect_Guide.cpp" />
@@ -259,6 +266,7 @@
     <ClCompile Include="..\Codes\PlayerObserver.cpp" />
     <ClCompile Include="..\Codes\Player_Hand.cpp" />
     <ClCompile Include="..\Codes\Raycast.cpp" />
+    <ClCompile Include="..\Codes\Rock.cpp" />
     <ClCompile Include="..\Codes\Skybox.cpp" />
     <ClCompile Include="..\Codes\SoundMgr.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />

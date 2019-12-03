@@ -22,6 +22,7 @@
 #include "Trooper.h"
 #include "Alien.h"
 #include "Boss_Overload.h"
+#include "Boss_CyberDemon.h"
 
 #include "UI.h"
 #include "Number.h"
@@ -393,7 +394,7 @@ void CStage::PipeLineSetUp()
 
 void CStage::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/MapObject.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/Map_Boss.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -519,24 +520,29 @@ void CStage::LoadMapObj()
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		//	tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
+			pObject = CPigMan::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), D3DXVECTOR3(0, 0, 0));
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Octabrain"))
 		{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), D3DXVECTOR3(0, 0, 0));
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Trooper"))
 		{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), D3DXVECTOR3(0, 0, 0));
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Overload"))
 		{
-		//	pObject = CBoss_Overload::Create(m_pGraphicDev);
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			pObject = CBoss_Overload::Create(m_pGraphicDev);
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+		}
+		else if (!lstrcmp(szType, L"CyberDemon"))
+		{
+			pObject = CBoss_CyberDemon::Create(m_pGraphicDev);
+			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
