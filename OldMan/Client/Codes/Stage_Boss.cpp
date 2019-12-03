@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Stage_02.h"
+#include "Stage_Boss.h"
 
 #include "Player.h"
 
@@ -39,7 +39,7 @@
 #include "SceneSelector.h"
 
 
-CStage_02::CStage_02(LPDIRECT3DDEVICE9 pGraphicDev)
+CStage_Boss::CStage_Boss(LPDIRECT3DDEVICE9 pGraphicDev)
 	: ENGINE::CScene(pGraphicDev),
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pManagement(ENGINE::GetManagement()),
@@ -47,12 +47,12 @@ CStage_02::CStage_02(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 }
 
-CStage_02::~CStage_02()
+CStage_Boss::~CStage_Boss()
 {
 	Release();
 }
 
-void CStage_02::Update()
+void CStage_Boss::Update()
 {
 	ENGINE::CScene::Update();
 
@@ -69,7 +69,7 @@ void CStage_02::Update()
 
 			else
 			{
-				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_BOSS));
+				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
 				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 			}
 
@@ -77,29 +77,29 @@ void CStage_02::Update()
 	}
 }
 
-void CStage_02::LateUpdate()
+void CStage_Boss::LateUpdate()
 {
 	ENGINE::CScene::LateUpdate();
 }
 
-void CStage_02::Render()
+void CStage_Boss::Render()
 {
 	ENGINE::CScene::Render();
 }
 
-map<WORD, ENGINE::CLayer*> CStage_02::Get_MapLayer()
+map<WORD, ENGINE::CLayer*> CStage_Boss::Get_MapLayer()
 {
 	return m_mapLayer;
 }
 
-HRESULT CStage_02::Add_Environment_Layer()
+HRESULT CStage_Boss::Add_Environment_Layer()
 {
 	return S_OK;
 }
 
-HRESULT CStage_02::Add_Object_Layer()
+HRESULT CStage_Boss::Add_Object_Layer()
 {
-	// 스테이지 2
+	// 스테이지 boss
 
 
 	// Object Layer
@@ -179,7 +179,7 @@ HRESULT CStage_02::Add_Object_Layer()
 	return S_OK;
 }
 
-HRESULT CStage_02::Add_UI_Layer()
+HRESULT CStage_Boss::Add_UI_Layer()
 {
 	// Object Layer
 	ENGINE::CLayer* pUILayer = ENGINE::CLayer::Create(m_pGraphicDev);
@@ -280,7 +280,7 @@ HRESULT CStage_02::Add_UI_Layer()
 	return S_OK;
 }
 
-HRESULT CStage_02::Initialize()
+HRESULT CStage_Boss::Initialize()
 {
 	PipeLineSetUp();
 
@@ -351,12 +351,12 @@ HRESULT CStage_02::Initialize()
 	return S_OK;
 }
 
-void CStage_02::Release()
+void CStage_Boss::Release()
 {
-	//m_pResourceMgr->ResetDynamicResource();
+	m_pResourceMgr->ResetDynamicResource();
 }
 
-void CStage_02::PipeLineSetUp()
+void CStage_Boss::PipeLineSetUp()
 {
 	// 조명 off
 	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -396,9 +396,9 @@ void CStage_02::PipeLineSetUp()
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
 }
 
-void CStage_02::LoadMapObj()
+void CStage_Boss::LoadMapObj()
 {
-	HANDLE hFile = CreateFile(L"../../Data/Map_Desert.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE hFile = CreateFile(L"../../Data/Map_Boss.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		FAILED_CHECK_MSG(-1, L"Load Failed. [INVALID_HANDLE_VALUE]");
@@ -524,24 +524,24 @@ void CStage_02::LoadMapObj()
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//;	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
-		//	tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
+			//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			//;	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			//	tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Octabrain"))
 		{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Trooper"))
 		{
-		//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			//	pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
+			//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Overload"))
 		{
-		//	pObject = CBoss_Overload::Create(m_pGraphicDev);
-		//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
+			//	pObject = CBoss_Overload::Create(m_pGraphicDev);
+			//	eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger
 		else if (!lstrcmp(szType, L"Trigger_ToNextStage"))
@@ -705,11 +705,11 @@ void CStage_02::LoadMapObj()
 	CloseHandle(hFile);
 }
 
-CStage_02* CStage_02::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CStage_Boss* CStage_Boss::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	NULL_CHECK_RETURN(pGraphicDev, nullptr);
 
-	CStage_02* pInstance = new CStage_02(pGraphicDev);
+	CStage_Boss* pInstance = new CStage_Boss(pGraphicDev);
 
 	if (FAILED(pInstance->Initialize()))
 	{

@@ -201,6 +201,7 @@
     <ClInclude Include="..\Codes\SoundMgr.h" />
     <ClInclude Include="..\Codes\Stage.h" />
     <ClInclude Include="..\Codes\Stage_02.h" />
+    <ClInclude Include="..\Codes\Stage_Boss.h" />
     <ClInclude Include="..\Codes\Summon_Effect.h" />
     <ClInclude Include="..\Codes\Terrain.h" />
     <ClInclude Include="..\Codes\TerrainCube.h" />
@@ -272,6 +273,7 @@
     <ClCompile Include="..\Codes\SoundMgr.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Stage_02.cpp" />
+    <ClCompile Include="..\Codes\Stage_Boss.cpp" />
     <ClCompile Include="..\Codes\Summon_Effect.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainCube.cpp" />

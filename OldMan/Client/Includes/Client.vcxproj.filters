@@ -190,6 +190,9 @@
     <Filter Include="02.GameObject\07.VFX\00. Effect\08. Summon_Effect">
       <UniqueIdentifier>{15e84c99-58e0-4091-855f-0c9254758ed8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\03.Stage_Boss">
+      <UniqueIdentifier>{de196fb3-9bba-4e13-b8ab-3ee9ba53ca82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -385,6 +388,9 @@
     <ClInclude Include="..\Codes\Summon_Effect.h">
       <Filter>02.GameObject\07.VFX\00. Effect\08. Summon_Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Stage_Boss.h">
+      <Filter>01.Scene\03.Stage_Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -555,6 +561,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Summon_Effect.cpp">
       <Filter>02.GameObject\07.VFX\00. Effect\08. Summon_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage_Boss.cpp">
+      <Filter>01.Scene\03.Stage_Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

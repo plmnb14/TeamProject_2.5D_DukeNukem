@@ -326,6 +326,9 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 						{
 							float fDamage = rDstCon->Get_Damage() + rSrcCon->Get_Armor();
 							rSrcCon->Add_Hp(-fDamage);
+
+							if (rSrcCon->Get_Hp() < 0)
+								rSrcCon->Add_Hp(rSrcCon->Get_Hp() * -1.f);
 						}
 					}
 				}
