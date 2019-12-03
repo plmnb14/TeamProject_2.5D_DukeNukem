@@ -197,8 +197,10 @@ HRESULT CAlien::LateInit()
 
 void CAlien::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
+	if (m_pObserver != nullptr) {
+		m_pSubject->UnSubscribe(m_pObserver);
+		ENGINE::Safe_Delete(m_pObserver);
+	}
 }
 
 HRESULT CAlien::AddComponent()

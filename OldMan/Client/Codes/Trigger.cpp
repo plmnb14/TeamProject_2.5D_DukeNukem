@@ -182,7 +182,7 @@ void CTrigger::CheckTriggerActive()
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 20,10,-4 } , CSummon_Effect::TROPPER);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 20,10,-4 } , CSummon_Effect::OCTABRAIN);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 

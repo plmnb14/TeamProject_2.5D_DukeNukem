@@ -197,8 +197,10 @@ HRESULT CPigMan::LateInit()
 
 void CPigMan::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
+	if (m_pObserver != nullptr) {
+		m_pSubject->UnSubscribe(m_pObserver);
+		ENGINE::Safe_Delete(m_pObserver);
+	}
 }
 
 HRESULT CPigMan::AddComponent()

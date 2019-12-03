@@ -207,8 +207,10 @@ void CTrooper::Set_Pos(D3DXVECTOR3 _Pos)
 
 void CTrooper::Release()
 {
-	m_pSubject->UnSubscribe(m_pObserver);
-	ENGINE::Safe_Delete(m_pObserver);
+	if (m_pObserver != nullptr) {
+		m_pSubject->UnSubscribe(m_pObserver);
+		ENGINE::Safe_Delete(m_pObserver);
+	}
 }
 
 HRESULT CTrooper::AddComponent()
@@ -638,7 +640,8 @@ void CTrooper::Monster_Dead()
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"Trooper_DeadFall");
 	m_pAnimator->Set_FrameAmp(1.f);
-	m_pAnimator->Set_Frame(5.f);
+	ChangeTex(L"Trooper_Dead");
+	m_pAnimator->Set_Frame(1.f);
 	m_fDeadTimer += m_pTimeMgr->GetDelta();
 	if (m_fDeadTimer > 3)
 	{

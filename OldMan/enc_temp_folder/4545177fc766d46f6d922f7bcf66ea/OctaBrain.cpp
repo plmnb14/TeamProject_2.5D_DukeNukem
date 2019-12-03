@@ -571,14 +571,12 @@ void COctaBrain::Monster_Fire2()
 
 void COctaBrain::Monster_Dead()
 {
+	m_pAnimator->Stop_Animation(false);
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"OctaBrain_Dead");
 	m_pAnimator->Set_FrameAmp(1.f);
-	m_pAnimator->Set_Frame(5);
-	m_pRigid->Set_UseGravity(true);
 
 	m_fDeadTimer += m_pTimeMgr->GetDelta();
-	cout << m_pAnimator->Get_Frame() << endl;
 
 	if (m_fDeadTimer > 3)
 	{

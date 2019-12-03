@@ -41,7 +41,7 @@ void CMainApp::Render()
 HRESULT CMainApp::Initialize()
 {
 	HRESULT hr = m_pDeviceMgr->InitDevice(
-		g_hWnd, WINCX, WINCY, ENGINE::CGraphicDev::MODE_FULL);
+		g_hWnd, WINCX, WINCY, ENGINE::CGraphicDev::MODE_WIN);
 	FAILED_CHECK_MSG_RETURN(hr, L"InitDevice Failed", E_FAIL);
 
 	hr = m_pManagement->InitManagement(
