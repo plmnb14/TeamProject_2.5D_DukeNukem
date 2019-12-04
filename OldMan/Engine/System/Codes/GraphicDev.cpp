@@ -106,12 +106,12 @@ void CGraphicDev::Render_End(HWND hWnd)
 
 void CGraphicDev::Release()
 {
-	if(Safe_Release(m_pSprite))
-		ERR_MSG(L"m_pSprite Release Failed");
+	Safe_Release(m_pSprite);
+		//ERR_MSG(L"m_pSprite Release Failed");
 
-	if (Safe_Release(m_pGraphicDev))
-		ERR_MSG(L"m_pGraphicDev Release Failed");
+	Safe_Release(m_pGraphicDev);
+		//ERR_MSG(L"m_pGraphicDev Release Failed");
 
-	if (Safe_Release(m_pSDK))
-		ERR_MSG(L"m_pSDK Release Failed");
+	Safe_Release(m_pSDK);
+		//ERR_MSG(L"m_pSDK Release Failed");
 }

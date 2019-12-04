@@ -125,9 +125,6 @@ void CTrigger::CheckTriggerActive()
 		{
 		case CTrigger::TRIGGER_NEXTSTAGE:
 		{
-
-			//cout << "Next Stage Trigger ON!!!!!" << endl;
-
 			switch (m_iIndex)
 			{
 			case 0:
@@ -135,10 +132,6 @@ void CTrigger::CheckTriggerActive()
 				m_bNextStage = true;
 				CPlayer* TmpPlayer = static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player());
 				TmpPlayer->Set_NextStage(true);
-				
-
-				//HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_02));
-				//FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 			}
 
 			m_bIsDead = true;
@@ -178,11 +171,14 @@ void CTrigger::CheckTriggerActive()
 			{
 			case 0:
 			{
-				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 14,8,5 } , CSummon_Effect::TROPPER);
+				// 에일리언
+				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 14,8,5 }, CSummon_Effect::MONSTER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 20,10,-4 } , CSummon_Effect::OCTABRAIN);
+
+				// 에일리언
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 20,10,-4 }, CSummon_Effect::MONSTER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -191,11 +187,13 @@ void CTrigger::CheckTriggerActive()
 			}
 			case 1:
 			{
-				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 160,-2,33 } , CSummon_Effect::MONSTER);
+				// 트루퍼
+				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 160,-2,10 }, CSummon_Effect::TROPPER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 155,2,18 } , CSummon_Effect::MONSTER);
+				// 피그맨
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 155,2,19 }, CSummon_Effect::PIGMAN);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -204,23 +202,23 @@ void CTrigger::CheckTriggerActive()
 			}
 			case 2:
 			{
-				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev,  { 196,38,241 } , CSummon_Effect::MONSTER);
+				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 196,38,241 }, CSummon_Effect::TROPPER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 192,38,198 } , CSummon_Effect::MONSTER);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 192,38,198 }, CSummon_Effect::TROPPER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 210,38,171 } , CSummon_Effect::MONSTER);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 210,38,171 }, CSummon_Effect::PIGMAN);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 211,38,175 } , CSummon_Effect::MONSTER);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 211,38,175 }, CSummon_Effect::TROPPER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev,  { 213,38,148 } , CSummon_Effect::MONSTER);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 213,38,148 }, CSummon_Effect::PIGMAN);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -229,7 +227,8 @@ void CTrigger::CheckTriggerActive()
 			}
 			case 3:
 			{
-				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev,  { 74,8,208 } , CSummon_Effect::MONSTER);
+				// 피그맨
+				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 74,8,208 }, CSummon_Effect::PIGMAN);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -238,89 +237,124 @@ void CTrigger::CheckTriggerActive()
 			}
 			case 4:
 			{
-				cout << "여 오긴 합니다" << endl;
-
 				m_fTriggerTimer += 50 * m_pTimeMgr->GetDelta();
 
 				CGameObject* pObject = nullptr;
 
 				if (int(m_fTriggerTimer) == 20)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 54,8,184 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 54,8,184 }, CSummon_Effect::PIGMAN);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 30,20,181 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 30,20,181 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 78,0,299 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 78,0,299 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 71,0,309 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 71,0,309 }, CSummon_Effect::PIGMAN);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 50)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 74,0,326 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 74,0,326 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 30,0,303 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 30,0,303 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 32,0,319 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 32,0,319 }, CSummon_Effect::TROPPER);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+				}
+
+
+				if (int(m_fTriggerTimer) == 400)
+				{
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 83,24,34 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 122,30,407 }, CSummon_Effect::OCTABRAIN);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 
-				if (int(m_fTriggerTimer) == 180)
+				if (int(m_fTriggerTimer) == 680)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,0,325 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,0,325 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 10,0,361 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 10,0,361 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 30,0,371 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 36, 18 ,366 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 83,24,34 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 122,30,407 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
 				}
 
-				if (int(m_fTriggerTimer) == 210)
+
+				if (int(m_fTriggerTimer) == 850)
 				{
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 35,0,391 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 34,0,397 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 34,0,397 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 74,0,388 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
+
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 68,30,257 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -12,18,272 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 
-				if (int(m_fTriggerTimer) == 250)
+
+				if (int(m_fTriggerTimer) == 920)
 				{
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 118,0,364 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 133,0,331 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 133,0,331 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 165,8,319 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 165,8,319 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -342,28 +376,28 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 20)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { -24,-6,12 } , CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -24,-6,12 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 40)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { -22,-6,37 } , CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -22,-6,37 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 50)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 28,-6,22 } , CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 28,-6,22 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 70)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { -53,-6,32 } , CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -53,-6,32 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -381,35 +415,43 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 20)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { 67,-17,121 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 67,-17,121 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 30)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { 86,-17,102 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 86,-17,102 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 60)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 61,-9,89 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 61,-9,89 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 70)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, {41,-17,159 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 41,-17,159 }, CSummon_Effect::MONSTER);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+
+				if (int(m_fTriggerTimer) == 80)
+				{
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 61, 0 ,89 }, CSummon_Effect::OCTABRAIN);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 100)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 41,-33,148 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 41,-33,148 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -436,33 +478,33 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 10)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,{ -29,-54,138 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -29,-54,138 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 0,-54,173 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 0,-54,173 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 60)
+				if (int(m_fTriggerTimer) == 150)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,{ 42,-35,134 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 42,-35,134 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { 22,-35,99 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 22,-35,99 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 90)
+				if (int(m_fTriggerTimer) == 290)
 				{
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 34,-59,165 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 24,-58,180 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 24,-58,180 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -471,13 +513,13 @@ void CTrigger::CheckTriggerActive()
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 150)
+				if (int(m_fTriggerTimer) == 350)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { -57,-58,116 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -57,-58,116 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { -65,-52,106 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -65,-52,106 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -485,14 +527,14 @@ void CTrigger::CheckTriggerActive()
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { -109,-28,147 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -109,-28,147 }, CSummon_Effect::OCTABRAIN);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 100)
+				if (int(m_fTriggerTimer) == 400)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { 41,-33,148 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 41,-33,148 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -510,7 +552,7 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 10)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,{ 29,-47,240 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 29,-47,240 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
@@ -535,28 +577,28 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 10)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 48,-49,353 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 48,-49,353 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 20)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 30,-49, 364 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 30,-49, 364 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 50)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { 7,-49, 367 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 7,-49, 367 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 60)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { -16,-46, 348 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -16,-46, 348 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
@@ -571,11 +613,11 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 120)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { -21,-42, 264 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -21,-42, 264 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,-44, 255 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,-44, 255 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -604,21 +646,21 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 50)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,{ -12,-34, 481 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -12,-34, 481 }, CSummon_Effect::OCTABRAIN);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 60)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,{ 50,-24, 472 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 50,-24, 472 }, CSummon_Effect::OCTABRAIN);
 					pObject->Set_MapLayer(m_mapLayer);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				}
 
 				if (int(m_fTriggerTimer) == 110)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev,  { -13,-48, 308 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -13,-48, 308 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
@@ -626,15 +668,15 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 120)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { -21,-42, 264 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -21,-42, 264 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,-44, 255 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 2,-44, 255 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev,{ -32,-38, 290 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -32,-38, 290 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
@@ -657,14 +699,14 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 40)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 51,-18, 562 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 51,-18, 562 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 60)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 44,-30, 596 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 44,-30, 596 }, CSummon_Effect::TROPPER);
 					pObject->Set_MapLayer(m_mapLayer);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				}
@@ -679,11 +721,11 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 120)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { -26,-48, 577 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { -26,-48, 577 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 53,-48, 606 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 53,-48, 606 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -708,14 +750,14 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 40)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 120,-23, 601 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 120,-23, 601 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
 				if (int(m_fTriggerTimer) == 50)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 138,-35, 596 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 138,-35, 596 }, CSummon_Effect::TROPPER);
 					pObject->Set_MapLayer(m_mapLayer);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 
@@ -751,7 +793,7 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 20)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 245,-49, 691 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 245,-49, 691 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -762,7 +804,7 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 70)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 255,-31, 678 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 255,-31, 678 }, CSummon_Effect::TROPPER);
 					pObject->Set_MapLayer(m_mapLayer);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 
@@ -791,11 +833,11 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 60)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 310,-48, 871 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 310,-48, 871 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 301,-48, 876 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 301,-48, 876 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -804,9 +846,9 @@ void CTrigger::CheckTriggerActive()
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 90)
+				if (int(m_fTriggerTimer) == 150)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 289,-48, 860 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 289,-48, 860 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -814,7 +856,7 @@ void CTrigger::CheckTriggerActive()
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 294,-48, 851 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 294,-48, 851 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -823,13 +865,36 @@ void CTrigger::CheckTriggerActive()
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 150)
+				if (int(m_fTriggerTimer) == 200)
+				{
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 323,-36, 802 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 313,-32, 825 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 210)
+				{
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 273,-38, 851 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 304,-24, 861 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+				}
+
+				if (int(m_fTriggerTimer) == 270)
 				{
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 309,-48, 870 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 298,-48, 866 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 298,-48, 866 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -838,13 +903,13 @@ void CTrigger::CheckTriggerActive()
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 210)
+				if (int(m_fTriggerTimer) == 280)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 297,-48, 708 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 297,-48, 708 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 288,-48, 715 }, CSummon_Effect::MONSTER);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 288,-48, 715 }, CSummon_Effect::TROPPER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -853,41 +918,41 @@ void CTrigger::CheckTriggerActive()
 					pObject->Set_MapLayer(m_mapLayer);
 				}
 
-				if (int(m_fTriggerTimer) == 230)
-				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 323,-36, 802 }, CSummon_Effect::MONSTER);
-					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
-					pObject->Set_MapLayer(m_mapLayer);
-
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 313,-32, 825 }, CSummon_Effect::MONSTER);
-					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
-					pObject->Set_MapLayer(m_mapLayer);
-				}
-
-				if (int(m_fTriggerTimer) == 260)
-				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 273,-38, 851 }, CSummon_Effect::MONSTER);
-					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
-					pObject->Set_MapLayer(m_mapLayer);
-
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 304,-24, 861 }, CSummon_Effect::MONSTER);
-					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
-					pObject->Set_MapLayer(m_mapLayer);
-
-				}
-
-				if (int(m_fTriggerTimer) == 290)
-				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 288,-36, 785 }, CSummon_Effect::MONSTER);
-					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
-					pObject->Set_MapLayer(m_mapLayer);
-
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 311,-30, 920 }, CSummon_Effect::MONSTER);
-					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
-					pObject->Set_MapLayer(m_mapLayer);
-				}
-
 				if (int(m_fTriggerTimer) == 300)
+				{
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 323,-36, 802 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 313,-32, 825 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 360)
+				{
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 273,-38, 851 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 304,-24, 861 }, CSummon_Effect::OCTABRAIN);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+				}
+
+				if (int(m_fTriggerTimer) == 400)
+				{
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 288,-36, 785 }, CSummon_Effect::TROPPER);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 311,-30, 920 }, CSummon_Effect::TROPPER);
+					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
+					pObject->Set_MapLayer(m_mapLayer);
+				}
+
+				if (int(m_fTriggerTimer) == 420)
 				{
 					pObject = CSummon_Effect::Create(m_pGraphicDev, { 284,-34, 920 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);

@@ -6,6 +6,7 @@
 #include "CameraObserver.h"
 #include "Billborad.h"
 #include "Collider.h"
+#include "SoundMgr.h"
 
 CEffect_Explosion_Rocket::CEffect_Explosion_Rocket(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CVfx(pGraphicDev), m_wFrame(0), m_pBombCollider(nullptr), m_pCondition(nullptr)
@@ -20,7 +21,9 @@ CEffect_Explosion_Rocket::~CEffect_Explosion_Rocket()
 int CEffect_Explosion_Rocket::Update()
 {
 	if (m_bIsDead)
+	{
 		return DEAD_OBJ;
+	}
 
 	ENGINE::CGameObject::LateInit();
 	ENGINE::CGameObject::Update();

@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "Condition.h"
 #include "Animator.h"
+#include "SoundMgr.h"
 // 트루퍼 빨강색-> 이용해서 -> 체력이 깍이면 도망가는 패턴 하나 넣기 -> 체력 절반일경우 -> 도망친다. 
 
 CTrooper::CTrooper(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -74,7 +75,7 @@ void CTrooper::LateUpdate()
 			if (m_eNextState != MONSTER_DEAD)
 			{
 				m_eNextState = MONSTER_DEAD;
-				m_pCollider->Set_MaxY(2.f);
+				m_pCollider->Set_MaxY(-4.5f);
 			}
 		}
 		else
@@ -110,20 +111,21 @@ HRESULT CTrooper::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
+	m_pTransform->SetSize(D3DXVECTOR3(5.f, 5.f, 5.f));
 
 	m_fMaxRange = 35.0f;//최대사거리
 	m_fRange = 0.f;
 	m_fMinRange = 18.0f;
 	m_fAttack = 5.0f;
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 2.f , 5.f, 2.f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);						// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
+	m_pCollider->Set_MaxY(-1);
 
 	//리지드 바디 세팅 
 	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
@@ -626,6 +628,10 @@ void CTrooper::Monster_Fire2()
 	}
 	if (m_fTime > 1)
 	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::TROP_ATTACK, 0.05f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::TROP_ATTACK);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Trop_Pistol.ogg", CSoundMgr::TROP_ATTACK);
+
 		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
 		pInstance->Set_MapLayer(m_mapLayer);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
@@ -637,6 +643,15 @@ void CTrooper::Monster_Fire2()
 
 void CTrooper::Monster_Dead()
 {
+	if (m_bDeadSound)
+	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::TROP_VOID, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::TROP_VOID);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Trooper_Dead.ogg", CSoundMgr::TROP_VOID);
+
+		m_bDeadSound = false;
+	}
+
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"Trooper_DeadFall");
 	m_pAnimator->Set_FrameAmp(1.f);

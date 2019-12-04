@@ -11,6 +11,7 @@
 #include "Trooper.h"
 #include "Monster.h"
 #include "Boss_Overload.h"
+#include "SoundMgr.h"
 
 CSummon_Effect::CSummon_Effect(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CVfx(pGraphicDev), m_wFrame(0), m_bSummon(false)
@@ -133,6 +134,12 @@ HRESULT CSummon_Effect::Initialize()
 	m_pAnimator->Set_FrameAmp(20.f);
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	m_pAnimator->Stop_Animation(false);
+
+	int iSound = rand() % 3;
+
+	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::ENVIRONMENT, 0.5f);
+	//CSoundMgr::GetInstance()->StopSound(CSoundMgr::ENVIRONMENT);
+	CSoundMgr::GetInstance()->MyPlaySound(L"Portal.wav", CSoundMgr::ENVIRONMENT);
 
 	return S_OK;
 }

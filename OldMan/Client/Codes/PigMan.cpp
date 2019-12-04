@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "Condition.h"
 #include "Animator.h"
+#include "SoundMgr.h"
 
 
 CPigMan::CPigMan(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -59,6 +60,7 @@ void CPigMan::LateUpdate()
 
 	if (m_pCondition->Get_Hp() <= 0)
 	{
+		m_pCollider->Set_MaxY(-6.5f);
 		m_eNextState = MONSTER_DEAD;
 
 	}
@@ -102,21 +104,22 @@ HRESULT CPigMan::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 12.f, 0.f));
-	m_pTransform->SetSize(D3DXVECTOR3(4.f, 4.f, 4.f));
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 0.f, 0.f));
+	m_pTransform->SetSize(D3DXVECTOR3(7.f, 7.f, 7.f));
 
 	m_fMaxRange = 61.0f;//최대사거리
 	m_fRange = 0.f;
 	m_fMinRange = 35.0f;
 	m_fAttack = 19.0f;
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 2.f , 4.f, 2.f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 2.f , 7.f, 2.f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);						// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
 	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
+	m_pCollider->Set_MaxY(-2);
 
 	//리지드 바디 세팅 
 	m_pRigid->Set_UseGravity(true);							// 중력의 영향 유무
@@ -463,7 +466,7 @@ void CPigMan::Monster_Fire2()
 	D3DXVECTOR3 vMonster = vPlayer_Pos_Top - vMonsterPos_ShotPoint;
 
 	float fMove;
-	fMove = 100.f * m_pTimeMgr->GetDelta();			 // 속도
+	fMove = 70.f * m_pTimeMgr->GetDelta();			 // 속도
 	float fAngle[3] = { 0.f };                      //각도 0도로 줘야함 안주면 총알 빌보드 문제 있음 
 	m_fTime += m_pTimeMgr->GetDelta();
 
@@ -525,6 +528,10 @@ void CPigMan::Monster_Fire2()
 				}
 				if (m_fTime > 2)
 				{
+					CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PIG_ATTACK, 0.05f);
+					CSoundMgr::GetInstance()->StopSound(CSoundMgr::PIG_ATTACK);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Trop_Pistol.ogg", CSoundMgr::PIG_ATTACK);
+
 					CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
 					pInstance->Set_MapLayer(m_mapLayer);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
@@ -549,6 +556,15 @@ void CPigMan::Monster_Fire2()
 
 void CPigMan::Monster_Dead()
 {
+	if (m_bDeadSound)
+	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PIG_VOICE, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PIG_VOICE);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PigMan_Dead.wav", CSoundMgr::PIG_VOICE);
+
+		m_bDeadSound = false;
+	}
+
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"PigMan_Dead");
 	m_pAnimator->Set_FrameAmp(1.f);

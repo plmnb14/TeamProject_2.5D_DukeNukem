@@ -109,7 +109,7 @@ void CSoundMgr::Set_MasterVolume(float _Value)
 	for (int i = 0; i < MAXCHANNEL; ++i)
 	{
 		FMOD_Channel_GetVolume(m_pChannelArr[i], &m_fVolumeValue);
-		FMOD_Channel_SetVolume();
+		//FMOD_Channel_SetVolume();
 	}
 
 }
