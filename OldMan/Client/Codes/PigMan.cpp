@@ -501,7 +501,7 @@ void CPigMan::Monster_Fire2()
 				}
 				if (m_fTime > 2)
 				{
-					CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+					CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER, 3.f);
 					pInstance->Set_MapLayer(m_mapLayer);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
 					m_fTime = 0;
@@ -530,9 +530,9 @@ void CPigMan::Monster_Fire2()
 				{
 					CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PIG_ATTACK, 0.05f);
 					CSoundMgr::GetInstance()->StopSound(CSoundMgr::PIG_ATTACK);
-					CSoundMgr::GetInstance()->MyPlaySound(L"Trop_Pistol.ogg", CSoundMgr::PIG_ATTACK);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Pig_Fire.wav", CSoundMgr::PIG_ATTACK);
 
-					CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+					CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_REVOLVER, 3.f);
 					pInstance->Set_MapLayer(m_mapLayer);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
 					m_fTime = 0;

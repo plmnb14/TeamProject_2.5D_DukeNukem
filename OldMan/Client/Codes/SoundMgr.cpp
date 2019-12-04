@@ -113,6 +113,12 @@ void CSoundMgr::Set_MasterVolume(float _Value)
 
 }
 
+void CSoundMgr::SetVolume_Test(CHANNELID eID, float _fVolume)
+{
+	if (_fVolume <= 0)_fVolume = 0;
+	FMOD_Channel_SetVolume(m_pChannelArr[eID], _fVolume);
+}
+
 void CSoundMgr::LoadSouneFile()
 {
 	_finddata_t fd; 

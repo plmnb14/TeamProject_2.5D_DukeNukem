@@ -636,7 +636,7 @@ void CMonster::Monster_Fire2()
 				D3DXVECTOR3 vMonster_Shot{ vMonster.x + xRand,vMonster.y+ yRand,vMonster.z+ zRand };
 
 
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster_Shot, fAngle, fMove, ENGINE::MONSTER_REVOLVER);
+				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster_Shot, fAngle, fMove, ENGINE::MONSTER_REVOLVER, 3.f);
 				pInstance->Set_MapLayer(m_mapLayer);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
 			}

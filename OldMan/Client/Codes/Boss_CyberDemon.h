@@ -132,6 +132,9 @@ private:
 	float					m_fOldHp;
 
 	float					m_fWalkSoundDelay;
+
+	bool					m_bIsPlayedDeadSound;
+
 };
 
 #define __BOSS_CYBERDEMON_H__

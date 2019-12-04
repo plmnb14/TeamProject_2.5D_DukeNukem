@@ -41,6 +41,7 @@ public:
 
 public:
 	void Set_MasterVolume(float _Value);
+	void SetVolume_Test(CHANNELID eID, float _fVolume);
 
 
 private:

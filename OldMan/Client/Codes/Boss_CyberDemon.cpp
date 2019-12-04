@@ -31,7 +31,7 @@ CBoss_CyberDemon::CBoss_CyberDemon(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pObserver(nullptr), m_pCondition(nullptr), m_pBillboard(nullptr), m_pAnimator(nullptr),
 	m_eState(CYBER_WALK), m_fLifeTime(0), m_fFowardDealy(0), m_bIsFindPlayer(false),
 	m_bIsCharging(false), m_vDashDir(0, 0, 0), m_bIsJump(false), m_fAccel(1), m_pHpBar(nullptr),
-	m_bIsChargeHitted(false), m_fOldHp(0.f), m_fHittedSoundDelay(0.f)
+	m_bIsChargeHitted(false), m_fOldHp(0.f), m_fHittedSoundDelay(0.f), m_bIsPlayedDeadSound(false)
 {
 }
 
@@ -323,6 +323,16 @@ void CBoss_CyberDemon::State()
 	if (m_eState == CYBER_DEAD)
 	{
 		static_cast<CGaugeBar*>(m_pHpBar)->SetVisible(false);
+
+		if (!m_bIsPlayedDeadSound)
+		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dead.mp3", CSoundMgr::MONSTER);
+
+			m_bIsPlayedDeadSound = true;
+		}
+		
 		return;
 	}
 
@@ -410,16 +420,16 @@ void CBoss_CyberDemon::HittedSound()
 		switch (iRand)
 		{
 		case 0:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_1.ogg", CSoundMgr::MONSTER_VOICE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_1.mp3", CSoundMgr::MONSTER_VOICE);
 			break;
 		case 1:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_2.ogg", CSoundMgr::MONSTER_VOICE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_2.mp3", CSoundMgr::MONSTER_VOICE);
 			break;
 		case 2:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_3.ogg", CSoundMgr::MONSTER_VOICE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_3.mp3", CSoundMgr::MONSTER_VOICE);
 			break;
 		case 3:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_4.ogg", CSoundMgr::MONSTER_VOICE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Hitted_4.mp3", CSoundMgr::MONSTER_VOICE);
 			break;
 		}
 
@@ -477,19 +487,19 @@ void CBoss_CyberDemon::Walk()
 		switch (iRand)
 		{
 		case 0:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_1.ogg", CSoundMgr::MONSTER_EFF);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_1.mp3", CSoundMgr::MONSTER_EFF);
 			break;
 		case 1:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_2.ogg", CSoundMgr::MONSTER_EFF);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_2.mp3", CSoundMgr::MONSTER_EFF);
 			break;
 		case 2:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_3.ogg", CSoundMgr::MONSTER_EFF);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_3.mp3", CSoundMgr::MONSTER_EFF);
 			break;
 		case 3:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_4.ogg", CSoundMgr::MONSTER_EFF);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_4.mp3", CSoundMgr::MONSTER_EFF);
 			break;
 		case 4:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_4.ogg", CSoundMgr::MONSTER_EFF);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Walk_4.mp3", CSoundMgr::MONSTER_EFF);
 			break;
 		}
 	}
@@ -513,19 +523,19 @@ void CBoss_CyberDemon::Dash()
 		switch (iRand)
 		{
 		case 0:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_1.wav", CSoundMgr::MONSTER_EFF);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_1.mp3", CSoundMgr::MONSTER_EFF);
 			break;
 		case 1:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_2.wav", CSoundMgr::MONSTER_EFF);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_2.mp3", CSoundMgr::MONSTER_EFF);
 			break;
 		case 2:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_3.wav", CSoundMgr::MONSTER_EFF);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Dash_3.mp3", CSoundMgr::MONSTER_EFF);
 			break;
 		}
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
-		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_DashEff.ogg", CSoundMgr::MONSTER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_DashEff.mp3", CSoundMgr::MONSTER);
 
 	}
 	else if (m_bIsCharging && m_fChargeDelay > 2.5f)
@@ -568,16 +578,16 @@ void CBoss_CyberDemon::Dash()
 			switch (iSound)
 			{
 			case 0:
-				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_1.wav", CSoundMgr::PLAYER_VOICE);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_1.mp3", CSoundMgr::PLAYER_VOICE);
 				break;
 			case 1:
-				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_2.ogg", CSoundMgr::PLAYER_VOICE);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_2.mp3", CSoundMgr::PLAYER_VOICE);
 				break;
 			case 2:
-				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_3.ogg", CSoundMgr::PLAYER_VOICE);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_3.mp3", CSoundMgr::PLAYER_VOICE);
 				break;
 			case 3:
-				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_4.ogg", CSoundMgr::PLAYER_VOICE);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_4.mp3", CSoundMgr::PLAYER_VOICE);
 				break;
 			}
 		}
@@ -695,10 +705,10 @@ void CBoss_CyberDemon::Slash()
 		switch (iRand)
 		{
 		case 0:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Slash_1.ogg", CSoundMgr::MONSTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Slash_1.mp3", CSoundMgr::MONSTER);
 			break;
 		case 1:
-			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Slash_2.ogg", CSoundMgr::MONSTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Slash_2.mp3", CSoundMgr::MONSTER);
 			break;
 		}
 
@@ -738,7 +748,7 @@ void CBoss_CyberDemon::Fire()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
-		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Fire_1.ogg", CSoundMgr::MONSTER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Fire_1.mp3", CSoundMgr::MONSTER);
 	}
 	else
 		m_fFireDelay += m_pTimeMgr->GetDelta();
@@ -813,11 +823,11 @@ void CBoss_CyberDemon::Jump()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_EFF, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER_EFF);
-		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Jump.ogg", CSoundMgr::MONSTER_EFF);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_Jump.mp3", CSoundMgr::MONSTER_EFF);
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
-		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_RockCreate.ogg", CSoundMgr::MONSTER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_RockCreate.mp3", CSoundMgr::MONSTER);
 	}
 
 	

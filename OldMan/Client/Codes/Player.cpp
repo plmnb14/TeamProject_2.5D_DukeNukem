@@ -71,22 +71,22 @@ int CPlayer::Update()
 		switch (iSound)
 		{
 		case 0:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_01.ogg", CSoundMgr::WEAPON_AFTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_01.mp3", CSoundMgr::WEAPON_AFTER);
 			break;
 		case 1:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_02.ogg", CSoundMgr::WEAPON_AFTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_02.mp3", CSoundMgr::WEAPON_AFTER);
 			break;
 		case 2:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_03.ogg", CSoundMgr::WEAPON_AFTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_03.mp3", CSoundMgr::WEAPON_AFTER);
 			break;
 		case 3:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_04.ogg", CSoundMgr::WEAPON_AFTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_04.mp3", CSoundMgr::WEAPON_AFTER);
 			break;
 		case 4:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_05.ogg", CSoundMgr::WEAPON_AFTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_05.mp3", CSoundMgr::WEAPON_AFTER);
 			break;
 		case 5:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_06.ogg", CSoundMgr::WEAPON_AFTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_06.mp3", CSoundMgr::WEAPON_AFTER);
 			break;
 
 			m_pMeleeCollider->Set_IsCollision(false);
@@ -430,7 +430,7 @@ void CPlayer::KeyInput()
 		{
 			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
 			CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
-			CSoundMgr::GetInstance()->MyPlaySound(L"Player_Slide.ogg", CSoundMgr::PLAYER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Player_Slide.mp3", CSoundMgr::PLAYER);
 
 			m_bPlaySlideSound = true;
 		}
@@ -537,23 +537,23 @@ void CPlayer::KeyInput()
 			{
 			case 0:
 			{
-				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_01.ogg", CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_01.mp3", CSoundMgr::PLAYER);
 				break;
 			}
 			case 1:
 			{
-				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_02.ogg", CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_02.mp3", CSoundMgr::PLAYER);
 				break;
 			}
 			case 2:
 			{
-				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_03.ogg", CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_03.mp3", CSoundMgr::PLAYER);
 				break;
 			}
 
 			case 3:
 			{
-				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_04.ogg", CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Jump_04.mp3", CSoundMgr::PLAYER);
 				break;
 			}
 			}
@@ -572,12 +572,12 @@ void CPlayer::KeyInput()
 			{
 			case 0:
 			{
-				CSoundMgr::GetInstance()->MyPlaySound(L"Ledge_01.ogg", CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Ledge_01.mp3", CSoundMgr::PLAYER);
 				break;
 			}
 			case 1:
 			{
-				CSoundMgr::GetInstance()->MyPlaySound(L"Ledge_02.ogg", CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Ledge_02.mp3", CSoundMgr::PLAYER);
 				break;
 			}
 			}
@@ -867,13 +867,13 @@ void CPlayer::Shoot()
 			switch (iSound)
 			{
 			case 0:
-				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_1.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_1.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			case 1:
-				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_2.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_2.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			case 2:
-				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_3.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"RocketLuncher_Shoot_3.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			}
 			break;
@@ -890,16 +890,16 @@ void CPlayer::Shoot()
 				CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
 
 			case 0:
-				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_1.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_1.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			case 1:
-				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_2.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_2.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			case 2:
-				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_3.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_3.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			case 3:
-				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_4.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Revolver_Shoot_4.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			}
 			break;
@@ -914,10 +914,10 @@ void CPlayer::Shoot()
 			switch (iSound)
 			{
 			case 0:
-				CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Shoot_1.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Shoot_1.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			case 1:
-				CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Shoot_2.wav", CSoundMgr::BULLET_SHOOT);
+				CSoundMgr::GetInstance()->MyPlaySound(L"SMG_Shoot_2.mp3", CSoundMgr::BULLET_SHOOT);
 				break;
 			}
 			break;
@@ -991,7 +991,7 @@ void CPlayer::Shoot()
 	{
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
-		CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_AmountZero.wav", CSoundMgr::PLAYER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_AmountZero.mp3", CSoundMgr::PLAYER);
 
 		m_pCondition->Set_RangeAttack(false);
 
@@ -1103,19 +1103,19 @@ void CPlayer::Shoot_Shotgun()
 			CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
 
 		case 0:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_1.ogg", CSoundMgr::BULLET_SHOOT);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_1.mp3", CSoundMgr::BULLET_SHOOT);
 			break;
 		case 1:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_2.ogg", CSoundMgr::BULLET_SHOOT);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_2.mp3", CSoundMgr::BULLET_SHOOT);
 			break;
 		case 2:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_3.ogg", CSoundMgr::BULLET_SHOOT);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_3.mp3", CSoundMgr::BULLET_SHOOT);
 			break;
 		case 3:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_4.ogg", CSoundMgr::BULLET_SHOOT);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_4.mp3", CSoundMgr::BULLET_SHOOT);
 			break;
 		case 4:
-			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_5.ogg", CSoundMgr::BULLET_SHOOT);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Shotgun_Shoot_5.mp3", CSoundMgr::BULLET_SHOOT);
 			break;
 		}
 	}
@@ -1132,7 +1132,7 @@ void CPlayer::Shoot_Shotgun()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
-		CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_AmountZero.wav", CSoundMgr::PLAYER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_AmountZero.mp3", CSoundMgr::PLAYER);
 	}
 }
 
@@ -1506,14 +1506,14 @@ void CPlayer::Check_WalkSound(bool _bIsRun)
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER_WALK);
 
 		if (m_iWalkSoundIndex == 0)
-			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_1.wav", CSoundMgr::PLAYER_WALK);
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_1.mp3", CSoundMgr::PLAYER_WALK);
 		else if (m_iWalkSoundIndex == 1)
-			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_2.wav", CSoundMgr::PLAYER_WALK);
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_2.mp3", CSoundMgr::PLAYER_WALK);
 		else if (m_iWalkSoundIndex == 2)
-			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_3.wav", CSoundMgr::PLAYER_WALK);
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_3.mp3", CSoundMgr::PLAYER_WALK);
 		else if (m_iWalkSoundIndex == 3)
 		{
-			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_4.wav", CSoundMgr::PLAYER_WALK);
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_4.mp3", CSoundMgr::PLAYER_WALK);
 			m_iWalkSoundIndex = -1;
 		}
 
@@ -1557,13 +1557,13 @@ void CPlayer::ShootType()
 				switch (iSound)
 				{
 				case 0:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_01.wav", CSoundMgr::WEAPON);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_01.mp3", CSoundMgr::WEAPON);
 					break;
 				case 1:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_02.wav", CSoundMgr::WEAPON);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_02.mp3", CSoundMgr::WEAPON);
 					break;
 				case 2:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_03.wav", CSoundMgr::WEAPON);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_03.mp3", CSoundMgr::WEAPON);
 					break;
 				}
 			}
@@ -1580,13 +1580,13 @@ void CPlayer::ShootType()
 				switch (iSound)
 				{
 				case 0:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_01.wav", CSoundMgr::WEAPON);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_01.mp3", CSoundMgr::WEAPON);
 					break;
 				case 1:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_02.wav", CSoundMgr::WEAPON);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_02.mp3", CSoundMgr::WEAPON);
 					break;
 				case 2:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_03.wav", CSoundMgr::WEAPON);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Fist_03.mp3", CSoundMgr::WEAPON);
 					break;
 				}
 

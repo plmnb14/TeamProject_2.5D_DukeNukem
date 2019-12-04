@@ -25,7 +25,7 @@ int CWeapon_Pump::Update()
 	{
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 0.5f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
-		CSoundMgr::GetInstance()->MyPlaySound(L"Gun_PickUp.ogg", CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Gun_PickUp.mp3", CSoundMgr::UI);
 
 		dynamic_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Set_WeaponInfo(&m_pWInfo);
 		return DEAD_OBJ;

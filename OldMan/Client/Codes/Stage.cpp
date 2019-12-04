@@ -22,7 +22,6 @@
 #include "Trooper.h"
 #include "Alien.h"
 #include "Boss_Overload.h"
-#include "OctaBrain.h"
 
 #include "UI.h"
 #include "Number.h"
@@ -299,9 +298,9 @@ HRESULT CStage::Initialize()
 	LoadMapObj();
 
 	// PlayBGM
-	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 0.0f);
+	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 0.1f);
 	CSoundMgr::GetInstance()->StopAll();
-	//CSoundMgr::GetInstance()->MyPlayBGM(L"Rip & Tear.mp3");
+	CSoundMgr::GetInstance()->MyPlayBGM(L"Rip & Tear.mp3");
 
 	return S_OK;
 }
@@ -479,23 +478,23 @@ void CStage::LoadMapObj()
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
-			pObject = CPigMan::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player() , vPos);
+			pObject = CPigMan::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), D3DXVECTOR3(0, 0, 0));
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 			tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Octabrain"))
 		{
-			pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player() , vPos);
+			pObject = COctaBrain::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), D3DXVECTOR3(0, 0, 0));
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Trooper"))
 		{
-			pObject = CTrooper::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player() , vPos);
+			pObject = CTrooper::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), D3DXVECTOR3(0, 0, 0));
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		else if (!lstrcmp(szType, L"Overload"))
 		{
-			pObject = CBoss_Overload::Create(m_pGraphicDev , vPos);
+			pObject = CBoss_Overload::Create(m_pGraphicDev, D3DXVECTOR3(0, 0, 0));
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 		}
 		// Trigger
