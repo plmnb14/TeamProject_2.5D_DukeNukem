@@ -347,7 +347,7 @@ HRESULT CStage_Boss::Initialize()
 	// PlayBGM
 	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 0.1f);
 	CSoundMgr::GetInstance()->StopAll();
-	CSoundMgr::GetInstance()->MyPlayBGM(L"Rip & Tear.mp3");
+	CSoundMgr::GetInstance()->MyPlayBGM(L"BOSS_BGM.wav");
 
 	return S_OK;
 }

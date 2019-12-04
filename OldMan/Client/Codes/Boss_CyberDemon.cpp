@@ -764,12 +764,6 @@ void CBoss_CyberDemon::Jump()
 		m_pRigid->Set_IsGround(false);
 
 		m_bIsJump = true;
-
-		D3DXVECTOR3 vTempDir = m_vRandomPos - m_pTransform->GetPos();
-		D3DXVec3Normalize(&vTempDir, &vTempDir);
-		vTempDir.y = 0;
-
-		m_pTransform->SetDir(vTempDir);
 	}
 
 	if (m_bIsJump && m_pRigid->Get_IsGround())
@@ -827,9 +821,14 @@ void CBoss_CyberDemon::Jump()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::MONSTER);
-		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_RockCreate.mp3", CSoundMgr::MONSTER);
+		CSoundMgr::GetInstance()->MyPlaySound(L"CyberDemon_RockCreate.ogg", CSoundMgr::MONSTER);
 	}
 
+	D3DXVECTOR3 vTempDir = m_vRandomPos - m_pTransform->GetPos();
+	D3DXVec3Normalize(&vTempDir, &vTempDir);
+	vTempDir.y = 0;
+
+	m_pTransform->SetDir(vTempDir);
 	
 }
 

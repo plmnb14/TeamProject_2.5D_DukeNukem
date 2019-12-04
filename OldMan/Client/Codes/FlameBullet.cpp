@@ -59,7 +59,7 @@ int CFlameBullet::Update()
 					pInstance->Set_MapLayer(m_mapLayer);
 				}
 				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_DEAD, 1.0f);
-				CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_DEAD);
+				//CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_DEAD);
 				CSoundMgr::GetInstance()->MyPlaySound(L"RocketBullet_Hit_1.mp3", CSoundMgr::BULLET_DEAD);
 			}
 

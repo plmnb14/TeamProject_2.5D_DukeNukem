@@ -175,7 +175,7 @@ HRESULT CLogo::Initialize()
 	// PlaySound
 	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 1.0f);
 	CSoundMgr::GetInstance()->StopAll();
-	CSoundMgr::GetInstance()->MyPlayBGM(L"Title Theme.mp3");
+	CSoundMgr::GetInstance()->MyPlayBGM(L"Title_BGM.wav");
 
 	return S_OK;
 }

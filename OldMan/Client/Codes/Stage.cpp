@@ -300,7 +300,7 @@ HRESULT CStage::Initialize()
 	// PlayBGM
 	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 0.1f);
 	CSoundMgr::GetInstance()->StopAll();
-	CSoundMgr::GetInstance()->MyPlayBGM(L"Rip & Tear.mp3");
+	CSoundMgr::GetInstance()->MyPlayBGM(L"BFG Division.mp3");
 
 	return S_OK;
 }

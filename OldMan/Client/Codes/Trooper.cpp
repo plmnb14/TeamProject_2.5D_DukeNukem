@@ -652,6 +652,9 @@ void CTrooper::Monster_Dead()
 		m_bDeadSound = false;
 	}
 
+	m_pCollider->Set_Radius(D3DXVECTOR3(m_pCollider->Get_Radius().x, m_pCollider->Get_Radius().y * 0.5f, m_pCollider->Get_Radius().z));
+
+
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"Trooper_DeadFall");
 	m_pAnimator->Set_FrameAmp(1.f);

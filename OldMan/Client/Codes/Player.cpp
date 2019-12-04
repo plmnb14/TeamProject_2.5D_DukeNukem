@@ -1468,12 +1468,19 @@ void CPlayer::Check_Hitted()
 	{
 		CHittedCircle* pCircle = CHittedCircle::Create(m_pGraphicDev, CHittedCircle::SIZE_XL);
 
+		D3DXVECTOR3 tmpPos_0 = m_pRigid->Get_PushDirForUI();
+		D3DXVECTOR3 tmpDir = tmpPos_0 - m_pTransform->GetPos();
+		D3DXVECTOR3 tmpRight = { 1,0,0 };
+
+		D3DXVec3Normalize(&tmpDir, &tmpDir);
+		D3DXVec3Cross(&tmpRight, &tmpDir, &D3DXVECTOR3{ 0, 1, 0 });
+
 		float fAngle = 0.f;
-		D3DXVECTOR3 vPlayerDir = {0, 0, 0};
-		D3DXVec3Normalize(&vPlayerDir, &m_pTransform->GetDir());
+		//D3DXVECTOR3 vPlayerDir = {0, 0, 0};
+		//D3DXVec3Normalize(&vPlayerDir, &m_pTransform->GetDir());
 		//fAngle = D3DXVec3Dot(&m_pRigid->Get_PushDirForUI(), &D3DXVECTOR3(0, 0, -1));
-		fAngle = D3DXVec3Dot(&m_pRigid->Get_PushDirForUI(), &vPlayerDir);
-		
+		fAngle = D3DXVec3Dot(&m_pRigid->Get_PushDirForUI(), &tmpRight);
+
 		if (m_pTransform->GetDir().x < 0)
 		{
 			fAngle *= -1.f;

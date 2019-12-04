@@ -325,10 +325,11 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 						if (rSrcCon->Get_Armor() <= 0)
 						{
 							float fDamage = rDstCon->Get_Damage() + rSrcCon->Get_Armor();
+							rSrcCon->Set_Armor(0);
 							rSrcCon->Add_Hp(-fDamage);
 
 							if (rSrcCon->Get_Hp() < 0)
-								rSrcCon->Add_Hp(rSrcCon->Get_Hp() * -1.f);
+								rSrcCon->Set_Hp(0.f);
 						}
 					}
 				}
@@ -364,11 +365,13 @@ void CCollisionMgr::CollisionBullet_To_Other(list<CGameObject*>& rDstList, list<
 
 					if (rSrcRigid != nullptr)
 					{
-						D3DXVECTOR3 vDirection = { 0, 0, 0 };
-						D3DXVec3Normalize(&vDirection, &rDstTrans->GetDir());
+						D3DXVECTOR3 vDstPos = rDstTrans->GetPos();
+						D3DXVECTOR3 vSrcPos = rSrcTrans->GetPos();
+						D3DXVECTOR3 vTmpDir = vSrcPos - vDstPos;
+						D3DXVec3Normalize(&vTmpDir, &vTmpDir);
 
 						rSrcRigid->Set_IsPushForUI(true);
-						rSrcRigid->Set_PushDirForUI(vDirection);
+						rSrcRigid->Set_PushDirForUI(vTmpDir);
 					}
 				}
 
@@ -411,7 +414,18 @@ void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CG
 
 					if (rSrcCon != nullptr)
 					{
-						rSrcCon->Add_Hp(-rDstCon->Get_Damage());
+						if (rSrcCon->Get_Armor() > 0)
+							rSrcCon->Add_Armor(-rDstCon->Get_Damage());
+
+						if (rSrcCon->Get_Armor() <= 0)
+						{
+							float fDamage = rDstCon->Get_Damage() + rSrcCon->Get_Armor();
+							rSrcCon->Set_Armor(0);
+							rSrcCon->Add_Hp(-fDamage);
+
+							if (rSrcCon->Get_Hp() < 0)
+								rSrcCon->Set_Hp(0.f);
+						}
 					}
 
 					D3DXVECTOR3 vDstPos = rDstTrans->GetPos();
@@ -510,15 +524,18 @@ void CCollisionMgr::CollisionTarget_To_Monstr_Mele(list<CGameObject*>& rDstList,
 				ENGINE::CCondition* rDstCon = static_cast<CCondition*>(rDst->Get_Component(L"Condition"));
 				ENGINE::CCondition* rSrcCon = static_cast<CCondition*>(rSrc->Get_Component(L"Condition"));
 			
-				if (rSrcCon->Get_Armor() > 0)
+				if(rSrcCon->Get_Armor() > 0)
 					rSrcCon->Add_Armor(-rDstCon->Get_Damage());
 
 				if (rSrcCon->Get_Armor() <= 0)
 				{
 					float fDamage = rDstCon->Get_Damage() + rSrcCon->Get_Armor();
+					rSrcCon->Set_Armor(0);
 					rSrcCon->Add_Hp(-fDamage);
-				}
 
+					if (rSrcCon->Get_Hp() < 0)
+						rSrcCon->Set_Hp(0.f);
+				}
 
 				return;
 			}
