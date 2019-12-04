@@ -88,6 +88,8 @@ int CPlayer::Update()
 		case 5:
 			CSoundMgr::GetInstance()->MyPlaySound(L"Fist_Hit_06.mp3", CSoundMgr::WEAPON_AFTER);
 			break;
+
+			m_pMeleeCollider->Set_IsCollision(false);
 		}
 
 
@@ -196,7 +198,7 @@ HRESULT CPlayer::Initialize()
 	D3DXVECTOR3 tmpPos_Melee = { m_pTransform->GetPos().x + (m_pCollider->Get_Radius().x + tmpRight.x) , m_pTransform->GetPos().y, m_pTransform->GetPos().z + (m_pCollider->Get_Radius().z * tmpRight.z) };
 
 	// 밀리 콜라이더
-	m_pMeleeCollider->Set_Radius({ 2 , 2, 2 });
+	m_pMeleeCollider->Set_Radius({ 3.5f , 3.f, 3.5f });
 	m_pMeleeCollider->Set_Dynamic(true);
 	m_pMeleeCollider->Set_Trigger(true);
 	m_pMeleeCollider->Set_CenterPos(tmpPos_Melee);
@@ -394,6 +396,10 @@ void CPlayer::KeyInput()
 
 		if (m_eActState != W_GRENADE)
 		{
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WEAPON_AFTER, 0.5f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WEAPON_AFTER);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Grenade_Throw.wav", CSoundMgr::WEAPON_AFTER);
+
 			Grenade();
 			m_eActState = W_GRENADE;
 			m_bGrenade = true;

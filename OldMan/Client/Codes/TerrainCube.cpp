@@ -22,23 +22,30 @@ int CTerrainCube::Update()
 		{
 			int iSound = rand() % 3;
 
-			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WOOD_BOX, 5.f);
-			CSoundMgr::GetInstance()->StopSound(CSoundMgr::WOOD_BOX);
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::ENVIRONMENT, 5.f);
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::ENVIRONMENT);
 			switch (iSound)
 			{
 			case 0:
-				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_1.mp3", CSoundMgr::WOOD_BOX);
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_1.wav", CSoundMgr::ENVIRONMENT);
 				break;
 			case 1:
-				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_2.mp3", CSoundMgr::WOOD_BOX);
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_2.wav", CSoundMgr::ENVIRONMENT);
 				break;
 			case 2:
-				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_3.mp3", CSoundMgr::WOOD_BOX);
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_3.wav", CSoundMgr::ENVIRONMENT);
 				break;
 			}
+
+			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::ENVIRONMENT, 1.f);
 		}
 
 		return DEAD_OBJ;
+	}
+
+	if (m_pCollider->Get_IsCollision())
+	{
+		m_pCollider->Set_IsCollision(false);
 	}
 
 	ENGINE::CGameObject::LateInit();

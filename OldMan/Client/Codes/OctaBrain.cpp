@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "Condition.h"
 #include "Animator.h"
+#include "SoundMgr.h"
 //Y축 패트롤 -> 위치 받아서 처리 
 
 //  패트롤-> 플레이어범위에 없을경우 패트롤 진행 -> 플레이어 발견시 추격 
@@ -561,6 +562,10 @@ void COctaBrain::Monster_Fire2()
 	m_pAnimator->Set_FrameAmp(0.7f);
 	if (m_fTime > 2.4f)
 	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::OCTA_ATTACK, 0.05f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::OCTA_ATTACK);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Octa_Attack.ogg", CSoundMgr::OCTA_ATTACK);
+
 		CGameObject* pInstance = CBullet::Create(m_pGraphicDev, vMonsterPos_ShotPoint, vMonster, fAngle, fMove, ENGINE::MONSTER_WAVE);
 		pInstance->Set_MapLayer(m_mapLayer);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_MONSTER, pInstance);
@@ -571,6 +576,15 @@ void COctaBrain::Monster_Fire2()
 
 void COctaBrain::Monster_Dead()
 {
+	if (m_bDeadSound)
+	{
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::OCTA_VOICE, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::OCTA_VOICE);
+		CSoundMgr::GetInstance()->MyPlaySound(L"Octa_Dead.ogg", CSoundMgr::OCTA_VOICE);
+
+		m_bDeadSound = false;
+	}
+
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);
 	ChangeTex(L"OctaBrain_Dead");
 	m_pAnimator->Set_FrameAmp(1.f);
@@ -578,7 +592,6 @@ void COctaBrain::Monster_Dead()
 	m_pRigid->Set_UseGravity(true);
 
 	m_fDeadTimer += m_pTimeMgr->GetDelta();
-	cout << m_pAnimator->Get_Frame() << endl;
 
 	if (m_fDeadTimer > 3)
 	{

@@ -42,6 +42,30 @@ int CGrenade::Update()
 		CGameObject* pInstance = CEffect_Explosion_Rocket::Create(m_pGraphicDev, m_pTransform->GetPos(), 30);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::EXPLOSION, pInstance);
 
+		int a = rand() % 3;
+
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::EXPLOSION_GRENADE, 0.5f);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::EXPLOSION_GRENADE);
+
+		switch (a)
+		{
+		case 0:
+		{
+			CSoundMgr::GetInstance()->MyPlaySound(L"EXPL_10.ogg", CSoundMgr::EXPLOSION_GRENADE);
+			break;
+		}
+		case 1:
+		{
+			CSoundMgr::GetInstance()->MyPlaySound(L"EXPL_11.ogg", CSoundMgr::EXPLOSION_GRENADE);
+			break;
+		}
+		case 2:
+		{
+			CSoundMgr::GetInstance()->MyPlaySound(L"EXPL_13.ogg", CSoundMgr::EXPLOSION_GRENADE);
+			break;
+		}
+		}
+
 		return DEAD_OBJ;
 	}
 

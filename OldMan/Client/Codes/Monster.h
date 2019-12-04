@@ -123,6 +123,7 @@ protected:
 	bool					m_bObject;
 	bool					m_bShot;
 	bool					m_bAttack;
+	bool					m_bDeadSound;
 
 	float					m_fDeadTimer;
 

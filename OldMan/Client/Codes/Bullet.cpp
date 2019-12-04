@@ -44,6 +44,26 @@ int CBullet::Update()
 		{
 			CGameObject* pInstance = nullptr;
 
+			if (m_eTag == ENGINE::WOOD_BOX)
+			{
+				int iSound = rand() % 3;
+
+				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::WOOD_BOX, 5.f);
+				CSoundMgr::GetInstance()->StopSound(CSoundMgr::WOOD_BOX);
+				switch (iSound)
+				{
+				case 0:
+					CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Hit_1.ogg", CSoundMgr::WOOD_BOX);
+					break;
+				case 1:
+					CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Hit_2.ogg", CSoundMgr::WOOD_BOX);
+					break;
+				case 2:
+					CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Hit_3.ogg", CSoundMgr::WOOD_BOX);
+					break;
+				}
+			}
+
 			if (m_eTag == ENGINE::TERRAIN)
 			{
 				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_DEAD, 1.0f);
