@@ -562,7 +562,7 @@ void COctaBrain::Monster_Fire2()
 	m_pAnimator->Set_FrameAmp(0.7f);
 	if (m_fTime > 2.4f)
 	{
-		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::OCTA_ATTACK, 0.05f);
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::OCTA_ATTACK, 0.5f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::OCTA_ATTACK);
 		CSoundMgr::GetInstance()->MyPlaySound(L"Octa_Attack.ogg", CSoundMgr::OCTA_ATTACK);
 

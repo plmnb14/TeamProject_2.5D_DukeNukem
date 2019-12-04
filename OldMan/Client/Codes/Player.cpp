@@ -250,8 +250,8 @@ HRESULT CPlayer::Initialize()
 	m_fZoomSpeed	= 5;
 	m_fMaxZoom		= 70;
 	m_fMinZoom		= 20;
-	m_iGrenadeCount = 3;
-	m_iMaxGrenadeCount = 5;
+	m_iGrenadeCount = 99;
+	m_iMaxGrenadeCount = 99;
 
 	m_pWInfo.wWeaponDamage = 15;
 
