@@ -314,6 +314,8 @@ No_Animation|256 x 256|Tile256x256_69.dds|1|..\Texture\Tiles\No_Animation\256 x 
 No_Animation|256 x 256|Tile256x256_69.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_69.png
 No_Animation|256 x 256|Tile256x256_7.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_7.dds
 No_Animation|256 x 256|Tile256x256_7.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_7.png
+No_Animation|256 x 256|Tile256x256_70.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_70.dds
+No_Animation|256 x 256|Tile256x256_70.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_70.png
 No_Animation|256 x 256|Tile256x256_79.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_79.dds
 No_Animation|256 x 256|Tile256x256_8.dds|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_8.dds
 No_Animation|256 x 256|Tile256x256_8.png|1|..\Texture\Tiles\No_Animation\256 x 256\Tile256x256_8.png

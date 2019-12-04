@@ -70,7 +70,7 @@ void CStage_Boss::Update()
 
 			else
 			{
-				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE));
+				HRESULT hr = ENGINE::GetManagement()->SceneChange(CSceneSelector(CSceneSelector::STAGE_BOSS));
 				FAILED_CHECK_MSG(hr, L"STAGE Scene Change Failed");
 			}
 
@@ -354,7 +354,8 @@ HRESULT CStage_Boss::Initialize()
 
 void CStage_Boss::Release()
 {
-	m_pResourceMgr->ResetDynamicResource();
+	if(!static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->GetDead())
+		m_pResourceMgr->ResetDynamicResource();
 }
 
 void CStage_Boss::PipeLineSetUp()

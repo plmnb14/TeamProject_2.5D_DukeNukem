@@ -71,6 +71,9 @@ int CBullet::Update()
 
 				int iSound = rand() % 2;
 
+				if (m_eWeaponTag == ENGINE::REVOLVER)
+					iSound = rand() % 3;
+
 				switch (iSound)
 				{
 				case 0:
@@ -79,9 +82,9 @@ int CBullet::Update()
 				case 1:
 					CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Hit_5.ogg", CSoundMgr::BULLET_DEAD);
 					break;
-				//case 2:
-				//	CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Hit_3.ogg", CSoundMgr::BULLET_DEAD);
-				//	break;
+				case 2:
+					CSoundMgr::GetInstance()->MyPlaySound(L"Bullet_Hit_3.ogg", CSoundMgr::BULLET_DEAD);
+					break;
 				}
 
 				pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
