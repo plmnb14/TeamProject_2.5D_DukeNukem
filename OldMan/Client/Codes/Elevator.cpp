@@ -189,13 +189,13 @@ void CElevator::CheckMove()
 		{
 			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::VEHICLE, 1.0f);
 			CSoundMgr::GetInstance()->StopSound(CSoundMgr::VEHICLE);
-			CSoundMgr::GetInstance()->MyPlaySound(L"Elevator_Start.wav", CSoundMgr::VEHICLE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Elevator_Start.mp3", CSoundMgr::VEHICLE);
 		}
 		else
 		{
 			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::VEHICLE, 1.0f);
 			CSoundMgr::GetInstance()->StopSound(CSoundMgr::VEHICLE);
-			CSoundMgr::GetInstance()->MyPlaySound(L"Elevator_Stop.wav", CSoundMgr::VEHICLE);
+			CSoundMgr::GetInstance()->MyPlaySound(L"Elevator_Stop.mp3", CSoundMgr::VEHICLE);
 		}
 
 		m_bIsUp = !m_bIsUp;

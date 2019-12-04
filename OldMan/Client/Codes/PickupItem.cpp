@@ -181,7 +181,7 @@ void CPickupItem::Hitted()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
-		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_HealthPack.wav", CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_HealthPack.mp3", CSoundMgr::UI);
 		break;
 	}
 	case CPickupItem::ITEM_ARMORPACK:
@@ -196,7 +196,7 @@ void CPickupItem::Hitted()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
-		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_ArmorPack.wav", CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_ArmorPack.mp3", CSoundMgr::UI);
 		break;
 	}
 	case CPickupItem::ITEM_AMMOBOX_SHORT: // for SMG, Revolver
@@ -235,7 +235,7 @@ void CPickupItem::Hitted()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
-		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.wav", CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.mp3", CSoundMgr::UI);
 
 		break;
 	}
@@ -252,7 +252,7 @@ void CPickupItem::Hitted()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
-		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.wav", CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.mp3", CSoundMgr::UI);
 
 		break;
 	}
@@ -282,7 +282,7 @@ void CPickupItem::Hitted()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
-		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.wav", CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.mp3", CSoundMgr::UI);
 
 		break;
 	}
@@ -313,7 +313,7 @@ void CPickupItem::Hitted()
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::UI, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
-		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.wav", CSoundMgr::UI);
+		CSoundMgr::GetInstance()->MyPlaySound(L"PickUp_Ammo.mp3", CSoundMgr::UI);
 
 		break;
 	}

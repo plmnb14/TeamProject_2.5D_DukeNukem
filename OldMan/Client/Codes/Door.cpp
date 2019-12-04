@@ -237,7 +237,7 @@ void CDoor::CheckOpen()
 	{
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::VEHICLE, 1.0f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::VEHICLE);
-		CSoundMgr::GetInstance()->MyPlaySound(L"DoorOpen.wav", CSoundMgr::VEHICLE);
+		CSoundMgr::GetInstance()->MyPlaySound(L"DoorOpen.mp3", CSoundMgr::VEHICLE);
 
 		m_bIsOpened = !m_bIsOpened;
 	}

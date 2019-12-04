@@ -60,7 +60,7 @@ int CFlameBullet::Update()
 				}
 				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_DEAD, 1.0f);
 				CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_DEAD);
-				CSoundMgr::GetInstance()->MyPlaySound(L"RocketBullet_Hit_1.ogg", CSoundMgr::BULLET_DEAD);
+				CSoundMgr::GetInstance()->MyPlaySound(L"RocketBullet_Hit_1.mp3", CSoundMgr::BULLET_DEAD);
 			}
 
 			if (m_eTag == ENGINE::PLAYER)
@@ -72,22 +72,22 @@ int CFlameBullet::Update()
 				switch (iSound)
 				{
 				case 0:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_1.wav", CSoundMgr::PLAYER_VOICE);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_1.mp3", CSoundMgr::PLAYER_VOICE);
 					break;
 				case 1:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_2.ogg", CSoundMgr::PLAYER_VOICE);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_2.mp3", CSoundMgr::PLAYER_VOICE);
 					break;
 				case 2:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_3.ogg", CSoundMgr::PLAYER_VOICE);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_3.mp3", CSoundMgr::PLAYER_VOICE);
 					break;
 				case 3:
-					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_4.ogg", CSoundMgr::PLAYER_VOICE);
+					CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_4.mp3", CSoundMgr::PLAYER_VOICE);
 					break;
 				}
 
 				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 1.0f);
 				CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
-				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_BloodSound_1.ogg", CSoundMgr::PLAYER);
+				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_BloodSound_1.mp3", CSoundMgr::PLAYER);
 
 			}
 			

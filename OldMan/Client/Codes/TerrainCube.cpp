@@ -27,13 +27,13 @@ int CTerrainCube::Update()
 			switch (iSound)
 			{
 			case 0:
-				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_1.ogg", CSoundMgr::WOOD_BOX);
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_1.mp3", CSoundMgr::WOOD_BOX);
 				break;
 			case 1:
-				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_2.ogg", CSoundMgr::WOOD_BOX);
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_2.mp3", CSoundMgr::WOOD_BOX);
 				break;
 			case 2:
-				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_3.ogg", CSoundMgr::WOOD_BOX);
+				CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Break_3.mp3", CSoundMgr::WOOD_BOX);
 				break;
 			}
 		}
