@@ -478,7 +478,7 @@ void CStage::LoadMapObj()
 		// Monster
 		else if (!lstrcmp(szType, L"Pigman"))
 		{
-			pObject = CPigMan::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), D3DXVECTOR3(0, 0, 0));
+			pObject = CMonster::Create(m_pGraphicDev, m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player(), D3DXVECTOR3(0, 0, 0));
 			eObjType = ENGINE::OBJECT_TYPE::MONSTER;
 			tmpTag = ENGINE::OBJECT_TYPE::MONSTER;
 		}

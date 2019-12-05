@@ -513,7 +513,7 @@ void CBoss_CyberDemon::Dash()
 
 	if (!m_bIsCharging && m_fChargeDelay > 0.5f)
 	{
-		m_fAccel = 3.f;
+		m_fAccel = 2.5f;
 		m_bIsCharging = true;
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::MONSTER_EFF, 1.0f);

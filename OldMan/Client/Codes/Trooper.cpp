@@ -75,7 +75,7 @@ void CTrooper::LateUpdate()
 			if (m_eNextState != MONSTER_DEAD)
 			{
 				m_eNextState = MONSTER_DEAD;
-				m_pCollider->Set_MaxY(-4.5f);
+				m_pCollider->Set_MaxY(-9.0f);
 			}
 		}
 		else
@@ -348,7 +348,7 @@ void CTrooper::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"Trooper_WalkFront");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "전좌- 좌측면1 " << endl;
+				//cout << "전좌- 좌측면1 " << endl;
 				m_fFowardDealy = 0;
 			}
 
@@ -360,7 +360,7 @@ void CTrooper::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"Trooper_WalkFront");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면2 " << endl;
+				//cout << "우 -측면2 " << endl;
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 
@@ -375,7 +375,7 @@ void CTrooper::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"Trooper_WalkFrontSide");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면3 " << endl;
+				//cout << "우 -측면3 " << endl;
 				m_pTransform->SetDir(vMonster_Player_Dir_Free);
 				//		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
@@ -390,7 +390,7 @@ void CTrooper::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"Trooper_WalkFrontSideRight");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면4 " << endl;
+				//cout << "우 -측면4 " << endl;
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				m_pTransform->SetDir(vMonster_Player_Dir_Free);
@@ -407,7 +407,7 @@ void CTrooper::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"Trooper_WalkSideRight");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면5 " << endl;
+				//cout << "우 -측면5 " << endl;
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				m_pTransform->SetDir(vMonster_Player_Dir_Free);
@@ -424,7 +424,7 @@ void CTrooper::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"Trooper_WalkSide");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면6 " << endl;
+				//cout << "우 -측면6 " << endl;
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				m_pTransform->SetDir(vMonster_Player_Dir_Free);
@@ -447,7 +447,7 @@ void CTrooper::Monster_Foward()
 				m_pTransform->SetDir(vMonster_Player_Dir_Free);
 
 
-				cout << "우 -측면7 " << endl;
+				//cout << "우 -측면7 " << endl;
 				m_fFowardDealy = 0;
 			}
 
@@ -460,7 +460,7 @@ void CTrooper::Monster_Foward()
 				ChangeTex(L"Trooper_WalkSideBackLeft");
 
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면8 " << endl;
+				//cout << "우 -측면8 " << endl;
 				m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
@@ -478,7 +478,7 @@ void CTrooper::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"Trooper_WalkBack");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면9 " << endl;
+				//cout << "우 -측면9 " << endl;
 				//		m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 				//m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				m_pTransform->SetDir(vMonster_Player_Dir_Free);
@@ -496,7 +496,7 @@ void CTrooper::Monster_Foward()
 				m_pAnimator->Stop_Animation(false);
 				ChangeTex(L"Trooper_WalkBack");
 				m_pAnimator->Set_FrameAmp(5.f);
-				cout << "우 -측면10 " << endl;
+				//cout << "우 -측면10 " << endl;
 				//	m_pTransform->MoveAngle(ENGINE::ANGLE_Y, 8.f);
 				//m_pTransform->MoveAngle(ENGINE::ANGLE_X, 5.f);
 				//	m_pTransform->SetAngle(90.f,ENGINE::ANGLE_Y);
@@ -651,8 +651,6 @@ void CTrooper::Monster_Dead()
 
 		m_bDeadSound = false;
 	}
-
-	m_pCollider->Set_Radius(D3DXVECTOR3(m_pCollider->Get_Radius().x, m_pCollider->Get_Radius().y * 0.5f, m_pCollider->Get_Radius().z));
 
 
 	m_pAnimator->Set_ResetOption(ENGINE::CAnimator::RESET_STOP);

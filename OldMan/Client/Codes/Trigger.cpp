@@ -172,13 +172,13 @@ void CTrigger::CheckTriggerActive()
 			case 0:
 			{
 				// 에일리언
-				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 14,8,5 }, CSummon_Effect::MONSTER);
+				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 14,8,5 }, CSummon_Effect::TROPPER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
 
 				// 에일리언
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 20,10,-4 }, CSummon_Effect::MONSTER);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 20,10,-4 }, CSummon_Effect::TROPPER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -193,7 +193,7 @@ void CTrigger::CheckTriggerActive()
 				pObject->Set_MapLayer(m_mapLayer);
 
 				// 피그맨
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 155,2,19 }, CSummon_Effect::PIGMAN);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 155,2,19 }, CSummon_Effect::MONSTER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -210,7 +210,7 @@ void CTrigger::CheckTriggerActive()
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 210,38,171 }, CSummon_Effect::PIGMAN);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 210,38,171 }, CSummon_Effect::MONSTER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -218,7 +218,7 @@ void CTrigger::CheckTriggerActive()
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
-				pObject = CSummon_Effect::Create(m_pGraphicDev, { 213,38,148 }, CSummon_Effect::PIGMAN);
+				pObject = CSummon_Effect::Create(m_pGraphicDev, { 213,38,148 }, CSummon_Effect::MONSTER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -228,7 +228,7 @@ void CTrigger::CheckTriggerActive()
 			case 3:
 			{
 				// 피그맨
-				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 74,8,208 }, CSummon_Effect::PIGMAN);
+				CGameObject* pObject = CSummon_Effect::Create(m_pGraphicDev, { 74,8,208 }, CSummon_Effect::MONSTER);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 				pObject->Set_MapLayer(m_mapLayer);
 
@@ -243,7 +243,7 @@ void CTrigger::CheckTriggerActive()
 
 				if (int(m_fTriggerTimer) == 20)
 				{
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 54,8,184 }, CSummon_Effect::PIGMAN);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 54,8,184 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
@@ -255,7 +255,7 @@ void CTrigger::CheckTriggerActive()
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 
-					pObject = CSummon_Effect::Create(m_pGraphicDev, { 71,0,309 }, CSummon_Effect::PIGMAN);
+					pObject = CSummon_Effect::Create(m_pGraphicDev, { 71,0,309 }, CSummon_Effect::MONSTER);
 					m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pObject);
 					pObject->Set_MapLayer(m_mapLayer);
 				}

@@ -488,6 +488,9 @@ void CPlayer_Hand::Weapon_Melee()
 
 	case CPlayer::W_IDLE:
 	{
+		m_pTransform->SetPos(D3DXVECTOR3(0.f, 285.f, 0.f));
+		m_pTransform->SetSize(D3DXVECTOR3(13.f, 13.f, 13.f));
+
 		ChangeTex(L"Hand_Idle");
 		m_pAnimator->Set_Frame(0);
 		m_pAnimator->Set_FrameAmp(1.f);
@@ -714,6 +717,9 @@ void CPlayer_Hand::Weapon_SMG()
 
 	case CPlayer::W_IDLE:
 	{
+		m_pTransform->SetPos(D3DXVECTOR3(0.f, 285.f, 0.f));
+		m_pTransform->SetSize(D3DXVECTOR3(13.f, 13.f, 13.f));
+
 		ChangeTex(L"SMG_Idle");
 		m_pAnimator->Set_Frame(0);
 		m_pAnimator->Set_FrameAmp(1.f);
@@ -1133,6 +1139,9 @@ void CPlayer_Hand::Weapon_Luncher()
 
 	case CPlayer::W_IDLE:
 	{
+		m_pTransform->SetPos(D3DXVECTOR3(0.f, 285.f, 0.f));
+		m_pTransform->SetSize(D3DXVECTOR3(13.f, 13.f, 13.f));
+
 		if (static_cast<CPlayer*>(m_pTarget)->Get_WInfo()->wMagazineBullet > 0)
 		{
 

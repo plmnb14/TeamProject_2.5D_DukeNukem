@@ -1509,18 +1509,18 @@ void CPlayer::Check_WalkSound(bool _bIsRun)
 	{
 		m_fWalkSoundDelay = 0.f;
 
-		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER_WALK, 1.0f);
+		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER_WALK, 0.5f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER_WALK);
 
 		if (m_iWalkSoundIndex == 0)
-			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_1.mp3", CSoundMgr::PLAYER_WALK);
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_1.wav", CSoundMgr::PLAYER_WALK);
 		else if (m_iWalkSoundIndex == 1)
-			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_2.mp3", CSoundMgr::PLAYER_WALK);
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_2.wav", CSoundMgr::PLAYER_WALK);
 		else if (m_iWalkSoundIndex == 2)
-			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_3.mp3", CSoundMgr::PLAYER_WALK);
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_3.wav", CSoundMgr::PLAYER_WALK);
 		else if (m_iWalkSoundIndex == 3)
 		{
-			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_4.mp3", CSoundMgr::PLAYER_WALK);
+			CSoundMgr::GetInstance()->MyPlaySound(L"PlayerWalk_4.wav", CSoundMgr::PLAYER_WALK);
 			m_iWalkSoundIndex = -1;
 		}
 
