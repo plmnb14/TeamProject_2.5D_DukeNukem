@@ -15,10 +15,6 @@ public:
 	~CCollisionMgr();
 	
 public:
-	static void CollisionRect(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
-	static void CollisionRectEX(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
-	static void CollisionSphere(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
-
 	static void CollisionPlayer_To_Trigger(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionPlayer_Fist_To_Target(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
 	static void CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList);
@@ -36,8 +32,6 @@ public:
 public:
 	static bool Check_AABB(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc , CCollider* _rDstCol, CCollider* _rSrcCol);
 	static bool Check_AABB_Bullet(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc, CCollider* _rDstCol, CCollider* _rSrcCol);
-	static bool Check_AABB_to_PLANE(ENGINE::CGameObject * rDst, ENGINE::CGameObject * rSrc, CCollider * _rDstCol, CCollider * _rSrcCol);
-	static bool Check_Collision(ENGINE::CGameObject * rDst, ENGINE::CGameObject * rSrc, CCollider * _rDstCol, CCollider * _rSrcCol);
 
 public:
 	static D3DXVECTOR3 Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BOXCOL * _TargetCollider, bool _Dynamic = false);
