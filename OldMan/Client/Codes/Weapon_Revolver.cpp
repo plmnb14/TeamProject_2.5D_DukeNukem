@@ -12,7 +12,7 @@
 CWeapon_Revolver::CWeapon_Revolver(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CWeapon(pGraphicDev)
 {
-	//ZeroMemory(m_pWInfo, sizeof(ENGINE::W_INFO));
+	//ZeroMemory(m_tWInfo, sizeof(ENGINE::W_INFO));
 }
 
 CWeapon_Revolver::~CWeapon_Revolver()
@@ -27,7 +27,7 @@ int CWeapon_Revolver::Update()
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
 		CSoundMgr::GetInstance()->MyPlaySound(L"Gun_PickUp.mp3", CSoundMgr::UI);
 
-		static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Set_WeaponInfo(&m_pWInfo);
+		static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Set_WeaponInfo(&m_tWInfo);
 		return DEAD_OBJ;
 	}
 
@@ -58,7 +58,7 @@ void CWeapon_Revolver::LateUpdate()
 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 
-	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+	m_pGChecker->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
 
@@ -77,28 +77,28 @@ HRESULT CWeapon_Revolver::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 
-	m_pWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
-	m_pWInfo.fInterval = 0.2f;				// 발사 간격
-	m_pWInfo.fKnockBack_Value = 0.1f;		// 저지력
+	m_tWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
+	m_tWInfo.fInterval = 0.2f;				// 발사 간격
+	m_tWInfo.fKnockBack_Value = 0.1f;		// 저지력
 
-	m_pWInfo.wMaxBullet = 128;				// 최대 탄환 수
-	m_pWInfo.wUseBullet = 1;				// 한번 발사 당 소모 탄환 수
-	m_pWInfo.wCurBullet = 36;				// 현재  수, 최초 획득 시 탄창 수
-	m_pWInfo.wMagazineSize = 6;			// 한 탄창 최대 보관 수
-	m_pWInfo.wMagazineBullet = 6;			// 현재 탄창의 총알 개수
-	m_pWInfo.fBullet_Speed = 100.f;
+	m_tWInfo.wMaxBullet = 128;				// 최대 탄환 수
+	m_tWInfo.wUseBullet = 1;				// 한번 발사 당 소모 탄환 수
+	m_tWInfo.wCurBullet = 36;				// 현재  수, 최초 획득 시 탄창 수
+	m_tWInfo.wMagazineSize = 6;			// 한 탄창 최대 보관 수
+	m_tWInfo.wMagazineBullet = 6;			// 현재 탄창의 총알 개수
+	m_tWInfo.fBullet_Speed = 100.f;
 
-	m_pWInfo.fVertical_Rebound = 0.1f;		// 수직 반동
-	m_pWInfo.fHorizontal_Rebound = 2.f;		// 수평 반동
+	m_tWInfo.fVertical_Rebound = 0.1f;		// 수직 반동
+	m_tWInfo.fHorizontal_Rebound = 2.f;		// 수평 반동
 
-	m_pWInfo.fBullet_Speed = 200.f;
+	m_tWInfo.fBullet_Speed = 200.f;
 
 	// 터저서 임시로 추가함 - 정은혜
-	m_pWInfo.fSpread_X = 5;
-	m_pWInfo.fSpread_Y = 5;
+	m_tWInfo.fSpread_X = 5;
+	m_tWInfo.fSpread_Y = 5;
 
-	m_pWInfo.wWeaponDamage = 24;				// 무기 데미지
-	m_pWInfo.eWeaponTag = ENGINE::REVOLVER;
+	m_tWInfo.wWeaponDamage = 24;				// 무기 데미지
+	m_tWInfo.eWeaponTag = ENGINE::REVOLVER;
 
 
 	// 트랜스폼 세팅
@@ -115,14 +115,14 @@ HRESULT CWeapon_Revolver::Initialize()
 	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
 
 															// 트리거 콜라이더
-	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.2f, 0.3f });
-	m_pGroundChekCollider->Set_Dynamic(true);
-	m_pGroundChekCollider->Set_Trigger(true);
-	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
+	m_pGChecker->Set_Radius({ 0.3f , 0.2f, 0.3f });
+	m_pGChecker->Set_Dynamic(true);
+	m_pGChecker->Set_Trigger(true);
+	m_pGChecker->Set_CenterPos({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
-	m_pGroundChekCollider->Set_UnderPos();
-	m_pGroundChekCollider->SetUp_Box();
+	m_pGChecker->Set_UnderPos();
+	m_pGChecker->SetUp_Box();
 
 
 	// 리지드 바디 세팅
@@ -201,8 +201,8 @@ HRESULT CWeapon_Revolver::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
-	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+	m_pGChecker = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pGChecker, E_FAIL);
 
 
 	// Rigid

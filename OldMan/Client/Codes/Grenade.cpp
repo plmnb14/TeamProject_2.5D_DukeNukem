@@ -2,7 +2,7 @@
 #include "Grenade.h"
 #include "Camera.h"
 #include "Trasform.h"
-#include "Camera_Component.h"
+#include "Cam.h"
 #include "RigidBody.h"
 #include "Collider.h"
 #include "Billborad.h"
@@ -24,8 +24,8 @@ CGrenade::CGrenade(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_pCollider(nullptr), m_pRigid(nullptr), m_pBillborad(nullptr), m_pObserver(nullptr),
-	m_eWeaponTag(ENGINE::WEAPON_TAG::MELLE), m_pSubject(ENGINE::GetCameraSubject()),
-	m_pCondition(nullptr), m_fOrigin_YAngle(0)
+	m_eWeaponTag(ENGINE::WEAPON_TAG::MELEE), m_pSubject(ENGINE::GetCameraSubject()),
+	m_pCondition(nullptr), m_fOrigin_YAngle(0), m_fBoundAngle(0)
 
 {
 }
@@ -81,18 +81,42 @@ int CGrenade::Update()
 
 	if (m_pTransform->GetAngle(ENGINE::ANGLE_X) <= 90 && m_pTransform->GetAngle(ENGINE::ANGLE_X) >= -90)
 	{
-		m_pTransform->SetAngle(m_pTransform->GetAngle(ENGINE::ANGLE_X) + m_pTimeMgr->GetDelta() * fabs(m_fOrigin_YAngle) * 4.f, ENGINE::ANGLE_X);
+		m_pTransform->SetAngle(m_pTransform->GetAngle(ENGINE::ANGLE_X) + m_pTimeMgr->GetDelta() * fabs(-m_fBoundAngle), ENGINE::ANGLE_X);
 	}
 
 	else
 	{
-		m_pTransform->SetAngle(m_pTransform->GetAngle(ENGINE::ANGLE_X) - m_pTimeMgr->GetDelta() * fabs(m_fOrigin_YAngle) * 4.f, ENGINE::ANGLE_X);
+		m_pTransform->SetAngle(m_pTransform->GetAngle(ENGINE::ANGLE_X) - m_pTimeMgr->GetDelta() * fabs(-m_fBoundAngle), ENGINE::ANGLE_X);
 	}
 
 	CGameObject* pInstance = CEffect_Guide::Create(m_pGraphicDev, m_pCollider->Get_CenterPos(), {0.3f,0.3f,0.3f});
 	m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
 
+	//Check_Physic();
+
 	return NO_EVENT;
+}
+
+void CGrenade::Check_Physic()
+{
+	if (m_pRigid->Get_IsJump() == true)
+	{
+		D3DXVECTOR3 JumpLength = { 0, m_pRigid->Set_Jump(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()) , 0 };
+		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
+
+		if (m_pRigid->Get_Accel().y <= 0.f)
+		{
+			m_pRigid->Set_Accel({ 1,0,1 });
+			m_pRigid->Set_IsFall(true);
+			m_pRigid->Set_IsJump(false);
+		}
+	}
+
+	if (m_pRigid->Get_IsJump() == false)
+	{
+		D3DXVECTOR3 JumpLength = { 0, -m_pRigid->Set_Fall(m_pTransform->GetPos(), m_pTimeMgr->GetDelta()),0 };
+		m_pTransform->Move_AdvancedPos_Vec3(JumpLength);
+	}
 }
 
 void CGrenade::LateUpdate()
@@ -126,17 +150,31 @@ void CGrenade::LateUpdate()
 			if (m_pTransform->GetAngle(ENGINE::ANGLE_X) < 0)
 			{
 				m_pTransform->SetAngle(-180 - m_pTransform->GetAngle(ENGINE::ANGLE_X), ENGINE::ANGLE_X);
+
+				m_pRigid->Set_IsJump(false);
+				m_pRigid->Set_IsFall(true);
 			}
 
 			else if (m_pTransform->GetAngle(ENGINE::ANGLE_X) >= 0)
 			{
 				m_pTransform->SetAngle(180 - m_pTransform->GetAngle(ENGINE::ANGLE_X), ENGINE::ANGLE_X);
+
+				m_pRigid->Set_IsJump(false);
+				m_pRigid->Set_IsFall(true);
 			}
 		}
 		
 		else
-			m_pTransform->SetAngle(-m_pTransform->GetAngle(ENGINE::ANGLE_X), ENGINE::ANGLE_X);
+		{
+			m_pRigid->Set_Accel({ 1, 1.5f , 1 });
+			m_pRigid->Set_IsJump(true);
+			m_pRigid->Set_IsFall(false);
+			m_pRigid->Set_IsGround(false);
 
+			m_pTransform->SetAngle(-m_pTransform->GetAngle(ENGINE::ANGLE_X), ENGINE::ANGLE_X);
+		}
+
+		m_fBoundAngle *= 1.3f;
 		m_fSpeed *= 0.7f;
 		m_fOrigin_YAngle = m_pTransform->GetAngle(ENGINE::ANGLE_X);
 
@@ -159,7 +197,7 @@ HRESULT CGrenade::Initialize()
 	m_pTransform->SetSize(D3DXVECTOR3(1.f, 1.f, 1.f));
 
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 0.5f , 0.5f, 0.5f });			// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Radius({ 0.8f , 0.8f, 0.8f });			// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
 	m_pCollider->Set_Trigger(false);						// 트리거 유무
 	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
@@ -178,10 +216,11 @@ HRESULT CGrenade::Initialize()
 	m_pRigid->Set_fPower(5.f);								// 점프 파워
 
 	m_pRigid->Set_Speed({ 1.f , 1.2f , 1.f });				// 각 축에 해당하는 속도
-	m_pRigid->Set_Accel({ 0.f, -1.2f, 0.f });					// 각 축에 해당하는 Accel 값
-	m_pRigid->Set_MaxAccel({ 1.f , 1.2f , 1.f });			// 각 축에 해당하는 MaxAccel 값
+	m_pRigid->Set_Accel({ 0.f, 1.2f, 0.f });					// 각 축에 해당하는 Accel 값
+	m_pRigid->Set_MaxAccel({ 1.f , 4.f , 1.f });			// 각 축에 해당하는 MaxAccel 값
 
 	m_fLifetime = 2.f;
+	m_fBoundAngle = 80.f;
 
 	return S_OK;
 }

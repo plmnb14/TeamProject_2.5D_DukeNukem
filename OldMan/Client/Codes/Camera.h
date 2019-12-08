@@ -9,7 +9,7 @@ namespace ENGINE
 	class CTimeMgr;
 	class CKeyMgr;
 	class CCameraSubject;
-	class CCamera_Component;
+	class CCam;
 }
 
 class CCamera : public ENGINE::CGameObject
@@ -108,7 +108,7 @@ private:
 	D3DXVECTOR3			m_vMaxCamShakePos;
 
 private:
-	ENGINE::CCamera_Component*	m_pCCamera_Component;
+	ENGINE::CCam*	m_pCCam;
 	ENGINE::CTimeMgr*			m_pTimeMgr;
 	ENGINE::CKeyMgr*			m_pKeyMgr;
 	ENGINE::CCameraSubject*		m_pSubject;
@@ -144,6 +144,7 @@ private:
 
 	float m_fX_OriginXAngle;
 	float m_fX_OriginYAngle;
+	float m_fFoot_to_Head;
 
 
 private:

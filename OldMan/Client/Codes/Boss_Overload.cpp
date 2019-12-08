@@ -2,7 +2,7 @@
 #include "Boss_Overload.h"
 #include "Camera.h"
 #include "Trasform.h"
-#include "Camera_Component.h"
+#include "Cam.h"
 #include "Bullet.h"
 #include "Collider.h"
 #include "CameraObserver.h"
@@ -19,7 +19,7 @@ CBoss_Overload::CBoss_Overload(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr),
-	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
+	m_pTransform(nullptr), m_pCollider(nullptr), m_pGChecker(nullptr),
 	m_pRigid(nullptr), m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_pObserver(nullptr), m_pCondition(nullptr), m_pBillboard(nullptr), m_pAnimator(nullptr),
 	m_eOverState(OVER_IDLE), m_fLifeTime(0), m_bRight(true) , m_bLeft(false) , m_iMissileCount(0) , m_fMissileTime(0)
@@ -65,7 +65,7 @@ void CBoss_Overload::LateUpdate()
 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 
-	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+	m_pGChecker->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
 
@@ -100,14 +100,14 @@ HRESULT CBoss_Overload::Initialize()
 
 
 															// 트리거 콜라이더
-	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.3f, 0.3f });
-	m_pGroundChekCollider->Set_Dynamic(true);
-	m_pGroundChekCollider->Set_Trigger(true);
-	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
+	m_pGChecker->Set_Radius({ 0.3f , 0.3f, 0.3f });
+	m_pGChecker->Set_Dynamic(true);
+	m_pGChecker->Set_Trigger(true);
+	m_pGChecker->Set_CenterPos({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
-	m_pGroundChekCollider->Set_UnderPos();
-	m_pGroundChekCollider->SetUp_Box();
+	m_pGChecker->Set_UnderPos();
+	m_pGChecker->SetUp_Box();
 
 
 	// 리지드 바디 세팅
@@ -218,8 +218,8 @@ HRESULT CBoss_Overload::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
-	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+	m_pGChecker = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pGChecker, E_FAIL);
 
 
 	// Rigid

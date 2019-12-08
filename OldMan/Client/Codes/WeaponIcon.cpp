@@ -74,7 +74,7 @@ void CWeaponIcon::CheckWeapon()
 	m_bVisible = true;
 	switch (m_eWeaponType)
 	{
-	case ENGINE::WEAPON_TAG::MELLE:
+	case ENGINE::WEAPON_TAG::MELEE:
 		ChangeTex(L"weaponIcon_fist.png");
 		break;
 	case ENGINE::WEAPON_TAG::REVOLVER:

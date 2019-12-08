@@ -3,7 +3,7 @@
 #include "Trasform.h"
 #include "Billborad.h"
 #include "Animator.h"
-#include "Camera_Component.h"
+#include "Cam.h"
 #include "CameraObserver.h"
 #include "PlayerObserver.h"
 

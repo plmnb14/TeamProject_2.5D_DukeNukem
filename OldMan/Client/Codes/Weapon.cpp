@@ -12,10 +12,10 @@ CWeapon::CWeapon(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr),
-	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
+	m_pTransform(nullptr), m_pCollider(nullptr), m_pGChecker(nullptr),
 	m_pRigid(nullptr), m_pSubject(ENGINE::GetCameraSubject()), m_pBillborad(nullptr), m_pObserver(nullptr)
 {
-	//ZeroMemory(m_pWInfo, sizeof(ENGINE::W_INFO));
+	//ZeroMemory(m_tWInfo, sizeof(ENGINE::W_INFO));
 }
 
 CWeapon::~CWeapon()

@@ -43,6 +43,58 @@ void CManagement::LateUpdate()
 {
 	NULL_CHECK(m_pScene);
 	m_pScene->LateUpdate();
+
+	CCollisionMgr::CollisionTarget_To_Ground		// 충돌 체크 함수
+		(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER),		// Scene->ObjectLayer 의 대상 1
+		MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));		// Scene->ObjectLayer 의 대상 2
+
+
+
+
+
+
+	CCollisionMgr::CollisionTarget_To_Ground(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), 
+											 MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+
+	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER),
+											MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), 
+											MAP_OBJ(ENGINE::OBJECT_TYPE::STAIR));
+
+
+
+
+
+
+
+
+	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
+	CCollisionMgr::CollisionPlayer_Fist_To_Target(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
+	CCollisionMgr::CollisionPlayer_Fist_To_Target(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+
+	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
+
+	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::GRENADE), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionPlayer_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::GRENADE), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
+
+	//CCollisionMgr::CollisionTarget_To_Monstr(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET_PLAYER));
+	CCollisionMgr::CollisionTarget_To_Monstr_Mele(MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER));
+
+	CCollisionMgr::CollisionPlayer_To_Trigger(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::TRIGGER));
+	CCollisionMgr::CollisionPlayer_To_Item(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::EQUIPMENT));
+	CCollisionMgr::CollisionPlayer_To_Item(MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::PICKUP));
+
+	CCollisionMgr::CollisionBullet_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET_PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionBullet_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET_MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionBullet_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET_PLAYER), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
+
+	CCollisionMgr::CollisionBomb_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::EXPLOSION), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionBomb_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::EXPLOSION), MAP_OBJ(ENGINE::OBJECT_TYPE::MONSTER));
+	CCollisionMgr::CollisionBomb_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::EXPLOSION), MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER));
+
+	CCollisionMgr::CollisionBullet_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::VFX_HIT), MAP_OBJ(ENGINE::OBJECT_TYPE::TERRAIN));
+	CCollisionMgr::CollisionBullet_To_Other(MAP_OBJ(ENGINE::OBJECT_TYPE::BULLET_MONSTER), MAP_OBJ(ENGINE::OBJECT_TYPE::PLAYER));
 }
 
 void CManagement::Render()

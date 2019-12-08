@@ -91,7 +91,7 @@ void COctaBrain::LateUpdate()
 	m_bAttack = m_pMelleCollider->Get_IsCollision();
 
 
-	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+	m_pGChecker->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
 }
@@ -141,14 +141,14 @@ HRESULT COctaBrain::Initialize()
 	m_pRigid->Set_MaxAccel({ 2.f , 4.f , 2.f });			// 각 축에 해당하는 MaxAccel 값
 															// 트리거 콜라이더 그라운드 
 
-	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.2f, 0.3f });
-	m_pGroundChekCollider->Set_Dynamic(true);
-	m_pGroundChekCollider->Set_Trigger(true);
-	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
+	m_pGChecker->Set_Radius({ 0.3f , 0.2f, 0.3f });
+	m_pGChecker->Set_Dynamic(true);
+	m_pGChecker->Set_Trigger(true);
+	m_pGChecker->Set_CenterPos({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
-	m_pGroundChekCollider->Set_UnderPos();
-	m_pGroundChekCollider->SetUp_Box();
+	m_pGChecker->Set_UnderPos();
+	m_pGChecker->SetUp_Box();
 
 	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
 	m_pMelleCollider->Set_Radius({ 3.6f , 5.6f, 3.6f });
@@ -278,8 +278,8 @@ HRESULT COctaBrain::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
-	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+	m_pGChecker = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pGChecker, E_FAIL);
 	//ANIMATER
 	pComponent = ENGINE::CAnimator::Create();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);

@@ -1,6 +1,6 @@
 #include "Layer.h"
 #include "GameObject.h"
-#include "Camera_Component.h"
+#include "Cam.h"
 #include "Trasform.h"
 
 USING(ENGINE)
@@ -52,7 +52,7 @@ CGameObject* CLayer::Get_MainCamera()
 {
 	for (auto& piter : m_mapGameObject[ENGINE::OBJECT_TYPE::CAMERA])
 	{
-		if (dynamic_cast<CCamera_Component*>(piter->Get_Component(L"Camera"))->Get_MainCamera() == true)
+		if (dynamic_cast<CCam*>(piter->Get_Component(L"Camera"))->Get_MainCamera() == true)
 			return piter;
 	}
 

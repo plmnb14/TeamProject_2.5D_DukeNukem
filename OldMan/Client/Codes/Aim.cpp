@@ -44,7 +44,7 @@ void CAim::Render()
 {
 	switch (m_eWeaponType)
 	{
-	case ENGINE::WEAPON_TAG::MELLE:
+	case ENGINE::WEAPON_TAG::MELEE:
 	{
 		CUI::Render();
 		break;
@@ -128,7 +128,7 @@ void CAim::CheckWeaponAim()
 	m_eWeaponType_Old = m_eWeaponType;
 	switch (m_eWeaponType)
 	{
-	case ENGINE::WEAPON_TAG::MELLE:
+	case ENGINE::WEAPON_TAG::MELEE:
 		ChangeTex(L"Aim_dot.png");
 		break;
 	case ENGINE::WEAPON_TAG::REVOLVER:

@@ -12,7 +12,7 @@
 CWeapon_Rocket::CWeapon_Rocket(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CWeapon(pGraphicDev)
 {
-	//ZeroMemory(m_pWInfo, sizeof(ENGINE::W_INFO));
+	//ZeroMemory(m_tWInfo, sizeof(ENGINE::W_INFO));
 }
 
 CWeapon_Rocket::~CWeapon_Rocket()
@@ -27,7 +27,7 @@ int CWeapon_Rocket::Update()
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::UI);
 		CSoundMgr::GetInstance()->MyPlaySound(L"Gun_PickUp.mp3", CSoundMgr::UI);
 
-		static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Set_WeaponInfo(&m_pWInfo);
+		static_cast<CPlayer*>(m_mapLayer[ENGINE::CLayer::OBJECT]->Get_Player())->Set_WeaponInfo(&m_tWInfo);
 		return DEAD_OBJ;
 	}
 
@@ -77,26 +77,26 @@ HRESULT CWeapon_Rocket::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 
-	m_pWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
-	m_pWInfo.fInterval = 1.00f;				// 발사 간격
-	m_pWInfo.fKnockBack_Value = 5.0f;		// 저지력
+	m_tWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
+	m_tWInfo.fInterval = 1.00f;				// 발사 간격
+	m_tWInfo.fKnockBack_Value = 5.0f;		// 저지력
 
-	m_pWInfo.wMaxBullet = 128;				// 최대 탄환 수
-	m_pWInfo.wUseBullet = 1;				// 한번 발사 당 소모 탄환 수
-	m_pWInfo.wCurBullet = 256;				// 현재  수, 최초 획득 시 탄창 수
-	m_pWInfo.wMagazineSize = 6;			// 한 탄창 최대 보관 수
-	m_pWInfo.wMagazineBullet = 6;			// 현재 탄창의 총알 개수
+	m_tWInfo.wMaxBullet = 128;				// 최대 탄환 수
+	m_tWInfo.wUseBullet = 1;				// 한번 발사 당 소모 탄환 수
+	m_tWInfo.wCurBullet = 256;				// 현재  수, 최초 획득 시 탄창 수
+	m_tWInfo.wMagazineSize = 6;			// 한 탄창 최대 보관 수
+	m_tWInfo.wMagazineBullet = 6;			// 현재 탄창의 총알 개수
 
-	m_pWInfo.fVertical_Rebound = 0.5f;		// 수직 반동
-	m_pWInfo.fHorizontal_Rebound = 18.0f;		// 수평 반동
+	m_tWInfo.fVertical_Rebound = 0.5f;		// 수직 반동
+	m_tWInfo.fHorizontal_Rebound = 18.0f;		// 수평 반동
 
-	m_pWInfo.fSpread_X = 1;
-	m_pWInfo.fSpread_Y = 1;
+	m_tWInfo.fSpread_X = 1;
+	m_tWInfo.fSpread_Y = 1;
 
-	m_pWInfo.fBullet_Speed = 10.f;
+	m_tWInfo.fBullet_Speed = 10.f;
 
-	m_pWInfo.wWeaponDamage = 100.f;				// 무기 데미지
-	m_pWInfo.eWeaponTag = ENGINE::LUNCHER;
+	m_tWInfo.wWeaponDamage = 100.f;				// 무기 데미지
+	m_tWInfo.eWeaponTag = ENGINE::LUNCHER;
 
 	// 트랜스폼 세팅
 	m_pTransform->SetPos(D3DXVECTOR3(0.f, 1.f, 0.f));

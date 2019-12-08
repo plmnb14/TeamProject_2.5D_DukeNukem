@@ -2,7 +2,7 @@
 #include "FlameBullet.h"
 #include "Camera.h"
 #include "Trasform.h"
-#include "Camera_Component.h"
+#include "Cam.h"
 #include "RigidBody.h"
 #include "Collider.h"
 #include "Billborad.h"
@@ -24,7 +24,7 @@ CFlameBullet::CFlameBullet(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_pCollider(nullptr), m_pRigid(nullptr), m_pBillborad(nullptr), m_pObserver(nullptr),
-	m_eWeaponTag(ENGINE::WEAPON_TAG::MELLE), m_pSubject(ENGINE::GetCameraSubject()),
+	m_eWeaponTag(ENGINE::WEAPON_TAG::MELEE), m_pSubject(ENGINE::GetCameraSubject()),
 	m_pCondition(nullptr)
 
 {

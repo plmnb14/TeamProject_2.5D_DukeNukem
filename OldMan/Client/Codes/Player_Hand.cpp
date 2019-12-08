@@ -19,7 +19,7 @@ CPlayer_Hand::CPlayer_Hand(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTexture(nullptr), m_pCameraObserver(nullptr), m_pBuffer(nullptr),
 	m_pTarget(nullptr),
 	m_pCameraSubject(ENGINE::GetCameraSubject()),
-	m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_eWeapon(ENGINE::MELLE),
+	m_fSizeY(0), m_fSizeX(0), m_fFrame(0), m_eWeapon(ENGINE::MELEE),
 	m_eActState(CPlayer::W_DRAW), m_eOldAcState(CPlayer::W_WALK),
 	m_bPump(false), m_bPumpIn(false), m_bPumpOut(false), m_iHand(0)
 {
@@ -231,7 +231,7 @@ void CPlayer_Hand::WeaponActState()
 
 	switch(m_eWeapon)
 	{
-	case ENGINE::MELLE:
+	case ENGINE::MELEE:
 	{
 		Weapon_Melee();
 		break;

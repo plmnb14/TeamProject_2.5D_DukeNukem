@@ -24,7 +24,7 @@ class CPlayer : public ENGINE::CGameObject
 public:
 	enum WEAPON
 	{
-		MELLE, REVOLVER, RIFLE, SHOTGUN, LUNCHER
+		MELEE, REVOLVER, RIFLE, SHOTGUN, LUNCHER
 	};
 
 	enum WEAPONACT
@@ -107,7 +107,7 @@ public:
 	bool Get_Zoom() { return m_bZoom; }
 	WEAPONACT Get_WeaponAct() { return m_eActState; }
 	void Set_WaponAct(WEAPONACT _Act) { m_eActState = _Act;};
-	ENGINE::W_INFO* Get_WInfo() { return &m_pWInfo; }
+	ENGINE::W_INFO* Get_WInfo() { return &m_tWInfo; }
 	ENGINE::W_INFO* Get_WInfo(ENGINE::WEAPON_TAG _eTag) { auto iter_find = m_mWeaponInfo.find(_eTag); if (m_mWeaponInfo.end() == iter_find) return nullptr; return m_mWeaponInfo[_eTag]; }
 	ENGINE::WEAPON_TAG	Get_WState() { return m_eWeaponState; }
 	int Get_GrenadeCount() { return m_iGrenadeCount; }
@@ -138,7 +138,7 @@ private:
 	ENGINE::CPlayerSubject*	m_pPlayerSubject;
 
 	// 현재 장착중인 무기 정보
-	ENGINE::W_INFO			m_pWInfo;
+	ENGINE::W_INFO			m_tWInfo;
 
 	// 현재 플레이어 정보 구조체 (일단 체력, 쉴드만)
 	ENGINE::CONDITION		m_tCondition;

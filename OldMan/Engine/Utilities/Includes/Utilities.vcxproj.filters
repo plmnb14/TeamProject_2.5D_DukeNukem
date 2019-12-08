@@ -28,9 +28,6 @@
     <Filter Include="02.SuperClass\02.Component\00. Transform">
       <UniqueIdentifier>{ca62117a-d975-4ee9-8553-38cac1a9a7f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.SuperClass\02.Component\99. Camera_Component">
-      <UniqueIdentifier>{d2fb3ca2-446c-49ae-81d4-7babdce64251}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.SuperClass\02.Component\01. Collider">
       <UniqueIdentifier>{d7a0ebfe-37f6-40ea-bdf8-c7930a730a06}</UniqueIdentifier>
     </Filter>
@@ -70,6 +67,9 @@
     <Filter Include="03.Design\00.Observer\00.Subject\02. BossSubject">
       <UniqueIdentifier>{6e286251-0048-4afa-9d4f-23421e8957a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.SuperClass\02.Component\99. Cam">
+      <UniqueIdentifier>{d2fb3ca2-446c-49ae-81d4-7babdce64251}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Codes\Management.h">
@@ -95,9 +95,6 @@
     </ClInclude>
     <ClInclude Include="..\Codes\Trasform.h">
       <Filter>02.SuperClass\02.Component\00. Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Codes\Camera_Component.h">
-      <Filter>02.SuperClass\02.Component\99. Camera_Component</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\Collider.h">
       <Filter>02.SuperClass\02.Component\01. Collider</Filter>
@@ -132,6 +129,9 @@
     <ClInclude Include="..\Codes\BossSubject.h">
       <Filter>03.Design\00.Observer\00.Subject\02. BossSubject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Cam.h">
+      <Filter>02.SuperClass\02.Component\99. Cam</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -154,9 +154,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Trasform.cpp">
       <Filter>02.SuperClass\02.Component\00. Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Camera_Component.cpp">
-      <Filter>02.SuperClass\02.Component\99. Camera_Component</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Collider.cpp">
       <Filter>02.SuperClass\02.Component\01. Collider</Filter>
@@ -190,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\BossSubject.cpp">
       <Filter>03.Design\00.Observer\00.Subject\02. BossSubject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cam.cpp">
+      <Filter>02.SuperClass\02.Component\99. Cam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -74,7 +74,7 @@ private:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
-	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CCollider*		m_pGChecker;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCondition*		m_pCondition;
 	ENGINE::CBillborad*		m_pBillboard;

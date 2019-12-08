@@ -1,18 +1,18 @@
 #pragma once
 
-#ifndef __CAMERA_COMPONENT_H__
+#ifndef __Cam_H__
 
 #include "Component.h"
 
 BEGIN(ENGINE)
 
-class ENGINE_DLL CCamera_Component : public CComponent
+class ENGINE_DLL CCam : public CComponent
 {
 private:
-	explicit CCamera_Component();
+	explicit CCam();
 
 public:
-	virtual ~CCamera_Component();
+	virtual ~CCam();
 
 public:
 	const D3DXVECTOR3&	Get_EyePos() const;
@@ -47,7 +47,7 @@ public:
 	virtual void LateUpdate();
 
 public:
-	static CCamera_Component* Create();
+	static CCam* Create();
 
 private:
 	ENGINE::CAM_INFO	m_tCamInfo;
@@ -55,5 +55,5 @@ private:
 
 END
 
-#define __CAMERA_COMPONENT_H__
+#define __Cam_H__
 #endif

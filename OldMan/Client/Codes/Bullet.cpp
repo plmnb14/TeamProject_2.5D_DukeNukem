@@ -2,7 +2,7 @@
 #include "Bullet.h"
 #include "Camera.h"
 #include "Trasform.h"
-#include "Camera_Component.h"
+#include "Cam.h"
 #include "RigidBody.h"
 #include "Collider.h"
 #include "Billborad.h"
@@ -25,7 +25,7 @@ CBullet::CBullet(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr), m_pTransform(nullptr),
 	m_pCollider(nullptr), m_pRigid(nullptr),m_pBillborad(nullptr), m_pObserver(nullptr),
-	m_eWeaponTag(ENGINE::WEAPON_TAG::MELLE), m_pSubject(ENGINE::GetCameraSubject()),
+	m_eWeaponTag(ENGINE::WEAPON_TAG::MELEE), m_pSubject(ENGINE::GetCameraSubject()),
 	m_pCondition(nullptr)
 
 {
@@ -44,7 +44,9 @@ int CBullet::Update()
 		{
 			CGameObject* pInstance = nullptr;
 
-			if (m_eTag == ENGINE::WOOD_BOX)
+			switch (m_eTag)
+			{
+			case ENGINE::WOOD_BOX:
 			{
 				int iSound = rand() % 3;
 
@@ -62,13 +64,14 @@ int CBullet::Update()
 					CSoundMgr::GetInstance()->MyPlaySound(L"WoodBox_Hit_3.ogg", CSoundMgr::WOOD_BOX);
 					break;
 				}
-			}
 
-			if (m_eTag == ENGINE::TERRAIN)
+				break;
+			}
+			case ENGINE::TERRAIN:
 			{
 				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_DEAD, 1.0f);
 
-				if(m_eWeaponTag != ENGINE::MONSTER_REVOLVER)
+				if (m_eWeaponTag != ENGINE::MONSTER_REVOLVER)
 					CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_DEAD);
 
 				int iSound = rand() % 2;
@@ -91,9 +94,9 @@ int CBullet::Update()
 
 				pInstance = CEffect_BulletHole::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
+				break;
 			}
-
-			if (m_eTag == ENGINE::MONSTER)
+			case ENGINE::MONSTER:
 			{
 				pInstance = CEffect_BloodSplit::Create(m_pGraphicDev, m_pCollider->Get_CenterPos());
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::VFX, pInstance);
@@ -114,9 +117,9 @@ int CBullet::Update()
 					CSoundMgr::GetInstance()->MyPlaySound(L"Monster_Hitted_3.mp3", CSoundMgr::MONSTER);
 					break;
 				}
+				break;
 			}
-
-			if (m_eTag == ENGINE::PLAYER)
+			case ENGINE::PLAYER:
 			{
 				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER_VOICE, 1.0f);
 				CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER_VOICE);
@@ -141,8 +144,10 @@ int CBullet::Update()
 				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 1.0f);
 				CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
 				CSoundMgr::GetInstance()->MyPlaySound(L"Player_Hitted_BloodSound_1.mp3", CSoundMgr::PLAYER);
-								
+				break;
 			}
+			}
+
 
 			if (m_eWeaponTag == ENGINE::LUNCHER)
 			{
@@ -163,7 +168,6 @@ int CBullet::Update()
 					pInstance->Set_MapLayer(m_mapLayer);
 				}
 				CSoundMgr::GetInstance()->SetVolume(CSoundMgr::EXPLOSION_DEAD, 1.0f);
-				//CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_DEAD);
 				CSoundMgr::GetInstance()->MyPlaySound(L"RocketBullet_Hit_1.mp3", CSoundMgr::EXPLOSION_DEAD);
 				
 			}

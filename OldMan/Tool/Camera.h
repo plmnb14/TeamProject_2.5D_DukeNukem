@@ -9,7 +9,7 @@ namespace ENGINE
 	class CTimeMgr;
 	class CKeyMgr;
 	class CCameraSubject;
-	class CCamera_Component;
+	class CCam;
 }
 
 class CCamera : public ENGINE::CGameObject
@@ -95,7 +95,7 @@ private:
 	D3DXMATRIX			m_MatProj;
 
 private:
-	ENGINE::CCamera_Component*	m_pCCamera_Component;
+	ENGINE::CCam*	m_pCCam;
 	ENGINE::CTimeMgr*			m_pTimeMgr;
 	ENGINE::CKeyMgr*			m_pKeyMgr;
 	ENGINE::CCameraSubject*		m_pSubject;

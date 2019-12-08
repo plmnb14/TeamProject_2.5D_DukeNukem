@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Trasform.h"
-#include "Camera_Component.h"
+#include "Cam.h"
 #include "Bullet.h"
 #include "Collider.h"
 #include "CameraObserver.h"
@@ -20,10 +20,10 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pKeyMgr(ENGINE::GetKeyMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr),
-	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr), m_pColliderLedge(nullptr),
+	m_pTransform(nullptr), m_pCollider(nullptr), m_pGChecker(nullptr), m_pColliderLedge(nullptr),
 	m_pRigid(nullptr), m_fSlideUp(0),
 	m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
-	m_eWeaponState(ENGINE::WEAPON_TAG::MELLE), m_fZoomAccel(0),
+	m_eWeaponState(ENGINE::WEAPON_TAG::MELEE), m_fZoomAccel(0),
 	m_pObserver(nullptr), m_bZoom(false), m_fMaxZoom(0), m_fMinZoom(0), m_bSpecial(0),
 	m_bCanAttack(true), m_vLedgeVec({ 0,0,0 }), m_bIsLedge(0), m_bCanLedge(0), m_fLength_Y(0),
 	m_eActState(W_DRAW), m_vLedgeUpVec({ 0,0,0 }), m_fHorizontal(0), m_iJumpCount(0), m_bGrenade(0),
@@ -31,7 +31,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_fWalkSoundDelay(0.f), m_iWalkSoundIndex(0), m_bPlaySlideSound(false), m_pMeleeCollider(nullptr),
 	m_bOnNextStage(false), m_DeathTimer(0)
 {	
-	ZeroMemory(&m_pWInfo, sizeof(ENGINE::W_INFO));
+	ZeroMemory(&m_tWInfo, sizeof(ENGINE::W_INFO));
 }
 
 CPlayer::~CPlayer()
@@ -125,7 +125,7 @@ void CPlayer::LateUpdate()
 
 	ShootDelay();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
-	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+	m_pGChecker->LateUpdate({ m_pTransform->GetPos().x ,
 										m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 										m_pTransform->GetPos().z });
 	m_pCollider->Set_IsCollision(false);
@@ -156,29 +156,30 @@ HRESULT CPlayer::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 	
-	// 트랜스폼 세팅
-	m_pTransform->SetPos(D3DXVECTOR3(0.f, 8.f, 2.f));
-	m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
-	
-	
 	// 물리적 콜라이더
-	m_pCollider->Set_Radius({ 0.9f , 2.5f, 0.9f });			// 각 축에 해당하는 반지름을 설정
-	m_pCollider->Set_Dynamic(true);							// 동적, 정적 Collider 유무
-	m_pCollider->Set_Trigger(false);						// 트리거 유무
-	m_pCollider->Set_CenterPos(m_pTransform->GetPos());		// Collider 의 정중앙좌표
-	m_pCollider->Set_UnderPos();							// Collider 의 하단중앙 좌표
-	m_pCollider->SetUp_Box();								// 설정된 것들을 Collider 에 반영합니다.
+	m_pCollider->Set_Radius({ 0.9f , 2.5f, 0.9f });		// 각 축에 해당하는 반지름을 설정
+	m_pCollider->Set_Dynamic(true);						// 동적, 정적 Collider 유무
+	m_pCollider->Set_Trigger(false);					// 트리거 유무
+	m_pCollider->Set_CenterPos(m_pTransform->GetPos());	// Collider 의 정중앙좌표
+	m_pCollider->Set_UnderPos();						// Collider 의 하단중앙 좌표
+	m_pCollider->SetUp_Box();							// 설정된 것들을 Collider 에 반영합니다.
+	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
 	
 	// 트리거 콜라이더
-	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.2f, 0.3f });
-	m_pGroundChekCollider->Set_Dynamic(true);
-	m_pGroundChekCollider->Set_Trigger(true);
-	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
-										   m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-										   m_pTransform->GetPos().z });
-	m_pGroundChekCollider->Set_UnderPos();
-	m_pGroundChekCollider->SetUp_Box();
+	m_pGChecker->Set_Radius({ 0.3f , 0.2f, 0.3f });
+	m_pGChecker->Set_Dynamic(true);
+	m_pGChecker->Set_Trigger(true);
+	m_pGChecker->Set_CenterPos({m_pTransform->GetPos().x ,
+								m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+							    m_pTransform->GetPos().z });
+	m_pGChecker->Set_UnderPos();
+	m_pGChecker->SetUp_Box();
+	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
 	
+
+	// 트랜스폼 세팅
+	// m_pTransform->SetPos(D3DXVECTOR3(0.f, 8.f, 2.f));
+	// m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
 	
 	D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
 	D3DXVECTOR3 tmpRight = {};
@@ -253,21 +254,21 @@ HRESULT CPlayer::Initialize()
 	m_iGrenadeCount = 99;
 	m_iMaxGrenadeCount = 99;
 
-	m_pWInfo.wWeaponDamage = 15;
+	m_tWInfo.wWeaponDamage = 15;
 
 	m_tCondition.fHp = m_pCondition->Get_Hp();
 	m_tCondition.fArmor = m_pCondition->Get_Armor();
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(m_tCondition));
-	m_pWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELLE;
-	m_pWInfo.wCurBullet = 0;
-	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
+	m_tWInfo.eWeaponTag = ENGINE::WEAPON_TAG::MELEE;
+	m_tWInfo.wCurBullet = 0;
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_tWInfo);
 
 	ENGINE::W_INFO* pTag = new ENGINE::W_INFO;
 
-	memcpy(pTag, &m_pWInfo, sizeof(ENGINE::W_INFO));
+	memcpy(pTag, &m_tWInfo, sizeof(ENGINE::W_INFO));
 
-	m_mWeaponInfo.insert(make_pair(ENGINE::MELLE, pTag));
-	m_mWeaponInfo[m_pWInfo.eWeaponTag];
+	m_mWeaponInfo.insert(make_pair(ENGINE::MELEE, pTag));
+	m_mWeaponInfo[m_tWInfo.eWeaponTag];
 
 	return S_OK;
 }
@@ -339,8 +340,8 @@ HRESULT CPlayer::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = dynamic_cast<ENGINE::CCollider*>(pComponent);
-	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+	m_pGChecker = dynamic_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pGChecker, E_FAIL);
 
 	// Ledge Collider
 	pComponent = ENGINE::CCollider::Create();
@@ -455,13 +456,13 @@ void CPlayer::KeyInput()
 			return;
 		}
 
-		if (m_eWeaponState == ENGINE::MELLE)
+		if (m_eWeaponState == ENGINE::MELEE)
 			return;
 
-		if (m_pWInfo.wCurBullet <= 0)
+		if (m_tWInfo.wCurBullet <= 0)
 			return;
 
-		if (m_pWInfo.wMagazineBullet == m_pWInfo.wMagazineSize)
+		if (m_tWInfo.wMagazineBullet == m_tWInfo.wMagazineSize)
 			return;
 
 		if(m_eActState == W_IDLE || m_eActState == W_ZOOMOUT)
@@ -594,7 +595,7 @@ void CPlayer::Check_Weapon()
 {
 	if (m_pKeyMgr->KeyDown(ENGINE::KEY_1))
 	{
-		auto iter_find = m_mWeaponInfo.find(ENGINE::WEAPON_TAG::MELLE);
+		auto iter_find = m_mWeaponInfo.find(ENGINE::WEAPON_TAG::MELEE);
 
 		if (m_mWeaponInfo.end() == iter_find)
 			return;
@@ -612,12 +613,12 @@ void CPlayer::Check_Weapon()
 			{
 				if (m_eWeaponState != ENGINE::NO_WEAPON)
 				{
-					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+					auto iter_find_old = m_mWeaponInfo.find(m_tWInfo.eWeaponTag);
 
 					if (m_mWeaponInfo.end() != iter_find_old)
 					{
-						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
-						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+						iter_find_old->second->wCurBullet = m_tWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_tWInfo.wMagazineBullet;
 					}
 				}
 
@@ -627,7 +628,7 @@ void CPlayer::Check_Weapon()
 
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
-				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				memcpy(&m_tWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
 				m_bCanAttack = true;
 			}
 		}
@@ -653,12 +654,12 @@ void CPlayer::Check_Weapon()
 			{
 				if (m_eWeaponState != ENGINE::NO_WEAPON)
 				{
-					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+					auto iter_find_old = m_mWeaponInfo.find(m_tWInfo.eWeaponTag);
 
 					if (m_mWeaponInfo.end() != iter_find_old)
 					{
-						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
-						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+						iter_find_old->second->wCurBullet = m_tWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_tWInfo.wMagazineBullet;
 					}
 				}
 
@@ -668,7 +669,7 @@ void CPlayer::Check_Weapon()
 
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
-				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				memcpy(&m_tWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
 				m_bCanAttack = true;
 			}
 		}
@@ -695,12 +696,12 @@ void CPlayer::Check_Weapon()
 			{
 				if (m_eWeaponState != ENGINE::NO_WEAPON)
 				{
-					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+					auto iter_find_old = m_mWeaponInfo.find(m_tWInfo.eWeaponTag);
 
 					if (m_mWeaponInfo.end() != iter_find_old)
 					{
-						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
-						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+						iter_find_old->second->wCurBullet = m_tWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_tWInfo.wMagazineBullet;
 					}
 				}
 
@@ -709,7 +710,7 @@ void CPlayer::Check_Weapon()
 				cout << "Select SMG" << endl;
 
 				m_eWeaponState = iter_find->second->eWeaponTag;
-				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				memcpy(&m_tWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
 				m_bCanAttack = true;
 			}
 		}
@@ -735,12 +736,12 @@ void CPlayer::Check_Weapon()
 			{
 				if (m_eWeaponState != ENGINE::NO_WEAPON)
 				{
-					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+					auto iter_find_old = m_mWeaponInfo.find(m_tWInfo.eWeaponTag);
 
 					if (m_mWeaponInfo.end() != iter_find_old)
 					{
-						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
-						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+						iter_find_old->second->wCurBullet = m_tWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_tWInfo.wMagazineBullet;
 					}
 				}
 
@@ -748,7 +749,7 @@ void CPlayer::Check_Weapon()
 
 				m_eActState = W_DRAW;
 				m_eWeaponState = iter_find->second->eWeaponTag;
-				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				memcpy(&m_tWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
 				m_bCanAttack = true;
 			}
 		}
@@ -774,12 +775,12 @@ void CPlayer::Check_Weapon()
 			{
 				if (m_eWeaponState != ENGINE::NO_WEAPON)
 				{
-					auto iter_find_old = m_mWeaponInfo.find(m_pWInfo.eWeaponTag);
+					auto iter_find_old = m_mWeaponInfo.find(m_tWInfo.eWeaponTag);
 
 					if (m_mWeaponInfo.end() != iter_find_old)
 					{
-						iter_find_old->second->wCurBullet = m_pWInfo.wCurBullet;
-						iter_find_old->second->wMagazineBullet = m_pWInfo.wMagazineBullet;
+						iter_find_old->second->wCurBullet = m_tWInfo.wCurBullet;
+						iter_find_old->second->wMagazineBullet = m_tWInfo.wMagazineBullet;
 					}
 				}
 
@@ -787,7 +788,7 @@ void CPlayer::Check_Weapon()
 
 				m_eActState = W_DRAW;
 				m_eWeaponState = iter_find->second->eWeaponTag;
-				memcpy(&m_pWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
+				memcpy(&m_tWInfo, iter_find->second, sizeof(ENGINE::W_INFO));
 				m_bCanAttack = true;
 			}
 		}
@@ -829,32 +830,28 @@ void CPlayer::UpdateObserverData()
 	m_tCondition.fHp = m_pCondition->Get_Hp();
 	m_tCondition.fArmor = m_pCondition->Get_Armor();
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::PLAYER_INFO, &(m_tCondition));
-	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_pWInfo);
+	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::WEAPON_INFO, &m_tWInfo);
 	m_pPlayerSubject->AddData(ENGINE::CPlayerSubject::GRENADE_COUNT, &m_iGrenadeCount);
 }
 
 void CPlayer::Shoot()
 {
-	if (m_pWInfo.fDelayTimer != 0)
+	if (m_tWInfo.fDelayTimer != 0)
 		return;
 
 	if (m_mWeaponInfo.empty())
 		return;
 
-	if (m_pWInfo.wMagazineBullet > 0)
+	if (m_tWInfo.wMagazineBullet > 0)
 	{
 		if (m_bSpecial == false)
 		{
-			if (m_bZoom == false)
-				m_eActState = W_FIRE;
-
-			if (m_bZoom == true)
-				m_eActState = W_ZOOMFIRE;
+			(m_bZoom == false ? m_eActState = W_FIRE : m_eActState = W_ZOOMFIRE);
 		}
 
-		switch (m_pWInfo.eWeaponTag)
+		switch (m_tWInfo.eWeaponTag)
 		{
-		case ENGINE::WEAPON_TAG::MELLE:
+		case ENGINE::WEAPON_TAG::MELEE:
 		{
 			break;
 		}
@@ -879,7 +876,6 @@ void CPlayer::Shoot()
 			break;
 		}
 		case ENGINE::WEAPON_TAG::REVOLVER:
-		case ENGINE::WEAPON_TAG::RIFLE:
 		{
 			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_SHOOT, 0.3f);
 
@@ -910,7 +906,6 @@ void CPlayer::Shoot()
 			int iSound = rand() % 2;
 
 			CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_SHOOT, 1.0f);
-			//CSoundMgr::GetInstance()->StopSound(CSoundMgr::BULLET_SHOOT);
 			switch (iSound)
 			{
 			case 0:
@@ -929,16 +924,14 @@ void CPlayer::Shoot()
 
 		m_pCondition->Set_RangeAttack(true);
 
-		int xSpread = m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2);
-		int ySpread = m_pWInfo.fSpread_Y - (m_pWInfo.fSpread_Y * 2);
+		int xSpread = m_tWInfo.fSpread_X - (m_tWInfo.fSpread_X * 2);
+		int ySpread = m_tWInfo.fSpread_Y - (m_tWInfo.fSpread_Y * 2);
 
 		float xRand = rand() % xSpread * 0.01f;
 		float yRand = rand() % ySpread * 0.01f;
 
-		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
-		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;
-
-		cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
+		m_tWInfo.wMagazineBullet -= m_tWInfo.wUseBullet;
+		m_tWInfo.fDelayTimer = m_tWInfo.fInterval;
 
 		D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
 		D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
@@ -947,9 +940,11 @@ void CPlayer::Shoot()
 
 		if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 		{
-			//D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
-			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
-			//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
+			{
+				//D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x + tmpLook.x * 1 - 1 * tmpUp.x + tmpRight.x * 2,
+				//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y + tmpLook.y * 1 - 1 * tmpUp.y + tmpRight.y * 2,
+				//	dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z + tmpLook.z * 1 - 1 * tmpUp.z + tmpRight.z * 2 };
+			}
 
 			D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x - 0.5f * tmpUp.x,
 				dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 0.5f * tmpUp.y,
@@ -957,37 +952,20 @@ void CPlayer::Shoot()
 
 			float fAngle[3];
 
-			// 탄 퍼짐 관련
 			fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 93 + xRand;
 			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) + yRand;
 			fAngle[2] = 0;
 
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag, m_pWInfo.wWeaponDamage);
+			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle , m_tWInfo.fBullet_Speed , m_tWInfo.eWeaponTag, m_tWInfo.wWeaponDamage);
 			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 			pInstance->Set_MapLayer(m_mapLayer);
 
-			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_pWInfo.fHorizontal_Rebound);
-			dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_pWInfo.fVertical_Rebound);
-		}
-
-		else if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->THIRD_PERSON)
-		{
-			D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x * 3,
-				m_pTransform->GetPos().y + 1.5f,
-				m_pTransform->GetPos().z + tmpDir.z * 3 };
-
-			float fAngle[3];
-
-			fAngle[0] = m_pTransform->GetAngle(ENGINE::ANGLE_X);
-			fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
-			fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
-
-			CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle , m_pWInfo.fBullet_Speed, m_pWInfo.eWeaponTag, m_pWInfo.wWeaponDamage);
-			m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
+			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_tWInfo.fHorizontal_Rebound);
+			dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_tWInfo.fVertical_Rebound);
 		}
 	}
 
-	else if (m_pWInfo.wMagazineBullet <= 0)
+	else if (m_tWInfo.wMagazineBullet <= 0)
 	{
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::PLAYER, 0.5f);
 		CSoundMgr::GetInstance()->StopSound(CSoundMgr::PLAYER);
@@ -997,9 +975,6 @@ void CPlayer::Shoot()
 
 		if (m_bSpecial == false)
 		{
-			//if (m_bZoom == false)
-			//	m_eActState = W_IDLE;
-
 			if (m_bZoom == true)
 				m_eActState = W_ZOOMOUT;
 		}
@@ -1008,91 +983,63 @@ void CPlayer::Shoot()
 
 void CPlayer::Shoot_Shotgun()
 {
-	if (m_pWInfo.wMagazineBullet > 0)
+	if (m_tWInfo.wMagazineBullet > 0)
 	{
 		if (m_bCanAttack == false)
 			return;
 
 		m_bCanAttack = false;
 
-		if (m_bZoom == false)
-			m_eActState = W_FIRE;
+		(m_bZoom == false ? m_eActState = W_FIRE : m_eActState = W_ZOOMFIRE);
 
-		if (m_bZoom == true)
-			m_eActState = W_ZOOMFIRE;
+		for (int i = 0; i < 30; ++i)
+		{
+			float fAngleFixed = 90.f;
+			float fFixed_x = 0.f;
+			float fFixed_y = 0.f;
+			float fNum = (float)(rand() % 2);
 
-	for (int i = 0; i < 30; ++i)
-	{
-				float a = 0.f;
-				float c = 0.f;
-				float b = (float)(rand() % 2);
+			(fNum == 1.f ?
+				fFixed_x = 1.f, fFixed_y = -1.f :
+				fFixed_x = -1.f, fFixed_y = 1.f);
 
-				if (b == 1)
-				{
-					a = 1;
-					c = -1;
-				}
-				else if (b == 0)
-				{
-				a = -1;
-				c = 1;
-				}
+			int xSpread = (int)(m_tWInfo.fSpread_X - (m_tWInfo.fSpread_X * 2) + (i * fFixed_x * 2));
+			int ySpread = (int)(m_tWInfo.fSpread_Y - (m_tWInfo.fSpread_Y * 2) + (i * fFixed_y * 2));
 
+			float xRand = rand() % xSpread * 0.01f;
+			float yRand = rand() % ySpread * 0.01f;
 
-				int xSpread = (int)(m_pWInfo.fSpread_X - (m_pWInfo.fSpread_X * 2) + (i * a * 2));
-				int ySpread = (int)(m_pWInfo.fSpread_Y - (m_pWInfo.fSpread_Y * 2) + (i * c * 2));
-
-				float xRand = rand() % xSpread * 0.01f;
-				float yRand = rand() % ySpread * 0.01f;
-
-				D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
-				D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
-				D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
-				D3DXVECTOR3 tmpRight = dynamic_cast<CCamera*>(m_pCamera)->Get_Right();
+			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+			D3DXVECTOR3 tmpLook = dynamic_cast<CCamera*>(m_pCamera)->Get_Look();
+			D3DXVECTOR3 tmpUp = dynamic_cast<CCamera*>(m_pCamera)->Get_Up();
 
 			if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->FIRST_PERSON)
 			{
-				D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x  - 1 * tmpUp.x,
+				D3DXVECTOR3 tmpPos = { dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().x - 1 * tmpUp.x,
 					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().y - 1 * tmpUp.y,
 					dynamic_cast<CCamera*>(m_pCamera)->Get_Pos().z - 1 * tmpUp.z };
 
 				float fAngle[3];
 
 				// 탄 퍼짐 관련
-				fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - 96 + xRand;
-				fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) - 6 + yRand;
+				fAngle[0] = D3DXToDegree(acosf(tmpLook.y)) - fAngleFixed + xRand;
+				fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y) + yRand;
 				fAngle[2] = 0;
 
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag , m_pWInfo.wWeaponDamage);
+				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle,
+														 m_tWInfo.fBullet_Speed, m_tWInfo.eWeaponTag, m_tWInfo.wWeaponDamage);
 				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
 				pInstance->Set_MapLayer(m_mapLayer);
 
-				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_pWInfo.fHorizontal_Rebound);
-				dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_pWInfo.fVertical_Rebound);
-			}
-
-			else if (dynamic_cast<CCamera*>(m_pCamera)->Get_ViewPoint() == dynamic_cast<CCamera*>(m_pCamera)->THIRD_PERSON)
-			{
-				D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + tmpDir.x * 3,
-					m_pTransform->GetPos().y + 1.5f,
-					m_pTransform->GetPos().z + tmpDir.z * 3 };
-
-				float fAngle[3];
-
-				fAngle[0] = m_pTransform->GetAngle(ENGINE::ANGLE_X);
-				fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
-				fAngle[2] = m_pTransform->GetAngle(ENGINE::ANGLE_Z);
-
-				CGameObject* pInstance = CBullet::Create(m_pGraphicDev, tmpPos, tmpDir, fAngle, m_pWInfo.fBullet_Speed , m_pWInfo.eWeaponTag, m_pWInfo.wWeaponDamage);
-				m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::BULLET_PLAYER, pInstance);
-				pInstance->Set_MapLayer(m_mapLayer);
+				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(m_tWInfo.fHorizontal_Rebound);
+				dynamic_cast<CCamera*>(m_pCamera)->Set_Vertical(m_tWInfo.fVertical_Rebound);
 			}
 		}
 
-		m_pWInfo.wMagazineBullet -= m_pWInfo.wUseBullet;
-		m_pWInfo.fDelayTimer = m_pWInfo.fInterval;
+		m_tWInfo.wMagazineBullet -= m_tWInfo.wUseBullet;
+		m_tWInfo.fDelayTimer = m_tWInfo.fInterval;
 
-		cout << "Remain bullet : " << m_pWInfo.wMagazineBullet << endl;
+		cout << "Remain bullet : " << m_tWInfo.wMagazineBullet << endl;
 
 		CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BULLET_SHOOT, 0.5f);
 
@@ -1120,7 +1067,7 @@ void CPlayer::Shoot_Shotgun()
 		}
 	}
 
-	if (m_pWInfo.wMagazineBullet <= 0)
+	if (m_tWInfo.wMagazineBullet <= 0)
 	{
 		m_pCondition->Set_RangeAttack(false);
 
@@ -1138,14 +1085,14 @@ void CPlayer::Shoot_Shotgun()
 
 void CPlayer::ShootDelay()
 {
-	if (m_pWInfo.fDelayTimer > 0)
+	if (m_tWInfo.fDelayTimer > 0)
 	{
-		m_pWInfo.fDelayTimer -= m_pTimeMgr->GetDelta();
+		m_tWInfo.fDelayTimer -= m_pTimeMgr->GetDelta();
 	}
 
-	if (m_pWInfo.fDelayTimer < 0)
+	if (m_tWInfo.fDelayTimer < 0)
 	{
-		m_pWInfo.fDelayTimer = 0.f;
+		m_tWInfo.fDelayTimer = 0.f;
 	}
 }
 
@@ -1158,38 +1105,38 @@ void CPlayer::Reload()
 
 	if (m_eWeaponState != ENGINE::SHOTGUN)
 	{
-		if (m_pWInfo.wCurBullet < m_pWInfo.wMagazineSize)
+		if (m_tWInfo.wCurBullet < m_tWInfo.wMagazineSize)
 		{
-			m_pWInfo.wMagazineBullet = m_pWInfo.wCurBullet;
-			m_pWInfo.wCurBullet = 0;
+			m_tWInfo.wMagazineBullet = m_tWInfo.wCurBullet;
+			m_tWInfo.wCurBullet = 0;
 		}
 		else
 		{
-			if (m_pWInfo.wMagazineBullet != 0 && m_pWInfo.wMagazineBullet > 0)
+			if (m_tWInfo.wMagazineBullet != 0 && m_tWInfo.wMagazineBullet > 0)
 			{
-				m_pWInfo.wCurBullet += m_pWInfo.wMagazineBullet;
+				m_tWInfo.wCurBullet += m_tWInfo.wMagazineBullet;
 			}
 
-			m_pWInfo.wMagazineBullet = m_pWInfo.wMagazineSize;
-			m_pWInfo.wCurBullet -= m_pWInfo.wMagazineSize;
+			m_tWInfo.wMagazineBullet = m_tWInfo.wMagazineSize;
+			m_tWInfo.wCurBullet -= m_tWInfo.wMagazineSize;
 		}
 	}
 
 	else if(m_eWeaponState == ENGINE::SHOTGUN)
 	{
-		if (m_pWInfo.wCurBullet > 0 && m_pWInfo.wMagazineBullet < m_pWInfo.wMagazineSize)
+		if (m_tWInfo.wCurBullet > 0 && m_tWInfo.wMagazineBullet < m_tWInfo.wMagazineSize)
 		{
-			m_pWInfo.wCurBullet -= 1;
-			m_pWInfo.wMagazineBullet += 1;
+			m_tWInfo.wCurBullet -= 1;
+			m_tWInfo.wMagazineBullet += 1;
 		}
 	}
 
-	//cout << "Remain Maxbullet : " << m_pWInfo.wCurBullet << endl;
+	//cout << "Remain Maxbullet : " << m_tWInfo.wCurBullet << endl;
 }
 
 void CPlayer::SpecialShot()
 {
-	if (m_pWInfo.wMagazineBullet > 0)
+	if (m_tWInfo.wMagazineBullet > 0)
 	{
 		if (m_eActState == W_SPECIAL_READY)
 			return;
@@ -1200,11 +1147,11 @@ void CPlayer::SpecialShot()
 			Shoot();
 
 			m_bSpecial = false;
-			m_pWInfo.fDelayTimer *= 0.5f;
+			m_tWInfo.fDelayTimer *= 0.5f;
 		}
 	}
 
-	else if (m_pWInfo.wMagazineBullet <= 0)
+	else if (m_tWInfo.wMagazineBullet <= 0)
 	{
 		m_eActState = W_SPECIAL_END;
 		m_bSpecial = false;
@@ -1240,7 +1187,7 @@ void CPlayer::Grenade()
 		fAngle[1] = m_pTransform->GetAngle(ENGINE::ANGLE_Y);
 		fAngle[2] = 0;
 
-		CGameObject* pInstance = CGrenade::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, 60, m_pWInfo.eWeaponTag, 10);
+		CGameObject* pInstance = CGrenade::Create(m_pGraphicDev, tmpPos, tmpLook, fAngle, 60, m_tWInfo.eWeaponTag, 10);
 		m_mapLayer[ENGINE::CLayer::OBJECT]->AddObject(ENGINE::OBJECT_TYPE::GRENADE, pInstance);
 		pInstance->Set_MapLayer(m_mapLayer);
 	}
@@ -1375,68 +1322,66 @@ void CPlayer::Check_Ledge()
 	{
 		if (m_bIsLedge == false)
 		{
-			dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(-35);
-
-
-		//	cout << "매달리지 아낫스" << endl;
-
-
 			float fLength_x = m_pTransform->GetPos().x - m_vLedgeVec.x;
 			float fLength_z = m_pTransform->GetPos().z - m_vLedgeVec.z;
 
 			(fLength_x > fLength_z ? fLength_x = 0 : fLength_z = 0);
 
-			D3DXVECTOR3 tmpPos1 = { m_pTransform->GetPos().x + fLength_x * 0.95f , m_vLedgeVec.y - 1.5f, m_pTransform->GetPos().z + fLength_z * 0.95f };
-			D3DXVECTOR3 tmpPos2 = { m_pTransform->GetPos().x + fLength_x * 0.95f , m_vLedgeVec.y + m_pCollider->Get_Radius().y + 0.2f , m_pTransform->GetPos().z + fLength_z * 0.95f };
+			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+			D3DXVECTOR3 tmpPos = { m_pTransform->GetPos().x + fLength_x , m_vLedgeVec.y - 1.5f, m_pTransform->GetPos().z + fLength_z  };
+			D3DXVECTOR3 tmpDistPos = { m_pTransform->GetPos().x + fLength_x , m_vLedgeVec.y + m_pCollider->Get_Radius().y + 0.2f , m_pTransform->GetPos().z + fLength_z };
 
 			m_pRigid->Set_UseGravity(false);
 
-			m_pTransform->SetPos(tmpPos1);
+			m_pTransform->SetPos(tmpPos);
 			m_pCollider->LateUpdate(m_pTransform->GetPos());
-			m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
-				m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-				m_pTransform->GetPos().z });
+			m_pGChecker->LateUpdate({ m_pTransform->GetPos().x ,
+												m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+												m_pTransform->GetPos().z });
 
-			D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
-			D3DXVECTOR3 tmpPos3 = { m_pTransform->GetPos().x + tmpDir.x , m_pTransform->GetPos().y + 1, m_pTransform->GetPos().z + tmpDir.z };
+		
+			D3DXVECTOR3 tmpLedgePos = { m_pTransform->GetPos().x + tmpDir.x , m_pTransform->GetPos().y + 1, m_pTransform->GetPos().z + tmpDir.z };
 
-			m_pColliderLedge->LateUpdate(tmpPos3);
+			m_pColliderLedge->LateUpdate(tmpLedgePos);
 
-			m_vLedgeUpVec = tmpPos2;
-			m_fLength_Y = m_pTransform->GetPos().y - tmpPos2.y;
+			m_vLedgeUpVec = tmpDistPos;
+			m_fLength_Y = m_pTransform->GetPos().y - tmpDistPos.y;
 			m_bIsLedge = true;
 		}
 
 		if (m_bIsLedge)
 		{
+			float fUp_Speed = 10.f;
+
 			if (m_pTransform->GetPos().y < m_vLedgeUpVec.y)
 			{
-				float yLength = (m_vLedgeUpVec.y - m_pTransform->GetPos().y);
-				D3DXVECTOR3 tmpDir = { 0,1,0 };
-				//D3DXVec3Normalize(&tmpDir, &tmpDir);
-				D3DXVECTOR3 tmpY = {};
+				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(-35.f);
 
-				m_pTransform->Move_AdvancedPos(tmpDir, 10 * m_pTimeMgr->GetDelta());
+				float fLength_y = (m_vLedgeUpVec.y - m_pTransform->GetPos().y);
+				D3DXVECTOR3 tmpWorldUp = { 0.f, 1.f, 0.f };
+				D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
+
+				m_pTransform->Move_AdvancedPos(tmpWorldUp, fUp_Speed * m_pTimeMgr->GetDelta());
 
 				m_pCollider->LateUpdate(m_pTransform->GetPos());
-				m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
-					m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
-					m_pTransform->GetPos().z });
+				m_pGChecker->LateUpdate({ m_pTransform->GetPos().x ,
+													m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
+													m_pTransform->GetPos().z });
 
-				D3DXVECTOR3 tmpDir2 = m_pTransform->GetDir();
-				D3DXVECTOR3 tmpPos3 = { m_pTransform->GetPos().x + tmpDir2.x , m_pTransform->GetPos().y + 1, m_pTransform->GetPos().z + tmpDir2.z };
+				D3DXVECTOR3 tmpLedgePos = { m_pTransform->GetPos().x + tmpDir.x ,
+											m_pTransform->GetPos().y + 1.f,
+											m_pTransform->GetPos().z + tmpDir.z };
 
-				m_pColliderLedge->LateUpdate(tmpPos3);
+				m_pColliderLedge->LateUpdate(tmpLedgePos);
 			}
 
-			else if (m_pTransform->GetPos().y >= m_vLedgeUpVec.y + 1)
+			else if (m_pTransform->GetPos().y >= m_vLedgeUpVec.y + 1.f)
 			{
-				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(0);
+				dynamic_cast<CCamera*>(m_pCamera)->Set_Hotizontal(0.f);
 
-				D3DXVECTOR3 tmpDir = { m_pTransform->GetDir().x , 0 ,m_pTransform->GetDir().z };
-				D3DXVECTOR3 tmpY = {};
+				D3DXVECTOR3 tmpDir = { m_pTransform->GetDir().x , 0.f ,m_pTransform->GetDir().z };
 
-				m_pTransform->Move_AdvancedPos(tmpDir, 10 * m_pTimeMgr->GetDelta());
+				m_pTransform->Move_AdvancedPos(tmpDir, fUp_Speed * m_pTimeMgr->GetDelta());
 				m_bCanLedge = false;
 				m_bIsLedge = false;
 				m_pRigid->Set_UseGravity(true);
@@ -1446,7 +1391,6 @@ void CPlayer::Check_Ledge()
 
 	else
 	{
-
 		m_bCanLedge = false;
 		m_bIsLedge = false;
 		m_pRigid->Set_UseGravity(true);
@@ -1547,7 +1491,7 @@ void CPlayer::ShootType()
 
 	switch (m_eWeaponState)
 	{
-	case ENGINE::MELLE:
+	case ENGINE::MELEE:
 	{
 		if (m_eActState != W_IDLE)
 			return;

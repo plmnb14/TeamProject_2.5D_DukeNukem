@@ -46,6 +46,7 @@ private:
 	HRESULT AddComponent();
 	void KeyInput();
 	void BulletType();
+	void Check_Physic();
 
 private:
 	void Set_Target(CGameObject* _Target);
@@ -86,6 +87,7 @@ private:
 	float m_fLifetime;
 	float m_fAttack;
 
+	float m_fBoundAngle;
 	float m_fOrigin_YAngle;
 
 };

@@ -2,7 +2,7 @@
 #include "Boss_CyberDemon.h"
 #include "Camera.h"
 #include "Trasform.h"
-#include "Camera_Component.h"
+#include "Cam.h"
 #include "Bullet.h"
 #include "FlameBullet.h"
 #include "MonsterBullet.h"
@@ -25,7 +25,7 @@ CBoss_CyberDemon::CBoss_CyberDemon(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pResourceMgr(ENGINE::GetResourceMgr()),
 	m_pTimeMgr(ENGINE::GetTimeMgr()),
 	m_pTexture(nullptr), m_pBuffer(nullptr),
-	m_pTransform(nullptr), m_pCollider(nullptr), m_pGroundChekCollider(nullptr),
+	m_pTransform(nullptr), m_pCollider(nullptr), m_pGChecker(nullptr),
 	m_pRigid(nullptr), m_pSubject(ENGINE::GetCameraSubject()), m_pPlayerSubject(ENGINE::GetPlayerSubject()),
 	m_pBossSubject(ENGINE::GetBossSubject()),
 	m_pObserver(nullptr), m_pCondition(nullptr), m_pBillboard(nullptr), m_pAnimator(nullptr),
@@ -80,7 +80,7 @@ void CBoss_CyberDemon::LateUpdate()
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 	m_pMelleCollider->LateUpdate(m_pTransform->GetPos());
 
-	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+	m_pGChecker->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
 
@@ -115,14 +115,14 @@ HRESULT CBoss_CyberDemon::Initialize()
 
 
 	// 트리거 콜라이더
-	m_pGroundChekCollider->Set_Radius({ 0.3f , 0.3f, 0.3f });
-	m_pGroundChekCollider->Set_Dynamic(true);
-	m_pGroundChekCollider->Set_Trigger(true);
-	m_pGroundChekCollider->Set_CenterPos({ m_pTransform->GetPos().x ,
+	m_pGChecker->Set_Radius({ 0.3f , 0.3f, 0.3f });
+	m_pGChecker->Set_Dynamic(true);
+	m_pGChecker->Set_Trigger(true);
+	m_pGChecker->Set_CenterPos({ m_pTransform->GetPos().x ,
 											m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 											m_pTransform->GetPos().z });
-	m_pGroundChekCollider->Set_UnderPos();
-	m_pGroundChekCollider->SetUp_Box();
+	m_pGChecker->Set_UnderPos();
+	m_pGChecker->SetUp_Box();
 
 	// 트리거 콜라이더     인식범위랑 비슷하게 필요하다 
 	m_pMelleCollider->Set_Radius(m_pCollider->Get_Radius() * 1.2);
@@ -245,8 +245,8 @@ HRESULT CBoss_CyberDemon::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
-	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+	m_pGChecker = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pGChecker, E_FAIL);
 
 	// MEELE
 	pComponent = ENGINE::CCollider::Create();

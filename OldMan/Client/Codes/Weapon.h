@@ -45,11 +45,11 @@ protected:
 	ENGINE::CVIBuffer*		m_pBuffer;
 	ENGINE::CTransform*		m_pTransform;
 	ENGINE::CCollider*		m_pCollider;
-	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CCollider*		m_pGChecker;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CTexture*		m_pTexture;
 
-	ENGINE::W_INFO			m_pWInfo;
+	ENGINE::W_INFO			m_tWInfo;
 
 protected:
 	CCameraObserver*		m_pObserver;

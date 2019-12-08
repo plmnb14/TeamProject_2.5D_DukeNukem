@@ -154,26 +154,22 @@ void CCollisionMgr::CollisionPlayer_To_Other(list<CGameObject*>& rDstList, list<
 	}
 }
 
-void CCollisionMgr::CollisionPlayer_To_Item(list<CGameObject*>& rDstList, list<CGameObject*>& rSrcList)
+void CCollisionMgr::CollisionPlayer_To_Item(list<CGameObject*>& rDstList, 
+											list<CGameObject*>& rSrcList)
 {
 	for (auto& rDst : rDstList)
 	{
 		for (auto& rSrc : rSrcList)
 		{
-			ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-			ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
+			ENGINE::CCollider* rDstCol = static_cast<CCollider*>		// 대상 1의 Collider
+								(rDst->Get_Component(L"Collider"));
 
-			float a = D3DXVec3Length(&(rDstTrans->GetPos() - rSrcTrans->GetPos()));
-
-			if (a > 20)
-				continue;
-
-			ENGINE::CCollider* rDstCol = static_cast<CCollider*>(rDst->Get_Component(L"Collider"));
-			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>(rSrc->Get_Component(L"Collider"));
+			ENGINE::CCollider* rSrcCol = static_cast<CCollider*>		// 대상 2의 Collider
+								(rSrc->Get_Component(L"Collider"));
 
 			if (Check_AABB(rDst, rSrc, rDstCol, rSrcCol))
 			{
-				rSrc->SetDead();
+				// 충돌 처리 이후, 후처리 영역
 			}
 		}
 	}
@@ -390,12 +386,12 @@ void CCollisionMgr::CollisionBomb_To_Other(list<CGameObject*>& rDstList, list<CG
 
 					ENGINE::CRigidBody*	rSrcRigid = static_cast<CRigidBody*>(rSrc->Get_Component(L"RigidBody"));
 
-					//if (rSrcRigid != nullptr)
-					//{
-					rSrcRigid->Set_Distance(D3DXVec3Length(&(vSrcPos - vDstPos)));
-					rSrcRigid->Set_IsPush(true);
-					rSrcRigid->Set_PushDir(vTmpDir);
-					//}
+					float fDistance = rDstCol->Get_Radius().x - D3DXVec3Length(&(vSrcPos - vDstPos));
+
+					(fDistance > 0 ?
+						rSrcRigid->Set_Distance(fDistance * 2.f),
+						rSrcRigid->Set_IsPush(true),
+						rSrcRigid->Set_PushDir(vTmpDir) : NULL);
 
 					if (rSrc->Get_Tag() == ENGINE::PLAYER)
 					{
@@ -600,7 +596,8 @@ void CCollisionMgr::CollisionTarget_To_Monstr(list<CGameObject*>& rDstList, list
 }
 
 
-bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc, CCollider* _rDstCol, CCollider* _rSrcCol)
+bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst, ENGINE::CGameObject* rSrc, 
+								CCollider* _rDstCol, CCollider* _rSrcCol)
 {
 	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
 	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
@@ -609,11 +606,12 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst, ENGINE::CGameObject* r
 		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
 		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
 	{
-		if (!rDstBox->bIsTrigger && !rSrtBox->bIsTrigger)
+		if (!rDstBox->bIsTrigger && !rSrtBox->bIsTrigger)  // 두 박스가 모두 Trigger 가 아닌지 판단
 		{
 			D3DXVECTOR3 tmpLength = { 0,0,0 };
 			bool bCheckDynamic = false;
 
+			// 대상들이 동적인 Object 인지 여부
 			if (rDstBox->bIsDynamic)
 			{
 				if (rSrtBox->bIsDynamic)
@@ -658,133 +656,59 @@ bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameO
 	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();
 
 	ENGINE::CTransform* rDstTrans = static_cast<CTransform*>(rDst->Get_Component(L"Transform"));
-	ENGINE::CTransform* rSrcTrans = static_cast<CTransform*>(rSrc->Get_Component(L"Transform"));
 
-	if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
-		rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
-		rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
+	const float fBetween = D3DXVec3Length(&(_rDstCol->Get_OldPos() - rDstBox->vCenterPos));
+	const int	iCount = fBetween / (rDstBox->vRadius[ENGINE::RADIUS_X] * 2.f);
+	const float	fDecrease = 1.f / iCount;
+
+	D3DXVECTOR3 vTemPos = {};
+	D3DXVECTOR3 vTempGap = _rDstCol->Get_OldPos() - rDstBox->vCenterPos;
+	D3DXVECTOR3 vOriginPos = rDstBox->vCenterPos;
+
+	for (int i = 0; i < iCount; ++i)
 	{
-		D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
+		vTemPos = rDstBox->vCenterPos + vTempGap * (i * fDecrease);
 
-		if (tmpLength.x != 0)
-		{
-			float fLegnth_x = 0.f;
-			float fixed_x = 0.f;
-			float fDistance = 0.5f;
-
-			(rSrtBox->vMaxPos.x < rDstBox->vCenterPos.x ? fixed_x = 1.f - fDistance : fixed_x = 1.f + fDistance);
-			(rDstTrans->GetDir().x < 0 ? fLegnth_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x : 
-										fLegnth_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x);
-
-			D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fLegnth_x * fixed_x , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
-			_rDstCol->Set_CenterPos(vTmpPos);
-		}
-
-		else if (tmpLength.y != 0)
-		{
-			float fLegnth_y = 0.f;
-			float fixed_y = 0.f;
-			float fDistance = 0.5f;
-
-			(rSrtBox->vMaxPos.y < rDstBox->vCenterPos.y ? fixed_y = 1.f - fDistance : fixed_y = 1.f + fDistance);
-			(rDstTrans->GetDir().y < 0 ? fLegnth_y = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y :
-				fLegnth_y = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y);
-
-			D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fLegnth_y * fixed_y, rDstBox->vCenterPos.z };
-			_rDstCol->Set_CenterPos(vTmpPos);
-		}
-
-		else if (tmpLength.z != 0)
-		{
-			float fLegnth_z = 0.f;
-			float fixed_z = 0.f;
-			float fDistance = 0.5f;
-
-			(rSrtBox->vMaxPos.z < rDstBox->vCenterPos.z ? fixed_z = 1.f - fDistance : fixed_z = 1.f + fDistance);
-			(rDstTrans->GetDir().z < 0 ? fLegnth_z = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.y :
-				fLegnth_z = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z);
-
-			D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y, rDstBox->vCenterPos.z + fLegnth_z * fixed_z };
-			_rDstCol->Set_CenterPos(vTmpPos);
-		}
-
-		return true;
-	}
-
-	else
-	{
-		const int	iCount = 20;
-		const float	fDecrease = 0.05f;
-
-		D3DXVECTOR3 vTemPos[iCount] = {};
-		D3DXVECTOR3 vTempGap = _rDstCol->Get_OldPos() - rDstBox->vCenterPos;
-		D3DXVECTOR3 vOriginPos = rDstBox->vCenterPos;
-
-
-		for (int i = 0; i < iCount; ++i)
-		{
-			vTemPos[i] = rDstBox->vCenterPos + vTempGap * ((i + 1) * fDecrease);
-
-			_rDstCol->Set_CenterPos(vTemPos[i]);
-			_rDstCol->SetUp_Box();
-
-			if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
-				rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
-				rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
-			{
-				D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
-
-				if (tmpLength.x != 0)
-				{
-					float fLegnth_x = 0.f;
-					float fixed_x = 0.f;
-					float fDistance = 0.5f;
-
-					(rSrtBox->vMaxPos.x < rDstBox->vCenterPos.x ? fixed_x = 1.f - fDistance : fixed_x = 1.f + fDistance);
-					(rDstTrans->GetDir().x < 0 ? fLegnth_x = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x :
-						fLegnth_x = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x);
-
-					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x + fLegnth_x * fixed_x , rDstBox->vCenterPos.y , rDstBox->vCenterPos.z };
-					_rDstCol->Set_CenterPos(vTmpPos);
-				}
-
-				else if (tmpLength.y != 0)
-				{
-					float fLegnth_y = 0.f;
-					float fixed_y = 0.f;
-					float fDistance = 0.5f;
-
-					(rSrtBox->vMaxPos.y < rDstBox->vCenterPos.y ? fixed_y = 1.f - fDistance : fixed_y = 1.f + fDistance);
-					(rDstTrans->GetDir().y < 0 ? fLegnth_y = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y :
-						fLegnth_y = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y);
-
-					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y + fLegnth_y * fixed_y, rDstBox->vCenterPos.z };
-					_rDstCol->Set_CenterPos(vTmpPos);
-				}
-
-				else if (tmpLength.z != 0)
-				{
-					float fLegnth_z = 0.f;
-					float fixed_z = 0.f;
-					float fDistance = 0.5f;
-
-					(rSrtBox->vMaxPos.z < rDstBox->vCenterPos.z ? fixed_z = 1.f - fDistance : fixed_z = 1.f + fDistance);
-					(rDstTrans->GetDir().z < 0 ? fLegnth_z = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.y :
-						fLegnth_z = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z);
-
-					D3DXVECTOR3 vTmpPos = { rDstBox->vCenterPos.x , rDstBox->vCenterPos.y, rDstBox->vCenterPos.z + fLegnth_z * fixed_z };
-					_rDstCol->Set_CenterPos(vTmpPos);
-				}
-
-				return true;
-			}
-		}
-
-		_rDstCol->Set_CenterPos(vOriginPos);
+		_rDstCol->Set_CenterPos(vTemPos);
 		_rDstCol->SetUp_Box();
 
-		return false;
+		if (rDstBox->vMinPos.x <= rSrtBox->vMaxPos.x && rDstBox->vMaxPos.x >= rSrtBox->vMinPos.x &&
+			rDstBox->vMinPos.y <= rSrtBox->vMaxPos.y && rDstBox->vMaxPos.y >= rSrtBox->vMinPos.y &&
+			rDstBox->vMinPos.z <= rSrtBox->vMaxPos.z && rDstBox->vMaxPos.z >= rSrtBox->vMinPos.z)
+		{
+			D3DXVECTOR3 tmpLength = Get_Length_Bullet(rDst, rSrc);
+
+			if (tmpLength != D3DXVECTOR3{ 0,0,0 })
+			{
+				int CalcNum = 0;
+				float fLegnth = 0.f;
+				float fFixed_Length = 0.f;
+				float fDistance = 0.5f;
+				D3DXVECTOR3 vTmpDistance = { 0.f, 0.f, 0.f };
+
+				(tmpLength.x != 0.f ?
+					CalcNum = 0 : tmpLength.y != 0 ?
+					CalcNum = 1 : CalcNum = 2);
+
+				(rSrtBox->vMaxPos[CalcNum] < rDstBox->vCenterPos[CalcNum] ?
+					fFixed_Length = 1.f - fDistance :
+					fFixed_Length = 1.f + fDistance);
+
+				(rDstTrans->GetDir()[CalcNum] < 0.f ?
+					fLegnth = rSrtBox->vMaxPos[CalcNum] - rDstBox->vCenterPos[CalcNum] :
+					fLegnth = rSrtBox->vMinPos[CalcNum] - rDstBox->vCenterPos[CalcNum]);
+
+				vTmpDistance[CalcNum] = fLegnth * fFixed_Length;
+
+				_rDstCol->Set_CenterPos(rDstBox->vCenterPos + vTmpDistance);
+			}
+
+			return true;
+		}
 	}
+
+	_rDstCol->Set_CenterPos(vOriginPos);
+	_rDstCol->SetUp_Box();
 
 	return false;
 }
@@ -820,123 +744,35 @@ D3DXVECTOR3 CCollisionMgr::Get_Length_Bullet(ENGINE::CGameObject * rDst, ENGINE:
 		fabs(vCross.y) == fabs(vCross.z) &&
 		fabs(vCross.z) == fabs(vCross.x))
 	{
-		float fGaps[3] = {};
-		//float fReverse[3] = {};
+		D3DXVECTOR3 fGaps = {0,0,0};
 		D3DXVECTOR3 vTempDir = -rDstTrans->GetDir();
 		D3DXVECTOR3 vTempPos = rDstCol->Get_CenterPos();
 
-		// x 축 방향이 0보다 작았을 경우 ( 음수 일 경우)
-		if (rDstTrans->GetDir().x < 0)
-		{
-			fGaps[0] = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x;
-		}
+		(rDstTrans->GetDir().x < 0 ? fGaps[0] = rSrtBox->vMaxPos.x - rDstBox->vCenterPos.x :
+									 fGaps[0] = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x);
 
-		// x 축 방향이 0보다 컷을 경우 ( 양수 일 경우)
-		else if (rDstTrans->GetDir().x >= 0)
-		{
-			fGaps[0] = rSrtBox->vMinPos.x - rDstBox->vCenterPos.x;
-		}
+		(rDstTrans->GetDir().y < 0 ? fGaps[1] = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y :
+									 fGaps[1] = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y);
 
-		if (rDstTrans->GetDir().y < 0)
-		{
-			fGaps[1] = rSrtBox->vMaxPos.y - rDstBox->vCenterPos.y;
-		}
+		(rDstTrans->GetDir().z < 0 ? fGaps[2] = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z :
+									 fGaps[2] = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z);
 
-		// y 축 방향이 0보다 컷을 경우 ( 양수 일 경우)
-		else if (rDstTrans->GetDir().y >= 0)
-		{
-			fGaps[1] = rSrtBox->vMinPos.y - rDstBox->vCenterPos.y;
-		}
-
-
-		// z축
-		if (rDstTrans->GetDir().z < 0)
-		{
-			fGaps[2] = rSrtBox->vMaxPos.z - rDstBox->vCenterPos.z;
-		}
-
-		// y 축 방향이 0보다 컷을 경우 ( 양수 일 경우)
-		else if (rDstTrans->GetDir().z >= 0)
-		{
-			fGaps[2] = rSrtBox->vMinPos.z - rDstBox->vCenterPos.z;
-		}
-
-		if (fabs(fGaps[0]) < fabs(fGaps[1]))
-		{
-			if (fabs(fGaps[0]) < fabs(fGaps[2]))
-			{
-				fGaps[2] = 0;
-
-				// x가 가장 작을 때,
-			}
-
-			else
-			{
-				fGaps[0] = 0;
-
-
-			}
-
-			fGaps[1] = 0;
-		}
-
-		else
-		{
-			if (fabs(fGaps[1]) < fabs(fGaps[2]))
-			{
-				fGaps[2] = 0;
-			}
-
-			else
-			{
-				fGaps[1] = 0;
-			}
-
-			fGaps[0] = 0;
-		}
+		(fabs(fGaps[0]) < fabs(fGaps[1])) ?
+			(fGaps[1] = 0, fabs(fGaps[0]) < fabs(fGaps[2]) ? fGaps[2] = 0 : fGaps[0] = 0) :
+			(fGaps[0] = 0, fabs(fGaps[1]) < fabs(fGaps[2]) ? fGaps[2] = 0 : fGaps[1] = 0);
 
 		vCross.x = 0;
 		vCross.y = 0;
 		vCross.z = 0;
 
-		rDstCol->Set_CenterPos({ vTempPos.x + fGaps[0] * 1.05f , vTempPos.y + fGaps[1] * 1.05f, vTempPos.z + fGaps[2] * 1.05f });
+		rDstCol->Set_CenterPos({ vTempPos + fGaps * 1.05f});
 
 		return vCross;
 	}
 
-	if (fabs(vCross.x) < fabs(vCross.y))
-	{
-		if (fabs(vCross.x) < fabs(vCross.z))
-		{
-			vCross.z = 0;
-
-			// x가 가장 작을 때,
-		}
-
-		else
-		{
-			vCross.x = 0;
-
-
-		}
-
-		vCross.y = 0;
-	}
-
-	else
-	{
-		if (fabs(vCross.y) < fabs(vCross.z))
-		{
-			vCross.z = 0;
-		}
-
-		else
-		{
-			vCross.y = 0;
-		}
-
-		vCross.x = 0;
-	}
+	(fabs(vCross.x) < fabs(vCross.y) ?
+		(vCross.y = 0, fabs(vCross.x) < fabs(vCross.z) ? vCross.z = 0 : vCross.x = 0) :
+		(vCross.x = 0, fabs(vCross.y) < fabs(vCross.z) ? vCross.z = 0 : vCross.y = 0));
 
 	if (_static)
 		return vCross * 0.5f;
@@ -945,7 +781,8 @@ D3DXVECTOR3 CCollisionMgr::Get_Length_Bullet(ENGINE::CGameObject * rDst, ENGINE:
 		return vCross;
 }
 
-D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BOXCOL * _TargetCollider, bool _static)
+D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, 
+									ENGINE::BOXCOL * _TargetCollider, bool _dynamic)
 {
 	D3DXVECTOR3 vMin = {};
 	D3DXVECTOR3 vMax = {};
@@ -964,77 +801,13 @@ D3DXVECTOR3 CCollisionMgr::Get_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BO
 	vCross.z = vMax.z - vMin.z;
 
 	if (vCross.x == vCross.y && vCross.y == vCross.z)
-	{
 		return{ 0,0,0 };
-	}
 
-	(fabs(vCross.x) < fabs(vCross.y) ? 
-		vCross.y = 0, fabs(vCross.x) < fabs(vCross.z) ?
-		vCross.z = 0 : vCross.x = 0 :
-		vCross.x = 0, fabs(vCross.y) < fabs(vCross.z) ? 
-		vCross.z = 0 : vCross.y = 0);
+	(fabs(vCross.x) < fabs(vCross.y) ?
+		(vCross.y = 0, fabs(vCross.x) < fabs(vCross.z) ? vCross.z = 0 : vCross.x = 0) :
+		(vCross.x = 0, fabs(vCross.y) < fabs(vCross.z) ? vCross.z = 0 : vCross.y = 0));
 
-
-	/*
-	if (fabs(vCross.x) < fabs(vCross.y))
-	{
-		if (fabs(vCross.x) < fabs(vCross.z))
-		{
-			vCross.z = 0;
-		}
-
-		else
-		{
-			vCross.x = 0;
-		}
-
-		vCross.y = 0;
-	}
-
-	else
-	{
-		if (fabs(vCross.y) < fabs(vCross.z))
-		{
-			vCross.z = 0;
-		}
-
-		else
-		{
-			vCross.y = 0;
-		}
-
-		vCross.x = 0;
-	}
-	*/
-
-
-	if (_static)
-		return vCross * 0.5f;
-
-	else
-		return vCross;
-}
-
-D3DXVECTOR3 CCollisionMgr::Get_Stair_Length(ENGINE::BOXCOL * _DistCollider, ENGINE::BOXCOL * _TargetCollider, bool _static)
-{
-	D3DXVECTOR3 vMin = {};
-	D3DXVECTOR3 vMax = {};
-	D3DXVECTOR3 vCross = {};
-
-	vMax.x = min(_DistCollider->vMaxPos.x, _TargetCollider->vMaxPos.x);
-	vMax.y = min(_DistCollider->vMaxPos.y, _TargetCollider->vMaxPos.y);
-	vMax.z = min(_DistCollider->vMaxPos.z, _TargetCollider->vMaxPos.z);
-
-	vMin.x = max(_DistCollider->vMinPos.x, _TargetCollider->vMinPos.x);
-	vMin.y = max(_DistCollider->vMinPos.y, _TargetCollider->vMinPos.y);
-	vMin.z = max(_DistCollider->vMinPos.z, _TargetCollider->vMinPos.z);
-
-	vCross.x = 0;
-	vCross.y = vMax.y - vMin.y;
-	vCross.z = 0;
-
-
-	if (_static)
+	if (_dynamic)
 		return vCross * 0.5f;
 
 	else
