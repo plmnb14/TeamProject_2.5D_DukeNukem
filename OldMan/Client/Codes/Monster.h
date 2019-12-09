@@ -97,7 +97,7 @@ protected:
 	ENGINE::CBillborad*		m_pBillborad;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCondition*		m_pCondition;
-	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CCollider*		m_pGChecker;
 	ENGINE::CAnimator*		m_pAnimator;
 
 protected:

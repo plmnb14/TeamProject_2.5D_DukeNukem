@@ -268,13 +268,12 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 								  vTemp_TargetPos.y + m_fFoot_to_Head + m_vCamShakePos.y + m_fCam_PosY,
 								  vTemp_TargetPos.z + fWalkShake_z });
 
-			m_pCCam->Set_LookAt({ vTemp_TargetPos.x, 
+			m_pCCam->Set_LookAt({ vTemp_TargetPos.x,
 								  vTemp_TargetPos.y + m_fFoot_to_Head ,
-							      vTemp_TargetPos.z + 1.f });
+								  vTemp_TargetPos.z + 1.f });
 
 			CamShakePos();
 		}
-
 		}
 
 		SetUp_MouseRotate();
@@ -298,7 +297,7 @@ void CCamera::SetUp_ViewPoint(CameraViewPoint _CameraViewPoint)
 							  vTemp_TargetPos.y + (vTempReverseDir.y * m_pCCam->Get_Distance()) + 1.f + m_pCCam->Get_Distance(),
 							  vTemp_TargetPos.z + (vTempReverseDir.z * m_pCCam->Get_Distance())});
 
-		m_pCCam->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y , vTemp_TargetPos.z });
+		m_pCCam->Set_LookAt({ vTemp_TargetPos.x, vTemp_TargetPos.y + 1.8f , vTemp_TargetPos.z });
 		m_pCCam->Set_Up({ 0, 1, 0 });
 
 		break;
@@ -356,23 +355,24 @@ void CCamera::SetUp_Zoom()
 
 void CCamera::SetUp_MouseRotate()
 {
-	POINT tmpPT = m_pKeyMgr->Get_MouseGap(g_hWnd);
+	POINT tmpPT = m_pKeyMgr->Get_MouseGap(g_hWnd);		// 이전 마우스와 현재 마우스 사이의 거리 차이
 
-	float fAngle = 0.f;
-	float fSensitive = 0.3f;
+	float fAngle = 0.f;									//  회전각도
+	float fSensitive = 0.3f;							//  마우스 민감도
 	D3DXVECTOR3 tmpRight, tmpUp, tmpLook;
 	D3DXVECTOR3 tmpEyePos;
 	D3DXVECTOR3 vDir;
 	D3DXMATRIX	matRot;
 
+	// x 거리차이가 0이 아닐 때
 	if (tmpPT.x != 0)
 	{
 		m_fX_Angle = tmpPT.x * fSensitive;
 
 		dynamic_cast<ENGINE::CTransform*>(m_pTarget->Get_Component(L"Transform"))->MoveAngle(ENGINE::ANGLE_Y, m_fX_Angle);
 		
+		// Up 벡터 기준으로 회전값 적용
 		D3DXMatrixRotationY(&matRot, D3DXToRadian(m_fX_Angle));
-		
 		memcpy(&matRot._41, &m_pCCam->Get_LookAt(), sizeof(D3DXVECTOR3));
 		
 		vDir = m_pCCam->Get_EyePos() - m_pCCam->Get_LookAt();
@@ -397,6 +397,7 @@ void CCamera::SetUp_MouseRotate()
 		m_pCCam->Set_EyePos(tmpEyePos);
 	}
 
+	// y 거리차이가 0이 아닐 때
 	if (tmpPT.y != 0)
 	{
 		float fMaxY_Rotate = 0.8f;
@@ -434,21 +435,23 @@ void CCamera::SetUp_MouseRotate()
 		
 		m_fY_Angle = tmpPT.y * fSensitive;
 		
+		// Right 벡터 기준으로 회전값 적용
 		D3DXMatrixRotationAxis(&matRot, &m_pCCam->Get_Right(), D3DXToRadian(m_fY_Angle));
 		memcpy(&matRot._41, &m_pCCam->Get_LookAt(), sizeof(D3DXVECTOR3));
 		
 		vDir = m_pCCam->Get_EyePos() - m_pCCam->Get_LookAt();
 		
+		// y 축 재조정
 		D3DXVec3TransformNormal(&tmpUp, &m_pCCam->Get_Up(), &matRot);
 		D3DXVec3Normalize(&tmpUp, &tmpUp);
 		m_pCCam->Set_Up(tmpUp);
 
-
+		// z 축 재조정
 		D3DXVec3TransformNormal(&tmpLook, &m_pCCam->Get_Look(), &matRot);
 		D3DXVec3Normalize(&tmpLook, &tmpLook);
 		m_pCCam->Set_Look(tmpLook);
 		
-
+		// 카메라 위치 재조정
 		D3DXVec3TransformCoord(&tmpEyePos, &vDir, &matRot);
 		m_pCCam->Set_EyePos(tmpEyePos);
 	}

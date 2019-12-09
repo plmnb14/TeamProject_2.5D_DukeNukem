@@ -156,6 +156,10 @@ HRESULT CPlayer::Initialize()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 	
+	// 트랜스폼
+	m_pTransform->SetPos(D3DXVECTOR3(0.f, 8.f, 2.f));
+	m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
+
 	// 물리적 콜라이더
 	m_pCollider->Set_Radius({ 0.9f , 2.5f, 0.9f });		// 각 축에 해당하는 반지름을 설정
 	m_pCollider->Set_Dynamic(true);						// 동적, 정적 Collider 유무
@@ -175,11 +179,6 @@ HRESULT CPlayer::Initialize()
 	m_pGChecker->Set_UnderPos();
 	m_pGChecker->SetUp_Box();
 	m_pCollider->Set_Type(ENGINE::COLLISION_AABB);
-	
-
-	// 트랜스폼 세팅
-	// m_pTransform->SetPos(D3DXVECTOR3(0.f, 8.f, 2.f));
-	// m_pTransform->SetSize(D3DXVECTOR3(1.f, 2.f, 1.f));
 	
 	D3DXVECTOR3 tmpDir = m_pTransform->GetDir();
 	D3DXVECTOR3 tmpRight = {};
@@ -1689,6 +1688,11 @@ void CPlayer::Set_WeaponInfo(ENGINE::W_INFO* _WeaponInfo)
 
 		m_mWeaponInfo.insert(make_pair(_WeaponInfo->eWeaponTag, pTag));
 		m_mWeaponInfo[_WeaponInfo->eWeaponTag];
+	}
+
+	else if (iter_find->first == _WeaponInfo->eWeaponTag)
+	{
+		iter_find->second->wCurBullet += _WeaponInfo->wCurBullet;
 	}
 }
 

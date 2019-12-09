@@ -27,7 +27,6 @@ void CTerrainRect::LateUpdate()
 {
 	ENGINE::CGameObject::LateUpdate();
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
-	m_pCollider->Set_PlaneVtx(m_pTransform->GetAllAngle() , m_pTransform->GetWorldMatrix());
 }
 
 void CTerrainRect::Render()
@@ -125,7 +124,6 @@ HRESULT CTerrainRect::AddComponent()
 	ENGINE::CVIBuffer* pBuffer = dynamic_cast<ENGINE::CVIBuffer*>(this->Get_Component(L"Buffer"));
 	m_myVtx = new ENGINE::VTX_TEX[4];
 	pBuffer->GetVertexInfo(m_myVtx);
-	m_pCollider->Set_CollisionVertex(m_pTransform, m_myVtx);
 
 
 

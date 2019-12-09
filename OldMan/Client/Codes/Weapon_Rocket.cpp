@@ -58,7 +58,7 @@ void CWeapon_Rocket::LateUpdate()
 
 	m_pCollider->LateUpdate(m_pTransform->GetPos());
 
-	m_pGroundChekCollider->LateUpdate({ m_pTransform->GetPos().x ,
+	m_pGChecker->LateUpdate({ m_pTransform->GetPos().x ,
 		m_pTransform->GetPos().y - m_pCollider->Get_Radius().y,
 		m_pTransform->GetPos().z });
 
@@ -187,8 +187,8 @@ HRESULT CWeapon_Rocket::AddComponent()
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent.insert({ L"GCheck_Collider", pComponent });
 
-	m_pGroundChekCollider = static_cast<ENGINE::CCollider*>(pComponent);
-	NULL_CHECK_RETURN(m_pGroundChekCollider, E_FAIL);
+	m_pGChecker = static_cast<ENGINE::CCollider*>(pComponent);
+	NULL_CHECK_RETURN(m_pGChecker, E_FAIL);
 
 
 	// Rigid

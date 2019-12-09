@@ -650,7 +650,8 @@ bool CCollisionMgr::Check_AABB(ENGINE::CGameObject* rDst, ENGINE::CGameObject* r
 	return false;
 }
 
-bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameObject * rSrc, CCollider * _rDstCol, CCollider * _rSrcCol)
+bool CCollisionMgr::Check_AABB_Bullet(ENGINE::CGameObject * rDst, ENGINE::CGameObject * rSrc, 
+									  CCollider * _rDstCol, CCollider * _rSrcCol)
 {
 	ENGINE::BOXCOL* rDstBox = _rDstCol->Get_BoxCollider();
 	ENGINE::BOXCOL* rSrtBox = _rSrcCol->Get_BoxCollider();

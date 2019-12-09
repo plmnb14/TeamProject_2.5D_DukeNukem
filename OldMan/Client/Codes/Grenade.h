@@ -79,7 +79,7 @@ private:
 	ENGINE::WEAPON_TAG	m_eWeaponTag;
 	ENGINE::CRigidBody*		m_pRigid;
 	ENGINE::CCollider*		m_pCollider;
-	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CCollider*		m_pGChecker;
 	D3DXMATRIX              m_matView;
 
 

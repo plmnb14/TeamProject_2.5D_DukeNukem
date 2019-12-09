@@ -127,7 +127,7 @@ private:
 	ENGINE::CRigidBody*		m_pRigid;
 
 	ENGINE::CCollider*		m_pCollider;
-	ENGINE::CCollider*		m_pGroundChekCollider;
+	ENGINE::CCollider*		m_pGChecker;
 	ENGINE::CCollider*		m_pColliderLedge;
 	ENGINE::CCollider*		m_pMeleeCollider;
 
@@ -137,9 +137,6 @@ private:
 	CCameraObserver*		m_pObserver;
 	ENGINE::CPlayerSubject*	m_pPlayerSubject;
 
-	// 현재 장착중인 무기 정보
-	ENGINE::W_INFO			m_tWInfo;
-
 	// 현재 플레이어 정보 구조체 (일단 체력, 쉴드만)
 	ENGINE::CONDITION		m_tCondition;
 
@@ -147,7 +144,12 @@ private:
 	ENGINE::CCondition*		m_pCondition;
 
 	// 현재 장착중인 무기 정보
+	ENGINE::W_INFO			m_tWInfo;
+
+	// 현재 장착중인 무기의 태그
 	ENGINE::WEAPON_TAG		m_eWeaponState;
+
+	// 보유한 무기의 정보를 보관하는 맵
 	map<ENGINE::WEAPON_TAG, ENGINE::W_INFO*>	m_mWeaponInfo;
 
 private:

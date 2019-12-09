@@ -77,28 +77,25 @@ HRESULT CWeapon_Revolver::Initialize()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 
-	m_tWInfo.eBulletType = ENGINE::HITSCAN;	// 히트스캔 방식인지, 투사체 방식인지
-	m_tWInfo.fInterval = 0.2f;				// 발사 간격
-	m_tWInfo.fKnockBack_Value = 0.1f;		// 저지력
+	m_tWInfo.eBulletType = ENGINE::HITSCAN;		// 히트스캔 방식인지, 투사체 방식인지
+	m_tWInfo.fInterval = 0.2f;					// 발사 간격
+	m_tWInfo.fKnockBack_Value = 0.1f;			// 저지력
 
-	m_tWInfo.wMaxBullet = 128;				// 최대 탄환 수
-	m_tWInfo.wUseBullet = 1;				// 한번 발사 당 소모 탄환 수
-	m_tWInfo.wCurBullet = 36;				// 현재  수, 최초 획득 시 탄창 수
-	m_tWInfo.wMagazineSize = 6;			// 한 탄창 최대 보관 수
-	m_tWInfo.wMagazineBullet = 6;			// 현재 탄창의 총알 개수
-	m_tWInfo.fBullet_Speed = 100.f;
+	m_tWInfo.wMaxBullet = 128;					// 최대 탄환 수
+	m_tWInfo.wUseBullet = 1;					// 한번 발사 당 소모 탄환 수
+	m_tWInfo.wCurBullet = 36;					// 현재  수, 최초 획득 시 탄창 수
+	m_tWInfo.wMagazineSize = 6;					// 한 탄창 최대 보관 수
+	m_tWInfo.wMagazineBullet = 6;				// 현재 탄창의 총알 개수
+	m_tWInfo.fBullet_Speed = 200.f;				// 탄환 속도
 
-	m_tWInfo.fVertical_Rebound = 0.1f;		// 수직 반동
-	m_tWInfo.fHorizontal_Rebound = 2.f;		// 수평 반동
+	m_tWInfo.fVertical_Rebound = 0.1f;			// 수직 반동
+	m_tWInfo.fHorizontal_Rebound = 2.f;			// 수평 반동
 
-	m_tWInfo.fBullet_Speed = 200.f;
-
-	// 터저서 임시로 추가함 - 정은혜
-	m_tWInfo.fSpread_X = 5;
-	m_tWInfo.fSpread_Y = 5;
+	m_tWInfo.fSpread_X = 5;						// x축 탄 퍼짐
+	m_tWInfo.fSpread_Y = 5;						// x축 탄 퍼짐
 
 	m_tWInfo.wWeaponDamage = 24;				// 무기 데미지
-	m_tWInfo.eWeaponTag = ENGINE::REVOLVER;
+	m_tWInfo.eWeaponTag = ENGINE::REVOLVER;		// 무기 태그
 
 
 	// 트랜스폼 세팅
